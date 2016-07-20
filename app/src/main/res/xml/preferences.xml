@@ -11,5 +11,6 @@
         android:key="@string/pref_password"
         android:title="@string/pref_password"
         android:summary="@string/pref_default_password"
-        android:defaultValue="@string/pref_default_password" />
+        android:defaultValue="@string/pref_default_password"
+        android:inputType="textPassword" />
 </PreferenceScreen>
