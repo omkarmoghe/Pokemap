@@ -91,7 +91,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * @param password
      * @throws IOException
      */
-    private void getToken(final String username, final String password) throws IOException {
+    private void getToken(final String username, String password) throws IOException {
+        // Maximum password length is 15 (sign in page enforces this limit, API does not)
+        final String trimmedPassword = password.length() > 15 ? password.substring(0, 15) : password;
+
         final OkHttpClient client = new OkHttpClient.Builder()
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             .add("execution", data.getString("execution"))
                             .add("_eventId", "submit")
                             .add("username", username)
-                            .add("password", password)
+                            .add("password", trimmedPassword)
                             .build();
 
                     Request interceptRedirect = new Request.Builder()
