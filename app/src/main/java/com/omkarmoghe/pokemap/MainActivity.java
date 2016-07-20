@@ -92,103 +92,110 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * @throws IOException
      */
     private void getToken(final String username, String password) throws IOException {
-        // Maximum password length is 15 (sign in page enforces this limit, API does not)
-        final String trimmedPassword = password.length() > 15 ? password.substring(0, 15) : password;
 
-        final OkHttpClient client = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                })
-                .cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(getApplicationContext())))
-                .followRedirects(false)
-                .followSslRedirects(false)
-                .build();
+        if (username.isEmpty() || password.isEmpty()) {
+            Log.d("Main Activity", "username or password can't be empty");
+        }
 
-        Request initialRequest = new Request.Builder()
-                .addHeader("User-Agent", "Niantic App")
-                .url(LOGIN_URL)
-                .build();
+        else {
+            // Maximum password length is 15 (sign in page enforces this limit, API does not)
+            final String trimmedPassword = password.length() > 15 ? password.substring(0, 15) : password;
 
-        client.newCall(initialRequest).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "fuck :(", e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String body = response.body().string();
-                try {
-                    JSONObject data = new JSONObject(body);
-                    Log.d(TAG, data.toString());
-
-                    RequestBody formBody = new FormBody.Builder()
-                            .add("lt", data.getString("lt"))
-                            .add("execution", data.getString("execution"))
-                            .add("_eventId", "submit")
-                            .add("username", username)
-                            .add("password", trimmedPassword)
-                            .build();
-
-                    Request interceptRedirect = new Request.Builder()
-                            .addHeader("User-Agent", "Niantic App")
-                            .url(LOGIN_URL)
-                            .post(formBody)
-                            .build();
-
-                    client.newCall(interceptRedirect).enqueue(new Callback() {
+            final OkHttpClient client = new OkHttpClient.Builder()
+                    .hostnameVerifier(new HostnameVerifier() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.e(TAG, "fuck :(", e);
+                        public boolean verify(String s, SSLSession sslSession) {
+                            return true;
                         }
+                    })
+                    .cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(getApplicationContext())))
+                    .followRedirects(false)
+                    .followSslRedirects(false)
+                    .build();
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.d(TAG, String.valueOf(response.code())); // should be a 302 (redirect)
-                            Log.d(TAG, response.headers().toString()); // should contain a "Location" header
+            Request initialRequest = new Request.Builder()
+                    .addHeader("User-Agent", "Niantic App")
+                    .url(LOGIN_URL)
+                    .build();
 
-                            String ticket = response.header("Location").split("ticket=")[1];
-
-                            RequestBody loginForm = new FormBody.Builder()
-                                    .add("client_id", CLIENT_ID)
-                                    .add("redirect_uri", REDIRECT_URI)
-                                    .add("client_secret", PTC_CLIENT_SECRET)
-                                    .add("grant_type", "refresh_token")
-                                    .add("code", ticket)
-                                    .build();
-
-                            Request loginRequest = new Request.Builder()
-                                    .addHeader("User-Agent", "Niantic App")
-                                    .url(LOGIN_OAUTH)
-                                    .post(loginForm)
-                                    .build();
-
-                            client.newCall(loginRequest).enqueue(new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    String rawToken = response.body().string();
-                                    String cleanToken = rawToken.replaceAll("&expires.*", "").replaceAll(".*access_token=", "");
-
-                                    Log.d(TAG, cleanToken); // success!
-
-                                    token = cleanToken;
-                                }
-                            });
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            client.newCall(initialRequest).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e(TAG, "fuck :(", e);
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String body = response.body().string();
+                    try {
+                        JSONObject data = new JSONObject(body);
+                        Log.d(TAG, data.toString());
+
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("lt", data.getString("lt"))
+                                .add("execution", data.getString("execution"))
+                                .add("_eventId", "submit")
+                                .add("username", username)
+                                .add("password", trimmedPassword)
+                                .build();
+
+                        Request interceptRedirect = new Request.Builder()
+                                .addHeader("User-Agent", "Niantic App")
+                                .url(LOGIN_URL)
+                                .post(formBody)
+                                .build();
+
+                        client.newCall(interceptRedirect).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.e(TAG, "fuck :(", e);
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                Log.d(TAG, String.valueOf(response.code())); // should be a 302 (redirect)
+                                Log.d(TAG, response.headers().toString()); // should contain a "Location" header
+
+                                String ticket = response.header("Location").split("ticket=")[1];
+
+                                RequestBody loginForm = new FormBody.Builder()
+                                        .add("client_id", CLIENT_ID)
+                                        .add("redirect_uri", REDIRECT_URI)
+                                        .add("client_secret", PTC_CLIENT_SECRET)
+                                        .add("grant_type", "refresh_token")
+                                        .add("code", ticket)
+                                        .build();
+
+                                Request loginRequest = new Request.Builder()
+                                        .addHeader("User-Agent", "Niantic App")
+                                        .url(LOGIN_OAUTH)
+                                        .post(loginForm)
+                                        .build();
+
+                                client.newCall(loginRequest).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        String rawToken = response.body().string();
+                                        String cleanToken = rawToken.replaceAll("&expires.*", "").replaceAll(".*access_token=", "");
+
+                                        Log.d(TAG, cleanToken); // success!
+
+                                        token = cleanToken;
+                                    }
+                                });
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     /**
