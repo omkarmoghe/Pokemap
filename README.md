@@ -14,7 +14,7 @@ try {
 ...
 ```
 
-# PRs
+# PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 So the main work we need to do is to effectively translate the code over at the [main repo](https://github.com/AHAAAAAAA/PokemonGo-Map) to work in *native* Android. The login functionality to get the token has been implemented and I started migrating the code to grab the actual Pokemon / Pokestop data using the `.proto` files.
 
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
