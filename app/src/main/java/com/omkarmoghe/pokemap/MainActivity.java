@@ -1,6 +1,5 @@
 package com.omkarmoghe.pokemap;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -23,6 +22,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.protobuf.ByteString;
+import com.omkarmoghe.pokemap.api.APIUtils;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass.RequestEnvelop;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
@@ -46,15 +46,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
                                                                GoogleApiClient.OnConnectionFailedListener,
                                                                MapWrapperFragment.LocationRequestListener {
-
     public static final String TAG = "Pokemap";
-
-    // magic constants fml
-    private static final String LOGIN_URL = "https://sso.pokemon.com/sso/login?service=https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize";
-    private static final String LOGIN_OAUTH = "https://sso.pokemon.com/sso/oauth2.0/accessToken";
-    private static final String PTC_CLIENT_SECRET = "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR";
-    public static final String CLIENT_ID = "mobile-app_pokemon-go";
-    public static final String REDIRECT_URI = "https://www.nianticlabs.com/pokemongo/error";
 
     // Niantic token
     private String token;
@@ -121,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Request initialRequest = new Request.Builder()
                 .addHeader("User-Agent", "Niantic App")
-                .url(LOGIN_URL)
+                .url(APIUtils.LOGIN_URL)
                 .build();
 
         client.newCall(initialRequest).enqueue(new Callback() {
@@ -147,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                     Request interceptRedirect = new Request.Builder()
                             .addHeader("User-Agent", "Niantic App")
-                            .url(LOGIN_URL)
+                            .url(APIUtils.LOGIN_URL)
                             .post(formBody)
                             .build();
 
@@ -179,16 +171,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             String ticket = response.header("Location").split("ticket=")[1];
 
                             RequestBody loginForm = new FormBody.Builder()
-                                    .add("client_id", CLIENT_ID)
-                                    .add("redirect_uri", REDIRECT_URI)
-                                    .add("client_secret", PTC_CLIENT_SECRET)
+                                    .add("client_id", APIUtils.CLIENT_ID)
+                                    .add("redirect_uri", APIUtils.REDIRECT_URI)
+                                    .add("client_secret", APIUtils.PTC_CLIENT_SECRET)
                                     .add("grant_type", "refresh_token")
                                     .add("code", ticket)
                                     .build();
 
                             Request loginRequest = new Request.Builder()
                                     .addHeader("User-Agent", "Niantic App")
-                                    .url(LOGIN_OAUTH)
+                                    .url(APIUtils.LOGIN_OAUTH)
                                     .post(loginForm)
                                     .build();
 
