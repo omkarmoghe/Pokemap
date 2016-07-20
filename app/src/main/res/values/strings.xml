@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Pokemap</string>
+
     <string name="action_settings">Settings</string>
+    <string name="action_relogin">Relogin</string>
+
+    <string name="pref_username">Username</string>
+    <string name="pref_default_username">John Doe</string>
+    <string name="pref_password">Password</string>
+    <string name="pref_default_password">***</string>
+    <string name="toast_credentials">Can\'t login. Please check your credentials</string>
 </resources>

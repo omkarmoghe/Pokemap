@@ -1,7 +1,11 @@
 package com.omkarmoghe.pokemap;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -20,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass.RequestEnvelop;
+import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,10 +66,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     GoogleApiClient mGoogleApiClient;
     Location        mLastLocation;
 
+    // Preferences
+    SharedPreferences pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -150,6 +162,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             Log.d(TAG, String.valueOf(response.code())); // should be a 302 (redirect)
                             Log.d(TAG, response.headers().toString()); // should contain a "Location" header
 
+                            if(response.code() != 302 || response.header("Location") == null) {
+
+                                runOnUiThread(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getBaseContext(), getString(R.string.toast_credentials), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                );
+
+                                return;
+                            }
+
                             String ticket = response.header("Location").split("ticket=")[1];
 
                             RequestBody loginForm = new FormBody.Builder()
@@ -226,6 +252,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+    private void login() {
+
+        String username = pref.getString(getString(R.string.pref_username), "");
+        String password = pref.getString(getString(R.string.pref_password), "");
+
+        Log.d(TAG, "Username: " + username);
+
+        try {
+            getToken(username, password);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setUpGoogleApiClient() {
         if (mGoogleApiClient == null) mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -250,7 +291,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.action_relogin) {
+            login();
         }
 
         return super.onOptionsItemSelected(item);
