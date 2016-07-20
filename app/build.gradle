@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'android-apt'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
+
     defaultConfig {
         applicationId "com.omkarmoghe.pokemap"
         minSdkVersion 17
@@ -12,32 +15,71 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 
-    // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
+    // Appcompat
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
     compile 'com.android.support:design:24.1.0'
     compile 'com.android.support:support-v4:24.1.0'
+
+    // Google Play services
     compile 'com.google.android.gms:play-services-maps:9.2.1'
     compile 'com.google.android.gms:play-services-location:9.2.1'
+
+    // REST client
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
+
+    // Android Annotations
+    def AAVersion = '3.3.2'
+
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // S2 geometry by Google
+    compile project(':s2-geometry-library-java')
+
+    // Retrolambda
+    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
+
+    // RxJava and RxAndroid
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+
+    // OKHttp client
+    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'com.jakewharton.retrofit:retrofit1-okhttp3-client:1.0.2'
+
+    // Retrofit
+    compile('com.squareup.retrofit:retrofit:1.9.0')
+
+    // Protobuf
+    // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
+
+    // Testing
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     testCompile 'junit:junit:4.12'
 }
