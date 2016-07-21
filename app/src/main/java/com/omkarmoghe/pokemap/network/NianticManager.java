@@ -59,7 +59,7 @@ public class NianticManager {
 
     NianticService nianticService;
     final OkHttpClient client;
-    
+
     public static NianticManager getInstance(Context context){
         if (instance == null){
             instance = new NianticManager();
