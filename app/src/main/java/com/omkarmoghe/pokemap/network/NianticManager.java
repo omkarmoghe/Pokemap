@@ -271,8 +271,9 @@ public class NianticManager {
             m1.setType(106); // magic number;
             PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
 
-            // TODO: mq.f1 = ''.join(map(encode, walk))
+            // mq.f1 = ''.join(map(encode, walk))
             String f1 = Joiner.on("").join(Collections2.transform(walk, this::encode));
+            mq.setF1(ByteString.copyFrom(f1, "UTF-8"));
 
             mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
 
