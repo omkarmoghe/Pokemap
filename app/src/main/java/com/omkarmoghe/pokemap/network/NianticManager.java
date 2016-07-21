@@ -11,8 +11,8 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Ordering;
 import com.google.common.geometry.S2CellId;
 import com.google.common.geometry.S2LatLng;
 import com.google.protobuf.ByteString;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
@@ -271,16 +270,9 @@ public class NianticManager {
             PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
             m1.setType(106); // magic number;
             PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
+
             // TODO: mq.f1 = ''.join(map(encode, walk))
-
-            Collections2.transform(walk, new Function<Long, String>() {
-                @Nullable
-                @Override
-                public String apply(@Nullable Long input) {
-                    return encode(input);
-                }
-            });
-
+            String f1 = Joiner.on("").join(Collections2.transform(walk, this::encode));
 
             mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
 
