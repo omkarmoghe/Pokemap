@@ -46,7 +46,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile 'com.android.support:design:24.1.0'
     compile 'com.android.support:support-v4:24.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
 
     compile 'com.google.android.gms:play-services-maps:9.2.1'
     compile 'com.google.android.gms:play-services-location:9.2.1'
