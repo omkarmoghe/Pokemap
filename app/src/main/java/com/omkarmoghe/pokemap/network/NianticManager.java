@@ -58,6 +58,9 @@ public class NianticManager {
 
     NianticService nianticService;
     final OkHttpClient client;
+
+    //private String token;
+
     public static NianticManager getInstance(Context context){
         if(instance == null){
             instance = new NianticManager();

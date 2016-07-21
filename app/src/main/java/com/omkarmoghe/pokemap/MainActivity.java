@@ -8,11 +8,13 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.omkarmoghe.pokemap.common.BaseActivity;
+import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
@@ -39,8 +41,8 @@ public class MainActivity extends BaseActivity {
         mMapWrapperFragment = MapWrapperFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_container, mMapWrapperFragment)
-                   .addToBackStack(null)
-                   .commit();
+                .addToBackStack(null)
+                .commit();
         login();
     }
 
@@ -69,8 +71,25 @@ public class MainActivity extends BaseActivity {
         String username = pref.getString(getString(R.string.pref_username), "");
         String password = pref.getString(getString(R.string.pref_password), "");
 
-        Log.d(TAG, "Username: " + username);
-        nianticManager.login(username, password, this);
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            requestLoginCredentials();
+        } else {
+            Log.d(TAG, "Username: " + username);
+            nianticManager.login(username, password, this);
+        }
+    }
+
+    private void requestLoginCredentials() {
+        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(
+                new RequestCredentialsDialogFragment.Listener() {
+                    @Override
+                    public void credentialsIntroduced(String username, String password) {
+                        pref.edit().putString(getString(R.string.pref_username), username).apply();
+                        pref.edit().putString(getString(R.string.pref_password), password).apply();
+
+                        login();
+                    }
+                }), "request_credentials").commit();
     }
 
     @Override

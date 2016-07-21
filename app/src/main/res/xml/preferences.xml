@@ -11,14 +11,12 @@
         <EditTextPreference
             android:key="@string/pref_username"
             android:title="@string/pref_username"
-            android:summary="@string/pref_default_username"
-            android:defaultValue="@string/pref_default_username" />
+            android:summary="@string/pref_default_username"/>
 
         <EditTextPreference
             android:key="@string/pref_password"
             android:title="@string/pref_password"
             android:summary="@string/pref_default_password"
-            android:defaultValue="@string/pref_default_password"
             android:inputType="textPassword" />
 
     </PreferenceCategory>
