@@ -26,9 +26,6 @@
 -dontpreverify
 -dontobfuscate
 
-# For testing purposes only!
--dontoptimize
-
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!field/removal/writeonly,!field/marking/private,!code/allocation/variable
 
