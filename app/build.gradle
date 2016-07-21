@@ -8,6 +8,8 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
+        multiDexEnabled true
+        jackOptions.enabled false
         applicationId "com.omkarmoghe.pokemap"
         minSdkVersion 17
         targetSdkVersion 24
