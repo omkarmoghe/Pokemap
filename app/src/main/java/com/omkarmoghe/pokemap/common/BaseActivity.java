@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = LocationManager.getInstance(this);
-        nianticManager = NianticManager.getInstance();
+        nianticManager = NianticManager.getInstance(this);
 
     }
     @Override
