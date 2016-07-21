@@ -1,0 +1,3 @@
+[submodule "PokeGOAPI-Java"]
+	path = PokeGOAPI-Java
+	url = https://github.com/Grover-c13/PokeGOAPI-Java.git
