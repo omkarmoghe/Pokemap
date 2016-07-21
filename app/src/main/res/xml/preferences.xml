@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/pref_user_account"
-        android:key="@string/pref_user_account">
+        android:title="@string/pref_cat_user_account"
+        android:key="@string/pref_cat_user_account">
 
         <PreferenceScreen
             android:summary="@string/pref_warning" />
@@ -18,6 +18,19 @@
             android:title="@string/pref_password"
             android:summary="@string/pref_default_password"
             android:inputType="textPassword" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_general">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/pref_pokestops_title"
+            android:key="@string/pref_pokestops_key" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/pref_gyms_title"
+            android:key="@string/pref_gyms_key" />
 
     </PreferenceCategory>
 
