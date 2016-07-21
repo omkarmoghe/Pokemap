@@ -25,6 +25,7 @@ android:
 
 before_script:
     - chmod +x gradlew
+    - chmod u+rwx scripts/upload_release_to_github.py
 
 script:
   - ./gradlew build
@@ -34,4 +35,5 @@ addons:
     packages:
     - python2.7
 
-after_success: ./scripts/upload_release_to_github.py
+after_success:
+    - ./scripts/upload_release_to_github.py
