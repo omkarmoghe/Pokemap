@@ -14,7 +14,7 @@ import com.omkarmoghe.pokemap.dagger.MainComponent;
  */
 public class App extends Application {
 
-    private MainComponent mainComponent;
+    private static MainComponent mainComponent;
 
     @Override
     public void onCreate() {
@@ -26,7 +26,7 @@ public class App extends Application {
                 .build();
     }
 
-    public MainComponent getMainComponent() {
+    public static MainComponent getMainComponent() {
         return mainComponent;
     }
 }

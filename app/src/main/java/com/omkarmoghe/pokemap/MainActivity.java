@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((App) getApplication()).getMainComponent().inject(this);
+        App.getMainComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
                 .commit();
         login();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,9 +67,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void login() {
-
         String username = pref.getString(getString(R.string.pref_username), "");
         String password = pref.getString(getString(R.string.pref_password), "");
 
