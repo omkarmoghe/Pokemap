@@ -3,25 +3,25 @@ package com.omkarmoghe.pokemap.network;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-import android.support.annotation.NonNull;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
-import com.google.common.geometry.S2CellId;
-import com.google.common.geometry.S2LatLng;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.map.LocationManager;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
+import com.omkarmoghe.pokemap.utils.Varint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,13 +55,15 @@ public class NianticManager {
     private static NianticManager instance;
 
     private List<Listener> listeners;
+    private Context context;
 
     NianticService nianticService;
     final OkHttpClient client;
-
-    public static NianticManager getInstance() {
-        if (instance == null) {
+    
+    public static NianticManager getInstance(Context context){
+        if (instance == null){
             instance = new NianticManager();
+            instance.context = context;
         }
         return instance;
     }
@@ -262,25 +264,21 @@ public class NianticManager {
             PokemonOuterClass.RequestEnvelop.MessageSingleString.Builder mss = PokemonOuterClass.RequestEnvelop.MessageSingleString.newBuilder();
             mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
             m5.setMessage(mss.build().toByteString());
-
-            // walk = sorted(getNeighbors())
-            List<Long> walk = getNeighbors(location);
-            Collections.sort(walk);
-
+            // TODO: walk = sorted(getNeighbors())
+            // TODO: Check if this is right
+            ArrayList<Integer> walk = getNeighbors();
             PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
             m1.setType(106); // magic number;
             PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
-
-            // mq.f1 = ''.join(map(encode, walk))
-            String f1 = Joiner.on("").join(Collections2.transform(walk, this::encode));
-            mq.setF1(ByteString.copyFrom(f1, "UTF-8"));
-
+            // TODO: mq.f1 = ''.join(map(encode, walk))
+            // TODO: Check if this is right
+            mq.setF1(encode(walk));
             mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
 
-            /*requestLocation();
-            mq.setLat(((long) mLastLocation.getLatitude()));
-            mq.setLong(((long) mLastLocation.getLongitude()));
-            */
+            LatLng latLng = LocationManager.getInstance(context).getLocation();
+            mq.setLat((long) latLng.latitude);
+            mq.setLong((long) latLng.longitude);
+
             //TODO: connect this to the location provider
 
             m1.setMessage(mq.build().toByteString());
@@ -291,39 +289,67 @@ public class NianticManager {
         }
     }
 
-    /**
-     * @param location the current location
-     * @return a list of cell IDs including the origin cell, 10 next and 10 previous cells.
-     */
-    private List<Long> getNeighbors(@NonNull Location location) {
-        S2LatLng latLng = S2LatLng.fromDegrees(location.getLatitude(), location.getLongitude());
-        S2CellId origin = S2CellId.fromLatLng(latLng);
+    //TODO: Find right place for this
+    private ArrayList<Integer> getNeighbors() {
 
-        List<Long> cellIDs = new ArrayList<>();
-        cellIDs.add(origin.id());
-
-        S2CellId next = origin.next();
-        S2CellId prev = origin.prev();
-        for (int i = 0; i < 10; i++) {
-            cellIDs.add(prev.id());
-            cellIDs.add(next.id());
-            next = next.next();
-            prev = prev.prev();
+        Integer origin = null;
+        final TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+            final GsmCellLocation location = (GsmCellLocation) telephony.getCellLocation();
+            if (location != null) {
+                origin = location.getCid();
+            }
         }
 
-        return cellIDs;
+        if (origin == null) {
+            return null;
+        }
+
+        ArrayList<Integer> walk = new ArrayList<>();
+        walk.add(origin);
+
+        for (int i = 1; i <= 10; i++) {
+            Integer next = origin + i;
+            walk.add(next);
+        }
+
+        Collections.sort(walk);
+
+        return walk;
     }
 
-    /**
-     * @param input a long value
-     * @return a Varint-encoded value.
-     */
-    private String encode(Long input) {
-        // TODO: 21.07.16 figure out Java varint encoding
-        return null;
+    //TODO: Find right place for this
+    private ByteString encode(ArrayList<Integer> walk) {
+        if (walk == null) {
+            return null;
+        }
+
+        byte[] mainBytes = null;
+
+        for (Integer cellid: walk) {
+
+            byte[] bytes = Varint.writeUnsignedVarInt(cellid);
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            try {
+                if (mainBytes != null) {
+                    outputStream.write(mainBytes);
+                }
+                outputStream.write( bytes );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mainBytes = outputStream.toByteArray( );
+
+        }
+
+        assert mainBytes != null;
+        return ByteString.copyFrom(mainBytes);
     }
 
-    public interface Listener {
+    public interface Listener{
 
     }
 

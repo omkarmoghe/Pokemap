@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.omkarmoghe.pokemap.app.App;
 import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
@@ -20,7 +18,7 @@ import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
 import javax.inject.Inject;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback {
+public class MainActivity extends BaseActivity {
 
     public static final String TAG = "Pokemap";
 
@@ -86,8 +84,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-
+    public void onBackPressed() {
+        this.finish();
     }
 
     @Override
