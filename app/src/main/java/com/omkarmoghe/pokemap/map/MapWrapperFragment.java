@@ -66,6 +66,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            // TODO: 21.07.16  
         }
     }
 
@@ -73,9 +74,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment if the view is not null
-        if (mView == null) mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        else {
-
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
         }
 
         // build the map
@@ -89,16 +89,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
 
         FloatingActionButton locationFab = (FloatingActionButton) mView.findViewById(R.id.location_fab);
-        locationFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, LOCATION_PERMISSION_REQUEST)) {
-                    Location myLocation = mListener.requestLocation();
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 15)
-                                            );
-                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
-                }
+        locationFab.setOnClickListener(view -> {
+            if (checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, LOCATION_PERMISSION_REQUEST)) {
+                Location myLocation = mListener.requestLocation();
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 15)
+                                        );
+                Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
             }
         });
 

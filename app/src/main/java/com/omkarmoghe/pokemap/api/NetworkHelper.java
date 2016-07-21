@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 
 /**
  * Network helper class.
@@ -58,7 +57,6 @@ public class NetworkHelper {
         RestAdapter.Builder builder = new RestAdapter.Builder();
         builder.setEndpoint(endpoint);
         builder.setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE);
-        builder.setConverter(new GsonConverter(createGsonBuilder().create()));
         return builder;
     }
 

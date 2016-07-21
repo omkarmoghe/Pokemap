@@ -22,8 +22,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -76,6 +80,24 @@ dependencies {
     // Protobuf
     // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
+
+    // Nucleus
+    def nucleusVersion = '3.0.0'
+    compile "info.android15.nucleus:nucleus:$nucleusVersion"
+    compile "info.android15.nucleus:nucleus-support-v4:$nucleusVersion"
+    compile "info.android15.nucleus:nucleus-support-v7:$nucleusVersion"
+
+    // Icepick
+    compile 'com.github.frankiesardo:icepick:2.3.6'
+    apt 'com.github.frankiesardo:icepick-processor:2.3.6'
+
+    // Dagger
+    def daggerVersion = '2.4'
+    compile "javax.annotation:javax.annotation-api:1.2"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    compile "com.google.guava:guava:19.0"
+    apt "com.google.guava:guava:19.0"
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Testing
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
