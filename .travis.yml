@@ -1,10 +1,9 @@
 language: android
-
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 android:
   components:
+<<<<<<< fbb04dce928808017e0087ad14022fc2523f2fbf
     - platform-tools
     - tools
 
@@ -18,16 +17,16 @@ android:
     - extra-google-google_play_services
     - extra-android-m2repository
     - extra-google-m2repository
-    
+
   licenses:
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+  - android-sdk-license-.+
+  - google-gdk-license-.+
 
 before_script:
-    - chmod +x gradlew
+  - chmod +x gradlew
 
 script:
-  - ./gradlew build
+  - "./gradlew build"
 
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
@@ -36,22 +35,26 @@ before_deploy:
   - git tag $GIT_TAG -a -m "Pokemap development build $TRAVIS_BUILD_NUMBER"
   - git push -q https://$GH_TOKEN@github.com/$TRAVIS_REPO_SLUG --tags
   - ls -R
+
 deploy:
   skip_cleanup: true
   provider: releases
   prerelease: true
   api_key:
-    secure: "TODO"
+    secure: "plgogAkdtkflHYsdZro6mGPLn7rKLmIFYztFziZ7cXDBiWDP5GPench/fdMBlmDP3npHkMMMsyynz8S+K0mQ/UW4vYokw/PRjP9PAOmLnxpLU1xgJ3RRsBqKLrdXLON1sHiS/oxk5cG/2LfRt/e/mg3wv/UU7ctA0jzDxA6U797PJvTTE7JUnmhRSeBcQN5LGVH4MlJxU20/g8Zkgh3M62zxS3tZKhz36V+IwJc2x13XLVl2Rh6wzZg6mc5VBdz39oBL8OOKyNjoFS/o36fw36874GKEhN7mrvbClkdmtaf+GLQoIZl1bCawr5PoSm6mjAVEeu6rDX1eKlo8aLqPOoFeCpac2AOfCXMjzDKXcRV8QqwHwjw9P3sVX6LJnRPYCsmz8Od1+5y6u3+qtL30JY6mcL8f3Mj8goMNGoVhTxLCFKoxPCAU+8Tw10DTGujJ0KWclmxEFQrBX6d5FFT7CdBMJWOTwtpEqtvQwixqBF3E1+zUdpNORRe5V4A6494v5/FLtJ/BS7z8+41ros08YjNhKbDUFoL8bV+LVnwKPwiMcU0uWhTSDa7oFxXIaS5j/o+rANRQUacjlsuZAjO53bNTevFkjs/itwjG0Ee1VU1NZiuDS9Qz948rflscbMVV3lRjlSb2+1q05WMII927kyCVomejGXzNLDNELRbmj+o="
   file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
   on:
     tags: false
     repo: $TRAVIS_REPO_SLUG
     all_branches: true
+
 branches:
   except:
   - "/^*-rev[0-9]/"
+
 notifications:
   email: false
+
 env:
   global:
     secure: "IxlTZcPE8iePA7Q85zMoKa/Lb/HlYVnBcOOHfXMlCEbPCmfbgdShu7sMu6VNVXZGYUlaK7+jKVTwCjzHzcjshENUAvUgLfPRfQT4yaKy3HtX/WYQQJUEAvqUtd+nDZhyMCd4AZhXiTl9ip1KOF43D5slIKOvfC25LfuY23a5kBBnt1JEHrIiqu44sJs5Xw4z/bU+LwacZP9EmHvryjKu++q0SPy8sUrqWVG0QIUJNKOQPtgMQNHDdxLYtHZ3uWRwH0IeP3DgLBUaY6Alq+GhGgyKMDwffHpUKdEhGsYJVFeQTcnjuZlHcZ/y7kBrMzKVXknFdiClcv7Zjuym1eDy2hbeWVHJoowg3KNP1PIFrt5jEzt1h6+JtpJkPvkjQFcjI33pNxlm7Ago7nUrfAtrE6VyajAvGCJQcatltnyvgrKipm6BibbGxx72fzU+qS5Y9mh20sYAggwEOHfWlERDZV5yzXrAlFFLGiyMTSKVbMDbdq2NwX+VcSlzbLfAyM+QfwP2KtPTbVL5kmrPehjtZj+4LHNy8sTbZE1TDR33ynwiEIoN+U4Cu/+4guL+2ZXz0AgamzZDoqyy5xq1Y6HXVCu6HP5Q5gfgJdrYwFMgvZX0Kyu/5xBOoUsPSv1XjbNyqc84wWMDxjWI9i/U2GRwu0eowOMRrndIUWEVbv6E4mo="
