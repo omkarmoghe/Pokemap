@@ -11,6 +11,7 @@
 # Generated files
 bin/
 gen/
+$ANDROID_SDK/
 
 # Gradle files
 .gradle/

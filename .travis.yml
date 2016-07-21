@@ -28,3 +28,10 @@ before_script:
 
 script:
   - ./gradlew build
+
+addons:
+  apt:
+    packages:
+    - python2.7
+
+after_success: ./scripts/upload_release_to_github.py
