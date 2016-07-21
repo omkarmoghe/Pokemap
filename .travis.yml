@@ -27,7 +27,7 @@ before_script:
     - chmod +x gradlew
 
 script:
-  - ./gradlew build
+  - ./gradlew assemble
 
 before_deploy:
   - zip $TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER *.apk
