@@ -24,16 +24,14 @@ import com.omkarmoghe.pokemap.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapWrapperFragment.LocationRequestListener} interface
- * to handle interaction events.
+ *
  * Use the {@link MapWrapperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                                             ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private static final int LOCATION_PERMISSION_REQUEST = 703;
+    private static final int LOCATION_PERMISSION_REQUEST = 19;
 
     private LocationManager locationManager;
 

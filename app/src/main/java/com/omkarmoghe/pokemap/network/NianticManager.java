@@ -2,21 +2,28 @@ package com.omkarmoghe.pokemap.network;
 
 import android.app.Activity;
 import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.map.LocationManager;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
+import com.omkarmoghe.pokemap.utils.Varint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
@@ -47,12 +54,17 @@ public class NianticManager {
     private static NianticManager instance;
 
     private List<Listener> listeners;
+    private Context context;
 
     NianticService nianticService;
     final OkHttpClient client;
-    public static NianticManager getInstance(){
+
+    //private String token;
+
+    public static NianticManager getInstance(Context context){
         if(instance == null){
             instance = new NianticManager();
+            instance.context = context;
         }
         return instance;
     }
@@ -61,16 +73,16 @@ public class NianticManager {
         listeners = new ArrayList<>();
 
         client = new OkHttpClient.Builder()
-            .hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String s, SSLSession sslSession) {
-                    return true;
-                }
-            })
-            .addInterceptor(new LoggingInterceptor())
-            .followRedirects(false)
-            .followSslRedirects(false)
-            .build();
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String s, SSLSession sslSession) {
+                        return true;
+                    }
+                })
+                .addInterceptor(new LoggingInterceptor())
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build();
 
         nianticService = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -254,16 +266,20 @@ public class NianticManager {
             mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
             m5.setMessage(mss.build().toByteString());
             // TODO: walk = sorted(getNeighbors())
+            // TODO: Check if this is right
+            ArrayList<Integer> walk = getNeighbors();
             PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
             m1.setType(106); // magic number;
             PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
             // TODO: mq.f1 = ''.join(map(encode, walk))
+            // TODO: Check if this is right
+            mq.setF1(encode(walk));
             mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
 
-            /*requestLocation();
-            mq.setLat(((long) mLastLocation.getLatitude()));
-            mq.setLong(((long) mLastLocation.getLongitude()));
-            */
+            LatLng latLng = LocationManager.getInstance(context).getLocation();
+            mq.setLat((long) latLng.latitude);
+            mq.setLong((long) latLng.longitude);
+
             //TODO: connect this to the location provider
 
             m1.setMessage(mq.build().toByteString());
@@ -272,6 +288,66 @@ public class NianticManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //TODO: Find right place for this
+    private ArrayList<Integer> getNeighbors() {
+
+        Integer origin = null;
+        final TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+            final GsmCellLocation location = (GsmCellLocation) telephony.getCellLocation();
+            if (location != null) {
+                origin = location.getCid();
+            }
+        }
+
+        if (origin == null) {
+            return null;
+        }
+
+        ArrayList<Integer> walk = new ArrayList<>();
+        walk.add(origin);
+
+        for (int i = 1; i <= 10; i++) {
+            Integer next = origin + i;
+            walk.add(next);
+        }
+
+        Collections.sort(walk);
+
+        return walk;
+    }
+
+    //TODO: Find right place for this
+    private ByteString encode(ArrayList<Integer> walk) {
+        if (walk == null) {
+            return null;
+        }
+
+        byte[] mainBytes = null;
+
+        for (Integer cellid: walk) {
+
+            byte[] bytes = Varint.writeUnsignedVarInt(cellid);
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            try {
+                if (mainBytes != null) {
+                    outputStream.write(mainBytes);
+                }
+                outputStream.write( bytes );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mainBytes = outputStream.toByteArray( );
+
+        }
+
+        assert mainBytes != null;
+        return ByteString.copyFrom(mainBytes);
     }
 
     public interface Listener{
