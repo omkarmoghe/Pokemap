@@ -33,7 +33,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
     compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.google.android.gms:play-services-maps:9.2.1'
