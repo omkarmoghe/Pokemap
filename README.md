@@ -2,19 +2,10 @@
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 # Building
-To build this you need to add your **PTC** username and password to the `getToken` function in the Activity's `onCreate` method as follows:
-
-```Java
-...
-try {
-  getToken(USERNAME, PASSWORD);
-} catch (IOException e) {
-  e.printStackTrace();
-}
-...
-```
+Check the Wiki for more info on building!
 
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
+## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
 So the main work we need to do is to effectively translate the code over at the [main repo](https://github.com/AHAAAAAAA/PokemonGo-Map) to work in *native* Android. The login functionality to get the token has been implemented and I started migrating the code to grab the actual Pokemon / Pokestop data using the `.proto` files.
 
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.

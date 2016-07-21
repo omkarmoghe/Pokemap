@@ -4,9 +4,13 @@
     <string name="action_settings">Settings</string>
     <string name="action_relogin">Relogin</string>
 
-    <string name="pref_username">Username</string>
+    <string name="pref_username">Set Username</string>
     <string name="pref_default_username">John Doe</string>
-    <string name="pref_password">Password</string>
+    <string name="pref_password">Set Password</string>
     <string name="pref_default_password">***</string>
+    <string name="pref_user_account">User Account</string>
+    <string name="pref_warning">NOTE: Do NOT use your main account for this application!
+        Instead, create and use a fake Pokémon Trainer Club account with a different password and email.</string>
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
+    <string name="title_activity_poke_map">Pokemon Nearby</string>
 </resources>
