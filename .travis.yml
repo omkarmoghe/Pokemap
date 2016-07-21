@@ -15,10 +15,13 @@ android:
     - android-24
 
     # Additional components
+    - extra-google-google_play_services
     - extra-android-m2repository
+    - extra-google-m2repository
     
   licenses:
     - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 before_script:
     - chmod +x gradlew
