@@ -14,11 +14,16 @@ import android.view.MenuItem;
 import com.omkarmoghe.pokemap.app.App;
 import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
+import com.omkarmoghe.pokemap.rx.presenter.MainPresenter;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
 import javax.inject.Inject;
 
-public class MainActivity extends BaseActivity {
+import nucleus.factory.PresenterFactory;
+import nucleus.factory.RequiresPresenter;
+
+@RequiresPresenter(MainPresenter.class)
+public class MainActivity extends BaseActivity<MainPresenter> {
 
     public static final String TAG = "Pokemap";
 
@@ -31,10 +36,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final PresenterFactory<MainPresenter> superFactory = super.getPresenterFactory();
+        setPresenterFactory(() -> {
+            MainPresenter presenter = superFactory.createPresenter();
+            App.getMainComponent().inject(presenter);
+            return presenter;
+        });
+
         super.onCreate(savedInstanceState);
+        App.getMainComponent().inject(this);
         setContentView(R.layout.activity_main);
 
-        App.getMainComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
