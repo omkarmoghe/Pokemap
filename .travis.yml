@@ -30,7 +30,6 @@ script:
   - ./gradlew build
 
 before_deploy:
-  - zip $TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER /app/build/outputs/apk/app-debug.apk
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
   - export GIT_TAG=$TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER
@@ -43,7 +42,7 @@ deploy:
   prerelease: true
   api_key:
     secure: AUja1Xwg09Pibn5KVsQtQ5GC8KsFjPqxLgY9pUYPgpR/JxL/Lm2VL7IRf/jzOs/XErHXGoQsI6w1O5euZldcVGWt7ZDh8f3cZ5cGCYskQoGcUJN1txL7vxUcoiYznB9jBZ8upGRRr917emPu+kpSR5/EUnM95D7IPebRPzbmg1M5diBwjjuggva2ox9wLtc4wOOai/yNmy8bLFOyRJooDT698J3ZH4ndbOIlL3OwYE6pTQs3UNL9Pbmr9FOly4T7CKZmKEJ/j04G3EWW8mwU6dc1ydRadAY7lP4dkaHX42DVZBKCuhi51g6+FH1TQ2s+Y7Pdbe2TjIaNTTZA+yX5VGIHbn1v4RCxQWTdv0dh3C3sRXjplPpt/UX8KZJ/DSqUR1T/xif31is0CJuzXjNrc2ZsgsI7omQ6Yaw2iBYiyuEcESMpK+R+YFmrihFyhrHsUNqrqMcfNG5KY3JdsKq+LCtl1zDaJFseEWyBbSXc6cIf+Imawyysn3s3//veLLdXwFU+XrXqXJrLNfLpZMV0tdxdAXLTk1CPZckA5q0ym6apQPJ7M361IbZaYaTvcngUKJXzYcKFbZ4bEYoDSLoHq79XyNCAIfllW4q+g/s74kLLmesB5BuL3dpAK4VLH34PNUArYbKX5J8kG6RprUjuh7rgYpD91xrdZGEZLal8YpY=
-  file: $TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER.zip
+  file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
   on:
     tags: false
     repo: $TRAVIS_REPO_SLUG
