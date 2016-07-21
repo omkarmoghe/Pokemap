@@ -15,13 +15,23 @@ android:
     - android-24
 
     # Additional components
+    - extra-google-google_play_services
     - extra-android-m2repository
+    - extra-google-m2repository
     
   licenses:
     - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 before_script:
     - chmod +x gradlew
 
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew build
+
+addons:
+  apt:
+    packages:
+    - python2.7
+
+after_success: ./scripts/upload_release_to_github.py
