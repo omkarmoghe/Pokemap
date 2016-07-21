@@ -91,6 +91,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
     }
 
     @Override
+    public void onBackPressed() {
+        this.finish();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // TODO: test all this shit on a 6.0+ phone lmfao
         switch (requestCode) {
