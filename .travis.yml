@@ -27,4 +27,4 @@ before_script:
     - chmod +x gradlew
 
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew build
