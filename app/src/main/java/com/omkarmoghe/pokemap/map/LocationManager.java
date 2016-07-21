@@ -92,7 +92,12 @@ public class LocationManager {
         listeners = new ArrayList<>();
     }
     public LatLng getLocation(){
-        return new LatLng(location.getLatitude(), location.getLongitude());
+        //Don't getLatitude without checking if location is not null... it will throw sys err...
+        if(location != null){
+            return new LatLng(location.getLatitude(), location.getLongitude());
+        }else{
+            return null;
+        }
     }
 
     public void onResume(){
