@@ -10,10 +10,12 @@ import android.widget.Toast;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.map.LocationManager;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
-import com.omkarmoghe.pokemap.utils.VarintEncoder;
+import com.omkarmoghe.pokemap.utils.Varint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +62,7 @@ public class NianticManager {
         if(instance == null){
             instance = new NianticManager();
             instance.context = context;
+            instance.getPokemon();
         }
         return instance;
     }
@@ -271,14 +274,9 @@ public class NianticManager {
             mq.setF1(encode(walk));
             mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
 
-            /*requestLocation();
-            mq.setLat(((long) mLastLocation.getLatitude()));
-            mq.setLong(((long) mLastLocation.getLongitude()));
-            */
-
-            //TODO: Remove hard coded coords. This is to avoid exceptions
-            mq.setLat((long) 43.287151);
-            mq.setLong((long) -8.360502);
+            LatLng latLng = LocationManager.getInstance(context).getLocation();
+            mq.setLat((long) latLng.latitude);
+            mq.setLong((long) latLng.longitude);
 
             //TODO: connect this to the location provider
 
@@ -325,14 +323,11 @@ public class NianticManager {
             return null;
         }
 
-
         byte[] mainBytes = null;
 
-        StringBuilder s = new StringBuilder(100);
         for (Integer cellid: walk) {
-            long id = cellid.longValue();
 
-            byte[] bytes = VarintEncoder.encode(id);
+            byte[] bytes = Varint.writeUnsignedVarInt(cellid);
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
