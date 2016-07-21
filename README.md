@@ -1,7 +1,7 @@
 # Pokemap [![Build Status](https://travis-ci.org/omkarmoghe/Pokemap.svg?branch=master)](https://travis-ci.org/omkarmoghe/Pokemap)
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
-Joint the Slack channel: https://github.com/omkarmoghe/Pokemap/issues/31
+[Join the Slack channel](https://github.com/omkarmoghe/Pokemap/issues/31)
 
 # Building
 Check the Wiki for more info on building!
