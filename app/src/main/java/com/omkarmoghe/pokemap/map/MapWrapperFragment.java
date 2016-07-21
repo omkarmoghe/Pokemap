@@ -79,11 +79,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         });
-        // Inflate the layout for this fragment if the view is not null
-        if (mView == null)
-            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        else {
 
+        // Inflate the layout for this fragment if the view is not null
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
         }
 
         // build the map
@@ -97,18 +96,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
 
         FloatingActionButton locationFab = (FloatingActionButton) mView.findViewById(R.id.location_fab);
-        locationFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mLocation != null && mGoogleMap != null) {
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-
-                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
-                }
+        locationFab.setOnClickListener(view -> {
+            if (mLocation != null && mGoogleMap != null) {
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+                Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
             }
         });
 
