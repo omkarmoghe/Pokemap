@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -14,11 +13,14 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.omkarmoghe.pokemap.app.App;
 import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback{
+import javax.inject.Inject;
+
+public class MainActivity extends BaseActivity implements OnMapReadyCallback {
 
     public static final String TAG = "Pokemap";
 
@@ -26,6 +28,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
     private MapWrapperFragment mMapWrapperFragment;
 
     // Preferences
+    @Inject
     SharedPreferences pref;
 
     @Override
@@ -33,7 +36,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        ((App) getApplication()).getMainComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,8 +44,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback{
         mMapWrapperFragment = MapWrapperFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_container, mMapWrapperFragment)
-                   .addToBackStack(null)
-                   .commit();
+                .addToBackStack(null)
+                .commit();
         login();
     }
 

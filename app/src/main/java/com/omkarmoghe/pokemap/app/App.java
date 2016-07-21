@@ -6,7 +6,6 @@ import com.omkarmoghe.pokemap.dagger.AppModule;
 import com.omkarmoghe.pokemap.dagger.DaggerMainComponent;
 import com.omkarmoghe.pokemap.dagger.MainActivityModule;
 import com.omkarmoghe.pokemap.dagger.MainComponent;
-import com.omkarmoghe.pokemap.dagger.MainPresenterModule;
 
 /**
  * Custom application class.
@@ -23,7 +22,6 @@ public class App extends Application {
 
         mainComponent = DaggerMainComponent.builder()
                 .appModule(new AppModule(this))
-                .mainPresenterModule(new MainPresenterModule())
                 .mainActivityModule(new MainActivityModule())
                 .build();
     }

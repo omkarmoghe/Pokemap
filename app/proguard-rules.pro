@@ -244,8 +244,11 @@
 -keepclassmembers interface org.apache.commons.logging.** { *; }
 
 # Retrofit
--keep class retrofit.http.** { *; }
--keepclasseswithmembers class * { @retrofit.http.* <methods>; }
+-keep class retrofit2.http.** { *; }
+-keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
+
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
 
 -keep class org.apache.http.** { *; }
 -keep class org.apache.james.mime4j.** { *; }
