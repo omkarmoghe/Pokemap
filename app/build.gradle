@@ -33,11 +33,10 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
     compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha4'
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
-    compile 'com.google.android.gms:play-services-maps:9.2.1'
-    compile 'com.google.android.gms:play-services-location:9.2.1'
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'

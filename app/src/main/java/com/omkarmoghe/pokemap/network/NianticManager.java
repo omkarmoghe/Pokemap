@@ -80,12 +80,12 @@ public class NianticManager {
                 .create(NianticService.class);
     }
     public void login(final String username, final String password, Context context){
-        retrofitLogin(username, password);
-        /*try {
+        //retrofitLogin(username, password);
+        try {
             traditionalLogin(username, password, context);
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void retrofitLogin(final String username, final String password){

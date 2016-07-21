@@ -65,6 +65,7 @@ public class LocationManager {
                             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 if (context instanceof Activity) {
                                     ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+
                                 }
                                 return;
                             }
@@ -90,7 +91,6 @@ public class LocationManager {
         }
         listeners = new ArrayList<>();
     }
-
     public LatLng getLocation(){
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
@@ -98,6 +98,8 @@ public class LocationManager {
     public void onResume(){
         mGoogleApiClient.connect();
     }
+
+
 
     public void onPause(){
         mGoogleApiClient.disconnect();
@@ -118,9 +120,12 @@ public class LocationManager {
         for(Listener listener: listeners){
             listener.onLocationChanged(location);
         }
+
     }
 
     public interface Listener{
         void onLocationChanged(Location location);
     }
+
+
 }
