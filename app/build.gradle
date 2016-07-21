@@ -59,10 +59,10 @@ dependencies {
     def AAVersion = '3.3.2'
 
     apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    androidTestCompile "org.androidannotations:androidannotations-api:$AAVersion"
 
     // S2 geometry by Google
-    compile project(':s2-geometry-library-java')
+    compile 'org.isuper:s2-geometry-library-java:0.0.1'
 
     // Retrolambda
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'

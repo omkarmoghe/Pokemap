@@ -1,1 +1,1 @@
-include ':app', ':s2-geometry-library-java'
+include ':app'
