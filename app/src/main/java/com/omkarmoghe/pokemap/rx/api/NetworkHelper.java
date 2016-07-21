@@ -5,14 +5,15 @@ import android.content.Context;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jakewharton.retrofit.Ok3Client;
-import com.omkarmoghe.pokemap.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-import retrofit.RestAdapter;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Network helper class.
@@ -21,7 +22,7 @@ import retrofit.RestAdapter;
  */
 public class NetworkHelper {
 
-    private static RestAdapter.Builder mRetrofitBuilder;
+    private static Retrofit.Builder mRetrofitBuilder;
 
     private static final int TIMEOUT = 1;
 
@@ -41,23 +42,24 @@ public class NetworkHelper {
     public <S> S createService(Context context,
                                String apiEndpoint,
                                Class<S> serviceClass) {
-        initRestAdapterBuilder(context, apiEndpoint);
-        RestAdapter adapter = mRetrofitBuilder.build();
-        return adapter.create(serviceClass);
+        if (null == mRetrofitBuilder) {
+            mRetrofitBuilder = initRestAdapterBuilder(context, apiEndpoint);
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                    .create();
+            mRetrofitBuilder.addConverterFactory(GsonConverterFactory.create(gson));
+        }
+
+        Retrofit retrofit = mRetrofitBuilder.build();
+        return retrofit.create(serviceClass);
     }
 
-    private RestAdapter.Builder initRestAdapterBuilder(Context context,
-                                                       String endpoint) {
-        mRetrofitBuilder = createRestAdapter(endpoint);
-        mRetrofitBuilder.setClient(new Ok3Client(createHttpClient(context)));
-        return mRetrofitBuilder;
-    }
-
-    private RestAdapter.Builder createRestAdapter(String endpoint) {
-        RestAdapter.Builder builder = new RestAdapter.Builder();
-        builder.setEndpoint(endpoint);
-        builder.setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE);
-        return builder;
+    private Retrofit.Builder initRestAdapterBuilder(Context context,
+                                                    String endpoint) {
+        return new Retrofit.Builder()
+                .baseUrl(endpoint)
+                .client(createHttpClient(context))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
     }
 
     private OkHttpClient createHttpClient(Context context) {
@@ -68,9 +70,5 @@ public class NetworkHelper {
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();
-    }
-
-    private GsonBuilder createGsonBuilder() {
-        return new GsonBuilder();
     }
 }
