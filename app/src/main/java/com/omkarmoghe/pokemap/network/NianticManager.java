@@ -62,7 +62,6 @@ public class NianticManager {
         if(instance == null){
             instance = new NianticManager();
             instance.context = context;
-            instance.getPokemon();
         }
         return instance;
     }
