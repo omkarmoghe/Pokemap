@@ -95,9 +95,8 @@ public class LocationManager {
         //Don't getLatitude without checking if location is not null... it will throw sys err...
         if(location != null){
             return new LatLng(location.getLatitude(), location.getLongitude());
-        }else{
-            return null;
         }
+        return null;
     }
 
     public void onResume(){
