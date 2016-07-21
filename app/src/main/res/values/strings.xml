@@ -12,4 +12,5 @@
     <string name="pref_warning">NOTE: Do NOT use your main account for this application!
         Instead, create and use a fake Pokémon Trainer Club account with a different password and email.</string>
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
+    <string name="title_activity_poke_map">Pokemon Nearby</string>
 </resources>

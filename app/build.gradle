@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
@@ -39,5 +40,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.2.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
     testCompile 'junit:junit:4.12'
 }
