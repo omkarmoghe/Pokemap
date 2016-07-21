@@ -24,3 +24,10 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+subprojects {
+    tasks.withType(Jar) {
+        destinationDir = file("$rootDir/app/libs")
+    }
+}
