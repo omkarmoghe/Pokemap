@@ -3,7 +3,6 @@ jdk:
 - oraclejdk8
 android:
   components:
-<<<<<<< fbb04dce928808017e0087ad14022fc2523f2fbf
     - platform-tools
     - tools
 
