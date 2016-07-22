@@ -41,6 +41,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public void removeUsername() {
+        sharedPreferences.edit().remove(USERNAME_KEY).apply();
+    }
+
+    @Override
     public void setPassword(@NonNull String password) {
         sharedPreferences.edit().putString(PASSWORD_KEY, password).apply();
     }
@@ -49,4 +54,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     public String getPassword() {
         return sharedPreferences.getString(PASSWORD_KEY, "");
     }
+
+    @Override
+    public void removePassword() {
+        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    }
+
 }

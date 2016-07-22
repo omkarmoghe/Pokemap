@@ -25,4 +25,5 @@
     <string name="title_activity_poke_map">Pokemon Nearby</string>
 
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
+    <string name="action_logout">Logout</string>
 </resources>

@@ -27,6 +27,11 @@ public interface PokemapAppPreferences {
     void setUsername(@NonNull String username);
 
     /**
+     * Remove username associated with account.
+     */
+    void removeUsername();
+
+    /**
      * @param password that should be set
      */
     void setPassword(@NonNull String password);
@@ -35,4 +40,10 @@ public interface PokemapAppPreferences {
      * @return the password stored or an empty @see java.lang.String
      */
     String getPassword();
+
+
+    /**
+     * Remove password associated with account
+     */
+    void removePassword();
 }

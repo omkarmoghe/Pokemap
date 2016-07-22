@@ -48,16 +48,20 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.action_relogin) {
-            login();
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case R.id.action_relogin:
+                login();
+                break;
+            case R.id.action_logout:
+                logout();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     private void login() {
         if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
@@ -65,6 +69,21 @@ public class MainActivity extends BaseActivity {
         } else {
             nianticManager.login(pref.getUsername(), pref.getPassword(), this);
         }
+    }
+
+    private void logout() {
+        pref.removeUsername();
+        pref.removePassword();
+        reloadActivity();
+    }
+
+    private void reloadActivity() {
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
     }
 
     private void requestLoginCredentials() {
