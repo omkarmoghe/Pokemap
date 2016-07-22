@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.omkarmoghe.pokemap.network.NianticManager;
+import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import java.util.ArrayList;
@@ -38,13 +39,13 @@ public class Notifier {
     public void removeListener(NianticManager.NianticEventListener listener) { this.mListeners.remove(listener); }
 
 
-    public void dispatchOnLogin(final AuthInfo info){
+    public void dispatchOnLogin(final AuthInfo info, final PokemonGo pokemonGo){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 for(NianticManager.NianticEventListener l : mListeners){
                     try{
-                        l.onLogin(info);
+                        l.onLogin(info, pokemonGo);
                     }catch(Exception ex){
                         Log.e(NianticManager.TAG, "Listener threw Exception", ex);
                     }
@@ -53,12 +54,12 @@ public class Notifier {
         });
     }
 
-    public void dispatchOnCatchablePokemonFound(List<CatchablePokemon> pokemons){
+    public void dispatchOnCatchablePokemonFound(final List<CatchablePokemon> pokemons){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 for(NianticManager.NianticEventListener l : mListeners){
-                    l.on
+                    l.onCatchablePokemonFound(pokemons);
                 }
             }
         });

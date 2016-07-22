@@ -87,7 +87,7 @@ public class NianticManager {
                 try
                 {
                     mAuthInfo = new PtcLogin(client).login(username, password);
-                    Notifier.instance().dispatchOnLogin(mAuthInfo);
+                    Notifier.instance().dispatchOnLogin(mAuthInfo, new PokemonGo(mAuthInfo, client));
 
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
@@ -123,7 +123,7 @@ public class NianticManager {
             }
         });
     }
-    
+
     //TODO: Find right place for this
     private ArrayList<Integer> getNeighbors() {
 
@@ -187,8 +187,10 @@ public class NianticManager {
     }
 
     public interface NianticEventListener {
-        void onLogin(AuthInfo info);
+        void onLogin(AuthInfo info, PokemonGo pokemonGo);
         void onOperationFailure(Exception ex);
+
+        void onCatchablePokemonFound(List<CatchablePokemon> pokemons);
     }
 
 }
