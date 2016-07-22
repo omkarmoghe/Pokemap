@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
         if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
             requestLoginCredentials();
         } else {
-            nianticManager.login(pref.getUsername(), pref.getPassword(), this);
+            nianticManager.login(pref.getUsername(), pref.getPassword());
         }
     }
 
