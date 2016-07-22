@@ -51,7 +51,7 @@ public class NianticManager {
     private List<NianticEventListener> listeners;
     private Context context;
     private AuthInfo mAuthInfo;
-    
+
     final OkHttpClient client;
     private Handler mHandler;
 
@@ -95,13 +95,13 @@ public class NianticManager {
         });
     }
 
-    public void fetchCatchablePokemon(final Location location){
+    public void fetchCatchablePokemon(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     PokemonGo pokemonGO = new PokemonGo(mAuthInfo, client);
-                    pokemonGO.setLocation(location.getLatitude(), location.getLongitude(), location.getAltitude());
+                    pokemonGO.setLocation(lat, longitude, alt);
                     List<CatchablePokemon> catchablePokemon = pokemonGO.getMap().getCatchablePokemon();
                     Notifier.instance().dispatchOnCatchablePokemonFound(catchablePokemon);
 
