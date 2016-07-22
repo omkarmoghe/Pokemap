@@ -51,8 +51,7 @@ public class NianticManager {
     private List<NianticEventListener> listeners;
     private Context context;
     private AuthInfo mAuthInfo;
-
-    NianticService nianticService;
+    
     final OkHttpClient client;
     private Handler mHandler;
 

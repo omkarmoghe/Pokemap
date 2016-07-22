@@ -25,6 +25,6 @@ public class AbstractNianticEventListener implements NianticManager.NianticEvent
 
     @Override
     public void onCatchablePokemonFound(List<CatchablePokemon> pokemons) {
-        
+
     }
 }
