@@ -2,6 +2,7 @@ package com.omkarmoghe.pokemap.network;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
@@ -59,17 +60,15 @@ public class NianticManager {
     NianticService nianticService;
     final OkHttpClient client;
 
-    //private String token;
-
     public static NianticManager getInstance(Context context){
-        if(instance == null){
+        if (instance == null){
             instance = new NianticManager();
             instance.context = context;
         }
         return instance;
     }
 
-    private NianticManager(){
+    private NianticManager() {
         listeners = new ArrayList<>();
 
         client = new OkHttpClient.Builder()
@@ -91,7 +90,8 @@ public class NianticManager {
                 .build()
                 .create(NianticService.class);
     }
-    public void login(final String username, final String password, Context context){
+
+    public void login(final String username, final String password, Context context) {
         //retrofitLogin(username, password);
         try {
             traditionalLogin(username, password, context);
@@ -100,7 +100,7 @@ public class NianticManager {
         }
     }
 
-    private void retrofitLogin(final String username, final String password){
+    private void retrofitLogin(final String username, final String password) {
         Callback<NianticService.InitialResponse> initialCallback = new Callback<NianticService.InitialResponse>() {
             @Override
             public void onResponse(Call<NianticService.InitialResponse> call, Response<NianticService.InitialResponse> response) {
@@ -116,7 +116,7 @@ public class NianticManager {
         call.enqueue(initialCallback);
     }
 
-    private void retrofitLoginStep2(NianticService.LoginRequest loginRequest){
+    private void retrofitLoginStep2(NianticService.LoginRequest loginRequest) {
         Callback<NianticService.LoginResponse> loginCallback = new Callback<NianticService.LoginResponse>() {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
@@ -192,9 +192,9 @@ public class NianticManager {
                             Log.d(TAG, String.valueOf(response.code())); // should be a 302 (redirect)
                             Log.d(TAG, response.headers().toString()); // should contain a "Location" header
 
-                            if(response.code() != 302 || response.header("Location") == null) {
-                                if (context instanceof Activity){
-                                    ((Activity)context).runOnUiThread(
+                            if (response.code() != 302 || response.header("Location") == null) {
+                                if (context instanceof Activity) {
+                                    ((Activity) context).runOnUiThread(
                                             new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -248,13 +248,12 @@ public class NianticManager {
         });
     }
 
-
     /**
      * Needs to be translated from the Python library.
      * See https://github.com/AHAAAAAAA/PokemonGo-Map
      * See https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/example.py#L378
      */
-    private void getPokemon() {
+    private void getPokemon(Location location) {
         try {
             PokemonOuterClass.RequestEnvelop.Requests.Builder m4 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
             PokemonOuterClass.RequestEnvelop.MessageSingleInt.Builder msi = PokemonOuterClass.RequestEnvelop.MessageSingleInt.newBuilder();

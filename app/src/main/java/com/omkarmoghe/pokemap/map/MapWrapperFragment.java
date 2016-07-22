@@ -1,14 +1,11 @@
 package com.omkarmoghe.pokemap.map;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +26,7 @@ import com.omkarmoghe.pokemap.R;
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
-                                                            ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
 
@@ -39,6 +36,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
+
     public MapWrapperFragment() {
         // Required empty public constructor
     }
@@ -74,16 +72,15 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation == null) {
                     mLocation = location;
                     initMap();
-                }
-                else{
+                } else {
                     mLocation = location;
                 }
             }
         });
-        // Inflate the layout for this fragment if the view is not null
-        if (mView == null) mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        else {
 
+        // Inflate the layout for this fragment if the view is not null
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
         }
 
         // build the map
@@ -97,26 +94,21 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
 
         FloatingActionButton locationFab = (FloatingActionButton) mView.findViewById(R.id.location_fab);
-        locationFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mLocation != null && mGoogleMap != null) {
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-
-                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
-                }
-                else{
-
-                    Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
-                }
+        locationFab.setOnClickListener(view -> {
+            if (mLocation != null && mGoogleMap != null) {
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+                Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
             }
         });
 
         return mView;
     }
-    private void initMap(){
-        if (mLocation != null && mGoogleMap != null){
+
+    private void initMap() {
+        if (mLocation != null && mGoogleMap != null) {
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));

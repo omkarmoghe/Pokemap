@@ -1,10 +1,11 @@
 package com.omkarmoghe.pokemap.settings;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import com.omkarmoghe.pokemap.R;
 
 public class SettingsFragment extends PreferenceFragment {

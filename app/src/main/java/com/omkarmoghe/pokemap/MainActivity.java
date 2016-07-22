@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +12,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.omkarmoghe.pokemap.app.App;
 import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
+import com.omkarmoghe.pokemap.rx.presenter.MainPresenter;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
 
-public class MainActivity extends BaseActivity {
+import javax.inject.Inject;
+
+import nucleus.factory.PresenterFactory;
+import nucleus.factory.RequiresPresenter;
+
+@RequiresPresenter(MainPresenter.class)
+public class MainActivity extends BaseActivity<MainPresenter> {
 
     public static final String TAG = "Pokemap";
 
@@ -26,14 +33,22 @@ public class MainActivity extends BaseActivity {
     private MapWrapperFragment mMapWrapperFragment;
 
     // Preferences
+    @Inject
     SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final PresenterFactory<MainPresenter> superFactory = super.getPresenterFactory();
+        setPresenterFactory(() -> {
+            MainPresenter presenter = superFactory.createPresenter();
+            App.getMainComponent().inject(presenter);
+            return presenter;
+        });
+
         super.onCreate(savedInstanceState);
+        App.getMainComponent().inject(this);
         setContentView(R.layout.activity_main);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,7 +60,6 @@ public class MainActivity extends BaseActivity {
                 .commit();
         login();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,9 +79,7 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void login() {
-
         String username = pref.getString(getString(R.string.pref_username), "");
         String password = pref.getString(getString(R.string.pref_password), "");
 
