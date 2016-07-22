@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap;
+package com.omkarmoghe.pokemap.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
