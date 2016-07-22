@@ -10,8 +10,8 @@ import android.support.annotation.NonNull;
  */
 
 public final class PokemapSharedPreferences {
-    private final String USERNAME_KEY = "UsernameKey";
-    private final String PASSWORD_KEY = "PasswordKey";
+    private static final String USERNAME_KEY = "UsernameKey";
+    private static final String PASSWORD_KEY = "PasswordKey";
 
     private final SharedPreferences sharedPreferences;
 
