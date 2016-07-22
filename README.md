@@ -5,8 +5,7 @@ A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
 ## Why aren't Pokemon showing up?
-We're still testing and haven't merged it into this repo yet. Here's a sneak peak thanks to [@rohanjain1](https://github.com/rohanjain1):
-<img src="http://i.imgur.com/zzad874.png" width="540" height="960">
+We're still testing and haven't merged it into this repo yet. 
 
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 ## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
