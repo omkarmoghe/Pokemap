@@ -1,12 +1,14 @@
 package com.omkarmoghe.pokemap.network;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
+import com.omkarmoghe.pokemap.common.Notifier;
 import com.omkarmoghe.pokemap.utils.Varint;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchResult;
@@ -36,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by vanshilshah on 20/07/16.
  */
 public class NianticManager {
-    private static final String TAG = "NianticManager";
+    public static final String TAG = "NianticManager";
     private static final String BASE_URL = "https://sso.pokemon.com/sso/";
     private static final String LOGIN_URL = "https://sso.pokemon.com/sso/login?service=https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize";
     private static final String LOGIN_OAUTH = "https://sso.pokemon.com/sso/oauth2.0/accessToken";
@@ -68,73 +70,60 @@ public class NianticManager {
         return instance;
     }
 
-    private NianticManager(){
+    private NianticManager() {
         listeners = new ArrayList<>();
 
         client = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                })
-                .addInterceptor(new LoggingInterceptor())
-                .followRedirects(false)
-                .followSslRedirects(false)
-                .build();
-
-        nianticService = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build()
-                .create(NianticService.class);
-    }
-    public void login(final String username, final String password) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    OkHttpClient http = buildHttpClient();
-
-                    mAuthInfo = new PtcLogin(http).login(username, password);
-
-//                    PokemonGo e = new PokemonGo(mAuthInfo, http);
-//                    e.setLocation(-32.058087D, 115.744325D, 0.0D);
-//                    List catchablePokemon = e.getMap().getCatchablePokemon();
-//                    Log.d(TAG, "Pokemon in area:" + catchablePokemon.size());
-//                    Iterator var5 = catchablePokemon.iterator();
-//
-//                    while(var5.hasNext()) {
-//                        CatchablePokemon cp = (CatchablePokemon)var5.next();
-//                        EncounterResult encResult = cp.encounterPokemon();
-//                        if(encResult.wasSuccessful()) {
-//                            Log.d(TAG, "Encounted:" + cp.getPokemonId());
-//                            CatchResult result = cp.catchPokemon();
-//                            Log.d(TAG, "Attempt to catch:" + cp.getPokemonId() + " " + result.getStatus());
-//                        }
-//                    }
-                } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                } catch (RemoteServerException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-
-    private OkHttpClient buildHttpClient(){
-        return new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
     }
 
-    private void getCatchablePokemon(){
+    public void login(final String username, final String password) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    mAuthInfo = new PtcLogin(client).login(username, password);
+                    Notifier.instance().dispatchOnLogin(mAuthInfo);
 
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+    public void fetchCatchablePokemon(final Location location){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PokemonGo pokemonGO = new PokemonGo(mAuthInfo, client);
+                    pokemonGO.setLocation(location.getLatitude(), location.getLongitude(), location.getAltitude());
+                    List<CatchablePokemon> catchablePokemon = pokemonGO.getMap().getCatchablePokemon();
+                    Notifier.instance().dispatchOnCatchablePokemonFound(catchablePokemon);
+
+//                  TODO: Demonstrates how to try to catch a catchable pokemon
+//                  for(CatchablePokemon pokemon : catchablePokemon) {
+//                        EncounterResult encounterResult = pokemon.encounterPokemon();
+//                        if (encounterResult.wasSuccessful()) {
+//                            CatchResult result = pokemon.catchPokemon();
+//                        }
+//                    }
+
+
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    
     //TODO: Find right place for this
     private ArrayList<Integer> getNeighbors() {
 
@@ -199,7 +188,7 @@ public class NianticManager {
 
     public interface NianticEventListener {
         void onLogin(AuthInfo info);
-        void onLoginFail();
+        void onOperationFailure(Exception ex);
     }
 
 }
