@@ -3,8 +3,10 @@ A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 [Join the Slack channel](https://pokemap-android-slack.herokuapp.com/) **Please accept your invite ASAP. We have a limit on how many invites we can send out based on the number of people that actually accept them. We want to give everyone interested an opportunity to join the Slack.**
 
-# Building
-Check the Wiki for more info on building!
+# [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
+## Why aren't Pokemon showing up?
+We're still testing and haven't merged it into this repo yet. Here's a sneak peak:
+<img src="http://i.imgur.com/zzad874.png" width="540" height="960">
 
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 ## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
