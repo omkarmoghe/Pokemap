@@ -4,14 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +19,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.omkarmoghe.pokemap.MainActivity;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
+import com.pokegoapi.api.map.Point;
+import com.pokegoapi.api.map.Pokemon.CatchablePokemon;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -189,6 +190,40 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     public interface LocationRequestListener {
         Location requestLocation();
+    }
+
+    public void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (CatchablePokemon poke : pokeList) {
+                        int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "mipmap", getActivity().getPackageName());
+                        mGoogleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                .icon(BitmapDescriptorFactory.fromResource(resourceID))
+                                .snippet(poke.getPokemonId().name())
+                        );
+                    }
+                }
+            });
+
+        }
+
+    public void setSpawnPoints(final List<Point> points){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int resourceID = getResources().getIdentifier("p1", "mipmap", getActivity().getPackageName());
+                for(Point point : points) {
+                    mGoogleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(point.getLatitude(), point.getLongitude()))
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.p1))
+                    );
+                }
+            }
+        });
+
     }
 }
 

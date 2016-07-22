@@ -1,10 +1,11 @@
 package com.omkarmoghe.pokemap;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
@@ -26,15 +29,20 @@ import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass.RequestEnvelop;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
+import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.map.Pokemon.CatchablePokemon;
+import com.pokegoapi.auth.PTCLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
+import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -45,14 +53,31 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
                                                                GoogleApiClient.OnConnectionFailedListener,
-                                                               MapWrapperFragment.LocationRequestListener {
+                                                               MapWrapperFragment.LocationRequestListener,
+                        Button.OnClickListener{
 
     public static final String TAG = "Pokemap";
+    private static Button getPoke;
+    private static PokemonGo pokemonGo=null;
+    private static final float GRANULARITY = 0.0008f;
+    private static final float SEARCH_RANGE = 0.005f;
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+    }
 
     // magic constants fml
     private static final String LOGIN_URL = "https://sso.pokemon.com/sso/login?service=https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize";
     private static final String LOGIN_OAUTH = "https://sso.pokemon.com/sso/oauth2.0/accessToken";
     private static final String PTC_CLIENT_SECRET = "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR";
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+    }
+
     public static final String CLIENT_ID = "mobile-app_pokemon-go";
     public static final String REDIRECT_URI = "https://www.nianticlabs.com/pokemongo/error";
 
@@ -78,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getPoke = (Button)findViewById(R.id.button2);
+        getPoke.setOnClickListener(this);
 
         setUpGoogleApiClient();
 
@@ -93,6 +120,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        final OkHttpClient httpClient = new OkHttpClient.Builder()
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String s, SSLSession sslSession) {
+                        return true;
+                    }
+                })
+                .cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(getApplicationContext())))
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build();
+
+                //new GoogleLogin(httpClient).login("token");
+        /*AsyncTask<Object,Object,Object>asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo auth= new PTCLogin(httpClient).login(token);
+                pokemonGo = new PokemonGo(auth,httpClient);
+                Log.d("Profile Info: ",pokemonGo.getPlayerProfile().toString());
+                return null;
+            }
+        };
+        asyncTask.execute();*/
+
 
         //getPokemon();
     }
@@ -206,6 +258,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                                     Log.d(TAG, cleanToken); // success!
 
                                     token = cleanToken;
+                                    RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo auth= new PTCLogin(client).login(token);
+                                    pokemonGo = new PokemonGo(auth,client);
+                                    Log.d("Profile Info: ",pokemonGo.getPlayerProfile().toString());
                                 }
                             });
                         }
@@ -222,7 +277,52 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * See https://github.com/AHAAAAAAA/PokemonGo-Map
      * See https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/example.py#L378
      */
-    private void getPokemon() {
+
+    private void getPokemon(){
+        Log.d("getPokemon","trying to get catchable Pokemon");
+        AsyncTask<Object,Object,Object>asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                /*try {
+                    List<Point> spawnPoints = pokemonGo.getMap().getSpawnPoints();
+                    mMapWrapperFragment.setSpawnPoints(spawnPoints);
+                }catch(Exception e){
+                    Log.d("Error spawnPoints:",e.getMessage());
+                }*/
+
+                float lat=-SEARCH_RANGE;
+                float lon = -SEARCH_RANGE;
+                List<CatchablePokemon> pokeList=null;
+                Location loc = new Location(mLastLocation);
+                while(lat<SEARCH_RANGE) {
+                    loc.setLatitude(mLastLocation.getLatitude()+lat);
+                    while (lon < SEARCH_RANGE){
+                        loc.setLongitude(mLastLocation.getLongitude()+lon);
+                        pokemonGo.setLocation(loc.getLatitude(), loc.getLongitude(), loc.getAltitude());
+                        try {
+                            pokeList = pokemonGo.getMap().getCatchablePokemon();
+                            Thread.sleep(100);
+                        } catch (Exception e) {
+                            Log.d("Error pokeFetch:", e.getMessage());
+                        }
+
+                        if (pokeList != null) {
+                        Log.d("Catchable", "poke on lat " + loc.getLatitude() + " lon:" + loc.getLongitude()+" poke:"+pokeList.size());
+                        mMapWrapperFragment.setPokemonMarkers(pokeList);
+                        }
+                        lon+=GRANULARITY;
+                    }
+                    lon=-SEARCH_RANGE;
+                    lat+=GRANULARITY;
+                }
+                return null;
+            }
+        };
+        asyncTask.execute();
+    }
+
+
+    private void getHeartBeat() {
         try {
             RequestEnvelop.Requests.Builder m4 = RequestEnvelop.Requests.newBuilder();
             RequestEnvelop.MessageSingleInt.Builder msi = RequestEnvelop.MessageSingleInt.newBuilder();
@@ -336,7 +436,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             setUpGoogleApiClient();
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
-
+        pokemonGo.setLocation(mLastLocation.getLatitude(),mLastLocation.getLongitude(),mLastLocation.getAltitude());
         return mLastLocation;
+    }
+
+    @Override
+    public void onClick(View view) {
+       if(view.getId() == R.id.button2) {
+           getPokemon();
+       }
     }
 }

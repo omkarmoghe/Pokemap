@@ -18,6 +18,17 @@
     <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main_container"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <Button
+            android:layout_marginBottom="10dp"
+            android:text="getPoke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2" />
+    </FrameLayout>
+
+
+
 
 </android.support.design.widget.CoordinatorLayout>
