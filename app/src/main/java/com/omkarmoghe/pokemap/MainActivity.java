@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ public class MainActivity extends BaseActivity {
 
     // fragments
     private MapWrapperFragment mMapWrapperFragment;
+    private FragmentManager manager = getSupportFragmentManager();
 
     // Preferences
     SharedPreferences pref;
@@ -104,7 +106,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        // As request, when the back button is pressed, we should pop the previous value
+        // (using immediate to execute immediate pop)
+        manager.popBackStackImmediate();
+
+        // Grab current amount of fragments in the stack, if 0, means that we can close the app
+        int backStackCount = manager.getBackStackEntryCount();
+        if (backStackCount == 0) {
+            this.finish();
+        }
     }
 
     @Override
