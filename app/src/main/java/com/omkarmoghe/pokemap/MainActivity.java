@@ -14,12 +14,13 @@ import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
-import com.omkarmoghe.pokemap.utils.PokemapSharedPreferences;
+import com.omkarmoghe.pokemap.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.app_preferences.PokemapSharedPreferences;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
 
-    private PokemapSharedPreferences pref;
+    private PokemapAppPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
