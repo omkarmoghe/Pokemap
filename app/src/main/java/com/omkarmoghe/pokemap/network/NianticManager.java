@@ -11,7 +11,6 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.protobuf.ByteString;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.map.LocationManager;
 import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
@@ -256,33 +255,33 @@ public class NianticManager {
      */
     private void getPokemon() {
         try {
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m4 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            PokemonOuterClass.RequestEnvelop.MessageSingleInt.Builder msi = PokemonOuterClass.RequestEnvelop.MessageSingleInt.newBuilder();
-            msi.setF1(System.currentTimeMillis());
-            m4.setMessage(msi.build().toByteString());
+            PokemonOuterClass.RequestEnvelop.Requests m4 = new PokemonOuterClass.RequestEnvelop.Requests();
+            PokemonOuterClass.RequestEnvelop.MessageSingleInt msi = new PokemonOuterClass.RequestEnvelop.MessageSingleInt();
+            msi.f1 = System.currentTimeMillis();
+            m4.message = msi.toString().getBytes();
 
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m5 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            PokemonOuterClass.RequestEnvelop.MessageSingleString.Builder mss = PokemonOuterClass.RequestEnvelop.MessageSingleString.newBuilder();
-            mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
-            m5.setMessage(mss.build().toByteString());
+            PokemonOuterClass.RequestEnvelop.Requests m5 = new PokemonOuterClass.RequestEnvelop.Requests();
+            PokemonOuterClass.RequestEnvelop.MessageSingleString mss = new PokemonOuterClass.RequestEnvelop.MessageSingleString();
+            mss.bytes = "05daf51635c82611d1aac95c0b051d3ec088a930".getBytes("UTF-8");
+            m5.message = mss.toString().getBytes();
             // TODO: walk = sorted(getNeighbors())
             // TODO: Check if this is right
             ArrayList<Integer> walk = getNeighbors();
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            m1.setType(106); // magic number;
-            PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
+            PokemonOuterClass.RequestEnvelop.Requests m1 = new PokemonOuterClass.RequestEnvelop.Requests();
+            m1.type = 106; // magic number
+            PokemonOuterClass.RequestEnvelop.MessageQuad mq = new PokemonOuterClass.RequestEnvelop.MessageQuad();
             // TODO: mq.f1 = ''.join(map(encode, walk))
             // TODO: Check if this is right
-            mq.setF1(encode(walk));
-            mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
+            mq.f1 = encode(walk);
+            mq.f2 = "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000".getBytes("UTF-8");
 
             LatLng latLng = LocationManager.getInstance(context).getLocation();
-            mq.setLat((long) latLng.latitude);
-            mq.setLong((long) latLng.longitude);
+            mq.lat = (long) latLng.latitude;
+            mq.long_ = (long) latLng.latitude;
 
             //TODO: connect this to the location provider
 
-            m1.setMessage(mq.build().toByteString());
+            m1.message = mq.toString().getBytes();
 
             // TODO: response = get_profile(...)...
         } catch (Exception e) {
@@ -320,7 +319,7 @@ public class NianticManager {
     }
 
     //TODO: Find right place for this
-    private ByteString encode(ArrayList<Integer> walk) {
+    private byte[] encode(ArrayList<Integer> walk) {
         if (walk == null) {
             return null;
         }
@@ -347,7 +346,7 @@ public class NianticManager {
         }
 
         assert mainBytes != null;
-        return ByteString.copyFrom(mainBytes);
+        return mainBytes;
     }
 
     public interface Listener{

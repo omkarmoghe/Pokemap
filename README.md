@@ -1,20 +1,22 @@
 # Pokemap [![Build Status](https://travis-ci.org/omkarmoghe/Pokemap.svg?branch=dev)](https://travis-ci.org/omkarmoghe/Pokemap)
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
-[Join the Slack channel](https://pokemap-android-slack.herokuapp.com/)
+[Join the Slack channel](https://pokemap-android-slack.herokuapp.com/) **Please accept your invite ASAP. We have a limit on how many invites we can send out based on the number of people that actually accept them. We want to give everyone interested an opportunity to join the Slack.**
 
-# Building
-Check the Wiki for more info on building!
+# [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
+## Why aren't Pokemon showing up?
+We're still testing and haven't merged it into this repo yet. Here's a sneak peak:
+<img src="http://i.imgur.com/zzad874.png" width="540" height="960">
 
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 ## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
-So the main work we need to do is to effectively translate the code over at the [main repo](https://github.com/AHAAAAAAA/PokemonGo-Map) to work in *native* Android. The login functionality to get the token has been implemented and I started migrating the code to grab the actual Pokemon / Pokestop data using the `.proto` files.
 
+## [TODO](https://slack-files.com/T1TQY34KE-F1TSY25UL-10400392c2)
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
 
 Also please read this: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
 
-#[Offical Website] (https://jz6.github.io/PoGoMap/#)
+#[Official Website] (https://jz6.github.io/PoGoMap/#)
 Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
 
 Using this software is against the ToS and can get you banned. Use at your own risk.
