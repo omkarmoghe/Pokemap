@@ -99,21 +99,21 @@ public class NianticManager {
 
                     mAuthInfo = new PtcLogin(http).login(username, password);
 
-                    PokemonGo e = new PokemonGo(mAuthInfo, http);
-                    e.setLocation(-32.058087D, 115.744325D, 0.0D);
-                    List catchablePokemon = e.getMap().getCatchablePokemon();
-                    Log.d(TAG, "Pokemon in area:" + catchablePokemon.size());
-                    Iterator var5 = catchablePokemon.iterator();
-
-                    while(var5.hasNext()) {
-                        CatchablePokemon cp = (CatchablePokemon)var5.next();
-                        EncounterResult encResult = cp.encounterPokemon();
-                        if(encResult.wasSuccessful()) {
-                            Log.d(TAG, "Encounted:" + cp.getPokemonId());
-                            CatchResult result = cp.catchPokemon();
-                            Log.d(TAG, "Attempt to catch:" + cp.getPokemonId() + " " + result.getStatus());
-                        }
-                    }
+//                    PokemonGo e = new PokemonGo(mAuthInfo, http);
+//                    e.setLocation(-32.058087D, 115.744325D, 0.0D);
+//                    List catchablePokemon = e.getMap().getCatchablePokemon();
+//                    Log.d(TAG, "Pokemon in area:" + catchablePokemon.size());
+//                    Iterator var5 = catchablePokemon.iterator();
+//
+//                    while(var5.hasNext()) {
+//                        CatchablePokemon cp = (CatchablePokemon)var5.next();
+//                        EncounterResult encResult = cp.encounterPokemon();
+//                        if(encResult.wasSuccessful()) {
+//                            Log.d(TAG, "Encounted:" + cp.getPokemonId());
+//                            CatchResult result = cp.catchPokemon();
+//                            Log.d(TAG, "Attempt to catch:" + cp.getPokemonId() + " " + result.getStatus());
+//                        }
+//                    }
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
                 } catch (RemoteServerException e) {
