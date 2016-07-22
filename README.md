@@ -8,8 +8,8 @@ Check the Wiki for more info on building!
 
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 ## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
-So the main work we need to do is to effectively translate the code over at the [main repo](https://github.com/AHAAAAAAA/PokemonGo-Map) to work in *native* Android. The login functionality to get the token has been implemented and I started migrating the code to grab the actual Pokemon / Pokestop data using the `.proto` files.
 
+## [TODO](https://slack-files.com/T1TQY34KE-F1TSY25UL-10400392c2)
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
 
 Also please read this: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
