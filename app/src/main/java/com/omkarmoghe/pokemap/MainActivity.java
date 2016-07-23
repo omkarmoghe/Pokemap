@@ -79,6 +79,9 @@ public class MainActivity extends BaseActivity {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.action_relogin) {
             login();
+        } else if(id == R.id.action_logout){
+            pref.clearPreferences();
+            login();
         }
 
         return super.onOptionsItemSelected(item);

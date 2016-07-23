@@ -49,4 +49,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     public String getPassword() {
         return sharedPreferences.getString(PASSWORD_KEY, "");
     }
+
+    @Override
+    public void clearPreferences(){
+        SharedPreferences.Editor spEditor = sharedPreferences.edit();
+
+        spEditor.remove(USERNAME_KEY);
+        spEditor.remove(PASSWORD_KEY);
+
+        spEditor.apply();
+    }
 }
