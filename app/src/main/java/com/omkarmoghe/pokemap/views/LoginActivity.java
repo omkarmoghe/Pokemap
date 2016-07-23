@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
         
-        if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
+        if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
         }
