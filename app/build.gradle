@@ -8,6 +8,7 @@ android {
         applicationId "com.omkarmoghe.pokemap"
         minSdkVersion 17
         targetSdkVersion 24
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
