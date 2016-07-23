@@ -43,7 +43,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.github.Grover-c13:PokeGOAPI-Java:master-SNAPSHOT'
+    compile 'com.github.Grover-c13:PokeGOAPI-Java:4f5b715380'
 
   compile group: 'com.google.protobuf.nano', name: 'protobuf-javanano', version: '3.0.0-alpha-5'
     compile 'com.android.support:appcompat-v7:24.0.0'

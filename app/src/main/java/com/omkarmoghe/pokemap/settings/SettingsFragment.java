@@ -6,6 +6,7 @@ import android.preference.PreferenceFragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.app_preferences.PokemapSharedPreferences;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -16,22 +17,20 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String usernameKey = getString(R.string.pref_username);
-
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        final Preference usernamePref = findPreference(usernameKey);
-        usernamePref.setSummary(pref.getString(usernameKey, getString(R.string.pref_default_username)));
+        final Preference usernamePref = findPreference(getString(R.string.pref_username_key));
+        usernamePref.setSummary(pref.getString(getString(R.string.pref_username_key), getString(R.string.pref_default_username)));
 
         // Create change listener
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-                if(s.equals(usernameKey))
-                    usernamePref.setSummary(pref.getString(getString(R.string.pref_username), getString(R.string.pref_default_username)));
+                if(s.equals(getString(R.string.pref_username_key)))
+                    usernamePref.setSummary(pref.getString(getString(R.string.pref_username_key), getString(R.string.pref_default_username)));
             }
         };
     }
