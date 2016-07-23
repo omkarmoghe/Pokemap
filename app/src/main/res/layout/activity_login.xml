@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/login_layout"
-    tools:context="com.omkarmoghe.pokemap.ui.LoginActivity">
+    tools:context="com.omkarmoghe.pokemap.views.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar

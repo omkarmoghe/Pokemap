@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.ui;
+package com.omkarmoghe.pokemap.views;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,9 +1,4 @@
-package com.omkarmoghe.pokemap.network;
-
-import android.util.Log;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
+package com.omkarmoghe.pokemap.controllers.net;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -49,7 +44,7 @@ public class GoogleManager {
                 .create(GoogleService.class);
     }
 
-    public void authUser(final CallBack callBack) {
+    public void authUser(final LoginListener loginListener) {
         HttpUrl url = HttpUrl.parse(OAUTH_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("scope", "openid email https://www.googleapis.com/auth/userinfo.email")
@@ -59,20 +54,20 @@ public class GoogleManager {
             @Override
             public void onResponse(Call<GoogleService.AuthRequest> call, Response<GoogleService.AuthRequest> response) {
                 GoogleService.AuthRequest body = response.body();
-                callBack.authRequested(body);
+                loginListener.authRequested(body);
             }
 
             @Override
             public void onFailure(Call<GoogleService.AuthRequest> call, Throwable t) {
                 t.printStackTrace();
-                callBack.authFailed("Failed on getting the information for the user auth");
+                loginListener.authFailed("Failed on getting the information for the user auth");
             }
         };
         Call<GoogleService.AuthRequest> call = mGoogleService.requestAuth(url.toString());
         call.enqueue(googleCallback);
     }
 
-    public void requestToken(String deviceCode, final CallBack callBack){
+    public void requestToken(String deviceCode, final LoginListener loginListener){
         HttpUrl url = HttpUrl.parse(OAUTH_TOKEN_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("client_secret", SECRET)
@@ -84,20 +79,20 @@ public class GoogleManager {
         Callback<GoogleService.TokenResponse> googleCallback = new Callback<GoogleService.TokenResponse>() {
             @Override
             public void onResponse(Call<GoogleService.TokenResponse> call, Response<GoogleService.TokenResponse> response) {
-                callBack.authSuccessful(response.body().getIdToken());
+                loginListener.authSuccessful(response.body().getIdToken());
             }
 
             @Override
             public void onFailure(Call<GoogleService.TokenResponse> call, Throwable t) {
                 t.printStackTrace();
-                callBack.authFailed("Failed on requesting the id token");
+                loginListener.authFailed("Failed on requesting the id token");
             }
         };
         Call<GoogleService.TokenResponse> call = mGoogleService.requestToken(url.toString());
         call.enqueue(googleCallback);
     }
 
-    public interface CallBack {
+    public interface LoginListener {
         void authSuccessful(String authToken);
         void authFailed(String message);
         void authRequested(GoogleService.AuthRequest body);

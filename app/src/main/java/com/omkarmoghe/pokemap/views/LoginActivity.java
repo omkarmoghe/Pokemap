@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.ui;
+package com.omkarmoghe.pokemap.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,13 +20,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.network.GoogleManager;
-import com.omkarmoghe.pokemap.network.GoogleService;
-import com.omkarmoghe.pokemap.network.NianticManager;
+import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
+import com.omkarmoghe.pokemap.controllers.net.GoogleService;
+import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 
 /**
  * A login screen that offers login via username/password. And a Google Sign in
@@ -44,9 +43,9 @@ public class LoginActivity extends AppCompatActivity{
     private View mProgressView;
     private View mLoginFormView;
     private NianticManager mNianticManager;
-    private NianticManager.CallBack mCallbackNiantic;
+    private NianticManager.LoginListener mNianticLoginListener;
     private GoogleManager mGoogleManager;
-    private GoogleManager.CallBack mCallbackGoogle;
+    private GoogleManager.LoginListener mGoogleLoginListener;
 
     private String mDeviceCode;
 
@@ -57,12 +56,12 @@ public class LoginActivity extends AppCompatActivity{
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
 
-        mCallbackNiantic = new NianticManager.CallBack() {
+        mNianticLoginListener = new NianticManager.LoginListener() {
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
-                MainActivity.start(LoginActivity.this, authToken, MainActivity.PROVIDER_PTC);
+                mNianticManager.setPTCAuthToken(authToken);
             }
 
             @Override
@@ -72,12 +71,12 @@ public class LoginActivity extends AppCompatActivity{
             }
         };
 
-        mCallbackGoogle = new GoogleManager.CallBack() {
+        mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
-                MainActivity.start(LoginActivity.this, authToken, MainActivity.PROVIDER_GOOGLE);
+                mNianticManager.setGoogleAuthToken(authToken);
             }
 
             @Override
@@ -131,7 +130,7 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleManager.authUser(mCallbackGoogle);
+                mGoogleManager.authUser(mGoogleLoginListener);
             }
         });
     }
@@ -142,7 +141,7 @@ public class LoginActivity extends AppCompatActivity{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_USER_AUTH){
                 showProgress(true);
-                mGoogleManager.requestToken(mDeviceCode, mCallbackGoogle);
+                mGoogleManager.requestToken(mDeviceCode, mGoogleLoginListener);
             }
         }
     }
@@ -186,9 +185,15 @@ public class LoginActivity extends AppCompatActivity{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mNianticManager.login(username, password, mCallbackNiantic);
+            mNianticManager.login(username, password, mNianticLoginListener);
 
         }
+    }
+
+    private void startMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**

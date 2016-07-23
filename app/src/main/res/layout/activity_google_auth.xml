@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.omkarmoghe.pokemap.ui.GoogleAuthActivity">
+    tools:context="com.omkarmoghe.pokemap.views.GoogleAuthActivity">
 
     <include layout="@layout/toolbar"/>
 
@@ -18,7 +18,6 @@
         android:layout_marginEnd="16dp">
 
         <TextView
-            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/auth_code"
