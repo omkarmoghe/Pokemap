@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
@@ -37,7 +38,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EventBus.getDefault().register(this);
         pref = new PokemapSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,6 +48,13 @@ public class MainActivity extends BaseActivity {
                 .addToBackStack(null)
                 .commit();
         login();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Better place to register then onCreate
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -126,6 +133,17 @@ public class MainActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Called whenever a use whats to search pokemons on a different position
+     *
+     * @param event PoJo with LatLng obj
+     */
+    @Subscribe
+    public void onEvent(SearchInPosition event) {
+        Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
+        nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
     /**

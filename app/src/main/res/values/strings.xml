@@ -25,4 +25,6 @@
     <string name="title_activity_poke_map">Pokemon Nearby</string>
 
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
+    <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
+
 </resources>
