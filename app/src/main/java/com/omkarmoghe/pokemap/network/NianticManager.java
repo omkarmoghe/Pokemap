@@ -55,6 +55,7 @@ public class NianticManager {
     private NianticService mNianticService;
     private final OkHttpClient mClient;
     private List<Listener> listeners;
+    private Context context;
 
     public static NianticManager getInstance(){
         if(instance == null){
