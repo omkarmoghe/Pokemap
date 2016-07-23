@@ -3,6 +3,7 @@ package com.omkarmoghe.pokemap.network;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 
@@ -72,7 +73,27 @@ public class NianticManager {
                 .build();
     }
 
-    public void login(final String username, final String password) {
+    /**
+     * Sets the google auth token for the auth info  also invokes the onLogin callback.
+     * @param token - a valid google auth token.
+     */
+    public void setGoogleAuthToken(@NonNull final String token) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mAuthInfo = new GoogleLogin(client).login(token);
+                    Notifier.instance().dispatchOnLogin(mAuthInfo, new PokemonGo(mAuthInfo, client));
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    
+    public void login(@NonNull  final String username, @NonNull  final String password) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
