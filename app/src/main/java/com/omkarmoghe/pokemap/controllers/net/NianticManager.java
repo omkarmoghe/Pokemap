@@ -5,11 +5,14 @@ import android.os.HandlerThread;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.IEvent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
@@ -53,7 +56,28 @@ public class NianticManager {
         mHandler = new Handler(thread.getLooper());
     }
 
-    public void login(final String username, final String password) {
+    /**
+     * Sets the google auth token for the auth info  also invokes the onLogin callback.
+     * @param token - a valid google auth token.
+     */
+    public void setGoogleAuthToken(@NonNull final String token) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mAuthInfo = new GoogleLogin(client).login(token);
+                    pokemonGo = new PokemonGo(mAuthInfo, client);
+                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, pokemonGo));
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void login(@NonNull final String username, @NonNull final String password) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
