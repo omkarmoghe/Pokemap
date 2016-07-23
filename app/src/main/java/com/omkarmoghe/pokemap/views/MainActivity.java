@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-<<<<<<< HEAD:app/src/main/java/com/omkarmoghe/pokemap/views/MainActivity.java
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
@@ -27,24 +25,6 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-=======
-import com.omkarmoghe.pokemap.common.AbstractNianticEventListener;
-import com.omkarmoghe.pokemap.common.BaseActivity;
-import com.omkarmoghe.pokemap.common.Notifier;
-import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
-import com.omkarmoghe.pokemap.map.LocationManager;
-import com.omkarmoghe.pokemap.map.MapWrapperFragment;
-import com.omkarmoghe.pokemap.network.NianticManager;
-import com.omkarmoghe.pokemap.settings.SettingsActivity;
-import com.omkarmoghe.pokemap.app_preferences.PokemapAppPreferences;
-import com.omkarmoghe.pokemap.app_preferences.PokemapSharedPreferences;
-import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-
-import java.util.List;
-
-import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass;
->>>>>>> refs/remotes/omkarmoghe/dev:app/src/main/java/com/omkarmoghe/pokemap/MainActivity.java
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
@@ -76,24 +56,6 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    //region Menu Methods
-    @Override
-    public void onResume() {
-        super.onResume();
-        Notifier.instance().addListener(mEventListener);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Notifier.instance().removeListener(mEventListener);
-    }
-
     //region Menu Methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,13 +75,6 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD:app/src/main/java/com/omkarmoghe/pokemap/views/MainActivity.java
-=======
-    //endregion
-
-
-
->>>>>>> refs/remotes/omkarmoghe/dev:app/src/main/java/com/omkarmoghe/pokemap/MainActivity.java
     @Override
     public void onBackPressed() {
         this.finish();
@@ -136,11 +91,6 @@ public class MainActivity extends BaseActivity {
                 break;
         }
     }
-<<<<<<< HEAD:app/src/main/java/com/omkarmoghe/pokemap/views/MainActivity.java
-=======
-    //endregion
-
->>>>>>> refs/remotes/omkarmoghe/dev:app/src/main/java/com/omkarmoghe/pokemap/MainActivity.java
 
     private void login() {
         if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
@@ -162,7 +112,6 @@ public class MainActivity extends BaseActivity {
                 }), "request_credentials").commit();
     }
 
-<<<<<<< HEAD:app/src/main/java/com/omkarmoghe/pokemap/views/MainActivity.java
     /**
      * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
      *
@@ -199,28 +148,5 @@ public class MainActivity extends BaseActivity {
         Toast.makeText(this, "The login token has expired. Getting a new one.", Toast.LENGTH_LONG).show();
         login();
     }
-=======
 
-    private NianticManager.Listener mEventListener = new AbstractNianticEventListener(){
-        @Override
-        public void onOperationFailure(Exception ex) {
-            super.onOperationFailure(ex);
-            Toast.makeText(MainActivity.this, "Error Occured: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onLogin(RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo info, PokemonGo pokemonGo) {
-            super.onLogin(info, pokemonGo);
-            LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
-            nianticManager.fetchCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
-            Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCatchablePokemonFound(List<CatchablePokemon> pokemons) {
-            super.onCatchablePokemonFound(pokemons);
-            Toast.makeText(getApplicationContext(), "Found " + pokemons.size() + " Catchable Pokemon", Toast.LENGTH_SHORT).show();
-        }
-    };
->>>>>>> refs/remotes/omkarmoghe/dev:app/src/main/java/com/omkarmoghe/pokemap/MainActivity.java
 }
