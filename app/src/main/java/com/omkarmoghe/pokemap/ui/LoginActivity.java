@@ -43,8 +43,9 @@ public class LoginActivity extends AppCompatActivity{
     private View mProgressView;
     private View mLoginFormView;
     private NianticManager mNianticManager;
+    private NianticManager.CallBack mCallbackNiantic;
     private GoogleManager mGoogleManager;
-    private GoogleManager.CallBack mCallback;
+    private GoogleManager.CallBack mCallbackGoogle;
 
     private String mDeviceCode;
 
@@ -55,18 +56,34 @@ public class LoginActivity extends AppCompatActivity{
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
 
-        mCallback = new GoogleManager.CallBack() {
+        mCallbackNiantic = new NianticManager.CallBack() {
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
+                MainActivity.start(LoginActivity.this, authToken, MainActivity.PROVIDER_PTC);
+            }
+
+            @Override
+            public void authFailed(String message) {
+                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+            }
+        };
+
+        mCallbackGoogle = new GoogleManager.CallBack() {
+            @Override
+            public void authSuccessful(String authToken) {
+                showProgress(false);
+                Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
+                MainActivity.start(LoginActivity.this, authToken, MainActivity.PROVIDER_GOOGLE);
             }
 
             @Override
             public void authFailed(String message) {
                 showProgress(false);
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
-                Snackbar.make(mLoginFormView, "Google Login Failed", Snackbar.LENGTH_LONG).show();
+                Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -108,7 +125,7 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleManager.authUser(mCallback);
+                mGoogleManager.authUser(mCallbackGoogle);
             }
         });
     }
@@ -119,7 +136,7 @@ public class LoginActivity extends AppCompatActivity{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_USER_AUTH){
                 showProgress(true);
-                mGoogleManager.requestToken(mDeviceCode, mCallback);
+                mGoogleManager.requestToken(mDeviceCode, mCallbackGoogle);
             }
         }
     }
@@ -162,8 +179,8 @@ public class LoginActivity extends AppCompatActivity{
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-//            showProgress(true);
-            mNianticManager.login(username, password, this);
+            showProgress(true);
+            mNianticManager.login(username, password, mCallbackNiantic);
 
         }
     }

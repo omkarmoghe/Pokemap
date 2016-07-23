@@ -1,31 +1,23 @@
 package com.omkarmoghe.pokemap.network;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.google.protobuf.ByteString;
-import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import okhttp3.FormBody;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,19 +29,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class NianticManager {
     private static final String TAG = "NianticManager";
+
     private static final String BASE_URL = "https://sso.pokemon.com/sso/";
-    private static final String LOGIN_URL = "https://sso.pokemon.com/sso/login?service=https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize";
+    private static final String LOGIN_URL = "https://sso.pokemon.com/sso/login?service=https" +
+            "%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize";
     private static final String LOGIN_OAUTH = "https://sso.pokemon.com/sso/oauth2.0/accessToken";
-    private static final String PTC_CLIENT_SECRET = "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR";
-    public static final String CLIENT_ID = "mobile-app_pokemon-go";
-    public static final String REDIRECT_URI = "https://www.nianticlabs.com/pokemongo/error";
+
+    private static final String CLIENT_SECRET = "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZP" +
+            "xtgyWsbTvWHFLm2wNY0JR";
+    private static final String CLIENT_ID = "mobile-app_pokemon-go";
+    private static final String REDIRECT_URI = "https://www.nianticlabs.com/pokemongo/error";
 
     private static NianticManager instance;
 
-    private List<Listener> listeners;
-
-    NianticService nianticService;
-    final OkHttpClient client;
+    private NianticService mNianticService;
+    private final OkHttpClient mClient;
     public static NianticManager getInstance(){
         if(instance == null){
             instance = new NianticManager();
@@ -58,184 +52,139 @@ public class NianticManager {
     }
 
     private NianticManager(){
-        listeners = new ArrayList<>();
+          /*
+		This is a temporary, in-memory cookie jar.
+		We don't require any persistence outside of the scope of the login,
+		so it being discarded is completely fine
+		*/
+        CookieJar tempJar = new CookieJar() {
+            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
 
-        client = new OkHttpClient.Builder()
-            .hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String s, SSLSession sslSession) {
-                    return true;
+            @Override
+            public void saveFromResponse(okhttp3.HttpUrl url, List<Cookie> cookies) {
+                cookieStore.put(url.host(), cookies);
+            }
+
+            @Override
+            public List<Cookie> loadForRequest(okhttp3.HttpUrl url) {
+                List<Cookie> cookies = cookieStore.get(url.host());
+                return cookies != null ? cookies : new ArrayList<Cookie>();
+            }
+        };
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        mClient = new OkHttpClient.Builder()
+                .cookieJar(tempJar)
+                .addInterceptor(new LoggingInterceptor())
+                .build();
+
+        mNianticService = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(mClient)
+                .build()
+                .create(NianticService.class);
+    }
+
+    public void login(final String username, final String password, final CallBack callBack){
+        Callback<NianticService.LoginValues> valuesCallback = new Callback<NianticService.LoginValues>() {
+            @Override
+            public void onResponse(Call<NianticService.LoginValues> call, Response<NianticService.LoginValues> response) {
+                if(response.body() != null) {
+                    loginPTC(username, password, response.body(), callBack);
+                }else{
+                    callBack.authFailed("Fetching Pokemon Trainer Club's Login Url Values Failed");
                 }
-            })
-            .addInterceptor(new LoggingInterceptor())
-            .followRedirects(false)
-            .followSslRedirects(false)
-            .build();
 
-        nianticService = new Retrofit.Builder()
+            }
+
+            @Override
+            public void onFailure(Call<NianticService.LoginValues> call, Throwable t) {
+                callBack.authFailed("Fetching Pokemon Trainer Club's Login Url Values Failed");
+            }
+        };
+        Call<NianticService.LoginValues> call = mNianticService.getLoginValues();
+        call.enqueue(valuesCallback);
+    }
+
+    private void loginPTC(final String username, final String password, NianticService.LoginValues values, final CallBack callBack){
+        HttpUrl url = HttpUrl.parse(LOGIN_URL).newBuilder()
+                .addQueryParameter("lt", values.getLt())
+                .addQueryParameter("execution", values.getExecution())
+                .addQueryParameter("_eventId", "submit")
+                .addQueryParameter("username", username)
+                .addQueryParameter("password", password)
+                .build();
+
+        OkHttpClient client = mClient.newBuilder()
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build();
+
+        NianticService service = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
                 .create(NianticService.class);
-    }
-    public void login(final String username, final String password, Context context){
-        //retrofitLogin(username, password);
-        try {
-            traditionalLogin(username, password, context);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void retrofitLogin(final String username, final String password){
-        Callback<NianticService.InitialResponse> initialCallback = new Callback<NianticService.InitialResponse>() {
-            @Override
-            public void onResponse(Call<NianticService.InitialResponse> call, Response<NianticService.InitialResponse> response) {
-                retrofitLoginStep2(new NianticService.LoginRequest(response.body(), username, password));
-            }
-
-            @Override
-            public void onFailure(Call<NianticService.InitialResponse> call, Throwable t) {
-
-            }
-        };
-        Call<NianticService.InitialResponse> call = nianticService.login();
-        call.enqueue(initialCallback);
-    }
-
-    private void retrofitLoginStep2(NianticService.LoginRequest loginRequest){
         Callback<NianticService.LoginResponse> loginCallback = new Callback<NianticService.LoginResponse>() {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
-                //TODO: make the next call to finish getting the token.
+                String location = response.headers().get("location");
+                String ticket = location.split("ticket=")[1];
+                requestToken(ticket, callBack);
             }
 
             @Override
             public void onFailure(Call<NianticService.LoginResponse> call, Throwable t) {
-
+                callBack.authFailed("Pokemon Trainer Club Login Failed");
             }
         };
-        Call<NianticService.LoginResponse> call = nianticService.completeLogin(loginRequest.lt, loginRequest.execution, loginRequest._eventId, loginRequest.username, loginRequest.password);
+        Call<NianticService.LoginResponse> call = service.login(url.toString());
         call.enqueue(loginCallback);
     }
 
-    private void traditionalLogin(final String username, String password, final Context context) throws IOException {
-        // Maximum password length is 15 (sign in page enforces this limit, API does not)
-        final String trimmedPassword = password.length() > 15 ? password.substring(0, 15) : password;
-
-        final OkHttpClient client = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                })
-                .cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)))
-                .addInterceptor(new LoggingInterceptor())
-                .followRedirects(false)
-                .followSslRedirects(false)
+    private void requestToken(String code, final CallBack callBack){
+        Log.d(TAG, "requestToken() called with: code = [" + code + "]");
+        HttpUrl url = HttpUrl.parse(LOGIN_OAUTH).newBuilder()
+                .addQueryParameter("client_id", CLIENT_ID)
+                .addQueryParameter("redirect_uri", REDIRECT_URI)
+                .addQueryParameter("client_secret", CLIENT_SECRET)
+                .addQueryParameter("grant_type", "refresh_token")
+                .addQueryParameter("code", code)
                 .build();
 
-        Request initialRequest = new Request.Builder()
-                .addHeader("User-Agent", "Niantic App")
-                .url(LOGIN_URL)
-                .build();
-
-        client.newCall(initialRequest).enqueue(new okhttp3.Callback() {
+        Callback<ResponseBody> authCallback = new Callback<ResponseBody>() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                Log.e(TAG, "fuck :(", e);
-            }
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                String body = response.body().string();
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    JSONObject data = new JSONObject(body);
-                    Log.d(TAG, data.toString());
-
-                    RequestBody formBody = new FormBody.Builder()
-                            .add("lt", data.getString("lt"))
-                            .add("execution", data.getString("execution"))
-                            .add("_eventId", "submit")
-                            .add("username", username)
-                            .add("password", trimmedPassword)
-                            .build();
-
-                    Request interceptRedirect = new Request.Builder()
-                            .addHeader("User-Agent", "Niantic App")
-                            .url(LOGIN_URL)
-                            .post(formBody)
-                            .build();
-
-                    client.newCall(interceptRedirect).enqueue(new okhttp3.Callback() {
-                        @Override
-                        public void onFailure(okhttp3.Call call, IOException e) {
-                            Log.e(TAG, "fuck :(", e);
-                        }
-
-                        @Override
-                        public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                            Log.d(TAG, String.valueOf(response.code())); // should be a 302 (redirect)
-                            Log.d(TAG, response.headers().toString()); // should contain a "Location" header
-
-                            if(response.code() != 302 || response.header("Location") == null) {
-                                if (context instanceof Activity){
-                                    ((Activity)context).runOnUiThread(
-                                            new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(context, context.getString(R.string.toast_credentials), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                    );
-                                }
-
-                                return;
-                            }
-
-                            String ticket = response.header("Location").split("ticket=")[1];
-
-                            RequestBody loginForm = new FormBody.Builder()
-                                    .add("client_id", CLIENT_ID)
-                                    .add("redirect_uri", REDIRECT_URI)
-                                    .add("client_secret", PTC_CLIENT_SECRET)
-                                    .add("grant_type", "refresh_token")
-                                    .add("code", ticket)
-                                    .build();
-
-                            Request loginRequest = new Request.Builder()
-                                    .addHeader("User-Agent", "Niantic App")
-                                    .url(LOGIN_OAUTH)
-                                    .post(loginForm)
-                                    .build();
-
-                            client.newCall(loginRequest).enqueue(new okhttp3.Callback() {
-                                @Override
-                                public void onFailure(okhttp3.Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                                    String rawToken = response.body().string();
-                                    String cleanToken = rawToken.replaceAll("&expires.*", "").replaceAll(".*access_token=", "");
-
-                                    Log.d(TAG, cleanToken); // success!
-
-                                    //token = cleanToken;
-                                }
-                            });
-                        }
-                    });
-                } catch (JSONException e) {
+                    String token = response.body().string().split("token=")[1];
+                    token = token.split("&")[0];
+                    callBack.authSuccessful(token);
+                } catch (IOException e) {
                     e.printStackTrace();
+                    callBack.authFailed("Pokemon Trainer Club Authentication Failed");
                 }
             }
-        });
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                callBack.authFailed("Pokemon Trainer Club Authentication Failed");
+            }
+        };
+        Call<ResponseBody> call = mNianticService.requestToken(url.toString());
+        call.enqueue(authCallback);
     }
 
+    public interface CallBack {
+        void authSuccessful(String authToken);
+        void authFailed(String message);
+    }
 
     /**
      * Needs to be translated from the Python library.
@@ -243,39 +192,34 @@ public class NianticManager {
      * See https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/example.py#L378
      */
     private void getPokemon() {
-        try {
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m4 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            PokemonOuterClass.RequestEnvelop.MessageSingleInt.Builder msi = PokemonOuterClass.RequestEnvelop.MessageSingleInt.newBuilder();
-            msi.setF1(System.currentTimeMillis());
-            m4.setMessage(msi.build().toByteString());
-
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m5 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            PokemonOuterClass.RequestEnvelop.MessageSingleString.Builder mss = PokemonOuterClass.RequestEnvelop.MessageSingleString.newBuilder();
-            mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
-            m5.setMessage(mss.build().toByteString());
-            // TODO: walk = sorted(getNeighbors())
-            PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-            m1.setType(106); // magic number;
-            PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
-            // TODO: mq.f1 = ''.join(map(encode, walk))
-            mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
-
-            /*requestLocation();
-            mq.setLat(((long) mLastLocation.getLatitude()));
-            mq.setLong(((long) mLastLocation.getLongitude()));
-            */
-            //TODO: connect this to the location provider
-
-            m1.setMessage(mq.build().toByteString());
-
-            // TODO: response = get_profile(...)...
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            PokemonOuterClass.RequestEnvelop.Requests.Builder m4 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
+//            PokemonOuterClass.RequestEnvelop.MessageSingleInt.Builder msi = PokemonOuterClass.RequestEnvelop.MessageSingleInt.newBuilder();
+//            msi.setF1(System.currentTimeMillis());
+//            m4.setMessage(msi.build().toByteString());
+//
+//            PokemonOuterClass.RequestEnvelop.Requests.Builder m5 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
+//            PokemonOuterClass.RequestEnvelop.MessageSingleString.Builder mss = PokemonOuterClass.RequestEnvelop.MessageSingleString.newBuilder();
+//            mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
+//            m5.setMessage(mss.build().toByteString());
+//            // TODO: walk = sorted(getNeighbors())
+//            PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
+//            m1.setType(106); // magic number;
+//            PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
+//            // TODO: mq.f1 = ''.join(map(encode, walk))
+//            mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
+//
+//            /*requestLocation();
+//            mq.setLat(((long) mLastLocation.getLatitude()));
+//            mq.setLong(((long) mLastLocation.getLongitude()));
+//            */
+//            //TODO: connect this to the location provider
+//
+//            m1.setMessage(mq.build().toByteString());
+//
+//            // TODO: response = get_profile(...)...
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
-
-    public interface Listener{
-
-    }
-
 }
