@@ -6,8 +6,12 @@ import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.omkarmoghe.pokemap.map.LocationManager;
+import com.omkarmoghe.pokemap.protobuf.PokemonOuterClass;
+import com.omkarmoghe.pokemap.utils.Varint;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,19 +54,11 @@ public class NianticManager {
 
     private NianticService mNianticService;
     private final OkHttpClient mClient;
-    public static NianticManager getInstance(){
     private List<Listener> listeners;
-    private Context context;
 
-    NianticService nianticService;
-    final OkHttpClient client;
-
-    //private String token;
-
-    public static NianticManager getInstance(Context context){
+    public static NianticManager getInstance(){
         if(instance == null){
             instance = new NianticManager();
-            instance.context = context;
         }
         return instance;
     }
@@ -218,7 +214,7 @@ public class NianticManager {
      * See https://github.com/AHAAAAAAA/PokemonGo-Map
      * See https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/example.py#L378
      */
-    private void getPokemon() {
+    private void getPokemon(Context context) {
         try {
             PokemonOuterClass.RequestEnvelop.Requests m4 = new PokemonOuterClass.RequestEnvelop.Requests();
             PokemonOuterClass.RequestEnvelop.MessageSingleInt msi = new PokemonOuterClass.RequestEnvelop.MessageSingleInt();
@@ -231,7 +227,7 @@ public class NianticManager {
             m5.message = mss.toString().getBytes();
             // TODO: walk = sorted(getNeighbors())
             // TODO: Check if this is right
-            ArrayList<Integer> walk = getNeighbors();
+            ArrayList<Integer> walk = getNeighbors(context);
             PokemonOuterClass.RequestEnvelop.Requests m1 = new PokemonOuterClass.RequestEnvelop.Requests();
             m1.type = 106; // magic number
             PokemonOuterClass.RequestEnvelop.MessageQuad mq = new PokemonOuterClass.RequestEnvelop.MessageQuad();
@@ -255,7 +251,7 @@ public class NianticManager {
     }
 
     //TODO: Find right place for this
-    private ArrayList<Integer> getNeighbors() {
+    private ArrayList<Integer> getNeighbors(Context context) {
 
         Integer origin = null;
         final TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
