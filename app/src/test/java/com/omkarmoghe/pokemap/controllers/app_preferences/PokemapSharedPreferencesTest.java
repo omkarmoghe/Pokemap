@@ -1,10 +1,8 @@
-package com.omkarmoghe.pokemap.app_preferences;
+package com.omkarmoghe.pokemap.controllers.app_preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.omkarmoghe.pokemap.app_preferences.PokemapSharedPreferences;
 
 import org.junit.Before;
 import org.junit.Test;

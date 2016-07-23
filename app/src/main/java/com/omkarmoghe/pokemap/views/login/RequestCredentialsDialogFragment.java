@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.login;
+package com.omkarmoghe.pokemap.views.login;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

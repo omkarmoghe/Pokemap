@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.map;
+package com.omkarmoghe.pokemap.controllers.map;
 
 import android.Manifest;
 import android.app.Activity;

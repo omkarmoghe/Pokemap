@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.network;
+package com.omkarmoghe.pokemap.controllers.net;
 
 /**
  * Created by vanshilshah on 20/07/16.

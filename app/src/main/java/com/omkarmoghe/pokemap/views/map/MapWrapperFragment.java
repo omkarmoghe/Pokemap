@@ -1,14 +1,11 @@
-package com.omkarmoghe.pokemap.map;
+package com.omkarmoghe.pokemap.views.map;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +16,22 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
+import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +73,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -124,6 +136,52 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+        if (mGoogleMap != null) {
+            for (CatchablePokemon poke : pokeList) {
+                //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                        .title(poke.getPokemonId().name())
+                        .snippet("Dissapears in: " + getDurationBreakdown(poke.getExpirationTimestampMs()))
+                        /*.icon(BitmapDescriptorFactory.fromResource(resourceID))*/);
+
+                marker.showInfoWindow();
+            }
+        } else {
+            Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String getDurationBreakdown(long millis) {
+        if(millis < 0) {
+            return "Expired";
+        }
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(minutes);
+        sb.append(" Minutes ");
+        sb.append(seconds);
+        sb.append(" Seconds");
+
+        return(sb.toString());
+    }
+
+    /**
+     * Called whenever a CatchablePokemonEvent is posted to the bus. Posted when new catchable pokemon are found.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(CatchablePokemonEvent event) {
+        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        setPokemonMarkers(event.getCatchablePokemon());
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -155,6 +213,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         initMap();
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }
 

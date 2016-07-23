@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.network;
+package com.omkarmoghe.pokemap.controllers.net;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

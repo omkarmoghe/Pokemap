@@ -1,10 +1,10 @@
-package com.omkarmoghe.pokemap.common;
+package com.omkarmoghe.pokemap.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.omkarmoghe.pokemap.map.LocationManager;
-import com.omkarmoghe.pokemap.network.NianticManager;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 
 /**
  * Created by vanshilshah on 19/07/16.
@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = LocationManager.getInstance(this);
-        nianticManager = NianticManager.getInstance(this);
+        nianticManager = NianticManager.getInstance();
 
     }
     @Override

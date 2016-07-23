@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.app_preferences;
+package com.omkarmoghe.pokemap.controllers.app_preferences;
 
 import android.support.annotation.NonNull;
 

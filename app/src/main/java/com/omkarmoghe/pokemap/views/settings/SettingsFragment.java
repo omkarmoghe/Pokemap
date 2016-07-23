@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.settings;
+package com.omkarmoghe.pokemap.views.settings;
 
 import android.content.SharedPreferences;
 import android.preference.Preference;

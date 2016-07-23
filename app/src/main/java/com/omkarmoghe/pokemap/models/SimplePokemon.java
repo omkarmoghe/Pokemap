@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.common;
+package com.omkarmoghe.pokemap.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
