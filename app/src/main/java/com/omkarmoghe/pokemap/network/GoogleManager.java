@@ -36,13 +36,7 @@ public class GoogleManager {
 
     private GoogleManager() {
         mClient = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                })
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new NetworkRequestLoggingInterceptor())
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();

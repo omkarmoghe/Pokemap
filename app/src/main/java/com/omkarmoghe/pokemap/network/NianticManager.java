@@ -91,7 +91,7 @@ public class NianticManager {
 
         mClient = new OkHttpClient.Builder()
                 .cookieJar(tempJar)
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new NetworkRequestLoggingInterceptor())
                 .build();
 
         mNianticService = new Retrofit.Builder()
