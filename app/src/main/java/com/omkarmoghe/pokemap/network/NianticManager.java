@@ -67,6 +67,15 @@ public class NianticManager {
         listeners = new ArrayList<>();
 
         client = new OkHttpClient.Builder()
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String s, SSLSession sslSession) {
+                        return true;
+                    }
+                })
+                .addInterceptor(new NetworkRequestLoggingInterceptor())
+                .followRedirects(false)
+                .followSslRedirects(false)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -104,6 +113,8 @@ public class NianticManager {
 
                 } catch (LoginFailedException e) {
                     e.printStackTrace();
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -126,8 +137,6 @@ public class NianticManager {
 //                            CatchResult result = pokemon.catchPokemon();
 //                        }
 //                    }
-
-
                 } catch (RemoteServerException e) {
                     e.printStackTrace();
                 } catch (LoginFailedException e) {
