@@ -23,14 +23,12 @@
         android:text="@string/login_warning_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
     <TextView
         android:text="@string/login_warning"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:id="@+id/login_form"
