@@ -1,6 +1,8 @@
 package com.omkarmoghe.pokemap.views.map;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -128,6 +130,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
     private void initMap(){
         if (mLocation != null && mGoogleMap != null){
+            if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                String[] requirePermissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+                ActivityCompat.requestPermissions(this.getActivity(), requirePermissions, 1);
+                return;
+            }
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
@@ -142,7 +151,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(poke.getExpirationTimestampMs()))
+                        .snippet("Disappears in: " + getDurationBreakdown(poke.getExpirationTimestampMs()))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
                 marker.showInfoWindow();
