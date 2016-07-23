@@ -17,18 +17,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +44,7 @@ import java.util.concurrent.TimeUnit;
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
+                                                            GoogleMap.OnMapLongClickListener,
                                                             ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
@@ -49,6 +55,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
+    private Marker userSelectedPositionMarker = null;
+    private Circle userSelectedPositionCircle = null;
+    private List<Marker> markerList = new ArrayList<>();
+
     public MapWrapperFragment() {
         // Required empty public constructor
     }
@@ -137,15 +147,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
+            //Removing all pokemons from map
+            if (markerList != null && !markerList.isEmpty()){
+                for(Marker marker : markerList){
+                    marker.remove();
+                }
+                markerList = new ArrayList<Marker>(); //cleaning the array
+            }
+
             for (CatchablePokemon poke : pokeList) {
                 int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(poke.getExpirationTimestampMs()))
+                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
                 marker.showInfoWindow();
+                //adding pokemons to list to be removed on next search
+                markerList.add(marker);
             }
         } else {
             Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
@@ -153,6 +174,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public static String getDurationBreakdown(long millis) {
+
         if(millis < 0) {
             return "Expired";
         }
@@ -177,6 +199,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
+        //FIXME : This actually is a workaround because gettind double pokemons
+        //int pokeCount = event.getCatchablePokemon().size()>0 ? event.getCatchablePokemon().size()/2 : event.getCatchablePokemon().size();
         Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
         setPokemonMarkers(event.getCatchablePokemon());
     }
@@ -215,9 +239,43 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         settings.setCompassEnabled(true);
         settings.setTiltGesturesEnabled(true);
         settings.setMyLocationButtonEnabled(false);
+        //Handle long click
+        mGoogleMap.setOnMapLongClickListener(this);
+        //Disable for now coz is under FAB
+        settings.setMapToolbarEnabled(false);
         initMap();
     }
 
 
+    @Override
+    public void onMapLongClick(LatLng position) {
+        //Draw user position marker with circle
+        drawMarkerWithCircle (position);
+
+        //Sending event to MainActivity
+        SearchInPosition sip = new SearchInPosition();
+        sip.setPosition(position);
+        EventBus.getDefault().post(sip);
+    }
+
+    private void drawMarkerWithCircle(LatLng position){
+        //Check and eventually remove old marker
+        if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
+            userSelectedPositionMarker.remove();
+            userSelectedPositionCircle.remove();
+        }
+
+        double radiusInMeters = 100.0;
+        int strokeColor = 0xff3399FF; // outline
+        int shadeColor = 0x4400CCFF; // fill
+
+        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
+
+        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                .position(position)
+                .title("Position Picked")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+    }
 }
 
