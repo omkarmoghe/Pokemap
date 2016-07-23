@@ -1,12 +1,10 @@
 package com.omkarmoghe.pokemap.network;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
 
 import com.omkarmoghe.pokemap.common.Notifier;
 import com.omkarmoghe.pokemap.utils.Varint;
@@ -14,6 +12,7 @@ import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchResult;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.map.pokemon.EncounterResult;
+import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
@@ -22,17 +21,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by vanshilshah on 20/07/16.
@@ -48,7 +41,7 @@ public class NianticManager {
 
     private static NianticManager instance;
 
-    private List<NianticEventListener> listeners;
+    private List<Listener> listeners;
     private Context context;
     private AuthInfo mAuthInfo;
 
@@ -185,7 +178,7 @@ public class NianticManager {
         return mainBytes;
     }
 
-    public interface NianticEventListener {
+    public interface Listener {
         void onLogin(AuthInfo info, PokemonGo pokemonGo);
         void onOperationFailure(Exception ex);
 

@@ -18,6 +18,7 @@ import com.omkarmoghe.pokemap.common.Notifier;
 import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.map.LocationManager;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
+import com.omkarmoghe.pokemap.network.LoginType;
 import com.omkarmoghe.pokemap.network.NianticManager;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
 import com.omkarmoghe.pokemap.app_preferences.PokemapAppPreferences;
@@ -128,7 +129,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private NianticManager.NianticEventListener mEventListener = new AbstractNianticEventListener(){
+    private NianticManager.Listener mEventListener = new AbstractNianticEventListener(){
         @Override
         public void onOperationFailure(Exception ex) {
             super.onOperationFailure(ex);

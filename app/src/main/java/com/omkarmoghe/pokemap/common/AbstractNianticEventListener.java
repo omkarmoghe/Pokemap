@@ -12,7 +12,7 @@ import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass;
  * Created by coreymann on 7/22/16.
  */
 
-public class AbstractNianticEventListener implements NianticManager.NianticEventListener {
+public class AbstractNianticEventListener implements NianticManager.Listener {
     @Override
     public void onLogin(RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo info, PokemonGo pokemonGo) {
 
