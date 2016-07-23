@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private NianticManager.NianticEventListener mEventListener = new AbstractNianticEventListener(){
+    private NianticManager.Listener mEventListener = new AbstractNianticEventListener(){
         @Override
         public void onOperationFailure(Exception ex) {
             super.onOperationFailure(ex);

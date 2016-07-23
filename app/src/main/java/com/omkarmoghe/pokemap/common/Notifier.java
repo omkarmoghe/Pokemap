@@ -11,7 +11,6 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import java.util.ArrayList;
 import java.util.List;
 
-import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass;
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
 
@@ -32,18 +31,18 @@ public class Notifier {
 
     //region Members
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    private List<NianticManager.NianticEventListener> mListeners = new ArrayList<>();
+    private List<NianticManager.Listener> mListeners = new ArrayList<>();
 
 
-    public void addListener(NianticManager.NianticEventListener listener){ this.mListeners.add(listener); }
-    public void removeListener(NianticManager.NianticEventListener listener) { this.mListeners.remove(listener); }
+    public void addListener(NianticManager.Listener listener){ this.mListeners.add(listener); }
+    public void removeListener(NianticManager.Listener listener) { this.mListeners.remove(listener); }
 
 
     public void dispatchOnLogin(final AuthInfo info, final PokemonGo pokemonGo){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                for(NianticManager.NianticEventListener l : mListeners){
+                for(NianticManager.Listener l : mListeners){
                     try{
                         l.onLogin(info, pokemonGo);
                     }catch(Exception ex){
@@ -58,7 +57,7 @@ public class Notifier {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                for(NianticManager.NianticEventListener l : mListeners){
+                for(NianticManager.Listener l : mListeners){
                     l.onCatchablePokemonFound(pokemons);
                 }
             }
@@ -68,7 +67,7 @@ public class Notifier {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                for(NianticManager.NianticEventListener l : mListeners){
+                for(NianticManager.Listener l : mListeners){
                     try{
                         l.onOperationFailure(ex);
                     }catch(Exception ex){
