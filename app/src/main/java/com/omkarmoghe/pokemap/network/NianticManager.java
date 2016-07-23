@@ -135,17 +135,6 @@ public class NianticManager {
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();
-        client = new OkHttpClient.Builder()
-                .hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                })
-                .addInterceptor(new LoggingInterceptor())
-                .followRedirects(false)
-                .followSslRedirects(false)
-                .build();
 
         NianticService service = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
