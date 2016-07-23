@@ -14,10 +14,13 @@
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokemon Nearby</string>
 
-
+    <string name="login_warning">It is recommended to
+    instead create and use a fake Pokémon Trainer Club account with a different password and email or
+        use a Google account not attached to your Pokemon Go account </string>
     <string name="prompt_username">PTC Username</string>
     <string name="prompt_password">PTC Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="error_field_required">Field Required</string>
     <string name="title_activity_maps">Map</string>
+    <string name="login_warning_title">Warning:</string>
 </resources>
