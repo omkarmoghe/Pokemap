@@ -1,13 +1,19 @@
 package com.omkarmoghe.pokemap.network;
 
+import android.app.Activity;
+import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
@@ -45,8 +51,18 @@ public class NianticManager {
     private NianticService mNianticService;
     private final OkHttpClient mClient;
     public static NianticManager getInstance(){
+    private List<Listener> listeners;
+    private Context context;
+
+    NianticService nianticService;
+    final OkHttpClient client;
+
+    //private String token;
+
+    public static NianticManager getInstance(Context context){
         if(instance == null){
             instance = new NianticManager();
+            instance.context = context;
         }
         return instance;
     }
@@ -123,6 +139,17 @@ public class NianticManager {
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();
+        client = new OkHttpClient.Builder()
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String s, SSLSession sslSession) {
+                        return true;
+                    }
+                })
+                .addInterceptor(new LoggingInterceptor())
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build();
 
         NianticService service = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -192,34 +219,105 @@ public class NianticManager {
      * See https://github.com/AHAAAAAAA/PokemonGo-Map/blob/master/example.py#L378
      */
     private void getPokemon() {
-//        try {
-//            PokemonOuterClass.RequestEnvelop.Requests.Builder m4 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-//            PokemonOuterClass.RequestEnvelop.MessageSingleInt.Builder msi = PokemonOuterClass.RequestEnvelop.MessageSingleInt.newBuilder();
-//            msi.setF1(System.currentTimeMillis());
-//            m4.setMessage(msi.build().toByteString());
-//
-//            PokemonOuterClass.RequestEnvelop.Requests.Builder m5 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-//            PokemonOuterClass.RequestEnvelop.MessageSingleString.Builder mss = PokemonOuterClass.RequestEnvelop.MessageSingleString.newBuilder();
-//            mss.setBytes(ByteString.copyFrom("05daf51635c82611d1aac95c0b051d3ec088a930", "UTF-8"));
-//            m5.setMessage(mss.build().toByteString());
-//            // TODO: walk = sorted(getNeighbors())
-//            PokemonOuterClass.RequestEnvelop.Requests.Builder m1 = PokemonOuterClass.RequestEnvelop.Requests.newBuilder();
-//            m1.setType(106); // magic number;
-//            PokemonOuterClass.RequestEnvelop.MessageQuad.Builder mq = PokemonOuterClass.RequestEnvelop.MessageQuad.newBuilder();
-//            // TODO: mq.f1 = ''.join(map(encode, walk))
-//            mq.setF2(ByteString.copyFrom("\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", "UTF-8"));
-//
-//            /*requestLocation();
-//            mq.setLat(((long) mLastLocation.getLatitude()));
-//            mq.setLong(((long) mLastLocation.getLongitude()));
-//            */
-//            //TODO: connect this to the location provider
-//
-//            m1.setMessage(mq.build().toByteString());
-//
-//            // TODO: response = get_profile(...)...
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            PokemonOuterClass.RequestEnvelop.Requests m4 = new PokemonOuterClass.RequestEnvelop.Requests();
+            PokemonOuterClass.RequestEnvelop.MessageSingleInt msi = new PokemonOuterClass.RequestEnvelop.MessageSingleInt();
+            msi.f1 = System.currentTimeMillis();
+            m4.message = msi.toString().getBytes();
+
+            PokemonOuterClass.RequestEnvelop.Requests m5 = new PokemonOuterClass.RequestEnvelop.Requests();
+            PokemonOuterClass.RequestEnvelop.MessageSingleString mss = new PokemonOuterClass.RequestEnvelop.MessageSingleString();
+            mss.bytes = "05daf51635c82611d1aac95c0b051d3ec088a930".getBytes("UTF-8");
+            m5.message = mss.toString().getBytes();
+            // TODO: walk = sorted(getNeighbors())
+            // TODO: Check if this is right
+            ArrayList<Integer> walk = getNeighbors();
+            PokemonOuterClass.RequestEnvelop.Requests m1 = new PokemonOuterClass.RequestEnvelop.Requests();
+            m1.type = 106; // magic number
+            PokemonOuterClass.RequestEnvelop.MessageQuad mq = new PokemonOuterClass.RequestEnvelop.MessageQuad();
+            // TODO: mq.f1 = ''.join(map(encode, walk))
+            // TODO: Check if this is right
+            mq.f1 = encode(walk);
+            mq.f2 = "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000".getBytes("UTF-8");
+
+            LatLng latLng = LocationManager.getInstance(context).getLocation();
+            mq.lat = (long) latLng.latitude;
+            mq.long_ = (long) latLng.latitude;
+
+            //TODO: connect this to the location provider
+
+            m1.message = mq.toString().getBytes();
+
+            // TODO: response = get_profile(...)...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    //TODO: Find right place for this
+    private ArrayList<Integer> getNeighbors() {
+
+        Integer origin = null;
+        final TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+            final GsmCellLocation location = (GsmCellLocation) telephony.getCellLocation();
+            if (location != null) {
+                origin = location.getCid();
+            }
+        }
+
+        if (origin == null) {
+            return null;
+        }
+
+        ArrayList<Integer> walk = new ArrayList<>();
+        walk.add(origin);
+
+        for (int i = 1; i <= 10; i++) {
+            Integer next = origin + i;
+            Integer prev = origin - i;
+            walk.add(next);
+            walk.add(prev);
+        }
+
+        Collections.sort(walk);
+
+        return walk;
+    }
+
+    //TODO: Find right place for this
+    private byte[] encode(ArrayList<Integer> walk) {
+        if (walk == null) {
+            return null;
+        }
+
+        byte[] mainBytes = null;
+
+        for (Integer cellid: walk) {
+
+            byte[] bytes = Varint.writeUnsignedVarInt(cellid);
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            try {
+                if (mainBytes != null) {
+                    outputStream.write(mainBytes);
+                }
+                outputStream.write( bytes );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mainBytes = outputStream.toByteArray( );
+
+        }
+
+        assert mainBytes != null;
+        return mainBytes;
+    }
+
+    public interface Listener{
+
+    }
+
 }
