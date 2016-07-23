@@ -78,7 +78,7 @@ public class NianticManager {
                         return true;
                     }
                 })
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new NetworkRequestLoggingInterceptor())
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();
@@ -143,7 +143,7 @@ public class NianticManager {
                     }
                 })
                 .cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)))
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new NetworkRequestLoggingInterceptor())
                 .followRedirects(false)
                 .followSslRedirects(false)
                 .build();
