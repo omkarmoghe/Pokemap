@@ -1,14 +1,11 @@
 package com.omkarmoghe.pokemap;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,30 +14,26 @@ import com.omkarmoghe.pokemap.common.BaseActivity;
 import com.omkarmoghe.pokemap.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.settings.SettingsActivity;
+import com.omkarmoghe.pokemap.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.app_preferences.PokemapSharedPreferences;
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = "Pokemap";
 
-    public static final String TAG = "Pokemap";
-
-    // fragments
-    private MapWrapperFragment mMapWrapperFragment;
-
-    // Preferences
-    SharedPreferences pref;
+    private PokemapAppPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        pref = new PokemapSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mMapWrapperFragment = MapWrapperFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container, mMapWrapperFragment)
+        transaction.replace(R.id.main_container, MapWrapperFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
         login();
@@ -67,15 +60,10 @@ public class MainActivity extends BaseActivity {
 
 
     private void login() {
-
-        String username = pref.getString(getString(R.string.pref_username), "");
-        String password = pref.getString(getString(R.string.pref_password), "");
-
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+        if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
             requestLoginCredentials();
         } else {
-            Log.d(TAG, "Username: " + username);
-            nianticManager.login(username, password, this);
+            nianticManager.login(pref.getUsername(), pref.getPassword(), this);
         }
     }
 
@@ -84,22 +72,11 @@ public class MainActivity extends BaseActivity {
                 new RequestCredentialsDialogFragment.Listener() {
                     @Override
                     public void credentialsIntroduced(String username, String password) {
-                        pref.edit().putString(getString(R.string.pref_username), username).apply();
-                        pref.edit().putString(getString(R.string.pref_password), password).apply();
-
+                        pref.setUsername(username);
+                        pref.setPassword(password);
                         login();
                     }
                 }), "request_credentials").commit();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -117,6 +94,5 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
         }
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

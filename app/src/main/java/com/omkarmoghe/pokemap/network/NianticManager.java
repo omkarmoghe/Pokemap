@@ -310,7 +310,9 @@ public class NianticManager {
 
         for (int i = 1; i <= 10; i++) {
             Integer next = origin + i;
+            Integer prev = origin - i;
             walk.add(next);
+            walk.add(prev);
         }
 
         Collections.sort(walk);
