@@ -254,6 +254,23 @@ public class NianticManager {
         });
     }
 
+    public void login(@NonNull final String username, @NonNull final String password) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mAuthInfo = new PtcLogin(mPoGoClient).login(username, password);
+                    mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
+                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                }
+            }
+        });
+    }
+
     public void getCatchablePokemon(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
             @Override
