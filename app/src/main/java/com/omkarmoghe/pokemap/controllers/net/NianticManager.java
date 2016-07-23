@@ -1,7 +1,10 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.os.HandlerThread;
+
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.IEvent;
+import android.os.Handler;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
@@ -10,6 +13,8 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,8 +32,10 @@ public class NianticManager {
 
     private static final NianticManager instance = new NianticManager();
 
+    private Handler mHandler;
     private RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo mAuthInfo;
     private final OkHttpClient client;
+    private PokemonGo pokemonGo;
 
     public static NianticManager getInstance(){
         return instance;
@@ -40,29 +47,43 @@ public class NianticManager {
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
+
+        HandlerThread thread = new HandlerThread("Niantic Manager Thread");
+        thread.start();
+        mHandler = new Handler(thread.getLooper());
     }
 
-    public IEvent login(final String username, final String password) {
-        try {
-            mAuthInfo = new PtcLogin(client).login(username, password);
-            return new LoginEventResult(true, mAuthInfo, new PokemonGo(mAuthInfo, client));
-        } catch (LoginFailedException e) {
-            return new LoginEventResult(false, null, null);
-        } catch (RemoteServerException e) {
-            return new ServerUnreachableEvent(e);
-        }
+    public void login(final String username, final String password) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mAuthInfo = new PtcLogin(client).login(username, password);
+                    pokemonGo = new PokemonGo(mAuthInfo, client);
+                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, pokemonGo));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                }
+            }
+        });
     }
 
-    public IEvent getCatchablePokemon(final double lat, final double longitude, final double alt){
-       try {
-           PokemonGo pokemonGO = new PokemonGo(mAuthInfo, client);
-           pokemonGO.setLocation(lat, longitude, alt);
-           return new CatchablePokemonEvent(pokemonGO.getMap().getCatchablePokemon());
-       } catch (LoginFailedException e) {
-           return new TokenExpiredEvent(); //Because we aren't coming from a log in event, the token must have expired.
-       } catch (RemoteServerException e) {
-           return new ServerUnreachableEvent(e);
-       }
+    public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    pokemonGo.setLocation(lat, longitude, alt);
+                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemonGo.getMap().getCatchablePokemon()));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                }
+            }
+        });
     }
 
 }

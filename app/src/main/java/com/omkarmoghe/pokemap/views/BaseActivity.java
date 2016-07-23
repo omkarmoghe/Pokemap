@@ -22,6 +22,7 @@ public class BaseActivity extends AppCompatActivity {
         nianticManager = NianticManager.getInstance();
 
     }
+
     @Override
     public void onResume(){
         super.onResume();

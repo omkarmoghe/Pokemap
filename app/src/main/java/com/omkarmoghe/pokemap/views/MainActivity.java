@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,13 +14,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.controllers.map.LocationManager;
-import com.omkarmoghe.pokemap.controllers.net.tasks.GetCatchablePokemonTask;
-import com.omkarmoghe.pokemap.controllers.net.tasks.LoginTask;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
@@ -27,13 +26,13 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
 
     private PokemapAppPreferences pref;
 
+    //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,18 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    //region Menu Methods
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -66,15 +77,32 @@ public class MainActivity extends BaseActivity {
         } else if (id == R.id.action_relogin) {
             login();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        this.finish();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // TODO: test all this shit on a 6.0+ phone lmfao
+        switch (requestCode) {
+            case 703:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "permission granted");
+                }
+                break;
+        }
+    }
 
     private void login() {
         if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
             requestLoginCredentials();
         } else {
-            new LoginTask(pref.getUsername(), pref.getPassword()).execute();
+            nianticManager.login(pref.getUsername(), pref.getPassword());
         }
     }
 
@@ -90,39 +118,17 @@ public class MainActivity extends BaseActivity {
                 }), "request_credentials").commit();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        this.finish();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 703:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "permission granted");
-                }
-                break;
-        }
-    }
-
     /**
      * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
      *
      * @param result Results of a log in attempt
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
             Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
-            new GetCatchablePokemonTask(latLng.latitude, latLng.longitude, 10.0D).execute();
+            nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
             Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
         }
@@ -133,7 +139,7 @@ public class MainActivity extends BaseActivity {
      *
      * @param event The event information
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
         Toast.makeText(this, "Unable to contact the Pokemon GO servers. The servers may be down.", Toast.LENGTH_LONG).show();
     }
@@ -143,10 +149,9 @@ public class MainActivity extends BaseActivity {
      *
      * @param event The event information
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onEvent(TokenExpiredEvent event) {
         Toast.makeText(this, "The login token has expired. Getting a new one.", Toast.LENGTH_LONG).show();
         login();
     }
-
 }

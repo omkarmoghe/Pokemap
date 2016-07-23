@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,12 +138,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
             for (CatchablePokemon poke : pokeList) {
-                //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
                         .snippet("Dissapears in: " + getDurationBreakdown(poke.getExpirationTimestampMs()))
-                        /*.icon(BitmapDescriptorFactory.fromResource(resourceID))*/);
+                        .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
                 marker.showInfoWindow();
             }
@@ -183,6 +182,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -213,10 +218,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         initMap();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
+
 }
 
