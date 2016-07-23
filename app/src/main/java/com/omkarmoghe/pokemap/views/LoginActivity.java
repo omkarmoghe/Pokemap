@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.SignInButton;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
@@ -48,13 +50,22 @@ public class LoginActivity extends AppCompatActivity{
     private GoogleManager.LoginListener mGoogleLoginListener;
 
     private String mDeviceCode;
+    private PokemapAppPreferences mPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
+        mPref = new PokemapSharedPreferences(this);
+        
+        if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
+            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+            finishLogin();
+        }
+
+        setContentView(R.layout.activity_login);
 
         mNianticLoginListener = new NianticManager.LoginListener() {
             @Override
