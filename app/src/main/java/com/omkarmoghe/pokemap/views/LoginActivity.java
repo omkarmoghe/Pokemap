@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity{
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
+                finishLogin();
             }
 
             @Override
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity{
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
+                finishLogin();
             }
 
             @Override
@@ -190,7 +192,7 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    private void startMainActivity(){
+    private void finishLogin(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

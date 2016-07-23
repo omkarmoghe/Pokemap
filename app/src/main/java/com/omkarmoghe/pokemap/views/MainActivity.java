@@ -47,7 +47,6 @@ public class MainActivity extends BaseActivity {
         transaction.replace(R.id.main_container, MapWrapperFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
-        login();
     }
 
     @Override
