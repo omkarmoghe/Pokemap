@@ -35,4 +35,10 @@ public interface PokemapAppPreferences {
      * @return the password stored or an empty @see java.lang.String
      */
     String getPassword();
+
+    /**
+     * Clears preferences.
+     * Allows to clean up on logout
+     */
+    void clearPreferences();
 }
