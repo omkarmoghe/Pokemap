@@ -16,7 +16,7 @@
 
     <string name="login_warning">It is recommended to
     instead create and use a fake Pokémon Trainer Club account with a different password and email or
-        use a Google account not attached to your Pokemon Go account </string>
+        use a Google account not attached to your Pokemon Go account. As using this app could result in your account being </string>
     <string name="prompt_username">PTC Username</string>
     <string name="prompt_password">PTC Password</string>
     <string name="action_sign_in">Sign in</string>

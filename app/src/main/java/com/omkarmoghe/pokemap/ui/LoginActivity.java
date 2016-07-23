@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -93,6 +94,11 @@ public class LoginActivity extends AppCompatActivity{
                 mDeviceCode = body.getDeviceCode();
             }
         };
+
+        //Bold words in Warning
+        TextView warning = (TextView) findViewById(R.id.login_warning);
+        String text = getString(R.string.login_warning) + " <b>banned</b>.";
+        warning.setText(Html.fromHtml(text));
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);

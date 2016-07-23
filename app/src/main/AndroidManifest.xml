@@ -30,6 +30,7 @@ package="com.omkarmoghe.pokemap">
         android:theme="@style/AppTheme.NoActionBar" />
     <activity
         android:name=".ui.GoogleAuthActivity"
+        android:theme="@style/AppTheme.NoActionBar"
         android:parentActivityName=".ui.LoginActivity">
     </activity>
 
