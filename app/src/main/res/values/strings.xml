@@ -21,6 +21,10 @@
     <string name="pref_gyms_title">Show Gyms</string>
     <string name="pref_gyms_key">gyms_checkbox</string>
 
+    <string name="pref_cat_service">Background Service</string>
+    <string name="pref_service_enable_title">Enable</string>
+    <string name="pref_service_enable_key">background_poke_service</string>
+
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokemon Nearby</string>
 

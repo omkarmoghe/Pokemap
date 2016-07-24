@@ -35,4 +35,16 @@ public interface PokemapAppPreferences {
      * @return the password stored or an empty @see java.lang.String
      */
     String getPassword();
+
+    /**
+     *
+     * @param isEnabled Sets if the background service is enabled.
+     */
+    void setServiceState(@NonNull boolean isEnabled);
+
+    /**
+     *
+     * @return Returns service state as set in preffs
+     */
+    boolean isServiceEnabled();
 }

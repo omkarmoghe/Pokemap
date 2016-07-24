@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.service.ScanService;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity {
 
 
     private PokemapAppPreferences pref;
+    private boolean dontStartService;
 
     //region Lifecycle Methods
     @Override
@@ -53,6 +54,8 @@ public class MainActivity extends BaseActivity {
         }
         fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
+
+        stopService();
     }
 
     @Override
@@ -64,12 +67,20 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onResume(){
         super.onResume();
+        stopService();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        startService();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+
     }
 
     //region Menu Methods
@@ -83,6 +94,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            dontStartService = true;
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.action_relogin) {
             login();
@@ -93,6 +105,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        dontStartService = true;
         this.finish();
     }
 
@@ -113,6 +126,20 @@ public class MainActivity extends BaseActivity {
             requestLoginCredentials();
         } else {
             nianticManager.login(pref.getUsername(), pref.getPassword());
+        }
+    }
+
+    private void startService(){
+        if( !dontStartService && pref.isServiceEnabled()){
+            Intent intent = new Intent(this, ScanService.class);
+            startService(intent);
+        }
+    }
+
+    private void stopService(){
+        if(pref.isServiceEnabled()){
+            Intent intent = new Intent(this, ScanService.class);
+            stopService(intent);
         }
     }
 

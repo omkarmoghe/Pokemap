@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
+    private static final String SERVICE_KEY = "background_poke_service";
 
     private final SharedPreferences sharedPreferences;
 
@@ -48,5 +49,15 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public String getPassword() {
         return sharedPreferences.getString(PASSWORD_KEY, "");
+    }
+
+    @Override
+    public void setServiceState(@NonNull boolean isEnabled) {
+        sharedPreferences.edit().putBoolean(SERVICE_KEY,isEnabled).apply();
+    }
+
+    @Override
+    public boolean isServiceEnabled() {
+        return sharedPreferences.getBoolean(SERVICE_KEY,false);
     }
 }
