@@ -38,7 +38,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EventBus.getDefault().register(this);
         pref = new PokemapSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,6 +53,13 @@ public class MainActivity extends BaseActivity {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //Best place for register
+        EventBus.getDefault().register(this);
     }
 
     //region Menu Methods

@@ -81,6 +81,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //Best place for register
         EventBus.getDefault().register(this);
     }
 
@@ -163,7 +169,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
-                marker.showInfoWindow();
+                //Showing info windows is annoying ... le user choose wich one to see...
+                //marker.showInfoWindow();
                 //adding pokemons to list to be removed on next search
                 markerList.add(marker);
             }
@@ -270,7 +277,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
                 .title("Position Picked")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+               .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
     }
 
 }
