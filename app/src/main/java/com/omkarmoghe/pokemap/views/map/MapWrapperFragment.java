@@ -81,7 +81,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-        EventBus.getDefault().register(this);
+        setRetainInstance(true);
     }
 
     @Override
@@ -110,6 +110,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mSupportMapFragment == null) {
             mSupportMapFragment = SupportMapFragment.newInstance();
             getChildFragmentManager().beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
+            mSupportMapFragment.setRetainInstance(true);
         }
 
         if (mGoogleMap == null) {
