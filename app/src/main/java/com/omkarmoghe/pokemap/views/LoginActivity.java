@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -38,6 +41,7 @@ public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
 
     private static final int REQUEST_USER_AUTH = 1;
+    private static final int REQUEST_LOCATION_PERMISSION = 123;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -56,10 +60,12 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        checkPermissionForLocation();
+
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
-        
+
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
@@ -146,6 +152,15 @@ public class LoginActivity extends AppCompatActivity{
                 mGoogleManager.authUser(mGoogleLoginListener);
             }
         });
+    }
+
+    private void checkPermissionForLocation() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        }
     }
 
     @Override
