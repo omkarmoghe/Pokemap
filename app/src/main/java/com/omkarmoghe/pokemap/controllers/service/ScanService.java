@@ -3,7 +3,10 @@ package com.omkarmoghe.pokemap.controllers.service;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ScanService extends Service{
     private static final int notificationId = 2423235;
+    private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
     private WorkRunnable workRunnable;
     private Thread workThread;
@@ -63,7 +67,9 @@ public class ScanService extends Service{
         workRunnable = new WorkRunnable();
         workThread = new Thread(workRunnable);
 
-
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_STOP_SELF);
+        registerReceiver(mBroadcastReciever,intentFilter);
     }
 
     @Override
@@ -72,6 +78,7 @@ public class ScanService extends Service{
         cancelNotification();
         workRunnable.stop();
         EventBus.getDefault().unregister(this);
+        unregisterReceiver(mBroadcastReciever);
     }
 
     @Override
@@ -97,7 +104,13 @@ public class ScanService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        builder.setContentIntent(pi);
+        //builder.setContentIntent(pi);
+
+        Intent stopService = new Intent();
+        stopService.setAction(ACTION_STOP_SELF);
+
+        PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
+        builder.addAction(R.drawable.ic_cancel_black_24dp,"Stop Service",piStopService);
 
         nm.notify(notificationId,builder.build());
     }
@@ -117,30 +130,23 @@ public class ScanService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
+        builder.setContentText(catchablePokemon.size() + " pokemon nearby.");
+        builder.setStyle(null);
 
-        if(catchablePokemon.isEmpty()){
-            builder.setContentText("No pokemon nearby");
-        }else{
-            StringBuilder sb = new StringBuilder();
-
+        if(!catchablePokemon.isEmpty()){
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle(catchablePokemon.size() + " pokemon in area:");
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
                 pokeLocation.setLatitude(cp.getLatitude());
                 pokeLocation.setLongitude(cp.getLongitude());
-
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-
-                sb.append(cp.getPokemonId().name() + "(" +
+                inboxStyle.addLine(cp.getPokemonId().name() + "(" +
                         TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
                         " minutes," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " meters)");
             }
-            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-            bigTextStyle.setBigContentTitle(catchablePokemon.size() + " pokemon nearby.");
-            bigTextStyle.bigText(sb.toString());
 
-            builder.setStyle(bigTextStyle);
-            builder.setContentText(catchablePokemon.size() + " pokemon nearby.");
-
+            builder.setStyle(inboxStyle);
         }
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -175,4 +181,11 @@ public class ScanService extends Service{
             isRunning = false;
         }
     }
+
+    private BroadcastReceiver mBroadcastReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           stopSelf();
+        }
+    };
 }
