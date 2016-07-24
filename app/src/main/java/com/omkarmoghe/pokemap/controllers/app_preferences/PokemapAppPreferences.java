@@ -47,4 +47,6 @@ public interface PokemapAppPreferences {
      * @return Returns service state as set in preffs
      */
     boolean isServiceEnabled();
+
+    int getServiceRefreshRate();
 }

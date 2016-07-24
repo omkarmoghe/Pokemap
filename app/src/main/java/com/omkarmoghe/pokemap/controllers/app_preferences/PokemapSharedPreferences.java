@@ -13,6 +13,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
     private static final String SERVICE_KEY = "background_poke_service";
+    private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
 
     private final SharedPreferences sharedPreferences;
 
@@ -59,5 +60,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public boolean isServiceEnabled() {
         return sharedPreferences.getBoolean(SERVICE_KEY,false);
+    }
+
+    @Override
+    public int getServiceRefreshRate() {
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY,"60"));
     }
 }

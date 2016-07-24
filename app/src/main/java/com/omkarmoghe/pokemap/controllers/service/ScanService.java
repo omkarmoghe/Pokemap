@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -37,6 +38,7 @@ public class ScanService extends Service{
     private LocationManager locationManager;
     private NianticManager nianticManager;
     private NotificationCompat.Builder builder;
+    private PokemapSharedPreferences preffs;
 
 
     public ScanService() {
@@ -52,6 +54,9 @@ public class ScanService extends Service{
         Log.d("PokeMap","Service.onCreate()");
         EventBus.getDefault().register(this);
         createNotification();
+
+        preffs = new PokemapSharedPreferences(this);
+
         locationManager = LocationManager.getInstance(this);
         nianticManager = NianticManager.getInstance();
 
@@ -86,6 +91,8 @@ public class ScanService extends Service{
                 .setContentText("Scanning").setOngoing(true);
 
         Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent pi = PendingIntent.getActivity(this,0,i,PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -141,7 +148,7 @@ public class ScanService extends Service{
     }
 
     private final class WorkRunnable implements Runnable{
-        private long sleepInMs = 1000;
+        private long sleepInMs = preffs.getServiceRefreshRate() * 1000;
         private boolean isRunning = true;
 
         @Override

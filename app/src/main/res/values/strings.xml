@@ -24,6 +24,9 @@
     <string name="pref_cat_service">Background Service</string>
     <string name="pref_service_enable_title">Enable</string>
     <string name="pref_service_enable_key">background_poke_service</string>
+    <string name="pref_service_refresh_title">Refresh Rate</string>
+    <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
+    <string name="pref_service_refresh_key">service_refresh_rate</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokemon Nearby</string>
