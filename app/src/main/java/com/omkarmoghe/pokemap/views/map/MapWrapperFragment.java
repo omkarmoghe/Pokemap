@@ -79,8 +79,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
         setRetainInstance(true);
     }
 
