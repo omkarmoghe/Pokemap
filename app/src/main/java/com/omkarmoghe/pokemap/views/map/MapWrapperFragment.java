@@ -85,6 +85,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         locationManager = LocationManager.getInstance(getContext());
@@ -211,11 +222,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
