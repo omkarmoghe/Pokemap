@@ -134,13 +134,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
-//                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
                     MainActivity.toast.setText("Found you!");
                     MainActivity.toast.show();
                 }
                 else{
 
-//                    Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
                     MainActivity.toast.setText("Waiting on location...");
                     MainActivity.toast.show();
                 }
@@ -154,7 +152,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-//            Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
             MainActivity.toast.setText("Found you!");
             MainActivity.toast.show();
         }
@@ -184,7 +181,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 markerList.add(marker);
             }
         } else {
-//            Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
         }
