@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +25,7 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -134,12 +134,21 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
-                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText("Found you!");
+                    MainActivity.toast.show();
                 }
                 else{
 
-                    Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
+                    MainActivity.toast.setText("Waiting on location...");
+                    MainActivity.toast.show();
                 }
+            }
+        });
+
+        mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
             }
         });
 
@@ -150,7 +159,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
+            MainActivity.toast.setText("Found you!");
+            MainActivity.toast.show();
         }
     }
 
@@ -178,7 +188,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 markerList.add(marker);
             }
         } else {
-            Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
+            MainActivity.toast.setText("The map is not initialized.");
+            MainActivity.toast.show();
         }
     }
 
@@ -207,7 +218,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+
+//        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
+        MainActivity.toast.show();
         setPokemonMarkers(event.getCatchablePokemon());
     }
 

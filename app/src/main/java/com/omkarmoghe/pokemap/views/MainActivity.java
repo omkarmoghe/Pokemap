@@ -35,6 +35,8 @@ public class MainActivity extends BaseActivity {
 
     private PokemapAppPreferences pref;
 
+    public static Toast toast;
+
     //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -165,11 +168,14 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
+            toast.setText("You have logged in successfully.");
+            toast.show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
-            Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
+            toast.cancel();
+            toast.setText("Could not log in. Make sure your credentials are correct.");
+            toast.show();
         }
     }
 
@@ -180,7 +186,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
+        toast.setText("Searching...");
+        toast.show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
@@ -191,7 +198,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-        Toast.makeText(this, "Unable to contact the Pokemon GO servers. The servers may be down.", Toast.LENGTH_LONG).show();
+        toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
+        toast.show();
     }
 
     /**
@@ -201,7 +209,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
-        Toast.makeText(this, "The login token has expired. Getting a new one.", Toast.LENGTH_LONG).show();
+        toast.setText("The login token has expired. Getting a new one.");
+        toast.show();
         login();
     }
 
