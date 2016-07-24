@@ -79,9 +79,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -110,6 +119,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mSupportMapFragment == null) {
             mSupportMapFragment = SupportMapFragment.newInstance();
             getChildFragmentManager().beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
+            mSupportMapFragment.setRetainInstance(true);
         }
 
         if (mGoogleMap == null) {
@@ -210,11 +220,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
