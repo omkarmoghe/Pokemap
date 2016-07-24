@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
