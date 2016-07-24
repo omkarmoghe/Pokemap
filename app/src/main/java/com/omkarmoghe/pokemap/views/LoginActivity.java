@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
 
     private static final int REQUEST_USER_AUTH = 1;
+    private static final int REQUEST_READ_STORAGE_PERMISSION = 123;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -56,10 +57,12 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        checkPermissionForLocation();
+
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
-        
+
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
@@ -146,6 +149,15 @@ public class LoginActivity extends AppCompatActivity{
                 mGoogleManager.authUser(mGoogleLoginListener);
             }
         });
+    }
+
+    private void checkPermissionForLocation() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_READ_STORAGE_PERMISSION);
+        }
     }
 
     @Override
