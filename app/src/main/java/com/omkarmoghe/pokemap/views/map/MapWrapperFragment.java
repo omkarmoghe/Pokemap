@@ -145,6 +145,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
+        mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
+            }
+        });
+
         return mView;
     }
     private void initMap(){
