@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity {
 
 
     private PokemapAppPreferences pref;
-    private boolean dontStartService;
 
     //region Lifecycle Methods
     @Override
@@ -55,7 +54,9 @@ public class MainActivity extends BaseActivity {
         fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
-        stopService();
+        if(pref.isServiceEnabled()){
+            startNotificationService();
+        }
     }
 
     @Override
@@ -67,13 +68,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onResume(){
         super.onResume();
-        stopService();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        startService();
     }
 
     @Override
@@ -94,7 +93,6 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            dontStartService = true;
             startActivityForResult(new Intent(this, SettingsActivity.class),0);
         } else if (id == R.id.action_relogin) {
             login();
@@ -105,12 +103,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        dontStartService = false;
+        if(pref.isServiceEnabled()){
+            startNotificationService();
+        }else{
+            stopNotificationService();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        dontStartService = true;
         this.finish();
     }
 
@@ -134,18 +135,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startService(){
-        if( !dontStartService && pref.isServiceEnabled()){
-            Intent intent = new Intent(this, PokemonNotificationService.class);
-            startService(intent);
-        }
+    private void startNotificationService(){
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        startService(intent);
     }
 
-    private void stopService(){
-        if(pref.isServiceEnabled()){
-            Intent intent = new Intent(this, PokemonNotificationService.class);
-            stopService(intent);
-        }
+    private void stopNotificationService(){
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        stopService(intent);
     }
 
     private void requestLoginCredentials() {

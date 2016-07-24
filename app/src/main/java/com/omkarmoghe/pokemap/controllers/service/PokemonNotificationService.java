@@ -63,6 +63,8 @@ public class PokemonNotificationService extends Service{
         workThread = new Thread(updateRunnable);
 
         initBroadcastReciever();
+        workThread.start();
+
     }
 
     /**
@@ -84,7 +86,6 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        workThread.start();
         return START_STICKY;
     }
 
@@ -161,8 +162,12 @@ public class PokemonNotificationService extends Service{
             while(isRunning){
                 try{
                     LatLng currentLocation = locationManager.getLocation();
-                    nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
 
+                    if(currentLocation != null){
+                        nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
+                    }else {
+                        locationManager = LocationManager.getInstance(PokemonNotificationService.this);
+                    }
                     Thread.sleep(refreshRate);
 
                 }catch(Exception e){
