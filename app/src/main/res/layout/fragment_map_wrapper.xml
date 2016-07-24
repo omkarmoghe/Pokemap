@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.omkarmoghe.pokemap.map.MapWrapperFragment">
+    android:layout_height="match_parent" tools:context=".views.map.MapWrapperFragment">
 
     <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
         <!--android:name="com.google.android.gms.maps.MapFragment"-->
@@ -19,5 +19,23 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
         android:id="@+id/location_fab" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal|top"
+        android:background="#4D000000">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_pokemon_map_suggestion"
+            android:id="@+id/txtSuggestions"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+    </FrameLayout>
 
 </FrameLayout>
