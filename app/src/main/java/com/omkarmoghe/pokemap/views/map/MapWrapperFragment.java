@@ -26,6 +26,7 @@ import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.views.MainActivity;
+import com.omkarmoghe.pokemap.models.pojo.PokemonObject;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,8 +44,8 @@ import java.util.concurrent.TimeUnit;
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
-                                                            GoogleMap.OnMapLongClickListener,
-                                                            ActivityCompat.OnRequestPermissionsResultCallback {
+        GoogleMap.OnMapLongClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
 
@@ -57,6 +58,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Marker userSelectedPositionMarker = null;
     private Circle userSelectedPositionCircle = null;
     private List<Marker> markerList = new ArrayList<>();
+    private List<PokemonObject> knownPokemon = new ArrayList<>();
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -83,7 +85,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
@@ -103,14 +105,14 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation == null) {
                     mLocation = location;
                     initMap();
-                }
-                else{
+                } else {
                     mLocation = location;
                 }
             }
         });
         // Inflate the layout for this fragment if the view is not null
-        if (mView == null) mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
+        if (mView == null)
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
         else {
 
         }
@@ -133,11 +135,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation != null && mGoogleMap != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-
                     MainActivity.toast.setText("Found you!");
                     MainActivity.toast.show();
-                }
-                else{
+                } else {
 
                     MainActivity.toast.setText("Waiting on location...");
                     MainActivity.toast.show();
@@ -154,8 +154,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         return mView;
     }
-    private void initMap(){
-        if (mLocation != null && mGoogleMap != null){
+
+    private void initMap() {
+        if (mLocation != null && mGoogleMap != null) {
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
@@ -164,7 +165,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+    private void setPokemonMarkers(){
         if (mGoogleMap != null) {
             //Removing all pokemons from map
             if (markerList != null && !markerList.isEmpty()){
@@ -174,9 +175,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 markerList = new ArrayList<Marker>(); //cleaning the array
             }
 
-            for (CatchablePokemon poke : pokeList) {
+            for (PokemonObject poke : knownPokemon) {
+
                 int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
+                long millisLeft = poke.getExpirationTimestamp() - System.currentTimeMillis();
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
@@ -190,6 +192,32 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         } else {
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
+        }
+    }
+
+    private void removeTimeoutedPokemonMarkers(){
+
+        for(PokemonObject pokemon : knownPokemon){
+            long timeLeft = pokemon.getExpirationTimestamp() - System.currentTimeMillis();
+            if(timeLeft < 0)
+                knownPokemon.remove(pokemon);
+        }
+    }
+
+    private void addPokemon(final List<CatchablePokemon> pokeList) {
+
+        removeTimeoutedPokemonMarkers();
+
+        for(CatchablePokemon poke : pokeList){
+
+            PokemonObject pokePojo = new PokemonObject(poke.getPokemonId(), poke.getLatitude(), poke.getLongitude(), poke.getExpirationTimestampMs());
+
+            if(knownPokemon.contains(pokePojo)) {
+                PokemonObject pokemon = knownPokemon.get(knownPokemon.indexOf(pokePojo));
+                pokemon.setExpirationTimestamp(poke.getExpirationTimestampMs());//synchronize pokemon timestamp with new data
+            }
+
+            knownPokemon.add(pokePojo);
         }
     }
 
@@ -218,11 +246,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-
 //        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
         MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
         MainActivity.toast.show();
-        setPokemonMarkers(event.getCatchablePokemon());
+        addPokemon(event.getCatchablePokemon());
+        setPokemonMarkers();
     }
 
     @Override
