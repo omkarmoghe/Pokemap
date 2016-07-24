@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,8 +80,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
         EventBus.getDefault().register(this);
     }
 
@@ -123,12 +122,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation != null && mGoogleMap != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-
-                    Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
                 }
                 else{
 
-                    Toast.makeText(getContext(), "Waiting on location...", Toast.LENGTH_SHORT).show();
+                    if(getView() != null) {
+                        Snackbar.make(getView(), "Waiting on location...", Snackbar.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -140,7 +139,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
         }
     }
 

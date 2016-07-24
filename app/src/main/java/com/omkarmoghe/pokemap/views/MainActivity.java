@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -120,11 +121,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
-            Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -146,7 +147,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-        Toast.makeText(this, "Unable to contact the Pokemon GO servers. The servers may be down.", Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
     }
 
     /**
@@ -156,7 +157,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
-        Toast.makeText(this, "The login token has expired. Getting a new one.", Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.root), "The login token has expired. Getting a new one.", Snackbar.LENGTH_LONG).show();
         login();
     }
 

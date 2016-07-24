@@ -30,6 +30,7 @@ import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.pokegoapi.auth.Login;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,7 +52,6 @@ public class LoginActivity extends AppCompatActivity{
     private View mProgressView;
     private View mLoginFormView;
     private NianticManager mNianticManager;
-    private NianticManager.LoginListener mNianticLoginListener;
     private GoogleManager mGoogleManager;
     private GoogleManager.LoginListener mGoogleLoginListener;
 
@@ -237,6 +237,10 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
+    @Subscribe
+    public void onEvent(ServerUnreachableEvent event){
+        Snackbar.make(findViewById(R.id.login_form), "Failed to Reach Servers", Snackbar.LENGTH_SHORT).show();
+    }
     /**
      * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
      *
@@ -245,11 +249,12 @@ public class LoginActivity extends AppCompatActivity{
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
             finishLogin();
 
         } else {
-            Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
+
+            Snackbar.make(findViewById(R.id.login_form), "Authentication Failed.", Snackbar.LENGTH_LONG).show();
         }
     }
 
