@@ -20,21 +20,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
-import com.omkarmoghe.pokemap.models.events.LoginEventResult;
-import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.pokegoapi.auth.Login;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * A login screen that offers login via username/password. And a Google Sign in
@@ -52,12 +43,12 @@ public class LoginActivity extends AppCompatActivity{
     private View mProgressView;
     private View mLoginFormView;
     private NianticManager mNianticManager;
+    private NianticManager.LoginListener mNianticLoginListener;
     private GoogleManager mGoogleManager;
     private GoogleManager.LoginListener mGoogleLoginListener;
 
     private String mDeviceCode;
 
-    //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +56,21 @@ public class LoginActivity extends AppCompatActivity{
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
 
-        EventBus.getDefault().register(this);
+        mNianticLoginListener = new NianticManager.LoginListener() {
+            @Override
+            public void authSuccessful(String authToken) {
+                showProgress(false);
+                Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
+                mNianticManager.setPTCAuthToken(authToken);
+                finishLogin();
+            }
+
+            @Override
+            public void authFailed(String message) {
+                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+            }
+        };
 
         mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
@@ -143,14 +148,6 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    //endregion
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -190,7 +187,8 @@ public class LoginActivity extends AppCompatActivity{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mNianticManager.login(username, password);
+            mNianticManager.login(username, password, mNianticLoginListener);
+
         }
     }
 
@@ -235,28 +233,5 @@ public class LoginActivity extends AppCompatActivity{
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
-
-    @Subscribe
-    public void onEvent(ServerUnreachableEvent event){
-        Snackbar.make(findViewById(R.id.login_form), "Failed to Reach Servers", Snackbar.LENGTH_SHORT).show();
-    }
-    /**
-     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
-     *
-     * @param result Results of a log in attempt
-     */
-    @Subscribe
-    public void onEvent(LoginEventResult result) {
-        if (result.isLoggedIn()) {
-//            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
-            finishLogin();
-
-        } else {
-
-            Snackbar.make(findViewById(R.id.login_form), "Authentication Failed.", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
 }
 
