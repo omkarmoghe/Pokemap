@@ -32,19 +32,6 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:text="@string/login_warning_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-            <TextView
-                android:text="@string/login_warning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/login_warning"
-                android:layout_marginBottom="8dp"/>
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -90,6 +77,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Disclaimer"
+                android:padding="10dp"
+                android:id="@+id/txtDisclaimer"
+                android:gravity="center"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
