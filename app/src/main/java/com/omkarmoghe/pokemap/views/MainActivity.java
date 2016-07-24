@@ -151,7 +151,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
+        //Removed this toast, no needed and is annoying
+        //Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
