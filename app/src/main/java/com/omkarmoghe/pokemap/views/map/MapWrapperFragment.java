@@ -1,7 +1,9 @@
 package com.omkarmoghe.pokemap.views.map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +37,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -81,6 +85,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //Best place for register
         EventBus.getDefault().register(this);
     }
 
@@ -143,7 +153,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             Toast.makeText(getContext(), "Found you!", Toast.LENGTH_SHORT).show();
         }
     }
-
+    Bitmap theBitmap;
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
             //Removing all pokemons from map
@@ -154,21 +164,62 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 markerList = new ArrayList<Marker>(); //cleaning the array
             }
 
-            for (CatchablePokemon poke : pokeList) {
-                int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                        .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
-                        .icon(BitmapDescriptorFactory.fromResource(resourceID)));
+            for (final CatchablePokemon poke : pokeList) {
+                //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
 
-                marker.showInfoWindow();
-                //adding pokemons to list to be removed on next search
-                markerList.add(marker);
+                Thread thread = new Thread(new Runnable(){
+                    @Override
+                    public void run(){
+                        try {
+                            //Getting te bitmap needed to be used as a marker by .icon
+                            theBitmap = Glide.
+                                    with(getActivity()).
+                                    load("http://serebii.net/pokemongo/pokemon/"+getCorrectPokemonIdNumber(poke.getPokemonId().getNumber())+".png").
+                                    asBitmap().
+                                    into(120, 120). // Width and height FIXME: Maybe get different sizes based on devices DPI?
+                                    get();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
+                                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                        .title(poke.getPokemonId().name())
+                                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(theBitmap)));
+                                //.icon(BitmapDescriptorFactory.fromResource(resourceID)));
+
+                                //Showing info windows is annoying ... le user choose wich one to see...
+                                //marker.showInfoWindow();
+                                //adding pokemons to list to be removed on next search
+                                markerList.add(marker);
+                            }
+                        });
+                    }
+                });
+                thread.start();
+
             }
         } else {
             Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
+    private String getCorrectPokemonIdNumber (int pokemonId){
+        String actualNumber = String.valueOf(pokemonId);
+        if(pokemonId < 10){
+            return "00" + actualNumber;
+        }else if(pokemonId < 100) {
+            return "0" + actualNumber;
+        }else {
+            return actualNumber;
         }
     }
 
@@ -197,7 +248,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        //Added this, coz i can see on map how many pokemons app found, is usefull only when it says that is no pokemons...
+        int pokemonAmount = event.getCatchablePokemon().size();
+        if(pokemonAmount == 0) {
+            Toast.makeText(getContext(), pokemonAmount + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        }
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
@@ -270,7 +325,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
                 .title("Position Picked")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.poke_marker)));
+                //Old marker was due too big and was not cool...
+                //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
     }
 
 }
