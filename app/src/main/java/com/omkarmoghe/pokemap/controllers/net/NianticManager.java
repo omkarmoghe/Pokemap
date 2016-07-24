@@ -160,9 +160,13 @@ public class NianticManager {
         Callback<NianticService.LoginResponse> loginCallback = new Callback<NianticService.LoginResponse>() {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
-                String location = response.headers().get("location");
-                String ticket = location.split("ticket=")[1];
-                requestToken(ticket, loginListener);
+                    String location = response.headers().get("location");
+                if(location != null){
+                    String ticket = location.split("ticket=")[1];
+                    requestToken(ticket, loginListener);
+                }else{
+                    loginListener.authFailed("Pokemon Trainer Club Login Failed");
+                }
             }
 
             @Override
