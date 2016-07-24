@@ -8,14 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.WorkerThread;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
@@ -33,11 +28,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class ScanService extends Service{
+public class PokemonNotificationService extends Service{
     private static final int notificationId = 2423235;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
-    private WorkRunnable workRunnable;
+    private UpdateRunnable updateRunnable;
     private Thread workThread;
     private LocationManager locationManager;
     private NianticManager nianticManager;
@@ -45,7 +40,7 @@ public class ScanService extends Service{
     private PokemapSharedPreferences preffs;
 
 
-    public ScanService() {
+    public PokemonNotificationService() {
     }
 
     @Override
@@ -64,9 +59,16 @@ public class ScanService extends Service{
         locationManager = LocationManager.getInstance(this);
         nianticManager = NianticManager.getInstance();
 
-        workRunnable = new WorkRunnable();
-        workThread = new Thread(workRunnable);
+        updateRunnable = new UpdateRunnable(preffs.getServiceRefreshRate());
+        workThread = new Thread(updateRunnable);
 
+        initBroadcastReciever();
+    }
+
+    /**
+     * This sets up the broadcast reciever.
+     */
+    private void initBroadcastReciever() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_STOP_SELF);
         registerReceiver(mBroadcastReciever,intentFilter);
@@ -74,20 +76,15 @@ public class ScanService extends Service{
 
     @Override
     public void onDestroy() {
-        Log.d("PokeMap","Service.onDestroy()");
         cancelNotification();
-        workRunnable.stop();
+        updateRunnable.stop();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(mBroadcastReciever);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("PokeMap","Service.onStart()");
-
-        if(!workThread.isAlive()){
-            workThread.start();
-        }
+        workThread.start();
         return START_STICKY;
     }
 
@@ -122,8 +119,6 @@ public class ScanService extends Service{
 
     @Subscribe
     public void onEvent(CatchablePokemonEvent event) {
-        Log.d("PokeMap","Service.onEvent(CatchablePokemonEvent) "
-                + event.getCatchablePokemon().size() + " pokemans");
         List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
         LatLng location = locationManager.getLocation();
@@ -153,28 +148,27 @@ public class ScanService extends Service{
         nm.notify(notificationId,builder.build());
     }
 
-    private final class WorkRunnable implements Runnable{
-        private long sleepInMs = preffs.getServiceRefreshRate() * 1000;
+    private final class UpdateRunnable implements Runnable{
+        private long refreshRate = preffs.getServiceRefreshRate() * 1000;
         private boolean isRunning = true;
+
+        public UpdateRunnable(int refreshRate){
+            this.refreshRate = refreshRate;
+        }
 
         @Override
         public void run() {
-            Log.d("PokeMap","WorkRunnable.run)");
-
             while(isRunning){
-                Log.d("PokeMap","WorkRunnable.run.loop)");
                 try{
                     LatLng currentLocation = locationManager.getLocation();
                     nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
 
-                    Thread.sleep(sleepInMs);
+                    Thread.sleep(refreshRate);
 
                 }catch(Exception e){
                     e.printStackTrace();
                 }
             }
-
-            Log.d("PokeMap","WorkRunnable.run stopping)");
         }
 
         public void stop(){

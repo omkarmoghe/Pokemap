@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.controllers.service.ScanService;
+import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
@@ -136,14 +136,14 @@ public class MainActivity extends BaseActivity {
 
     private void startService(){
         if( !dontStartService && pref.isServiceEnabled()){
-            Intent intent = new Intent(this, ScanService.class);
+            Intent intent = new Intent(this, PokemonNotificationService.class);
             startService(intent);
         }
     }
 
     private void stopService(){
         if(pref.isServiceEnabled()){
-            Intent intent = new Intent(this, ScanService.class);
+            Intent intent = new Intent(this, PokemonNotificationService.class);
             stopService(intent);
         }
     }
