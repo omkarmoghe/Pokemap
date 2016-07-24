@@ -38,7 +38,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EventBus.getDefault().register(this);
         pref = new PokemapSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,6 +47,17 @@ public class MainActivity extends BaseActivity {
         transaction.replace(R.id.main_container, MapWrapperFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
