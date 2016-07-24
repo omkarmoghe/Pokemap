@@ -16,6 +16,9 @@ We're still testing and haven't merged it into this repo yet.
 # PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
 ## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
 
+## [Building] (https://github.com/omkarmoghe/Pokemap/wiki/Building)
+Make sure you use the latest [android studio version 2.2 (canary builds)] (http://tools.android.com/download/studio/canary/latest) and have installed the latest versions of the build tools and support libraries in order to successfully compile and run the project. 
+
 ## [TODO](https://slack-files.com/T1TQY34KE-F1TSY25UL-10400392c2)
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
 
