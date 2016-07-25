@@ -197,8 +197,14 @@ public class NianticManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String token = response.body().string().split("token=")[1];
-                    token = token.split("&")[0];
-                    loginListener.authSuccessful(token);
+
+                    if (token != null) {
+                        token = token.split("&")[0];
+
+                        loginListener.authSuccessful(token);
+                    } else {
+                        loginListener.authFailed("Pokemon Trainer Club Login Failed");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     loginListener.authFailed("Pokemon Trainer Club Authentication Failed");
@@ -290,17 +296,20 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-                    SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(lat, longitude));
-                    List<LatLng> list = params.getSearchArea();
-                    List<CatchablePokemon> pokemon = new ArrayList<>();
-                    for (LatLng p : list) {
-                        mPokemonGo.setLocation(p.latitude, p.longitude, alt);
-                        pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
-                    }
+                    if (mPokemonGo != null) {
 
-                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemon));
+                        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(lat, longitude));
+                        List<LatLng> list = params.getSearchArea();
+                        List<CatchablePokemon> pokemon = new ArrayList<>();
+                        for (LatLng p : list) {
+                            mPokemonGo.setLocation(p.latitude, p.longitude, alt);
+                            pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
+                        }
+
+                        EventBus.getDefault().post(new CatchablePokemonEvent(pokemon));
+                    }
                 } catch (LoginFailedException e) {
-                    EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
+                    EventBus.getDefault().post(new TokenExpiredEvent());
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (Exception e) {

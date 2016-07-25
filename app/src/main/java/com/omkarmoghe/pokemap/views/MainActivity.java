@@ -160,6 +160,9 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
+
+        event.getE().printStackTrace();
+
         toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
         toast.show();
     }
@@ -171,6 +174,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
+
         toast.setText("The login token has expired. Getting a new one.");
         toast.show();
         login();
@@ -183,6 +187,9 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(InternalExceptionEvent event) {
+
+        event.getE().printStackTrace();
+
         Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 
