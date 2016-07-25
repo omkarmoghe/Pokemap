@@ -35,7 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
- * A triggerPtcLogin screen that offers triggerPtcLogin via username/password. And a Google Sign in
+ * A login screen that offers login via username/password. And a Google Sign in
  *
  */
 public class LoginActivity extends AppCompatActivity{
@@ -69,6 +69,14 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
 
+        if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
+            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+            finishLogin();
+        } else if (mPref.isGoogleTokenAvailable()) {
+            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
+            finishLogin();
+        }
+
         setContentView(R.layout.activity_login);
 
         mNianticLoginListener = new NianticManager.LoginListener() {
@@ -96,6 +104,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
+                mPref.setGoogleToken(authToken);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
                 finishLogin();
