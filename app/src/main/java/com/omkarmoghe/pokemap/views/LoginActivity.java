@@ -69,14 +69,6 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
 
-        if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
-            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
-            finishLogin();
-        } else if (mPref.isGoogleTokenAvailable()) {
-            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
-            finishLogin();
-        }
-
         setContentView(R.layout.activity_login);
 
         mNianticLoginListener = new NianticManager.LoginListener() {
@@ -130,7 +122,7 @@ public class LoginActivity extends AppCompatActivity{
         String text = getString(R.string.login_warning) + " <b>banned</b>.";
         warning.setText(Html.fromHtml(text));
 
-        // Set up the triggerPtcLogin form.
+        // Set up the triggerAutoLogin form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -161,11 +153,11 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-            mGoogleManager.authUser(mGoogleLoginListener);
+                mGoogleManager.authUser(mGoogleLoginListener);
             }
         });
 
-        triggerPtcLogin();
+        triggerAutoLogin();
     }
 
     private void showAuthFailed() {
@@ -191,16 +183,16 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
-     * Attempts to sign in or register the account specified by the triggerPtcLogin form.
+     * Attempts to sign in or register the account specified by the triggerAutoLogin form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual triggerPtcLogin attempt is made.
+     * errors are presented and no actual triggerAutoLogin attempt is made.
      */
     private void validatePTCLoginForm() {
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the triggerPtcLogin attempt.
+        // Store values at the time of the triggerAutoLogin attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -221,14 +213,19 @@ public class LoginActivity extends AppCompatActivity{
             cancel = true;
         }
 
+        // auto-login is reading from here,
+        // if not persisted, you can't change the values in the form
+        mPref.setPassword(password);
+        mPref.setUsername(username);
+
         if (cancel) {
-            // There was an error; don't attempt triggerPtcLogin and focus the first
+            // There was an error; don't attempt triggerAutoLogin and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user triggerPtcLogin attempt.
-            triggerPtcLogin();
+            // perform the user triggerAutoLogin attempt.
+            triggerAutoLogin();
         }
     }
 
@@ -239,7 +236,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
-     * Shows the progress UI and hides the triggerPtcLogin form.
+     * Shows the progress UI and hides the triggerAutoLogin form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -275,11 +272,14 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    private void triggerPtcLogin() {
+    private void triggerAutoLogin() {
+
+        showProgress(true);
 
         if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
-            showProgress(true);
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+        } else if (mPref.isGoogleTokenAvailable()) {
+            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
         }
     }
 
@@ -302,7 +302,7 @@ public class LoginActivity extends AppCompatActivity{
 
                 } else {
 
-                    // show triggerPtcLogin form again
+                    // show triggerAutoLogin form again
                     showProgress(false);
 
                     showAuthFailed();

@@ -233,13 +233,13 @@ public class NianticManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
-                    mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
-                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (Exception e) {
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
-                }
+            try {
+                mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
+                mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
+                EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
+            } catch (Exception e) {
+                EventBus.getDefault().post(new LoginEventResult(false, null, null));
+            }
             }
         });
     }
