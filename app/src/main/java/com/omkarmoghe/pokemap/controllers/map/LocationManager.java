@@ -79,14 +79,14 @@ public class LocationManager {
                         @Override
                         public void onConnectionSuspended(int i) {
 
-                            notifyLocalizationFailed();
+                            notifyLocationFetchFailed(null);
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
 
-                            notifyLocalizationFailed();
+                            notifyLocationFetchFailed(connectionResult);
                         }
                     })
                     .addApi(LocationServices.API)
@@ -99,7 +99,7 @@ public class LocationManager {
         if(location != null){
             return new LatLng(location.getLatitude(), location.getLongitude());
         } else {
-            notifyLocalizationFailed();
+            notifyLocationFetchFailed(null);
         }
         return null;
     }
@@ -141,19 +141,19 @@ public class LocationManager {
 
     }
 
-    private void notifyLocalizationFailed() {
+    private void notifyLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
 
         if (listeners != null) {
 
             for (Listener listener : listeners) {
-                listener.onLocalizationFailed();
+                listener.onLocationFetchFailed(connectionResult);
             }
         }
     }
 
     public interface Listener{
         void onLocationChanged(@NonNull Location location);
-        void onLocalizationFailed();
+        void onLocationFetchFailed(@Nullable ConnectionResult connectionResult);
     }
 
 

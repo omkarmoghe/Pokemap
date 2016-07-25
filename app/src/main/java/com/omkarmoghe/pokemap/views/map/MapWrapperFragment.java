@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -105,8 +106,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
 
             @Override
-            public void onLocalizationFailed() {
-                showLocalizationFailed();
+            public void onLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
+                showLocationFetchFailed();
             }
         });
         // Inflate the layout for this fragment if the view is not null
@@ -132,7 +133,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View view) {
 
                 Context context = getContext();
-
+                
                 if (mLocation != null && mGoogleMap != null && context != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
@@ -141,9 +142,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
                 else{
 
-                    if (context != null) {
-                        Toast.makeText(context, "Waiting on location...", Toast.LENGTH_SHORT).show();
-                    }
+                    showLocationFetchFailed();
                 }
             }
         });
@@ -161,15 +160,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         return mView;
     }
 
-    private void showLocalizationFailed() {
+    private void showLocationFetchFailed() {
 
         Context context = getContext();
 
         // TODO: Instead of a toast, lets show a red bar as long as there is no signal (like in the Niantic app)
 
-        // Yes!! The context actually *can* be null; e.g. when you leave the settings view while
-        // no GPS location was found. Timing matters and in the end the activity has already
-        // been destroyed; well then there is no context and guess what...
         if (context != null) {
             Toast.makeText(context, "No GPS signal.", Toast.LENGTH_LONG).show();
         }
@@ -181,7 +177,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
         } else {
-            showLocalizationFailed();
+            showLocationFetchFailed();
         }
     }
 
