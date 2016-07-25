@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
+    private static final String GOOGLE_TOKEN_KEY = "GoogleTokenKey";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
 
@@ -53,8 +54,23 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public boolean isGoogleTokenAvailable() {
+        return sharedPreferences.contains(GOOGLE_TOKEN_KEY);
+    }
+
+    @Override
+    public String getGoogleToken() {
+        return sharedPreferences.getString(GOOGLE_TOKEN_KEY, "");
+    }
+
+    @Override
     public void setServiceState(@NonNull boolean isEnabled) {
         sharedPreferences.edit().putBoolean(SERVICE_KEY,isEnabled).apply();
+    }
+
+    @Override
+    public void setGoogleToken(@NonNull String token) {
+        sharedPreferences.edit().putString(GOOGLE_TOKEN_KEY, token).apply();
     }
 
     @Override

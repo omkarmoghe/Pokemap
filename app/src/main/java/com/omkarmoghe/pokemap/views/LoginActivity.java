@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -63,6 +64,9 @@ public class LoginActivity extends AppCompatActivity{
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
+        } else if (mPref.isGoogleTokenAvailable()) {
+            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
+            finishLogin();
         }
 
         setContentView(R.layout.activity_login);
@@ -73,6 +77,11 @@ public class LoginActivity extends AppCompatActivity{
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
+
+                // store prefs
+                mPref.setUsername(mUsernameView.getText().toString());
+                mPref.setPassword(mPasswordView.getText().toString());
+
                 finishLogin();
             }
 
@@ -88,6 +97,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
+                mPref.setGoogleToken(authToken);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
                 finishLogin();
@@ -108,10 +118,16 @@ public class LoginActivity extends AppCompatActivity{
             }
         };
 
-        //Bold words in Warning
-        TextView warning = (TextView) findViewById(R.id.login_warning);
-        String text = getString(R.string.login_warning) + " <b>banned</b>.";
-        warning.setText(Html.fromHtml(text));
+        findViewById(R.id.txtDisclaimer).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle(getString(R.string.login_warning_title))
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</banned>"))
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        });
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
