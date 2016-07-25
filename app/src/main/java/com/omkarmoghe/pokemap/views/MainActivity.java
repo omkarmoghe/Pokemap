@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
@@ -56,19 +57,14 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onResume(){
+        super.onResume();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
     }
 
@@ -117,15 +113,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(
-                new RequestCredentialsDialogFragment.Listener() {
-                    @Override
-                    public void credentialsIntroduced(String username, String password) {
-                        pref.setUsername(username);
-                        pref.setPassword(password);
-                        login();
-                    }
-                }), "request_credentials").commit();
+        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(null), "request_credentials").commit();
     }
 
     /**
@@ -137,7 +125,10 @@ public class MainActivity extends BaseActivity {
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
-            nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+
+            if (latLng != null) {
+                nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+            }
         } else {
             Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
         }
@@ -161,6 +152,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
         Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
+        event.getE().printStackTrace();
     }
 
     /**
@@ -172,6 +164,17 @@ public class MainActivity extends BaseActivity {
     public void onEvent(TokenExpiredEvent event) {
         Snackbar.make(findViewById(R.id.root), "The login token has expired. Getting a new one.", Snackbar.LENGTH_LONG).show();
         login();
+    }
+
+    /**
+     * Called whenever a InternalExceptionEvent is posted to the bus. Posted when the server cannot be reached
+     *
+     * @param event The event information
+     */
+    @Subscribe
+    public void onEvent(InternalExceptionEvent event) {
+        event.getE().printStackTrace();
+        Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 
 }

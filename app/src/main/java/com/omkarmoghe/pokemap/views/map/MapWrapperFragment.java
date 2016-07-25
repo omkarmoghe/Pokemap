@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -15,7 +16,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -93,14 +96,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
         updatePokemonMarkers();
     }
 
@@ -118,6 +116,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 else{
                     mLocation = location;
                 }
+            }
+
+            @Override
+            public void onLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
+                showLocationFetchFailed();
             }
         });
         // Inflate the layout for this fragment if the view is not null
@@ -146,9 +149,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
                 }
                 else{
-                    if(getView() != null) {
-                        Snackbar.make(getView(), "Waiting on Location....", Snackbar.LENGTH_SHORT).show();
-                    }
+                    showLocationFetchFailed();
                 }
             }
         });
@@ -177,6 +178,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+        } else {
+            showLocationFetchFailed();
         }
     }
 
@@ -228,6 +231,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
 
             updatePokemonMarkers();
+        } else {
+            showMapNotInitializedError();
+        }
+    }
+
+    private void showMapNotInitializedError() {
+        if(getView() != null){
+            Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showLocationFetchFailed() {
+        if(getView() != null){
+            Snackbar.make(getView(), "Failed to Find GPS Location", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -257,24 +274,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -304,25 +306,31 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void drawMarkerWithCircle(LatLng position){
-        //Check and eventually remove old marker
-        if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
-            userSelectedPositionMarker.remove();
-            userSelectedPositionCircle.remove();
+
+        if (mGoogleMap != null) {
+
+            //Check and eventually remove old marker
+            if (userSelectedPositionMarker != null && userSelectedPositionCircle != null) {
+                userSelectedPositionMarker.remove();
+                userSelectedPositionCircle.remove();
+            }
+
+            double radiusInMeters = 100.0;
+            int strokeColor = 0xff3399FF; // outline
+            int shadeColor = 0x4400CCFF; // fill
+
+            CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+            userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
+
+            userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title("Position Picked")
+                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                            R.drawable.ic_my_location_white_24dp)))
+                    .anchor(0.5f, 0.5f));
+        } else {
+            showMapNotInitializedError();
         }
-
-        double radiusInMeters = 100.0;
-        int strokeColor = 0xff3399FF; // outline
-        int shadeColor = 0x4400CCFF; // fill
-
-        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-        userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
-
-        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title("Position Picked")
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.ic_my_location_white_24dp)))
-                .anchor(0.5f, 0.5f));
     }
 
 }
