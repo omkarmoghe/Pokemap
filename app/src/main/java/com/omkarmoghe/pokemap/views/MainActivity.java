@@ -155,8 +155,6 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        toast.setText("Searching...");
-        toast.show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
