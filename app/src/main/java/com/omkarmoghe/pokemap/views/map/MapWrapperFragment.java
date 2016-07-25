@@ -183,7 +183,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
-                marker.showInfoWindow();
+//                marker.showInfoWindow();
                 //adding pokemons to list to be removed on next search
                 markerList.add(marker);
             }
