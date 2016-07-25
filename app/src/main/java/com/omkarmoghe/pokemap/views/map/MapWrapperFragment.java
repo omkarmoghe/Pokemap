@@ -207,8 +207,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
 
-
             Set<String> markerKeys = markerList.keySet();
+            int pokemonFound = 0;
             for (CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
@@ -221,8 +221,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     //adding pokemons to list to be removed on next search
                     markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                    pokemonFound++;
                 }
             }
+
+            MainActivity.toast.setText(pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.");
+            MainActivity.toast.show();
 
             updatePokemonMarkers();
         } else {
@@ -251,9 +255,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
 
-//        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
-        MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
-        MainActivity.toast.show();
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
