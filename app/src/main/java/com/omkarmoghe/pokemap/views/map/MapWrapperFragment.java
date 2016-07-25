@@ -1,11 +1,15 @@
 package com.omkarmoghe.pokemap.views.map;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.views.MainActivity;
@@ -33,7 +38,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,7 +65,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
     private Circle userSelectedPositionCircle = null;
-    private List<Marker> markerList = new ArrayList<>();
+    private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -91,6 +100,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
+        updatePokemonMarkers();
     }
 
     @Override
@@ -156,6 +166,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
     private void initMap(){
         if (mLocation != null && mGoogleMap != null){
+            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                MainActivity.toast.setText("Location permission not granted!");
+                MainActivity.toast.show();
+                return;
+            }
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
@@ -164,36 +180,58 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private void updatePokemonMarkers() {
+        if (mGoogleMap != null && markerList != null && !markerList.isEmpty()){
+            long minExpiration = 900000;
+            for(Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, PokemonMarkerExtended> entry = it.next();
+                CatchablePokemon catchablePokemon = entry.getValue().getCatchablePokemon();
+                Marker marker = entry.getValue().getMarker();
+                long millisLeft = catchablePokemon.getExpirationTimestampMs() < 0 ? 900000 : catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis(); // Sometimes expiration comes as a negative -1, default 15min expiration
+                if(millisLeft < 0) {
+                    marker.remove();
+                    it.remove();
+                } else {
+                    marker.setSnippet(getExpirationBreakdown(millisLeft));
+                    if(marker.isInfoWindowShown()) {
+                        marker.showInfoWindow();
+                    }
+                }
+
+                minExpiration = millisLeft < minExpiration ? millisLeft : minExpiration;
+            }
+
+        }
+    }
+
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
-            //Removing all pokemons from map
-            if (markerList != null && !markerList.isEmpty()){
-                for(Marker marker : markerList){
-                    marker.remove();
-                }
-                markerList = new ArrayList<Marker>(); //cleaning the array
-            }
 
+
+            Set<String> markerKeys = markerList.keySet();
             for (CatchablePokemon poke : pokeList) {
-                int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                        .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
-                        .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
-                marker.showInfoWindow();
-                //adding pokemons to list to be removed on next search
-                markerList.add(marker);
+                if(!markerKeys.contains(poke.getSpawnPointId())) {
+                    int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                            .title(poke.getPokemonId().name())
+                            .icon(BitmapDescriptorFactory.fromResource(resourceID))
+                            .anchor(0.5f, 0.5f));
+
+                    //adding pokemons to list to be removed on next search
+                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                }
             }
+
+            updatePokemonMarkers();
         } else {
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
         }
     }
 
-    public static String getDurationBreakdown(long millis) {
+    public static String getExpirationBreakdown(long millis) {
         if(millis < 0) {
             return "Expired";
         }
@@ -202,13 +240,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(minutes);
-        sb.append(" Minutes ");
-        sb.append(seconds);
-        sb.append(" Seconds");
-
-        return(sb.toString());
+        return(String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
     }
 
     /**
@@ -289,7 +321,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
                 .title("Position Picked")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                        R.drawable.ic_my_location_white_24dp)))
+                .anchor(0.5f, 0.5f));
     }
 
 }
