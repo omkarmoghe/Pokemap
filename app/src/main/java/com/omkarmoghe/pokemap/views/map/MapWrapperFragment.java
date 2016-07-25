@@ -25,6 +25,7 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.utils.PokeUtils;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -34,7 +35,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -161,6 +161,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
             MainActivity.toast.setText("Found you!");
             MainActivity.toast.show();
+            onMapLongClick(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
         }
     }
 
@@ -178,12 +179,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
                 long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                        .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
-                        .icon(BitmapDescriptorFactory.fromResource(resourceID)));
+                                                             .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                                             .title(poke.getPokemonId().name())
+                                                             .snippet("Dissapears in: " + PokeUtils.getDurationBreakdown(millisLeft))
+                                                             .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
-                marker.showInfoWindow();
                 //adding pokemons to list to be removed on next search
                 markerList.add(marker);
             }
@@ -191,24 +191,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
         }
-    }
-
-    public static String getDurationBreakdown(long millis) {
-        if(millis < 0) {
-            return "Expired";
-        }
-
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(minutes);
-        sb.append(" Minutes ");
-        sb.append(seconds);
-        sb.append(" Seconds");
-
-        return(sb.toString());
     }
 
     /**
@@ -219,7 +201,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
 
-//        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
         MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
         MainActivity.toast.show();
         setPokemonMarkers(event.getCatchablePokemon());
@@ -274,8 +255,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void drawMarkerWithCircle(LatLng position){
         //Check and eventually remove old marker
-        if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
-            userSelectedPositionMarker.remove();
+        if( userSelectedPositionCircle != null){
             userSelectedPositionCircle.remove();
         }
 
@@ -286,10 +266,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
         userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
 
-        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title("Position Picked")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
     }
 
 }
