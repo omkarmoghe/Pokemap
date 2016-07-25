@@ -68,6 +68,8 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    //endregion
+
     //region Menu Methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,6 +88,7 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    //endregion
 
     @Override
     public void onBackPressed() {
