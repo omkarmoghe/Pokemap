@@ -63,8 +63,11 @@ public class GoogleManager {
                 loginListener.authFailed("Failed on getting the information for the user auth");
             }
         };
-        Call<GoogleService.AuthRequest> call = mGoogleService.requestAuth(url.toString());
-        call.enqueue(googleCallback);
+
+        if (mGoogleService != null) {
+            Call<GoogleService.AuthRequest> call = mGoogleService.requestAuth(url.toString());
+            call.enqueue(googleCallback);
+        }
     }
 
     public void requestToken(String deviceCode, final LoginListener loginListener){
@@ -88,8 +91,11 @@ public class GoogleManager {
                 loginListener.authFailed("Failed on requesting the id token");
             }
         };
-        Call<GoogleService.TokenResponse> call = mGoogleService.requestToken(url.toString());
-        call.enqueue(googleCallback);
+
+        if (mGoogleService != null) {
+            Call<GoogleService.TokenResponse> call = mGoogleService.requestToken(url.toString());
+            call.enqueue(googleCallback);
+        }
     }
 
     public interface LoginListener {

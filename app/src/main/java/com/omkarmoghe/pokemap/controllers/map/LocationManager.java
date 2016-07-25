@@ -91,6 +91,7 @@ public class LocationManager {
         }
         listeners = new ArrayList<>();
     }
+
     public LatLng getLocation(){
         //Don't getLatitude without checking if location is not null... it will throw sys err...
         if(location != null){
@@ -100,29 +101,36 @@ public class LocationManager {
     }
 
     public void onResume(){
-        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
-
-
     public void onPause(){
-        mGoogleApiClient.disconnect();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     public void unregister(Listener listener){
-        if(listeners.indexOf(listener) != -1){
+        if(listeners != null && listeners.indexOf(listener) != -1){
             listeners.remove(listener);
         }
     }
     public void register(Listener listener){
-        if(listeners.indexOf(listener) == -1){
+        if(listeners != null && listeners.indexOf(listener) == -1){
             listeners.add(listener);
         }
     }
 
     private void notifyLocationChanged(Location location){
-        for(Listener listener: listeners){
-            listener.onLocationChanged(location);
+
+        if (listeners != null) {
+            for (Listener listener : listeners) {
+                listener.onLocationChanged(location);
+            }
         }
 
     }

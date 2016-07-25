@@ -129,7 +129,10 @@ public class MainActivity extends BaseActivity {
             toast.setText("You have logged in successfully.");
             toast.show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
-            nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+
+            if (latLng != null) {
+                nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+            }
         } else {
             toast.cancel();
             toast.setText("Could not log in. Make sure your credentials are correct.");

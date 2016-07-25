@@ -226,9 +226,14 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             updatePokemonMarkers();
         } else {
-            MainActivity.toast.setText("The map is not initialized.");
-            MainActivity.toast.show();
+            showMapNotInitializedError();
         }
+    }
+
+    private void showMapNotInitializedError() {
+
+        MainActivity.toast.setText("The map is not initialized.");
+        MainActivity.toast.show();
     }
 
     public static String getExpirationBreakdown(long millis) {
@@ -302,25 +307,31 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void drawMarkerWithCircle(LatLng position){
-        //Check and eventually remove old marker
-        if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
-            userSelectedPositionMarker.remove();
-            userSelectedPositionCircle.remove();
+
+        if (mGoogleMap != null) {
+
+            //Check and eventually remove old marker
+            if (userSelectedPositionMarker != null && userSelectedPositionCircle != null) {
+                userSelectedPositionMarker.remove();
+                userSelectedPositionCircle.remove();
+            }
+
+            double radiusInMeters = 100.0;
+            int strokeColor = 0xff3399FF; // outline
+            int shadeColor = 0x4400CCFF; // fill
+
+            CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+            userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
+
+            userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title("Position Picked")
+                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                            R.drawable.ic_my_location_white_24dp)))
+                    .anchor(0.5f, 0.5f));
+        } else {
+            showMapNotInitializedError();
         }
-
-        double radiusInMeters = 100.0;
-        int strokeColor = 0xff3399FF; // outline
-        int shadeColor = 0x4400CCFF; // fill
-
-        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-        userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
-
-        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title("Position Picked")
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.ic_my_location_white_24dp)))
-                .anchor(0.5f, 0.5f));
     }
 
 }
