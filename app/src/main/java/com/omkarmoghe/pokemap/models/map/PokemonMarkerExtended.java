@@ -1,4 +1,4 @@
-package com.omkarmoghe.pokemap.models;
+package com.omkarmoghe.pokemap.models.map;
 
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.google.android.gms.maps.model.Marker;
