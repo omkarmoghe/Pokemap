@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,16 +13,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
-import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,8 +35,6 @@ public class MainActivity extends BaseActivity {
 
     private PokemapAppPreferences pref;
 
-    public static Toast toast;
-
     //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,19 +56,14 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onResume(){
+        super.onResume();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
     }
 
@@ -100,7 +92,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // TODO: test all this shit on a 6.0+ phone lmfao
         switch (requestCode) {
             case 703:
@@ -120,15 +112,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(
-                new RequestCredentialsDialogFragment.Listener() {
-                    @Override
-                    public void credentialsIntroduced(String username, String password) {
-                        pref.setUsername(username);
-                        pref.setPassword(password);
-                        login();
-                    }
-                }), "request_credentials").commit();
+
+        getSupportFragmentManager().beginTransaction().add(
+            RequestCredentialsDialogFragment.newInstance(null), "request_credentials"
+        ).commit();
     }
 
     /**
@@ -139,14 +126,15 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            toast.setText("You have logged in successfully.");
-            toast.show();
+            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
-            nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+
+            // being logged in doesn't always mean we have a location...
+            if (latLng != null) {
+                nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+            }
         } else {
-            toast.cancel();
-            toast.setText("Could not log in. Make sure your credentials are correct.");
-            toast.show();
+            Toast.makeText(this, "Could not log in. Make sure your credentials are correct.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -157,8 +145,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        toast.setText("Searching...");
-        toast.show();
+        Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
@@ -169,8 +156,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-        toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
-        toast.show();
+        Toast.makeText(this, "Unable to contact the Pokemon GO servers. You might be offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -180,9 +166,18 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
-        toast.setText("The login token has expired. Getting a new one.");
-        toast.show();
+        Toast.makeText(this, "The login token has expired. Getting a new one.", Toast.LENGTH_LONG).show();
         login();
+    }
+
+    /**
+     * Called whenever a InternalExceptionEvent is posted to the bus. Posted when the server cannot be reached
+     *
+     * @param event The event information
+     */
+    @Subscribe
+    public void onEvent(InternalExceptionEvent event) {
+        Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 
 }

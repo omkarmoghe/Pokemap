@@ -1,5 +1,8 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -59,12 +62,16 @@ public class GoogleManager {
 
             @Override
             public void onFailure(Call<GoogleService.AuthRequest> call, Throwable t) {
+
                 t.printStackTrace();
                 loginListener.authFailed("Failed on getting the information for the user auth");
             }
         };
-        Call<GoogleService.AuthRequest> call = mGoogleService.requestAuth(url.toString());
-        call.enqueue(googleCallback);
+
+        if (mGoogleService != null) {
+            Call<GoogleService.AuthRequest> call = mGoogleService.requestAuth(url.toString());
+            call.enqueue(googleCallback);
+        }
     }
 
     public void requestToken(String deviceCode, final LoginListener loginListener){
@@ -83,13 +90,19 @@ public class GoogleManager {
             }
 
             @Override
-            public void onFailure(Call<GoogleService.TokenResponse> call, Throwable t) {
-                t.printStackTrace();
+            public void onFailure(Call<GoogleService.TokenResponse> call, @Nullable Throwable t) {
+
+                if (t != null) {
+                    t.printStackTrace();
+                }
                 loginListener.authFailed("Failed on requesting the id token");
             }
         };
-        Call<GoogleService.TokenResponse> call = mGoogleService.requestToken(url.toString());
-        call.enqueue(googleCallback);
+
+        if (mGoogleService != null) {
+            Call<GoogleService.TokenResponse> call = mGoogleService.requestToken(url.toString());
+            call.enqueue(googleCallback);
+        }
     }
 
     public interface LoginListener {
