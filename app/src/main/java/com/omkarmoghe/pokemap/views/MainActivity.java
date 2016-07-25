@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
@@ -68,9 +69,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
         EventBus.getDefault().unregister(this);
 
     }
