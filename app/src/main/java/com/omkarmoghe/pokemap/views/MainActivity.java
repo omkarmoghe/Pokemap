@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
@@ -173,6 +174,16 @@ public class MainActivity extends BaseActivity {
         toast.setText("The login token has expired. Getting a new one.");
         toast.show();
         login();
+    }
+
+    /**
+     * Called whenever a InternalExceptionEvent is posted to the bus. Posted when the server cannot be reached
+     *
+     * @param event The event information
+     */
+    @Subscribe
+    public void onEvent(InternalExceptionEvent event) {
+        Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 
 }

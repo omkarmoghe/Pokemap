@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
@@ -232,9 +233,11 @@ public class NianticManager {
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
-                    e.printStackTrace();
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
         });
@@ -253,9 +256,11 @@ public class NianticManager {
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
-                    e.printStackTrace();
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
         });
@@ -273,6 +278,8 @@ public class NianticManager {
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
         });
@@ -296,6 +303,8 @@ public class NianticManager {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
         });
