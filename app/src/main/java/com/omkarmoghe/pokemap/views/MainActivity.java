@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -33,10 +34,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
-
     private PokemapAppPreferences pref;
-
-    public static Toast toast;
 
     //region Lifecycle Methods
     @Override
@@ -45,7 +43,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -127,17 +124,13 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            toast.setText("You have logged in successfully.");
-            toast.show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
             if (latLng != null) {
                 nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
             }
         } else {
-            toast.cancel();
-            toast.setText("Could not log in. Make sure your credentials are correct.");
-            toast.show();
+            Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -148,8 +141,6 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        toast.setText("Searching...");
-        toast.show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
@@ -160,11 +151,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-
+        Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
         event.getE().printStackTrace();
-
-        toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
-        toast.show();
     }
 
     /**
@@ -174,9 +162,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
-
-        toast.setText("The login token has expired. Getting a new one.");
-        toast.show();
+        Snackbar.make(findViewById(R.id.root), "The login token has expired. Getting a new one.", Snackbar.LENGTH_LONG).show();
         login();
     }
 
@@ -187,9 +173,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(InternalExceptionEvent event) {
-
         event.getE().printStackTrace();
-
         Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 

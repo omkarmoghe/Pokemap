@@ -8,9 +8,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,12 +147,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation != null && mGoogleMap != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-
-                    MainActivity.toast.setText("Found you!");
-                    MainActivity.toast.show();
                 }
                 else{
-
                     showLocationFetchFailed();
                 }
             }
@@ -169,15 +167,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mLocation != null && mGoogleMap != null){
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                MainActivity.toast.setText("Location permission not granted!");
-                MainActivity.toast.show();
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Enable Location Permission")
+                        .setMessage("Please enable location permission to use this application")
+                        .setPositiveButton("OK", null)
+                        .show();
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            MainActivity.toast.setText("Found you!");
-            MainActivity.toast.show();
         } else {
             showLocationFetchFailed();
         }
@@ -225,8 +225,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
-            MainActivity.toast.setText(pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.");
-            MainActivity.toast.show();
+            if(getView() != null) {
+                String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
+            }
 
             updatePokemonMarkers();
         } else {
@@ -235,15 +237,15 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void showMapNotInitializedError() {
-
-        MainActivity.toast.setText("The map is not initialized.");
-        MainActivity.toast.show();
+        if(getView() != null){
+            Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void showLocationFetchFailed() {
-
-        MainActivity.toast.setText("No GPS signal.");
-        MainActivity.toast.show();
+        if(getView() != null){
+            Snackbar.make(getView(), "Failed to Find GPS Location", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     public static String getExpirationBreakdown(long millis) {
@@ -265,7 +267,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-
+        if(getView() != null) {
+            Snackbar.make(getView(), "Found " + event.getCatchablePokemon().size() + " Pokemon", Snackbar.LENGTH_SHORT).show();
+        }
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
