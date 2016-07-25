@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity {
 
 
     private PokemapAppPreferences pref;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
 
     public static Toast toast;
 
@@ -50,7 +51,6 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
         MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
         if(mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
@@ -92,7 +92,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        // As request, when the back button is pressed, we should pop the previous value
+        // (using immediate to execute immediate pop)
+        fragmentManager.popBackStackImmediate();
+
+        // Grab current amount of fragments in the stack, if 0, means that we can close the app
+        int backStackCount = fragmentManager.getBackStackEntryCount();
+        if (backStackCount == 0) {
+            this.finish();
+        }
     }
 
     @Override
