@@ -36,11 +36,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.MainActivity;
+import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,6 +51,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -76,6 +80,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Marker userSelectedPositionMarker = null;
     private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
+    private HashMap<String, PokestopMarkerExtended> pokestopsList= new HashMap<>();
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -105,7 +110,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        updatePokemonMarkers();
+        updateMarkers();
     }
 
     @Override
@@ -189,7 +194,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void updatePokemonMarkers() {
+    private void updateMarkers() {
         if (mGoogleMap != null && markerList != null && !markerList.isEmpty()) {
             for (Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, PokemonMarkerExtended> entry = it.next();
@@ -207,6 +212,32 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
+        }
+    }
+
+    private void setPokestopsMarkers(final Collection<Pokestop> pokestops){
+        if (mGoogleMap != null) {
+
+            if(pokestops != null) {
+                Set<String> markerKeys = pokestopsList.keySet();
+                for (Pokestop pokestop : pokestops) {
+                    if (!markerKeys.contains(pokestop.getId())) {
+                        int resourceID = getResources().getIdentifier("pstop", "drawable", getActivity().getPackageName());
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
+                                .title(getString(R.string.pokestop))
+                                .icon(BitmapDescriptorFactory.fromResource(resourceID))
+                                .anchor(0.5f, 0.5f));
+
+                        //adding pokemons to list to be removed on next search
+                        pokestopsList.put(pokestop.getId(), new PokestopMarkerExtended(pokestop, marker));
+                    }
+                }
+            }
+            updateMarkers();
+
+        } else {
+            showMapNotInitializedError();
         }
     }
 
@@ -246,8 +277,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
                 Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
             }
-
-            updatePokemonMarkers();
+            updateMarkers();
         } else {
             showMapNotInitializedError();
         }
@@ -297,6 +327,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
         setPokemonMarkers(event.getCatchablePokemon());
+    }
+
+    /**
+     * Called whenever a PokestopsEvent is posted to the bus. Posted when new pokestops are found.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PokestopsEvent event) {
+
+        setPokestopsMarkers(event.getPokestops());
     }
 
     @Override

@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
             if (latLng != null) {
-                nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+                nianticManager.getMapInformation(latLng.latitude, latLng.longitude, 0D);
             } else {
                 Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
             }
@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity {
         SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
         for (LatLng p : list) {
-            nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
+            nianticManager.getMapInformation(p.latitude, p.longitude, 0D);
         }
 
 
