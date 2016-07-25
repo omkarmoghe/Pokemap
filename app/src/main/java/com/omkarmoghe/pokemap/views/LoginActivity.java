@@ -299,13 +299,9 @@ public class LoginActivity extends AppCompatActivity{
 
                 if (result.isLoggedIn()) {
 
-                    showProgress(false);
                     finishLogin();
 
                 } else {
-
-                    // show triggerAutoLogin form again
-                    showProgress(false);
 
                     showAuthFailed();
                 }
