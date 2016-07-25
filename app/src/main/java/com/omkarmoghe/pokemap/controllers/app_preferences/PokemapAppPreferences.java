@@ -35,4 +35,10 @@ public interface PokemapAppPreferences {
      * @return the password stored or an empty @see java.lang.String
      */
     String getPassword();
+
+    boolean isGoogleTokenAvailable();
+
+    String getGoogleToken();
+
+    void setGoogleToken(@NonNull String token);
 }
