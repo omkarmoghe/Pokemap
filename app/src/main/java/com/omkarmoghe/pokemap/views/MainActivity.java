@@ -33,10 +33,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
-
     private PokemapAppPreferences pref;
-
-    public static Toast toast;
 
     //region Lifecycle Methods
     @Override
@@ -45,7 +42,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -140,7 +136,6 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-//            Toast.makeText(this, "You have logged in successfully.", Toast.LENGTH_LONG).show();
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {

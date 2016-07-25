@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,8 +166,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mLocation != null && mGoogleMap != null){
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                MainActivity.toast.setText("Location permission not granted!");
-                MainActivity.toast.show();
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Enable Location Permission")
+                        .setMessage("Please enable location permission to use this application")
+                        .setPositiveButton("OK", null)
+                        .show();
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
@@ -245,7 +250,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-        Snackbar.make(getView(), "Found " + event.getCatchablePokemon().size() + " Pokemon", Snackbar.LENGTH_SHORT).show();
+        if(getView() != null) {
+            Snackbar.make(getView(), "Found " + event.getCatchablePokemon().size() + " Pokemon", Snackbar.LENGTH_SHORT).show();
+        }
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
