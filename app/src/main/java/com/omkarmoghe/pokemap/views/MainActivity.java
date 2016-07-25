@@ -75,15 +75,23 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.action_relogin) {
-            startActivity(new Intent(this, LoginActivity.class));
+        } else if (id == R.id.action_logout) {
+            logout();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void logout() {
+
+        pref.clearLoginCredentials();
+
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
-        this.finish();
+        finish();
     }
 
     @Override
