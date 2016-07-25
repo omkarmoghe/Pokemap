@@ -30,6 +30,7 @@ import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -37,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -63,7 +65,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
-    private Circle userSelectedPositionCircle = null;
+    private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
 
     public MapWrapperFragment() {
@@ -180,18 +182,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void updatePokemonMarkers() {
-        if (mGoogleMap != null && markerList != null && !markerList.isEmpty()){
-            for(Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
+        if (mGoogleMap != null && markerList != null && !markerList.isEmpty()) {
+            for (Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, PokemonMarkerExtended> entry = it.next();
                 CatchablePokemon catchablePokemon = entry.getValue().getCatchablePokemon();
                 Marker marker = entry.getValue().getMarker();
                 long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
-                if(millisLeft < 0) {
+                if (millisLeft < 0) {
                     marker.remove();
                     it.remove();
                 } else {
                     marker.setSnippet(getExpirationBreakdown(millisLeft));
-                    if(marker.isInfoWindowShown()) {
+                    if (marker.isInfoWindowShown()) {
                         marker.showInfoWindow();
                     }
                 }
@@ -204,7 +206,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
-            int pokemonFound = 0;
             for (CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
@@ -217,14 +218,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     //adding pokemons to list to be removed on next search
                     markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
-                    pokemonFound++;
                 }
             }
-
-            MainActivity.toast.setText(pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.");
-            MainActivity.toast.show();
-
             updatePokemonMarkers();
+            
         } else {
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
@@ -303,17 +300,25 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void drawMarkerWithCircle(LatLng position){
         //Check and eventually remove old marker
-        if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
+        if(userSelectedPositionMarker != null && userSelectedPositionCircles != null){
             userSelectedPositionMarker.remove();
-            userSelectedPositionCircle.remove();
+            for(Circle circle: userSelectedPositionCircles) {
+                circle.remove();
+            }
+            userSelectedPositionCircles.clear();
         }
 
         double radiusInMeters = 100.0;
         int strokeColor = 0xff3399FF; // outline
         int shadeColor = 0x4400CCFF; // fill
 
-        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-        userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
+        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new com.omkarmoghe.pokemap.models.map.LatLng(position.latitude, position.longitude));
+        List<com.omkarmoghe.pokemap.models.map.LatLng> list = params.getSearchArea();
+        for (com.omkarmoghe.pokemap.models.map.LatLng p : list) {
+            CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+            userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+
+        }
 
         userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
