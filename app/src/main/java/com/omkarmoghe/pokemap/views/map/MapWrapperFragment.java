@@ -181,12 +181,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void updatePokemonMarkers() {
         if (mGoogleMap != null && markerList != null && !markerList.isEmpty()){
-            long minExpiration = 900000;
             for(Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, PokemonMarkerExtended> entry = it.next();
                 CatchablePokemon catchablePokemon = entry.getValue().getCatchablePokemon();
                 Marker marker = entry.getValue().getMarker();
-                long millisLeft = catchablePokemon.getExpirationTimestampMs() < 0 ? 900000 : catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis(); // Sometimes expiration comes as a negative -1, default 15min expiration
+                long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
                 if(millisLeft < 0) {
                     marker.remove();
                     it.remove();
@@ -196,8 +195,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         marker.showInfoWindow();
                     }
                 }
-
-                minExpiration = millisLeft < minExpiration ? millisLeft : minExpiration;
             }
 
         }
