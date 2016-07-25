@@ -71,6 +71,12 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
+                String username = mUsernameView.getText().toString();
+                String password = mPasswordView.getText().toString();
+                if (!mPref.isUsernameSet())
+                    mPref.setUsername(username);
+                if (!mPref.isPasswordSet())
+                    mPref.setPassword(password);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
                 finishLogin();
@@ -200,7 +206,6 @@ public class LoginActivity extends AppCompatActivity{
             // perform the user login attempt.
             showProgress(true);
             mNianticManager.login(username, password, mNianticLoginListener);
-
         }
     }
 
