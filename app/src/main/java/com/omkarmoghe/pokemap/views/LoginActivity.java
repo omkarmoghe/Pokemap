@@ -21,7 +21,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
 import com.omkarmoghe.pokemap.R;
@@ -45,8 +44,6 @@ public class LoginActivity extends AppCompatActivity{
 
     private static final int REQUEST_USER_AUTH = 1;
 
-    public static Toast toast;
-
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
@@ -63,8 +60,6 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
