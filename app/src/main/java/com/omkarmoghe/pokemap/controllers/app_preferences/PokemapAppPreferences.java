@@ -35,4 +35,9 @@ public interface PokemapAppPreferences {
      * @return the password stored or an empty @see java.lang.String
      */
     String getPassword();
+
+    /**
+     * @return boolean show pokestops @see java.lang.Boolean
+     */
+    boolean showPokestops();
 }

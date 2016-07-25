@@ -1,19 +1,19 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
-
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -286,6 +285,27 @@ public class NianticManager {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (RuntimeException e) {
+                    EventBus.getDefault().post(e);
+                }
+            }
+        });
+    }
+    public void getPokestops(final double lat, final double longitude, final double alt){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mPokemonGo.setLocation(lat, longitude, alt);
+                    //load pokestops
+                    List<Pokestop> pokestopList = new ArrayList<Pokestop>(mPokemonGo.getMap().getMapObjects().getPokestops());
+                    EventBus.getDefault().post(new PokestopsEvent(pokestopList));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (RuntimeException e) {
+                    EventBus.getDefault().post(e);
                 }
             }
         });
