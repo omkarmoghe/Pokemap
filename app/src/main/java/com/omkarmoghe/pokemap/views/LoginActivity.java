@@ -63,6 +63,9 @@ public class LoginActivity extends AppCompatActivity{
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
+        } else if (mPref.isGoogleTokenAvailable()) {
+            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
+            finishLogin();
         }
 
         setContentView(R.layout.activity_login);
@@ -73,6 +76,11 @@ public class LoginActivity extends AppCompatActivity{
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
+
+                // store prefs
+                mPref.setUsername(mUsernameView.getText().toString());
+                mPref.setPassword(mPasswordView.getText().toString());
+
                 finishLogin();
             }
 
@@ -88,6 +96,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authSuccessful(String authToken) {
                 showProgress(false);
+                mPref.setGoogleToken(authToken);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
                 finishLogin();

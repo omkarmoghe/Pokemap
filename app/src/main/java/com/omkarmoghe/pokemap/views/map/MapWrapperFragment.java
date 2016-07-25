@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -93,14 +96,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
         updatePokemonMarkers();
     }
 
@@ -118,6 +116,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 else{
                     mLocation = location;
                 }
+            }
+
+            @Override
+            public void onLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
+                showLocationFetchFailed();
             }
         });
         // Inflate the layout for this fragment if the view is not null
@@ -150,8 +153,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
                 else{
 
-                    MainActivity.toast.setText("Waiting on location...");
-                    MainActivity.toast.show();
+                    showLocationFetchFailed();
                 }
             }
         });
@@ -178,6 +180,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
             MainActivity.toast.setText("Found you!");
             MainActivity.toast.show();
+        } else {
+            showLocationFetchFailed();
         }
     }
 
@@ -223,9 +227,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             updatePokemonMarkers();
 
         } else {
-            MainActivity.toast.setText("The map is not initialized.");
-            MainActivity.toast.show();
+            showMapNotInitializedError();
         }
+    }
+
+    private void showMapNotInitializedError() {
+
+        MainActivity.toast.setText("The map is not initialized.");
+        MainActivity.toast.show();
+    }
+
+    private void showLocationFetchFailed() {
+
+        MainActivity.toast.setText("No GPS signal.");
+        MainActivity.toast.show();
     }
 
     public static String getExpirationBreakdown(long millis) {
@@ -252,24 +267,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -299,33 +299,38 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void drawMarkerWithCircle(LatLng position){
-        //Check and eventually remove old marker
-        if(userSelectedPositionMarker != null && userSelectedPositionCircles != null){
-            userSelectedPositionMarker.remove();
-            for(Circle circle: userSelectedPositionCircles) {
-                circle.remove();
+            if (mGoogleMap != null) {
+                    //Check and eventually remove old marker
+                if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
+                    userSelectedPositionMarker.remove();
+                    for (Circle circle : userSelectedPositionCircles) {
+                        circle.remove();
+                    }
+                    userSelectedPositionCircles.clear();
+                }
+
+
+                double radiusInMeters = 100.0;
+                int strokeColor = 0xff3399FF; // outline
+                int shadeColor = 0x4400CCFF; // fill
+
+                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
+                List<LatLng> list = params.getSearchArea();
+                for (LatLng p : list) {
+                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+
+                }
+
+                userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title("Position Picked")
+                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                                R.drawable.ic_my_location_white_24dp)))
+                        .anchor(0.5f, 0.5f));
+            } else {
+                showMapNotInitializedError();
             }
-            userSelectedPositionCircles.clear();
-        }
-
-        double radiusInMeters = 100.0;
-        int strokeColor = 0xff3399FF; // outline
-        int shadeColor = 0x4400CCFF; // fill
-
-        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-        List<LatLng> list = params.getSearchArea();
-        for (LatLng p : list) {
-            CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-            userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
-        }
-
-        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title("Position Picked")
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.ic_my_location_white_24dp)))
-                .anchor(0.5f, 0.5f));
     }
 
 }
