@@ -286,15 +286,9 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-                    SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(lat, longitude));
-                    List<LatLng> list = params.getSearchArea();
-                    List<CatchablePokemon> pokemon = new ArrayList<>();
-                    for (LatLng p : list) {
-                        mPokemonGo.setLocation(p.latitude, p.longitude, alt);
-                        pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
-                    }
+                    mPokemonGo.setLocation(lat, longitude, alt);
+                    EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
 
-                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemon));
                 } catch (LoginFailedException e) {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
