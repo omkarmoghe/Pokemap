@@ -18,6 +18,7 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.models.events.NotificationCatchablePokemonEvent;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -86,7 +87,7 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     private void createNotification(){
@@ -119,7 +120,7 @@ public class PokemonNotificationService extends Service{
     }
 
     @Subscribe
-    public void onEvent(CatchablePokemonEvent event) {
+    public void onEvent(NotificationCatchablePokemonEvent event) {
         List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
         LatLng location = locationManager.getLocation();
