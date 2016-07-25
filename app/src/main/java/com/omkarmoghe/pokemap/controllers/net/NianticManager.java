@@ -13,7 +13,10 @@ import android.util.Log;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
+import com.omkarmoghe.pokemap.models.map.LatLng;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
@@ -280,8 +283,15 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-                    mPokemonGo.setLocation(lat, longitude, alt);
-                    EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+                    SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(lat, longitude));
+                    List<LatLng> list = params.getSearchArea();
+                    List<CatchablePokemon> pokemon = new ArrayList<>();
+                    for (LatLng p : list) {
+                        mPokemonGo.setLocation(p.latitude, p.longitude, alt);
+                        pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
+                    }
+
+                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemon));
                 } catch (LoginFailedException e) {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
