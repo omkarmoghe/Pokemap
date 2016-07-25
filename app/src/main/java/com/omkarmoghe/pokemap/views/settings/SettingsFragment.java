@@ -42,7 +42,6 @@ public class SettingsFragment extends PreferenceFragment {
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
     }
 
-    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     @Override
     public void onPause() {
         super.onPause();

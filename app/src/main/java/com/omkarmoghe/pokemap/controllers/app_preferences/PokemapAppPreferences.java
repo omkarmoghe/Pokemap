@@ -24,12 +24,12 @@ public interface PokemapAppPreferences {
     /**
      * @param username that should be set
      */
-    void setUsername(@NonNull String username);
+    void setUsername(String username);
 
     /**
      * @param password that should be set
      */
-    void setPassword(@NonNull String password);
+    void setPassword(String password);
 
     /**
      * @return the password stored or an empty @see java.lang.String

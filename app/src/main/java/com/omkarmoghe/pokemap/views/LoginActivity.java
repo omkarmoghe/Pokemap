@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mNianticLoginListener = new NianticManager.LoginListener() {
             @Override
-            public void authSuccessful(@NonNull String authToken) {
+            public void authSuccessful(String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void authFailed(@NonNull String message) {
+            public void authFailed(String message) {
                 showProgress(false);
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
                 Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
-            public void authSuccessful(@NonNull String authToken) {
+            public void authSuccessful(String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
@@ -99,14 +99,14 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void authFailed(@NonNull String message) {
+            public void authFailed(String message) {
                 showProgress(false);
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
                 Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
             }
 
             @Override
-            public void authRequested(@NonNull GoogleService.AuthRequest body) {
+            public void authRequested(GoogleService.AuthRequest body) {
                 GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH,
                         body.getVerificationUrl(), body.getUserCode());
                 mDeviceCode = body.getDeviceCode();

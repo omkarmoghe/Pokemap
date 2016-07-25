@@ -86,12 +86,12 @@ public class NianticManager {
             private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
 
             @Override
-            public void saveFromResponse(@NonNull HttpUrl url, @NonNull List<Cookie> cookies) {
+            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
                 cookieStore.put(url.host(), cookies);
             }
 
             @Override
-            public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
+            public List<Cookie> loadForRequest(HttpUrl url) {
                 List<Cookie> cookies = cookieStore.get(url.host());
                 return cookies != null ? cookies : new ArrayList<Cookie>();
             }
@@ -114,10 +114,10 @@ public class NianticManager {
                 .create(NianticService.class);
     }
 
-    public void login(@NonNull final String username, @NonNull final String password, @NonNull final LoginListener loginListener){
+    public void login(final String username, final String password, final LoginListener loginListener){
         Callback<NianticService.LoginValues> valuesCallback = new Callback<NianticService.LoginValues>() {
             @Override
-            public void onResponse(@NonNull Call<NianticService.LoginValues> call, @NonNull Response<NianticService.LoginValues> response) {
+            public void onResponse(Call<NianticService.LoginValues> call, Response<NianticService.LoginValues> response) {
                 if(response.body() != null) {
                     loginPTC(username, password, response.body(), loginListener);
                 }else{
@@ -127,7 +127,7 @@ public class NianticManager {
             }
 
             @Override
-            public void onFailure(@NonNull Call<NianticService.LoginValues> call, @Nullable Throwable t) {
+            public void onFailure(Call<NianticService.LoginValues> call, Throwable t) {
                 loginListener.authFailed("Fetching Pokemon Trainer Club's Login Url Values Failed");
             }
         };
@@ -135,7 +135,7 @@ public class NianticManager {
         call.enqueue(valuesCallback);
     }
 
-    private void loginPTC(@NonNull final String username, @NonNull final String password, @NonNull NianticService.LoginValues values, @NonNull final LoginListener loginListener){
+    private void loginPTC(final String username, final String password, NianticService.LoginValues values, final LoginListener loginListener){
         HttpUrl url = HttpUrl.parse(LOGIN_URL).newBuilder()
                 .addQueryParameter("lt", values.getLt())
                 .addQueryParameter("execution", values.getExecution())
@@ -158,11 +158,9 @@ public class NianticManager {
 
         Callback<NianticService.LoginResponse> loginCallback = new Callback<NianticService.LoginResponse>() {
             @Override
-            public void onResponse(@NonNull Call<NianticService.LoginResponse> call, @NonNull Response<NianticService.LoginResponse> response) {
+            public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
                 String location = response.headers().get("location");
 
-                // location is null when the login fails and there is no response header like this
-                // this also means the response is: Login failed!
                 if (location != null) {
 
                     String ticket = location.split("ticket=")[1];
@@ -176,7 +174,7 @@ public class NianticManager {
 
             // this is only called when the HTTP response code is bad!
             @Override
-            public void onFailure(@NonNull Call<NianticService.LoginResponse> call, @Nullable Throwable t) {
+            public void onFailure(Call<NianticService.LoginResponse> call, Throwable t) {
                 loginListener.authFailed("Pokemon Trainer Club Login Failed");
             }
         };
@@ -184,7 +182,7 @@ public class NianticManager {
         call.enqueue(loginCallback);
     }
 
-    private void requestToken(@NonNull String code, @NonNull final LoginListener loginListener){
+    private void requestToken(String code, final LoginListener loginListener){
         Log.d(TAG, "requestToken() called with: code = [" + code + "]");
         HttpUrl url = HttpUrl.parse(LOGIN_OAUTH).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
@@ -196,7 +194,7 @@ public class NianticManager {
 
         Callback<ResponseBody> authCallback = new Callback<ResponseBody>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String token = response.body().string().split("token=")[1];
                     token = token.split("&")[0];
@@ -208,11 +206,9 @@ public class NianticManager {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @Nullable Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                if (t != null) {
-                    t.printStackTrace();
-                }
+                t.printStackTrace();
                 loginListener.authFailed("Pokemon Trainer Club Authentication Failed");
             }
         };
@@ -221,15 +217,15 @@ public class NianticManager {
     }
 
     public interface LoginListener {
-        void authSuccessful(@NonNull String authToken);
-        void authFailed(@NonNull String message);
+        void authSuccessful(String authToken);
+        void authFailed(String message);
     }
 
     /**
      * Sets the google auth token for the auth info also invokes the onLogin callback.
      * @param token - a valid google auth token.
      */
-    public void setGoogleAuthToken(@NonNull final String token) {
+    public void setGoogleAuthToken(final String token) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -242,11 +238,6 @@ public class NianticManager {
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (NullPointerException e) {
-
-                    //Because we aren't coming from a log in event, the token must have expired.
-                    // pokegoapi lacks null pointer checks and throws NullPointerException
-                    // when a server is unreachable / no network connection etc.
-                    // TODO: Create PR for them to fix this mess
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
 
                 }
@@ -258,7 +249,7 @@ public class NianticManager {
      * Sets the pokemon trainer club auth token for the auth info also invokes the onLogin callback.
      * @param token - a valid pokemon trainer club auth token.
      */
-    public void setPTCAuthToken(@NonNull final String token) {
+    public void setPTCAuthToken(final String token) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -271,11 +262,6 @@ public class NianticManager {
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (NullPointerException e) {
-
-                    //Because we aren't coming from a log in event, the token must have expired.
-                    // pokegoapi lacks null pointer checks and throws NullPointerException
-                    // when a server is unreachable / no network connection etc.
-                    // TODO: Create PR for them to fix this mess
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
 
                 }
@@ -283,7 +269,7 @@ public class NianticManager {
         });
     }
 
-    public void login(@NonNull final String username, @NonNull final String password) {
+    public void login(final String username, final String password) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -296,11 +282,6 @@ public class NianticManager {
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (NullPointerException e) {
-
-                    //Because we aren't coming from a log in event, the token must have expired.
-                    // pokegoapi lacks null pointer checks and throws NullPointerException
-                    // when a server is unreachable / no network connection etc.
-                    // TODO: Create PR for them to fix this mess
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
 
                 }
@@ -320,11 +301,6 @@ public class NianticManager {
                 }  catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (NullPointerException e) {
-
-                    //Because we aren't coming from a log in event, the token must have expired.
-                    // pokegoapi lacks null pointer checks and throws NullPointerException
-                    // when a server is unreachable / no network connection etc.
-                    // TODO: Create PR for them to fix this mess
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }

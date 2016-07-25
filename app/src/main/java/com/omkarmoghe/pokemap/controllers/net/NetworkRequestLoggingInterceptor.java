@@ -26,7 +26,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
     private final String RESPONSE_BODY_LOG = "Response body:\n{0}\n";
 
     @Override
-    public Response intercept(@NonNull Chain chain) throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         final Request request = chain.request();
 
         if (request != null) {
@@ -56,7 +56,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
         return null;
     }
 
-    private String convertRequestBodyToString(@NonNull final Request request) {
+    private String convertRequestBodyToString(final Request request) {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();

@@ -84,7 +84,7 @@ public class LocationManager {
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
-                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        public void onConnectionFailed(ConnectionResult connectionResult) {
 
                             notifyLocalizationFailed();
                         }
@@ -104,7 +104,6 @@ public class LocationManager {
         return null;
     }
 
-    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     public void onResume(){
 
         if (mGoogleApiClient != null) {
@@ -112,7 +111,6 @@ public class LocationManager {
         }
     }
 
-    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     public void onPause(){
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();

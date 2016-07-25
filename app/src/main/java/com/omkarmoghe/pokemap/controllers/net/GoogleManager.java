@@ -47,7 +47,7 @@ public class GoogleManager {
                 .create(GoogleService.class);
     }
 
-    public void authUser(@NonNull final LoginListener loginListener) {
+    public void authUser(final LoginListener loginListener) {
         HttpUrl url = HttpUrl.parse(OAUTH_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("scope", "openid email https://www.googleapis.com/auth/userinfo.email")
@@ -55,17 +55,15 @@ public class GoogleManager {
 
         Callback<GoogleService.AuthRequest> googleCallback = new Callback<GoogleService.AuthRequest>() {
             @Override
-            public void onResponse(@NonNull Call<GoogleService.AuthRequest> call, @NonNull Response<GoogleService.AuthRequest> response) {
+            public void onResponse(Call<GoogleService.AuthRequest> call, Response<GoogleService.AuthRequest> response) {
                 GoogleService.AuthRequest body = response.body();
                 loginListener.authRequested(body);
             }
 
             @Override
-            public void onFailure(@NonNull Call<GoogleService.AuthRequest> call, @Nullable Throwable t) {
+            public void onFailure(Call<GoogleService.AuthRequest> call, Throwable t) {
 
-                if (t != null) {
-                    t.printStackTrace();
-                }
+                t.printStackTrace();
                 loginListener.authFailed("Failed on getting the information for the user auth");
             }
         };
@@ -76,7 +74,7 @@ public class GoogleManager {
         }
     }
 
-    public void requestToken(@NonNull String deviceCode, @NonNull final LoginListener loginListener){
+    public void requestToken(String deviceCode, final LoginListener loginListener){
         HttpUrl url = HttpUrl.parse(OAUTH_TOKEN_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("client_secret", SECRET)
@@ -87,12 +85,12 @@ public class GoogleManager {
 
         Callback<GoogleService.TokenResponse> googleCallback = new Callback<GoogleService.TokenResponse>() {
             @Override
-            public void onResponse(@NonNull Call<GoogleService.TokenResponse> call, @NonNull Response<GoogleService.TokenResponse> response) {
+            public void onResponse(Call<GoogleService.TokenResponse> call, Response<GoogleService.TokenResponse> response) {
                 loginListener.authSuccessful(response.body().getIdToken());
             }
 
             @Override
-            public void onFailure(@NonNull Call<GoogleService.TokenResponse> call, @Nullable Throwable t) {
+            public void onFailure(Call<GoogleService.TokenResponse> call, @Nullable Throwable t) {
 
                 if (t != null) {
                     t.printStackTrace();

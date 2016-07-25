@@ -185,7 +185,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setPokemonMarkers(@NonNull final List<CatchablePokemon> pokeList){
+    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
             //Removing all pokemons from map
             if (markerList != null && !markerList.isEmpty()){
@@ -246,12 +246,15 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      * @param event The event information
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(@NonNull CatchablePokemonEvent event) {
+    public void onEvent(CatchablePokemonEvent event) {
 
-        if (getContext() != null) {
-            Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        if (event.getCatchablePokemon() != null) {
+
+            if (getContext() != null) {
+                Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+            }
+            setPokemonMarkers(event.getCatchablePokemon());
         }
-        setPokemonMarkers(event.getCatchablePokemon());
     }
 
     @Override
@@ -267,7 +270,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
 
         mGoogleMap = googleMap;
 
@@ -283,7 +286,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onMapLongClick(@NonNull LatLng position) {
+    public void onMapLongClick(LatLng position) {
         //Draw user position marker with circle
         drawMarkerWithCircle (position);
 
@@ -293,7 +296,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         EventBus.getDefault().post(sip);
     }
 
-    private void drawMarkerWithCircle(@NonNull LatLng position){
+    private void drawMarkerWithCircle(LatLng position){
         //Check and eventually remove old marker
         if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
             userSelectedPositionMarker.remove();

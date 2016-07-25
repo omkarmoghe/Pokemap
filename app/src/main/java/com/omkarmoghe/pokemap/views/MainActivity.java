@@ -55,15 +55,12 @@ public class MainActivity extends BaseActivity {
                 .commit();
     }
 
-
-    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     @Override
     public void onResume(){
         super.onResume();
         EventBus.getDefault().register(this);
     }
 
-    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     @Override
     public void onPause() {
         super.onPause();
@@ -95,7 +92,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // TODO: test all this shit on a 6.0+ phone lmfao
         switch (requestCode) {
             case 703:
@@ -116,12 +113,8 @@ public class MainActivity extends BaseActivity {
 
     private void requestLoginCredentials() {
 
-        // Do not handle login pref storage in MainActivity because this UI is not even always
-        // called from here! It leads to the bug that when PermissionActivity calls LoginActivity,
-        // the username + password of the Ptc login actually were never saved!
-        // -> moved to LoginActivity and only stored when the Ptc login was successful.
         getSupportFragmentManager().beginTransaction().add(
-                RequestCredentialsDialogFragment.newInstance(null), "request_credentials"
+            RequestCredentialsDialogFragment.newInstance(null), "request_credentials"
         ).commit();
     }
 

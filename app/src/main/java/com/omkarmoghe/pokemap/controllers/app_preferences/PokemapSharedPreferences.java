@@ -36,12 +36,12 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
-    public void setUsername(@NonNull String username) {
+    public void setUsername(String username) {
         sharedPreferences.edit().putString(USERNAME_KEY, username).apply();
     }
 
     @Override
-    public void setPassword(@NonNull String password) {
+    public void setPassword(String password) {
         sharedPreferences.edit().putString(PASSWORD_KEY, password).apply();
     }
 

@@ -31,15 +31,15 @@ public class RequestCredentialsDialogFragment extends AppCompatDialogFragment {
         rootView.findViewById(R.id.request_credentials_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sListener != null) {
-                    String username = ((EditText) rootView.findViewById(R.id.username)).getText().toString();
-                    String password = ((EditText) rootView.findViewById(R.id.password)).getText().toString();
+            if (sListener != null) {
+                String username = ((EditText) rootView.findViewById(R.id.username)).getText().toString();
+                String password = ((EditText) rootView.findViewById(R.id.password)).getText().toString();
 
-                    if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-                        sListener.credentialsIntroduced(username, password);
-                        getDialog().cancel();
-                    }
+                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                    sListener.credentialsIntroduced(username, password);
+                    getDialog().cancel();
                 }
+            }
             }
         });
 
