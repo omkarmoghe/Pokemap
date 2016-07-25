@@ -344,7 +344,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
 
                 double radiusInMeters = 100.0;
-                int strokeColor = 0xff3399FF; // outline
+                int strokeColor = 0x4400CCFF; // outline
                 int shadeColor = 0x4400CCFF; // fill
 
                 SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
