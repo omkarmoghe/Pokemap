@@ -195,7 +195,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void removeTimeoutedPokemonMarkers(){
+    private void removeTimeoutedPokemon(){
 
         for(PokemonObject pokemon : knownPokemon){
             long timeLeft = pokemon.getExpirationTimestamp() - System.currentTimeMillis();
@@ -205,8 +205,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void addPokemon(final List<CatchablePokemon> pokeList) {
-
-        removeTimeoutedPokemonMarkers();
 
         for(CatchablePokemon poke : pokeList){
 
@@ -293,6 +291,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onMapLongClick(LatLng position) {
         //Draw user position marker with circle
         drawMarkerWithCircle (position);
+
+        removeTimeoutedPokemon();
 
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
