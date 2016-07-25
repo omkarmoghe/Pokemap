@@ -123,16 +123,16 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    }
-
     private void startNotificationService(){
         Intent intent = new Intent(this, PokemonNotificationService.class);
         startService(intent);
     }
 
-    private void stopNotificationService(){
+    private void stopNotificationService() {
         Intent intent = new Intent(this, PokemonNotificationService.class);
         stopService(intent);
+    }
+
     /**
      * Triggers a first pokemon scan after a successful login
      *
