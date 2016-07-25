@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
+import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
+import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -32,8 +35,6 @@ public class MainActivity extends BaseActivity {
 
     private PokemapAppPreferences pref;
 
-    public static Toast toast;
-
     //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -116,6 +116,8 @@ public class MainActivity extends BaseActivity {
 
             if (latLng != null) {
                 nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+            } else {
+                Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -127,8 +129,6 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        toast.setText("Searching...");
-        toast.show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
@@ -139,11 +139,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-
+        Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
         event.getE().printStackTrace();
-
-        toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
-        toast.show();
     }
 
     /**
@@ -153,9 +150,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(InternalExceptionEvent event) {
-
         event.getE().printStackTrace();
-
         Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
     }
 

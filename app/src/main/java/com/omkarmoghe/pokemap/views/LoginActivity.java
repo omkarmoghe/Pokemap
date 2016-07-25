@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -117,10 +118,16 @@ public class LoginActivity extends AppCompatActivity{
             }
         };
 
-        //Bold words in Warning
-        TextView warning = (TextView) findViewById(R.id.login_warning);
-        String text = getString(R.string.login_warning) + " <b>banned</b>.";
-        warning.setText(Html.fromHtml(text));
+        findViewById(R.id.txtDisclaimer).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle(getString(R.string.login_warning_title))
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</banned>"))
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        });
 
         // Set up the triggerAutoLogin form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
