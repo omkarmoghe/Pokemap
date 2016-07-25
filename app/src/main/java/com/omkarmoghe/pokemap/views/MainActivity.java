@@ -16,6 +16,7 @@ import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -24,6 +25,8 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
@@ -128,7 +131,13 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
+        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        List<LatLng> list = params.getSearchArea();
+        for (LatLng p : list) {
+            nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
+        }
+
+
     }
 
     /**
