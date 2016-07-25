@@ -77,13 +77,13 @@ public class LocationManager {
 
                         @Override
                         public void onConnectionSuspended(int i) {
-
+                            notifyLocationFetchFailed(null);
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+                            notifyLocationFetchFailed(connectionResult);
                         }
                     })
                     .addApi(LocationServices.API)
@@ -96,6 +96,8 @@ public class LocationManager {
         //Don't getLatitude without checking if location is not null... it will throw sys err...
         if(location != null){
             return new LatLng(location.getLatitude(), location.getLongitude());
+        } else {
+            notifyLocationFetchFailed(null);
         }
         return null;
     }
@@ -125,6 +127,16 @@ public class LocationManager {
         }
     }
 
+    private void notifyLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
+
+        if (listeners != null) {
+
+            for (Listener listener : listeners) {
+                listener.onLocationFetchFailed(connectionResult);
+            }
+        }
+    }
+
     private void notifyLocationChanged(Location location){
 
         if (listeners != null) {
@@ -135,8 +147,9 @@ public class LocationManager {
 
     }
 
-    public interface Listener{
+    public interface Listener {
         void onLocationChanged(Location location);
+        void onLocationFetchFailed(@Nullable ConnectionResult connectionResult);
     }
 
 

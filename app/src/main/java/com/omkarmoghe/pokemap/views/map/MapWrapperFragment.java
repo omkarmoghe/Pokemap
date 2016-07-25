@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -117,6 +120,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     mLocation = location;
                 }
             }
+
+            @Override
+            public void onLocationFetchFailed(@Nullable ConnectionResult connectionResult) {
+                showLocationFetchFailed();
+            }
         });
         // Inflate the layout for this fragment if the view is not null
         if (mView == null) mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
@@ -148,8 +156,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
                 else{
 
-                    MainActivity.toast.setText("Waiting on location...");
-                    MainActivity.toast.show();
+                    showLocationFetchFailed();
                 }
             }
         });
@@ -176,6 +183,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
             MainActivity.toast.setText("Found you!");
             MainActivity.toast.show();
+        } else {
+            showLocationFetchFailed();
         }
     }
 
@@ -233,6 +242,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void showMapNotInitializedError() {
 
         MainActivity.toast.setText("The map is not initialized.");
+        MainActivity.toast.show();
+    }
+
+    private void showLocationFetchFailed() {
+
+        MainActivity.toast.setText("No GPS signal.");
         MainActivity.toast.show();
     }
 
