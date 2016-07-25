@@ -289,6 +289,8 @@ public class NianticManager {
                         List<LatLng> list = params.getSearchArea();
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for (LatLng p : list) {
+                            //This fixes Exception of missind ID
+                            Thread.sleep(50);
                             mPokemonGo.setLocation(p.latitude, p.longitude, alt);
                             pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
                         }
