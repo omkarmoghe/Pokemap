@@ -39,5 +39,5 @@
     <string name="toast_localization_waiting">Warte auf Koordinaten...</string>
     <string name="toast_map_not_initialized">Die Karte ist nicht initialisiert.</string>
     <string name="toast_user_found">Hab dich!</string>
-    <string name="searching">Suche...</string>
+    <string name="farfetch_d">Porenta</string>
 </resources>

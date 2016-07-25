@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by vanshilshah on 19/07/16.
  */
@@ -39,5 +41,15 @@ public class BaseActivity extends AppCompatActivity {
             locationManager.unregister(locationListener);
         }
         super.onPause();
+    }
+
+    public static int getResId(String resName, Class<?> c){
+        try {
+            Field idField = c.getDeclaredField(resName.toLowerCase());
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }

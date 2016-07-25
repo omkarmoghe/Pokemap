@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -35,6 +37,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -169,8 +172,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            MainActivity.toast.setText(getString(R.string.toast_user_found));
-            MainActivity.toast.show();
+            MainActivity.toastMe(getString(R.string.toast_user_found));
         }
     }
 
@@ -186,12 +188,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             for (CatchablePokemon poke : pokeList) {
                 int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                long millisLeft = poke.getExpirationTimestampMs() - System.currentTimeMillis();
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(resourceID);
+
+                String breakdown = getDurationBreakdown(poke.getExpirationTimestampMs() - System.currentTimeMillis());
+                String snippet = getString(R.string.pokemon_disappearing_in)+ breakdown;
+
+                String pokeName = poke.getPokemonId().name();
+                int resId = getPokemonNameId(pokeName);
+                String title = resId == -1 ? pokeName : getString(resId);
+
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                        .title(poke.getPokemonId().name())
-                        .snippet(getString(R.string.pokemon_disappearing_in)+ getDurationBreakdown(millisLeft))
-                        .icon(BitmapDescriptorFactory.fromResource(resourceID)));
+                        .title(title)
+                        .snippet(snippet)
+                        .icon(icon));
 
                 marker.showInfoWindow();
                 //adding pokemons to list to be removed on next search
@@ -201,10 +211,23 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             MainActivity.toastMe(getString(R.string.toast_map_not_initialized));
         }
     }
+    private int getPokemonNameId(String pokeName){
+        try {
+            Class res = R.string.class;
+            Field field = res.getField(pokeName.toLowerCase());
+            int id = field.getInt(null);
 
-    public static String getDurationBreakdown(long millis) {
+            return id;
+        }
+        catch (Exception e) {
+            Log.e("MyTag", "Failure to get id.", e);
+            return -1;
+        }
+    }
+
+    public String getDurationBreakdown(long millis) {
         if(millis < 0) {
-            return Resources.getSystem().getString(R.string.pokemon_expired);
+            return getString(R.string.pokemon_expired);
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
@@ -213,9 +236,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         StringBuilder sb = new StringBuilder(64);
         sb.append(minutes);
-        sb.append(Resources.getSystem().getString(R.string.minutes));
+        sb.append(getString(R.string.minutes));
         sb.append(seconds);
-        sb.append(Resources.getSystem().getString(R.string.seconds));
+        sb.append(getString(R.string.seconds));
 
         return(sb.toString());
     }
@@ -227,8 +250,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-
-//        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
         MainActivity.toastMe(event.getCatchablePokemon().size() + getString(R.string.pokemon_found_new));
         setPokemonMarkers(event.getCatchablePokemon());
     }

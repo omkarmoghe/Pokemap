@@ -38,7 +38,6 @@ public class MainActivity extends BaseActivity {
     public static Toast toast;
 
     public static void toastMe(String message){
-        toast.cancel();
         toast.setText(message);
         toast.show();
     }

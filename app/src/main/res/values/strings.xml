@@ -37,7 +37,6 @@
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
     <string name="toast_login_successful">You have logged in successfully.</string>
-    <string name="searching">Searching...</string>
     <string name="seconds">" Seconds"</string>
     <string name="toast_server_unreachable">Unable to contact the Pokemon GO servers. The servers may be down.</string>
     <string name="toast_token_expired">The login token has expired. Getting a new one.</string>
