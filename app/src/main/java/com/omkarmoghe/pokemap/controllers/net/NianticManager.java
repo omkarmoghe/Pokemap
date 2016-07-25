@@ -1,15 +1,13 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
@@ -286,6 +284,8 @@ public class NianticManager {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (RuntimeException e) {
+                    EventBus.getDefault().post(e);
                 }
             }
         });
