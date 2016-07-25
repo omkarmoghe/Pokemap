@@ -1,6 +1,9 @@
 package com.omkarmoghe.pokemap.views.map;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,8 +46,8 @@ import java.util.concurrent.TimeUnit;
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
-                                                            GoogleMap.OnMapLongClickListener,
-                                                            ActivityCompat.OnRequestPermissionsResultCallback {
+        GoogleMap.OnMapLongClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
 
@@ -83,7 +86,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
@@ -103,17 +106,14 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation == null) {
                     mLocation = location;
                     initMap();
-                }
-                else{
+                } else {
                     mLocation = location;
                 }
             }
         });
         // Inflate the layout for this fragment if the view is not null
-        if (mView == null) mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        else {
-
-        }
+        if (mView == null)
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
 
         // build the map
         if (mSupportMapFragment == null) {
@@ -134,12 +134,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
-                    MainActivity.toast.setText("Found you!");
+                    MainActivity.toast.setText(getString(R.string.toast_user_found));
                     MainActivity.toast.show();
-                }
-                else{
+                } else {
 
-                    MainActivity.toast.setText("Waiting on location...");
+                    MainActivity.toast.setText(getString(R.string.toast_localization_waiting));
                     MainActivity.toast.show();
                 }
             }
@@ -154,12 +153,23 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         return mView;
     }
-    private void initMap(){
-        if (mLocation != null && mGoogleMap != null){
+
+    private void initMap() {
+        if (mLocation != null && mGoogleMap != null) {
+            if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            MainActivity.toast.setText("Found you!");
+            MainActivity.toast.setText(getString(R.string.toast_user_found));
             MainActivity.toast.show();
         }
     }
@@ -171,7 +181,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 for(Marker marker : markerList){
                     marker.remove();
                 }
-                markerList = new ArrayList<Marker>(); //cleaning the array
+                markerList = new ArrayList<>(); //cleaning the array
             }
 
             for (CatchablePokemon poke : pokeList) {
@@ -180,7 +190,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
+                        .snippet(getString(R.string.pokemon_disappearing_in)+ getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
                 marker.showInfoWindow();
@@ -188,14 +198,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 markerList.add(marker);
             }
         } else {
-            MainActivity.toast.setText("The map is not initialized.");
-            MainActivity.toast.show();
+            MainActivity.toastMe(getString(R.string.toast_map_not_initialized));
         }
     }
 
     public static String getDurationBreakdown(long millis) {
         if(millis < 0) {
-            return "Expired";
+            return Resources.getSystem().getString(R.string.pokemon_expired);
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
@@ -204,9 +213,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         StringBuilder sb = new StringBuilder(64);
         sb.append(minutes);
-        sb.append(" Minutes ");
+        sb.append(Resources.getSystem().getString(R.string.minutes));
         sb.append(seconds);
-        sb.append(" Seconds");
+        sb.append(Resources.getSystem().getString(R.string.seconds));
 
         return(sb.toString());
     }
@@ -220,8 +229,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onEvent(CatchablePokemonEvent event) {
 
 //        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
-        MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
-        MainActivity.toast.show();
+        MainActivity.toastMe(event.getCatchablePokemon().size() + getString(R.string.pokemon_found_new));
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
@@ -288,7 +296,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(position)
-                .title("Position Picked")
+                .title(getString(R.string.position_picked))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
     }
 

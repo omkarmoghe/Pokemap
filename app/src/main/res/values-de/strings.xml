@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Translation by chrosey -->
+<resources>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_sign_in">Einloggen</string>
+    <string name="action_relogin">Neu einloggen</string>
+    <string name="error_field_required">Feld erforderlich</string>
+    <string name="login_warning">Es wird empfohlen nicht den eigenen Account zu nutzen.
+        Lege dir einen PTC account mit einem anderem Password und Emailadresse an,
+        oder nutze einen Google Account der nicht mit deiner Emailadresse verknüpft ist.</string>
+    <string name="login_warning_title">Warnung:</string>
+    <string name="pref_cat_general">Allgemein</string>
+    <string name="pref_cat_user_account">Benutzerkonto</string>
+    <string name="pref_gyms_title">Zeige Arenen</string>
+    <string name="pref_password">Passwort setzen</string>
+    <string name="pref_pokestops_title">Zeige Pokestops</string>
+    <string name="pref_username">Nutzernamen setzen</string>
+    <string name="pref_warning">Anmerkung: Nutze nicht deinen Hauptaccount für diese App.
+        Lege dir lieber einen zusätzlichen PTC Account mit anderem Passwort und Email an.</string>
+    <string name="prompt_password">PTC Passwort</string>
+    <string name="prompt_username">PTC Benutzername</string>
+    <string name="request_credentials_title">Gib deine Pokemon Go Zugangsdaten ein</string>
+    <string name="search_pokemon_map_suggestion">(Lange gedrückt halten zum Ändern der Suchposition)</string>
+    <string name="title_activity_maps">Karte</string>
+    <string name="title_activity_poke_map">Pokemon in der Nähe</string>
+    <string name="toast_credentials">Login fehlerhaft. Bitte überprüfe deine Zugangsdaten.</string>
+    <string name="pref_default_username">Max Mustermann</string>
+    <string name="toast_login_successful">Login erfolgreich.</string>
+    <string name="toast_searching">Suche...</string>
+    <string name="toast_server_unreachable">Pokemon GO Server nicht erreichbar. Eventuell sind die Server offline.</string>
+    <string name="toast_token_expired">Der Logintoken ist abgelaufen. Hole einen neuen.</string>
+    <string name="ban">gebannt</string>
+    <string name="minutes">" Minuten "</string>
+    <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
+    <string name="pokemon_expired">Abgelaufen</string>
+    <string name="pokemon_found_new">" neue fangbare Pokemon wurden gefunden."</string>
+    <string name="position_picked">Gewählte Position</string>
+    <string name="seconds">" Sekunden"</string>
+    <string name="toast_localization_waiting">Warte auf Koordinaten...</string>
+    <string name="toast_map_not_initialized">Die Karte ist nicht initialisiert.</string>
+    <string name="toast_user_found">Hab dich!</string>
+    <string name="searching">Suche...</string>
+</resources>

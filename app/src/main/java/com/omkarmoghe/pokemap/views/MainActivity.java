@@ -37,6 +37,12 @@ public class MainActivity extends BaseActivity {
 
     public static Toast toast;
 
+    public static void toastMe(String message){
+        toast.cancel();
+        toast.setText(message);
+        toast.show();
+    }
+
     //region Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,14 +145,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(LoginEventResult result) {
         if (result.isLoggedIn()) {
-            toast.setText("You have logged in successfully.");
-            toast.show();
+            toastMe(getString(R.string.toast_login_successful));
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
-            toast.cancel();
-            toast.setText("Could not log in. Make sure your credentials are correct.");
-            toast.show();
+            toastMe(getString(R.string.toast_credentials));
         }
     }
 
@@ -157,8 +160,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        toast.setText("Searching...");
-        toast.show();
+        toastMe(getString(R.string.toast_searching));
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
@@ -169,8 +171,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-        toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
-        toast.show();
+        toastMe(getString(R.string.toast_server_unreachable));
     }
 
     /**
@@ -180,8 +181,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(TokenExpiredEvent event) {
-        toast.setText("The login token has expired. Getting a new one.");
-        toast.show();
+        toastMe(getString(R.string.toast_token_expired));
         login();
     }
 
