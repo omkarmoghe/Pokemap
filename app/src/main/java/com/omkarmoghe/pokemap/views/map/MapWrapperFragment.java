@@ -221,7 +221,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
             updatePokemonMarkers();
-            
+
         } else {
             MainActivity.toast.setText("The map is not initialized.");
             MainActivity.toast.show();
@@ -312,9 +312,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         int strokeColor = 0xff3399FF; // outline
         int shadeColor = 0x4400CCFF; // fill
 
-        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new com.omkarmoghe.pokemap.models.map.LatLng(position.latitude, position.longitude));
-        List<com.omkarmoghe.pokemap.models.map.LatLng> list = params.getSearchArea();
-        for (com.omkarmoghe.pokemap.models.map.LatLng p : list) {
+        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
+        List<LatLng> list = params.getSearchArea();
+        for (LatLng p : list) {
             CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
             userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
 

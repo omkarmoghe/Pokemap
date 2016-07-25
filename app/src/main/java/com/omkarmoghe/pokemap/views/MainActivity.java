@@ -11,12 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
-import com.omkarmoghe.pokemap.models.map.LatLng;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity {
         if (result.isLoggedIn()) {
             toast.setText("You have logged in successfully.");
             toast.show();
-            com.google.android.gms.maps.model.LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
+            LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             if(nianticManager != null)
                 nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
