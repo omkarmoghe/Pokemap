@@ -1,7 +1,9 @@
 package com.omkarmoghe.pokemap.views.map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +29,7 @@ import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +47,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                                             GoogleMap.OnMapLongClickListener,
+                                                            GoogleMap.OnInfoWindowClickListener,
                                                             ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
@@ -56,7 +60,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
     private Circle userSelectedPositionCircle = null;
-    private List<Marker> markerList = new ArrayList<>();
+    private List<MarkerObj> markerList = new ArrayList<>();
+
+    class MarkerObj {
+        Marker marker;
+        CatchablePokemon poke;
+    }
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -164,14 +173,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+
+
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
             //Removing all pokemons from map
             if (markerList != null && !markerList.isEmpty()){
-                for(Marker marker : markerList){
-                    marker.remove();
+                for(MarkerObj marker : markerList){
+                    marker.marker.remove();
                 }
-                markerList = new ArrayList<Marker>(); //cleaning the array
+                markerList = new ArrayList<MarkerObj>(); //cleaning the array
             }
 
             for (CatchablePokemon poke : pokeList) {
@@ -183,9 +194,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
-//                marker.showInfoWindow();
+                MarkerObj tempMarkerObj = new MarkerObj();
+                tempMarkerObj.marker = marker;
+                tempMarkerObj.poke = poke;
                 //adding pokemons to list to be removed on next search
-                markerList.add(marker);
+                markerList.add(tempMarkerObj);
             }
         } else {
             MainActivity.toast.setText("The map is not initialized.");
@@ -256,6 +269,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         settings.setMyLocationButtonEnabled(false);
         //Handle long click
         mGoogleMap.setOnMapLongClickListener(this);
+        mGoogleMap.setOnInfoWindowClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
         initMap();
@@ -270,6 +284,24 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         SearchInPosition sip = new SearchInPosition();
         sip.setPosition(position);
         EventBus.getDefault().post(sip);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        if(marker.getSnippet() != null) {
+            CatchablePokemon poke = null;
+            for (MarkerObj markerObj: markerList) {
+                if(markerObj.marker.equals(marker))
+                {
+                    poke = markerObj.poke;
+                }
+            }
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?daddr="+ poke.getLatitude() + "," + poke.getLongitude()));
+            startActivity(intent);
+            MainActivity.toast.setText("Opening directions for " + poke.getPokemonId());
+            MainActivity.toast.show();
+        }
     }
 
     private void drawMarkerWithCircle(LatLng position){
@@ -291,6 +323,5 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 .title("Position Picked")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
     }
-
 }
 
