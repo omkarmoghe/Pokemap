@@ -42,8 +42,8 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         // Unregister change listener
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
     }
