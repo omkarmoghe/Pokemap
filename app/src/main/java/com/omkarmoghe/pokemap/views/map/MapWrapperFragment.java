@@ -3,6 +3,7 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +39,7 @@ import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -42,6 +47,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -68,7 +74,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
-    private Circle userSelectedPositionCircle = null;
+    private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
 
     public MapWrapperFragment() {
@@ -184,18 +190,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void updatePokemonMarkers() {
-        if (mGoogleMap != null && markerList != null && !markerList.isEmpty()){
-            for(Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
+        if (mGoogleMap != null && markerList != null && !markerList.isEmpty()) {
+            for (Iterator<Map.Entry<String, PokemonMarkerExtended>> it = markerList.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, PokemonMarkerExtended> entry = it.next();
                 CatchablePokemon catchablePokemon = entry.getValue().getCatchablePokemon();
                 Marker marker = entry.getValue().getMarker();
                 long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
-                if(millisLeft < 0) {
+                if (millisLeft < 0) {
                     marker.remove();
                     it.remove();
                 } else {
                     marker.setSnippet(getExpirationBreakdown(millisLeft));
-                    if(marker.isInfoWindowShown()) {
+                    if (marker.isInfoWindowShown()) {
                         marker.showInfoWindow();
                     }
                 }
@@ -209,22 +215,33 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             Set<String> markerKeys = markerList.keySet();
             int pokemonFound = 0;
-            for (CatchablePokemon poke : pokeList) {
+            for (final CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
-                    int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                            .title(poke.getPokemonId().name())
-                            .icon(BitmapDescriptorFactory.fromResource(resourceID))
-                            .anchor(0.5f, 0.5f));
-
-                    //adding pokemons to list to be removed on next search
-                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                    //Showing images using glide
+                    Glide.with(getActivity())
+                            .load("http://serebii.net/pokemongo/pokemon/"+getCorrectPokemonImageId(poke.getPokemonId().getNumber())+".png")
+                            .asBitmap()
+                            .skipMemoryCache(false)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(new SimpleTarget<Bitmap>(120, 120) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
+                                @Override
+                                public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                                    //Setting marker since we got image
+                                    //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                            .title(poke.getPokemonId().name())
+                                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                                            .anchor(0.5f, 0.5f));
+                                    //adding pokemons to list to be removed on next search
+                                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                                }
+                            });
+                    //Increase founded pokemon counter
                     pokemonFound++;
                 }
             }
-
             if(getView() != null) {
                 String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
                 Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
@@ -233,6 +250,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             updatePokemonMarkers();
         } else {
             showMapNotInitializedError();
+        }
+    }
+
+    //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
+    private String getCorrectPokemonImageId (int pokemonId){
+        String actualNumber = String.valueOf(pokemonId);
+        if(pokemonId < 10){
+            return "00" + actualNumber;
+        }else if(pokemonId < 100) {
+            return "0" + actualNumber;
+        }else {
+            return actualNumber;
         }
     }
 
@@ -267,9 +296,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-        if(getView() != null) {
-            Snackbar.make(getView(), "Found " + event.getCatchablePokemon().size() + " Pokemon", Snackbar.LENGTH_SHORT).show();
-        }
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
@@ -306,31 +332,38 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void drawMarkerWithCircle(LatLng position){
+            if (mGoogleMap != null) {
+                    //Check and eventually remove old marker
+                if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
+                    userSelectedPositionMarker.remove();
+                    for (Circle circle : userSelectedPositionCircles) {
+                        circle.remove();
+                    }
+                    userSelectedPositionCircles.clear();
+                }
 
-        if (mGoogleMap != null) {
 
-            //Check and eventually remove old marker
-            if (userSelectedPositionMarker != null && userSelectedPositionCircle != null) {
-                userSelectedPositionMarker.remove();
-                userSelectedPositionCircle.remove();
+                double radiusInMeters = 100.0;
+                int strokeColor = 0x4400CCFF; // outline
+                int shadeColor = 0x4400CCFF; // fill
+
+                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
+                List<LatLng> list = params.getSearchArea();
+                for (LatLng p : list) {
+                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+
+                }
+
+                userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title("Position Picked")
+                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                                R.drawable.ic_my_location_white_24dp)))
+                        .anchor(0.5f, 0.5f));
+            } else {
+                showMapNotInitializedError();
             }
-
-            double radiusInMeters = 100.0;
-            int strokeColor = 0xff3399FF; // outline
-            int shadeColor = 0x4400CCFF; // fill
-
-            CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-            userSelectedPositionCircle = mGoogleMap.addCircle(circleOptions);
-
-            userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                    .position(position)
-                    .title("Position Picked")
-                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.ic_my_location_white_24dp)))
-                    .anchor(0.5f, 0.5f));
-        } else {
-            showMapNotInitializedError();
-        }
     }
 
 }

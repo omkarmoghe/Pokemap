@@ -10,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
@@ -19,8 +17,7 @@ import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
-import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -29,6 +26,8 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
@@ -96,9 +95,8 @@ public class MainActivity extends BaseActivity {
             skipNotificationServer = true;
             startActivityForResult(new Intent(this, SettingsActivity.class),0);
         } else if (id == R.id.action_relogin) {
-            login();
+            startActivity(new Intent(this, LoginActivity.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -125,12 +123,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void login() {
-        if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
-            requestLoginCredentials();
-        } else {
-            nianticManager.login(pref.getUsername(), pref.getPassword());
-        }
     }
 
     private void startNotificationService(){
@@ -141,27 +133,23 @@ public class MainActivity extends BaseActivity {
     private void stopNotificationService(){
         Intent intent = new Intent(this, PokemonNotificationService.class);
         stopService(intent);
-    }
-
-    private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(null), "request_credentials").commit();
-    }
-
     /**
-     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
+     * Triggers a first pokemon scan after a successful login
      *
      * @param result Results of a log in attempt
      */
     @Subscribe
     public void onEvent(LoginEventResult result) {
+
         if (result.isLoggedIn()) {
+
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
             if (latLng != null) {
                 nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+            } else {
+                Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
             }
-        } else {
-            Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -172,7 +160,13 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
+        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        List<LatLng> list = params.getSearchArea();
+        for (LatLng p : list) {
+            nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
+        }
+
+
     }
 
     /**
@@ -187,17 +181,6 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * Called whenever a TokenExpiredEvent is posted to the bus. Posted when the token from the login expired.
-     *
-     * @param event The event information
-     */
-    @Subscribe
-    public void onEvent(TokenExpiredEvent event) {
-        Snackbar.make(findViewById(R.id.root), "The login token has expired. Getting a new one.", Snackbar.LENGTH_LONG).show();
-        login();
-    }
-
-    /**
      * Called whenever a InternalExceptionEvent is posted to the bus. Posted when the server cannot be reached
      *
      * @param event The event information
@@ -205,7 +188,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(InternalExceptionEvent event) {
         event.getE().printStackTrace();
-        Toast.makeText(this, "An internal error occurred. This might happen when you are offline or the servers are down.", Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.root), "An internal error occurred. This might happen when you are offline or the servers are down.", Snackbar.LENGTH_LONG).show();
     }
 
 }
