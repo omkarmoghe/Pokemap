@@ -18,7 +18,6 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-import com.omkarmoghe.pokemap.models.events.NotificationCatchablePokemonEvent;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -92,7 +91,7 @@ public class PokemonNotificationService extends Service{
 
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
-                .setSmallIcon(R.drawable.p1)
+                .setSmallIcon(R.drawable.ic_gps_fixed_white_24dp)
                 .setContentTitle("Pokemon Service")
                 .setContentText("Scanning").setOngoing(true);
 
@@ -120,7 +119,7 @@ public class PokemonNotificationService extends Service{
     }
 
     @Subscribe
-    public void onEvent(NotificationCatchablePokemonEvent event) {
+    public void onEvent(CatchablePokemonEvent event) {
         List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
         LatLng location = locationManager.getLocation();

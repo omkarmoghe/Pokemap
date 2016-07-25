@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
-import com.omkarmoghe.pokemap.models.events.NotificationCatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.omkarmoghe.pokemap.models.map.LatLng;

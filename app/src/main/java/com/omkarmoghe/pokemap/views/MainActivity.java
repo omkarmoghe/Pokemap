@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
+    private boolean skipNotificationServer;
     private PokemapAppPreferences pref;
 
     //region Lifecycle Methods
@@ -64,12 +65,20 @@ public class MainActivity extends BaseActivity {
     public void onResume(){
         super.onResume();
         EventBus.getDefault().register(this);
+
+        if(pref.isServiceEnabled()){
+            stopNotificationService();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+
+        if(!skipNotificationServer && pref.isServiceEnabled()){
+            startNotificationService();
+        }
 
     }
 
@@ -84,6 +93,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            skipNotificationServer = true;
             startActivityForResult(new Intent(this, SettingsActivity.class),0);
         } else if (id == R.id.action_relogin) {
             login();
@@ -94,15 +104,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(pref.isServiceEnabled()){
-            startNotificationService();
-        }else{
-            stopNotificationService();
-        }
+        skipNotificationServer = false;
     }
 
     @Override
     public void onBackPressed() {
+        skipNotificationServer = true;
         this.finish();
     }
 
