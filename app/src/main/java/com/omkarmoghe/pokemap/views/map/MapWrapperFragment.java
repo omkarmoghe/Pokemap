@@ -24,9 +24,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.utils.PokeUtils;
 import com.omkarmoghe.pokemap.views.MainActivity;
+import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,6 +59,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Marker userSelectedPositionMarker = null;
     private Circle userSelectedPositionCircle = null;
     private List<Marker> markerList = new ArrayList<>();
+    private List<Pokestop> knownPokestops = new ArrayList<>();
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -192,6 +195,31 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             MainActivity.toast.show();
         }
     }
+    private void setPokestopsMarkers(final List<Pokestop> pokestopList){
+        if (mGoogleMap != null) {
+            if (knownPokestops == null){
+                knownPokestops = new ArrayList<Pokestop>();
+            }
+            for (Pokestop pokestop : pokestopList) {
+                if (!knownPokestops.contains(pokestop)) {
+                    knownPokestops.add(pokestop);
+                    int resourceID = R.drawable.pstop;
+                    if (pokestop.hasLurePokemon()){
+                        resourceID = R.drawable.pstoplured;
+                    }
+                    //draw new marker
+                    mGoogleMap.addMarker(new MarkerOptions()
+                                                                 .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
+                                                                 .title("Pokestop")
+                                                                 .snippet("Pokestop")
+                                                                 .icon(BitmapDescriptorFactory.fromResource(resourceID)));
+                }
+            }
+        } else {
+            MainActivity.toast.setText("The map is not initialized.");
+            MainActivity.toast.show();
+        }
+    }
 
     /**
      * Called whenever a CatchablePokemonEvent is posted to the bus. Posted when new catchable pokemon are found.
@@ -204,6 +232,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
         MainActivity.toast.show();
         setPokemonMarkers(event.getCatchablePokemon());
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PokestopsEvent event) {
+        setPokestopsMarkers(event.getPokestopList());
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
+    public static final String KEY_POKESTOPS = "pokestops_checkbox";
 
     private final SharedPreferences sharedPreferences;
 
@@ -48,5 +49,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public String getPassword() {
         return sharedPreferences.getString(PASSWORD_KEY, "");
+    }
+
+    @Override
+    public boolean showPokestops() {
+        return sharedPreferences.getBoolean(KEY_POKESTOPS, false);
     }
 }
