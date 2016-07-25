@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View view) {
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</banned>"))
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</b>"))
                         .setPositiveButton("OK", null)
                         .show();
             }
