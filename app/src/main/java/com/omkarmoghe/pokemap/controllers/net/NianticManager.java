@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
+import com.omkarmoghe.pokemap.models.events.ThreadSleepFailure;
 import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.auth.GoogleLogin;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
@@ -56,7 +58,12 @@ public class NianticManager {
 
     private static final NianticManager instance = new NianticManager();
 
+    private static final int STEP_SIZE = 750;
+
+    private static final int STEP_COUNT = 2;
+
     private Handler mHandler;
+    private Runnable mRunnable;
     private AuthInfo mAuthInfo;
     private NianticService mNianticService;
     private final OkHttpClient mClient;
@@ -280,12 +287,21 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-                    mPokemonGo.setLocation(lat, longitude, alt);
-                    EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+                    //TODO: change this to more accurate or larger. finals are for testing
+                    for(int i=-1*STEP_COUNT;i<=STEP_COUNT;i++){
+                        for(int j=-1*STEP_COUNT;j<=STEP_COUNT;j++) {
+                            mPokemonGo.setLocation(lat+(double)i/STEP_SIZE, longitude+(double)j/STEP_SIZE, alt);
+                            EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+                            // Sleep for 1 second to not teleport to fast or at the very least help app not lag
+                            Thread.sleep(1000);
+                        }
+                    }
                 } catch (LoginFailedException e) {
                     EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (InterruptedException e) {
+                    EventBus.getDefault().post(new ThreadSleepFailure());
                 }
             }
         });
