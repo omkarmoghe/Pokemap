@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -142,6 +145,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         Toast.makeText(context, "Waiting on location...", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        final ImageView closeSuggestionsButton = (ImageView) mView.findViewById(R.id.closeSuggestions);
+        closeSuggestionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayout suggestions = (LinearLayout) mView.findViewById(R.id.layoutSuggestions);
+                suggestions.setVisibility(View.INVISIBLE);
             }
         });
 
