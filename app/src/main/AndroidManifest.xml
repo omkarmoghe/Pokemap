@@ -24,6 +24,10 @@
     </activity>
 
     <activity
+        android:name=".views.PermissionActivity">
+    </activity>
+
+    <activity
         android:name=".views.settings.SettingsActivity"
         android:launchMode="singleTask"
         android:parentActivityName=".views.MainActivity"
@@ -41,7 +45,7 @@
     <activity-alias
         android:name=".Launcher"
         android:label="@string/app_name"
-        android:targetActivity=".views.LoginActivity">
+        android:targetActivity=".views.PermissionActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 

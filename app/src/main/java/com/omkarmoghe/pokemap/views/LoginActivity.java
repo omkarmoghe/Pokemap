@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity{
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
-        
+
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                showProgress(false);
                 Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
             }
         };

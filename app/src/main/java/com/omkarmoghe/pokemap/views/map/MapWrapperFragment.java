@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +26,7 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,7 +80,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -109,6 +120,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mSupportMapFragment == null) {
             mSupportMapFragment = SupportMapFragment.newInstance();
             getChildFragmentManager().beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
+            mSupportMapFragment.setRetainInstance(true);
         }
 
         if (mGoogleMap == null) {
@@ -124,11 +136,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
                 }
                 else{
-
                     if(getView() != null) {
-                        Snackbar.make(getView(), "Waiting on location...", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), "Waiting on Location....", Snackbar.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
             }
         });
 
@@ -165,8 +183,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 //adding pokemons to list to be removed on next search
                 markerList.add(marker);
             }
-        } else {
-            Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -195,7 +211,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
-        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), "Found " + event.getCatchablePokemon().size() + " Pokemon", Snackbar.LENGTH_SHORT).show();
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
@@ -208,11 +224,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

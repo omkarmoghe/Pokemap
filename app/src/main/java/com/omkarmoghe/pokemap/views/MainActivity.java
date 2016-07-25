@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,8 +31,12 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
+    private static final String MAP_FRAGMENT_TAG = "MapFragment";
+
 
     private PokemapAppPreferences pref;
+
+    public static Toast toast;
 
     //region Lifecycle Methods
     @Override
@@ -39,16 +44,30 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EventBus.getDefault().register(this);
         pref = new PokemapSharedPreferences(this);
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container, MapWrapperFragment.newInstance())
-                .addToBackStack(null)
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
+        if(mapWrapperFragment == null) {
+            mapWrapperFragment = MapWrapperFragment.newInstance();
+        }
+        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
@@ -136,7 +155,8 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        Toast.makeText(this, "Searching...", Toast.LENGTH_LONG).show();
+        toast.setText("Searching...");
+        toast.show();
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
     }
 
