@@ -3,12 +3,14 @@ package com.omkarmoghe.pokemap.views.map;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +27,6 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
-import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,8 +46,6 @@ import java.util.concurrent.TimeUnit;
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                                             GoogleMap.OnMapLongClickListener,
                                                             ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private static final int LOCATION_PERMISSION_REQUEST = 19;
 
     private LocationManager locationManager;
 
@@ -82,31 +81,29 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         setRetainInstance(true);
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         locationManager = LocationManager.getInstance(getContext());
         locationManager.register(new LocationManager.Listener() {
             @Override
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(@NonNull Location location) {
+
                 if (mLocation == null) {
+
                     mLocation = location;
                     initMap();
-                }
-                else{
+
+                } else {
+
                     mLocation = location;
                 }
+            }
+
+            @Override
+            public void onLocalizationFailed() {
+                showLocalizationFailed();
             }
         });
         // Inflate the layout for this fragment if the view is not null
@@ -130,41 +127,52 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         locationFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mLocation != null && mGoogleMap != null) {
+
+                Context context = getContext();
+
+                if (mLocation != null && mGoogleMap != null && context != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
-                    MainActivity.toast.setText("Found you!");
-                    MainActivity.toast.show();
+                    Toast.makeText(context, "Found you!", Toast.LENGTH_SHORT).show();
                 }
                 else{
 
-                    MainActivity.toast.setText("Waiting on location...");
-                    MainActivity.toast.show();
+                    if (context != null) {
+                        Toast.makeText(context, "Waiting on location...", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-
-        mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
             }
         });
 
         return mView;
     }
+
+    private void showLocalizationFailed() {
+
+        Context context = getContext();
+
+        // TODO: Instead of a toast, lets show a red bar as long as there is no signal (like in the Niantic app)
+
+        // Yes!! The context actually *can* be null; e.g. when you leave the settings view while
+        // no GPS location was found. Timing matters and in the end the activity has already
+        // been destroyed; well then there is no context and guess what...
+        if (context != null) {
+            Toast.makeText(context, "No GPS signal.", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void initMap(){
         if (mLocation != null && mGoogleMap != null){
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
-            MainActivity.toast.setText("Found you!");
-            MainActivity.toast.show();
+        } else {
+            showLocalizationFailed();
         }
     }
 
-    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+    private void setPokemonMarkers(@NonNull final List<CatchablePokemon> pokeList){
         if (mGoogleMap != null) {
             //Removing all pokemons from map
             if (markerList != null && !markerList.isEmpty()){
@@ -180,16 +188,24 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                         .title(poke.getPokemonId().name())
-                        .snippet("Dissapears in: " + getDurationBreakdown(millisLeft))
+                        .snippet("Disappears in: " + getDurationBreakdown(millisLeft))
                         .icon(BitmapDescriptorFactory.fromResource(resourceID)));
 
                 marker.showInfoWindow();
-                //adding pokemons to list to be removed on next search
-                markerList.add(marker);
+
+
+                // the check above leaves a possible null pointer when the list is empty.
+                if (markerList != null) {
+
+                    //adding pokemons to list to be removed on next search
+                    markerList.add(marker);
+                }
             }
         } else {
-            MainActivity.toast.setText("The map is not initialized.");
-            MainActivity.toast.show();
+
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "The map is not initialized.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -217,37 +233,29 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      * @param event The event information
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(CatchablePokemonEvent event) {
+    public void onEvent(@NonNull CatchablePokemonEvent event) {
 
-//        Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
-        MainActivity.toast.setText(event.getCatchablePokemon().size() + " new catchable Pokemon have been found.");
-        MainActivity.toast.show();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), event.getCatchablePokemon().size() + " new catchable Pokemon have been found.", Toast.LENGTH_LONG).show();
+        }
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-    }
+    public void onMapReady(@NonNull GoogleMap googleMap) {
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
         UiSettings settings = mGoogleMap.getUiSettings();
@@ -262,7 +270,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onMapLongClick(LatLng position) {
+    public void onMapLongClick(@NonNull LatLng position) {
         //Draw user position marker with circle
         drawMarkerWithCircle (position);
 
@@ -272,7 +280,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         EventBus.getDefault().post(sip);
     }
 
-    private void drawMarkerWithCircle(LatLng position){
+    private void drawMarkerWithCircle(@NonNull LatLng position){
         //Check and eventually remove old marker
         if(userSelectedPositionMarker != null && userSelectedPositionCircle != null){
             userSelectedPositionMarker.remove();

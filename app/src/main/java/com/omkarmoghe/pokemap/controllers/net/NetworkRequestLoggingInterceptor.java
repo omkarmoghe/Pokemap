@@ -4,6 +4,7 @@ package com.omkarmoghe.pokemap.controllers.net;
  * Created by vanshilshah on 20/07/16.
  */
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -25,30 +26,37 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
     private final String RESPONSE_BODY_LOG = "Response body:\n{0}\n";
 
     @Override
-    public Response intercept(Interceptor.Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         final Request request = chain.request();
 
-        // Log request
-        Log.d(TAG, MessageFormat.format(REQUEST_SEND_LOG, request.method(), request.url(), chain.connection(), request.headers()));
-        if(request.method().compareToIgnoreCase("post") == 0)
-            Log.d(TAG, MessageFormat.format(REQUEST_BODY_LOG, convertRequestBodyToString(request)));
+        if (request != null) {
 
-        final long requestStart = System.currentTimeMillis();
-        final Response response = chain.proceed(request);
-        final long requestEnd = System.currentTimeMillis();
-        final long responseTime = requestEnd - requestStart;
+            // Log request
+            Log.d(TAG, MessageFormat.format(REQUEST_SEND_LOG, request.method(), request.url(), chain.connection(), request.headers()));
+            if(request.method().compareToIgnoreCase("post") == 0)
+                Log.d(TAG, MessageFormat.format(REQUEST_BODY_LOG, convertRequestBodyToString(request)));
 
-        // Log response
-        Log.d(TAG, MessageFormat.format(RESPONSE_RECEIVE_LOG, responseTime, response.request().url(), response.headers()));
-        final String responseBodyString = response.body().string();
-        if(responseBodyString.length() > 0)
-            Log.d(TAG, MessageFormat.format(RESPONSE_BODY_LOG, responseBodyString.trim()));
+            final long requestStart = System.currentTimeMillis();
+            final Response response = chain.proceed(request);
 
-        return response.newBuilder().body(ResponseBody.create(response.body().contentType(), responseBodyString)).build();
+            if (response != null) {
 
+                final long requestEnd = System.currentTimeMillis();
+                final long responseTime = requestEnd - requestStart;
+
+                // Log response
+                Log.d(TAG, MessageFormat.format(RESPONSE_RECEIVE_LOG, responseTime, response.request().url(), response.headers()));
+                final String responseBodyString = response.body().string();
+                if (responseBodyString.length() > 0)
+                    Log.d(TAG, MessageFormat.format(RESPONSE_BODY_LOG, responseBodyString.trim()));
+
+                return response.newBuilder().body(ResponseBody.create(response.body().contentType(), responseBodyString)).build();
+            }
+        }
+        return null;
     }
 
-    private String convertRequestBodyToString(final Request request) {
+    private String convertRequestBodyToString(@NonNull final Request request) {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();

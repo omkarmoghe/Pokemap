@@ -27,7 +27,8 @@ public class BaseActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         locationManager.onResume();
-        if(locationListener != null){
+
+        if (locationListener != null) {
             locationManager.register(locationListener);
         }
     }
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onPause(){
         LocationManager.getInstance(this).onPause();
-        if(locationListener != null){
+        if (locationListener != null) {
             locationManager.unregister(locationListener);
         }
         super.onPause();

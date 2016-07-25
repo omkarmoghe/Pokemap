@@ -1,10 +1,11 @@
 package com.omkarmoghe.pokemap.views.settings;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import com.omkarmoghe.pokemap.R;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -41,9 +42,10 @@ public class SettingsFragment extends PreferenceFragment {
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
     }
 
+    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         // Unregister change listener
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
     }

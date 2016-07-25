@@ -32,21 +32,22 @@ public class LocationManager {
     GoogleApiClient mGoogleApiClient;
 
     private static LocationManager instance;
-    public boolean pingLocation = false;
 
     Location location;
 
-    public static LocationManager getInstance(Context context) {
+    public static LocationManager getInstance(@NonNull Context context) {
+
         if (instance == null) {
             instance = new LocationManager(context);
         }
 
         return instance;
     }
-    private LocationManager(final Context context) {
+    private LocationManager(@NonNull final Context context)  {
+
         final LocationListener locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(Location newLocation) {
+            public void onLocationChanged(@NonNull Location newLocation) {
                 location = newLocation;
                 Log.d(TAG, "Location Found: " + location.getLatitude() + ", " + location.getLongitude());
                 notifyLocationChanged(location);
@@ -78,12 +79,14 @@ public class LocationManager {
                         @Override
                         public void onConnectionSuspended(int i) {
 
+                            notifyLocalizationFailed();
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+                            notifyLocalizationFailed();
                         }
                     })
                     .addApi(LocationServices.API)
@@ -95,40 +98,64 @@ public class LocationManager {
         //Don't getLatitude without checking if location is not null... it will throw sys err...
         if(location != null){
             return new LatLng(location.getLatitude(), location.getLongitude());
+        } else {
+            notifyLocalizationFailed();
         }
         return null;
     }
 
+    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     public void onResume(){
-        mGoogleApiClient.connect();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
-
-
+    // as discussed with @s7092910, @comann, @christiancoleman: Lets use onPause() / onResume()
     public void onPause(){
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
-    public void unregister(Listener listener){
+    public void unregister(@NonNull Listener listener){
+
         if(listeners.indexOf(listener) != -1){
             listeners.remove(listener);
         }
     }
-    public void register(Listener listener){
-        if(listeners.indexOf(listener) == -1){
+    public void register(@NonNull Listener listener){
+
+        if(listeners != null && listeners.indexOf(listener) == -1){
             listeners.add(listener);
         }
     }
 
-    private void notifyLocationChanged(Location location){
-        for(Listener listener: listeners){
-            listener.onLocationChanged(location);
+    private void notifyLocationChanged(@NonNull Location location){
+
+        if (listeners != null) {
+
+            for (Listener listener : listeners) {
+                listener.onLocationChanged(location);
+            }
         }
 
     }
 
+    private void notifyLocalizationFailed() {
+
+        if (listeners != null) {
+
+            for (Listener listener : listeners) {
+                listener.onLocalizationFailed();
+            }
+        }
+    }
+
     public interface Listener{
-        void onLocationChanged(Location location);
+        void onLocationChanged(@NonNull Location location);
+        void onLocalizationFailed();
     }
 
 

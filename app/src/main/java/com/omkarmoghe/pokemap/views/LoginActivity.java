@@ -4,11 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,7 +33,7 @@ import com.omkarmoghe.pokemap.controllers.net.NianticManager;
  * A login screen that offers login via username/password. And a Google Sign in
  *
  */
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity{
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
-
+        
         if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
             finishLogin();
@@ -69,24 +69,29 @@ public class LoginActivity extends AppCompatActivity{
 
         mNianticLoginListener = new NianticManager.LoginListener() {
             @Override
-            public void authSuccessful(String authToken) {
+            public void authSuccessful(@NonNull String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
+
+                // store prefs
+                mPref.setUsername(mUsernameView.getText().toString());
+                mPref.setPassword(mPasswordView.getText().toString());
+
                 finishLogin();
             }
 
             @Override
-            public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+            public void authFailed(@NonNull String message) {
                 showProgress(false);
+                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
                 Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
             }
         };
 
         mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
-            public void authSuccessful(String authToken) {
+            public void authSuccessful(@NonNull String authToken) {
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
@@ -94,14 +99,14 @@ public class LoginActivity extends AppCompatActivity{
             }
 
             @Override
-            public void authFailed(String message) {
+            public void authFailed(@NonNull String message) {
                 showProgress(false);
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
                 Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
             }
 
             @Override
-            public void authRequested(GoogleService.AuthRequest body) {
+            public void authRequested(@NonNull GoogleService.AuthRequest body) {
                 GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH,
                         body.getVerificationUrl(), body.getUserCode());
                 mDeviceCode = body.getDeviceCode();
@@ -205,6 +210,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void finishLogin(){
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
