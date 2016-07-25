@@ -3,6 +3,7 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -210,18 +215,31 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             Set<String> markerKeys = markerList.keySet();
             int pokemonFound = 0;
-            for (CatchablePokemon poke : pokeList) {
+            for (final CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
-                    int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                            .title(poke.getPokemonId().name())
-                            .icon(BitmapDescriptorFactory.fromResource(resourceID))
-                            .anchor(0.5f, 0.5f));
+                    //Showing images using glide
+                    Glide.with(getActivity())
+                            .load("http://serebii.net/pokemongo/pokemon/"+getCorrectPokemonImageId(poke.getPokemonId().getNumber())+".png")
+                            .asBitmap()
+                            .skipMemoryCache(false)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(new SimpleTarget<Bitmap>(120, 120) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
+                                @Override
+                                public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                                    //Setting marker since we got image
+                                    //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                            .title(poke.getPokemonId().name())
+                                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                                            .anchor(0.5f, 0.5f));
+                                    //adding pokemons to list to be removed on next search
+                                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                                }
+                            });
+                    //Increase founded pokemon counter
                     pokemonFound++;
-                    //adding pokemons to list to be removed on next search
-                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
                 }
             }
             if(getView() != null) {
@@ -232,6 +250,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             updatePokemonMarkers();
         } else {
             showMapNotInitializedError();
+        }
+    }
+
+    //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
+    private String getCorrectPokemonImageId (int pokemonId){
+        String actualNumber = String.valueOf(pokemonId);
+        if(pokemonId < 10){
+            return "00" + actualNumber;
+        }else if(pokemonId < 100) {
+            return "0" + actualNumber;
+        }else {
+            return actualNumber;
         }
     }
 

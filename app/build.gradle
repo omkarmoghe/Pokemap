@@ -51,6 +51,9 @@ dependencies {
     //Pokemon Go API
     compile 'com.github.Grover-c13:PokeGOAPI-Java:2e14fab7f0'
 
+    //Image handler
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
     //Network
     compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
