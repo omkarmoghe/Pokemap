@@ -73,6 +73,11 @@ public class LoginActivity extends AppCompatActivity{
                 showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setPTCAuthToken(authToken);
+
+                // store prefs
+                mPref.setUsername(mUsernameView.getText().toString());
+                mPref.setPassword(mPasswordView.getText().toString());
+
                 finishLogin();
             }
 

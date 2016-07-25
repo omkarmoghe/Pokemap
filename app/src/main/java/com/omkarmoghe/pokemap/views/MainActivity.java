@@ -115,15 +115,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(
-                new RequestCredentialsDialogFragment.Listener() {
-                    @Override
-                    public void credentialsIntroduced(String username, String password) {
-                        pref.setUsername(username);
-                        pref.setPassword(password);
-                        login();
-                    }
-                }), "request_credentials").commit();
+        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(null), "request_credentials").commit();
     }
 
     /**
