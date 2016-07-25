@@ -20,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
 import com.omkarmoghe.pokemap.R;
@@ -28,9 +29,13 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
+import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
- * A login screen that offers login via username/password. And a Google Sign in
+ * A triggerPtcLogin screen that offers triggerPtcLogin via username/password. And a Google Sign in
  *
  */
 public class LoginActivity extends AppCompatActivity{
@@ -38,6 +43,8 @@ public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
 
     private static final int REQUEST_USER_AUTH = 1;
+
+    public static Toast toast;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -56,14 +63,11 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+
         mNianticManager = NianticManager.getInstance();
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
-
-        if (mPref.isUsernameSet() && mPref.isPasswordSet()) {
-            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
-            finishLogin();
-        }
 
         setContentView(R.layout.activity_login);
 
@@ -84,8 +88,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
-                showProgress(false);
-                Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+                showAuthFailed();
             }
         };
 
@@ -118,18 +121,18 @@ public class LoginActivity extends AppCompatActivity{
         String text = getString(R.string.login_warning) + " <b>banned</b>.";
         warning.setText(Html.fromHtml(text));
 
-        // Set up the login form.
+        // Set up the triggerPtcLogin form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptPTCLogin();
-                    return true;
-                }
-                return false;
+            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                validatePTCLoginForm();
+                return true;
+            }
+            return false;
             }
         });
 
@@ -137,7 +140,7 @@ public class LoginActivity extends AppCompatActivity{
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptPTCLogin();
+                validatePTCLoginForm();
             }
         });
 
@@ -149,9 +152,22 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleManager.authUser(mGoogleLoginListener);
+            mGoogleManager.authUser(mGoogleLoginListener);
             }
         });
+
+        triggerPtcLogin();
+    }
+
+    private void showAuthFailed() {
+
+        showProgress(false);
+
+        // set Ptc credentials (remembering)
+        mUsernameView.setText(mPref.getUsername());
+        mPasswordView.setText(mPref.getPassword());
+
+        Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -166,16 +182,16 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the triggerPtcLogin form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual triggerPtcLogin attempt is made.
      */
-    private void attemptPTCLogin() {
+    private void validatePTCLoginForm() {
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Store values at the time of the triggerPtcLogin attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -197,15 +213,13 @@ public class LoginActivity extends AppCompatActivity{
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt triggerPtcLogin and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mNianticManager.login(username, password, mNianticLoginListener);
-
+            // perform the user triggerPtcLogin attempt.
+            triggerPtcLogin();
         }
     }
 
@@ -216,10 +230,11 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the triggerPtcLogin form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
+
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -249,6 +264,54 @@ public class LoginActivity extends AppCompatActivity{
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void triggerPtcLogin() {
+
+        if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
+            showProgress(true);
+            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+        }
+    }
+
+    /**
+     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
+     *
+     * @param result Results of a log in attempt
+     */
+    @Subscribe
+    public void onEvent(final LoginEventResult result) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (result.isLoggedIn()) {
+
+                    showProgress(false);
+                    finishLogin();
+
+                } else {
+
+                    // show triggerPtcLogin form again
+                    showProgress(false);
+
+                    showAuthFailed();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 }
 

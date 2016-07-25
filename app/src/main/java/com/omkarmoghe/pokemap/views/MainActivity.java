@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,8 +17,6 @@ import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
-import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -32,7 +29,6 @@ import org.greenrobot.eventbus.Subscribe;
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
-
 
     private PokemapAppPreferences pref;
 
@@ -84,9 +80,8 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.action_relogin) {
-            login();
+            startActivity(new Intent(this, LoginActivity.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -107,37 +102,21 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void login() {
-        if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
-            requestLoginCredentials();
-        } else {
-            nianticManager.login(pref.getUsername(), pref.getPassword());
-        }
-    }
-
-    private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(null), "request_credentials").commit();
-    }
-
     /**
-     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
+     * Triggers a first pokemon scan after a successful login
      *
      * @param result Results of a log in attempt
      */
     @Subscribe
     public void onEvent(LoginEventResult result) {
+
         if (result.isLoggedIn()) {
-            toast.setText("You have logged in successfully.");
-            toast.show();
+
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
             if (latLng != null) {
                 nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
             }
-        } else {
-            toast.cancel();
-            toast.setText("Could not log in. Make sure your credentials are correct.");
-            toast.show();
         }
     }
 
@@ -165,19 +144,6 @@ public class MainActivity extends BaseActivity {
 
         toast.setText("Unable to contact the Pokemon GO servers. The servers may be down.");
         toast.show();
-    }
-
-    /**
-     * Called whenever a TokenExpiredEvent is posted to the bus. Posted when the token from the login expired.
-     *
-     * @param event The event information
-     */
-    @Subscribe
-    public void onEvent(TokenExpiredEvent event) {
-
-        toast.setText("The login token has expired. Getting a new one.");
-        toast.show();
-        login();
     }
 
     /**
