@@ -130,20 +130,22 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + " "+getString(R.string.notification_service_pokemon_nearby)+".");
+        builder.setContentText(getString(R.string.notification_service_content_pokemon_nearby, catchablePokemon.size()));
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + " "+getString(R.string.notification_service_pokemon_nearby)+":");
+            inboxStyle.setBigContentTitle(getString(R.string.notification_service_inbox_pokemon_nearby, catchablePokemon.size()));
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
                 pokeLocation.setLatitude(cp.getLatitude());
                 pokeLocation.setLongitude(cp.getLongitude());
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(getLocalePokemonName(cp.getPokemonId().name()) + "(" +
-                        TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " "+getString(R.string.notification_minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(R.string.notification_meters)+")");
+                String pokeName = getLocalePokemonName(cp.getPokemonId().name());
+                long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
+                double dist = Math.ceil(pokeLocation.distanceTo(myLoc));
+
+                inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime, dist));
             }
 
             builder.setStyle(inboxStyle);
@@ -151,6 +153,7 @@ public class PokemonNotificationService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
+
     }
 
     private final class UpdateRunnable implements Runnable{
