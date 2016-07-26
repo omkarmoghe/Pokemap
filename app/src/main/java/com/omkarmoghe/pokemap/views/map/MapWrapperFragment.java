@@ -204,8 +204,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
+
+            LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+                    currentLatLngLocation, 15));
+
+            //Run the initial scan at the current location reusing the long click function
+            onMapLongClick(currentLatLngLocation);
         } else {
             showLocationFetchFailed();
         }
