@@ -44,10 +44,10 @@
     <string name="pokemon_found_new">" se objevil nový chytitelný Pokémon."</string>
     <string name="position_picked">Pozice zvolena</string>
     <string name="seconds">"s"</string>
-    <string name="toast_localization_waiting">Čekám na pozici...</string>
+    <string name="toast_localization_waiting">Čekám na pozici…</string>
     <string name="toast_login_successful">Úspěšně přihlášení.</string>
     <string name="toast_map_not_initialized">Problém s inicializací Google Map</string>
-    <string name="toast_searching">Hledám...</string>
+    <string name="toast_searching">Hledám…</string>
     <string name="toast_server_unreachable">Nemohu zkontaktovat Pokémon GO servery. Možná jsou přetížené.</string>
     <string name="toast_token_expired">Přihlášení vypršelo. Znovupřihlašuji.</string>
     <string name="toast_user_found">A mám Tě!</string>
