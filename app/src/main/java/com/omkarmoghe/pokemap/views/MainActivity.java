@@ -76,13 +76,13 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         EventBus.getDefault().register(this);
 
+        if(pref.isServiceEnabled()) {
+            stopNotificationService();
+        }
+
         // If the theme has changed, recreate the activity.
         if(themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
             recreate();
-        }
-
-        if(pref.isServiceEnabled()) {
-            stopNotificationService();
         }
     }
 
