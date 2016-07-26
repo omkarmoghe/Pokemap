@@ -3,10 +3,12 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -316,16 +318,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      * @return
      */
     private String getLocalePokemonName(String apiPokeName){
-        int resId = 0;
 
-        try{
-            Class resClass = R.string.class;
-            Field field = resClass.getField(apiPokeName.toLowerCase());
-            resId = field.getInt(null);
-        }catch(Exception e){
-            Log.e("PokemonTranslation","Failure to get Name",e);
-            resId = -1;
-        }
+        int resId = getResources().getIdentifier(apiPokeName.toLowerCase(), "string", getActivity().getPackageName());
         return resId > 0 ? getString(resId) : apiPokeName;
     }
 
