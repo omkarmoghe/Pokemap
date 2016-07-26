@@ -3,8 +3,12 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+<<<<<<< HEAD
+import android.content.res.Resources;
+=======
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+>>>>>>> refs/remotes/omkarmoghe/dev
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +16,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+<<<<<<< HEAD
+import android.util.Log;
+=======
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+>>>>>>> refs/remotes/omkarmoghe/dev
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -54,6 +63,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -113,7 +123,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+<<<<<<< HEAD
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+=======
         mPref = new PokemapSharedPreferences(getContext());
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     @Override
@@ -146,9 +165,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         // Inflate the layout for this fragment if the view is not null
         if (mView == null)
             mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
+<<<<<<< HEAD
+=======
         else {
 
         }
+>>>>>>> refs/remotes/omkarmoghe/dev
 
         // build the map
         if (mSupportMapFragment == null) {
@@ -168,8 +190,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 if (mLocation != null && mGoogleMap != null) {
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+<<<<<<< HEAD
+
+                    MainActivity.toast.setText(getString(R.string.toast_user_found));
+                    MainActivity.toast.show();
+                } else {
+
+                    MainActivity.toast.setText(getString(R.string.toast_localization_waiting));
+                    MainActivity.toast.show();
+=======
                 } else {
                     showLocationFetchFailed();
+>>>>>>> refs/remotes/omkarmoghe/dev
                 }
             }
         });
@@ -185,6 +217,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void initMap() {
+<<<<<<< HEAD
+        if (mLocation != null && mGoogleMap != null) {
+            if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+=======
         pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null) {
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -195,13 +238,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         .setMessage("Please enable location permission to use this application")
                         .setPositiveButton("OK", null)
                         .show();
+>>>>>>> refs/remotes/omkarmoghe/dev
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+<<<<<<< HEAD
+            MainActivity.toastMe(getString(R.string.toast_user_found));
+=======
         } else {
             showLocationFetchFailed();
+>>>>>>> refs/remotes/omkarmoghe/dev
         }
     }
 
@@ -341,6 +389,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     //Increase founded pokemon counter
                     pokemonFound++;
                 }
+<<<<<<< HEAD
+                markerList = new ArrayList<>(); //cleaning the array
+=======
+>>>>>>> refs/remotes/omkarmoghe/dev
             }
             if(getView() != null) {
                 if(positionNum != LOCATION_PERMISSION_REQUEST) {
@@ -348,15 +400,41 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
 
+<<<<<<< HEAD
+            for (CatchablePokemon poke : pokeList) {
+                int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(resourceID);
+
+                String breakdown = getDurationBreakdown(poke.getExpirationTimestampMs() - System.currentTimeMillis());
+                String snippet = getString(R.string.pokemon_disappearing_in)+ breakdown;
+
+                String pokeName = poke.getPokemonId().name();
+                int resId = getPokemonNameId(pokeName);
+                String title = resId == -1 ? pokeName : getString(resId);
+
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                        .title(title)
+                        .snippet(snippet)
+                        .icon(icon));
+
+                marker.showInfoWindow();
+                //adding pokemons to list to be removed on next search
+                markerList.add(marker);
+=======
                 }
                 else {
                     String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }
+>>>>>>> refs/remotes/omkarmoghe/dev
             }
             updateMarkers();
         } else {
+<<<<<<< HEAD
+            MainActivity.toastMe(getString(R.string.toast_map_not_initialized));
+=======
             showMapNotInitializedError();
         }
     }
@@ -370,9 +448,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             return "0" + actualNumber;
         }else {
             return actualNumber;
+>>>>>>> refs/remotes/omkarmoghe/dev
+        }
+    }
+    private int getPokemonNameId(String pokeName){
+        try {
+            Class res = R.string.class;
+            Field field = res.getField(pokeName.toLowerCase());
+            int id = field.getInt(null);
+
+<<<<<<< HEAD
+            return id;
+        }
+        catch (Exception e) {
+            Log.e("MyTag", "Failure to get id.", e);
+            return -1;
         }
     }
 
+    public String getDurationBreakdown(long millis) {
+=======
     private void showMapNotInitializedError() {
         if(getView() != null){
             Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
@@ -386,15 +481,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public static String getExpirationBreakdown(long millis) {
+>>>>>>> refs/remotes/omkarmoghe/dev
         if(millis < 0) {
-            return "Expired";
+            return getString(R.string.pokemon_expired);
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
+<<<<<<< HEAD
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(minutes);
+        sb.append(getString(R.string.minutes));
+        sb.append(seconds);
+        sb.append(getString(R.string.seconds));
+
+        return(sb.toString());
+=======
         return(String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     /**
@@ -404,6 +510,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
+<<<<<<< HEAD
+        MainActivity.toastMe(event.getCatchablePokemon().size() + getString(R.string.pokemon_found_new));
+=======
+>>>>>>> refs/remotes/omkarmoghe/dev
         setPokemonMarkers(event.getCatchablePokemon());
     }
 
@@ -488,6 +598,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
+<<<<<<< HEAD
+        userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                .position(position)
+                .title(getString(R.string.position_picked))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+=======
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title("Position Picked")
@@ -497,6 +613,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         } else {
             showMapNotInitializedError();
         }
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
 }

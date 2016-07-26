@@ -34,8 +34,26 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
     private boolean skipNotificationServer;
+>>>>>>> refs/remotes/omkarmoghe/dev
+=======
+
+>>>>>>> parent of 2543e84... Refactoring
+=======
+
+>>>>>>> parent of 2543e84... Refactoring
     private PokemapAppPreferences pref;
+
+    public static Toast toast;
+
+    public static void toastMe(String message){
+        toast.setText(message);
+        toast.show();
+    }
 
     //region Lifecycle Methods
     @Override
@@ -152,6 +170,13 @@ public class MainActivity extends BaseActivity {
     public void onEvent(LoginEventResult result) {
 
         if (result.isLoggedIn()) {
+<<<<<<< HEAD
+            toastMe(getString(R.string.toast_login_successful));
+            LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
+            nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
+        } else {
+            toastMe(getString(R.string.toast_credentials));
+=======
 
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
@@ -160,6 +185,7 @@ public class MainActivity extends BaseActivity {
             } else {
                 Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
             }
+>>>>>>> refs/remotes/omkarmoghe/dev
         }
     }
 
@@ -170,6 +196,10 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
+<<<<<<< HEAD
+        toastMe(getString(R.string.toast_searching));
+        nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
+=======
         SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
         MapWrapperFragment.pokeSnackbar.setText("Searching...");
@@ -179,6 +209,7 @@ public class MainActivity extends BaseActivity {
         for (LatLng p : list) {
             nianticManager.getMapInformation(p.latitude, p.longitude, 0D);
         }
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     /**
@@ -188,8 +219,12 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
+<<<<<<< HEAD
+        toastMe(getString(R.string.toast_server_unreachable));
+=======
         Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
         event.getE().printStackTrace();
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     /**
@@ -198,9 +233,15 @@ public class MainActivity extends BaseActivity {
      * @param event The event information
      */
     @Subscribe
+<<<<<<< HEAD
+    public void onEvent(TokenExpiredEvent event) {
+        toastMe(getString(R.string.toast_token_expired));
+        login();
+=======
     public void onEvent(InternalExceptionEvent event) {
         event.getE().printStackTrace();
         Snackbar.make(findViewById(R.id.root), "An internal error occurred. This might happen when you are offline or the servers are down.", Snackbar.LENGTH_LONG).show();
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
 }

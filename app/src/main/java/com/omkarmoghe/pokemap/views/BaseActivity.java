@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 
+
 /**
  * Created by vanshilshah on 19/07/16.
  */
@@ -24,18 +25,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         locationManager.onResume();
-        if(locationListener != null){
+        if (locationListener != null) {
             locationManager.register(locationListener);
         }
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         LocationManager.getInstance(this).onPause();
-        if(locationListener != null){
+        if (locationListener != null) {
             locationManager.unregister(locationListener);
         }
         super.onPause();
