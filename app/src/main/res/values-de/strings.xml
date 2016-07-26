@@ -56,7 +56,6 @@
     <string name="toast_pokemon_found_count">" Pokemon gefunden"</string>
     <string name="toast_ptc_login_error">PTC Login fehlgeschlagen</string>
     <string name="google_login_failed">Google Login fehlgeschlagen</string>
-    <string name="toast_ptc_login_error">PTC Login gescheitert</string>
     <string name="notification_meters">Meter</string>
     <string name="notification_minutes">Minuten</string>
     <string name="notification_service_pokemon_nearby">Pokemon in der Nähe</string>
@@ -66,4 +65,9 @@
     <string name="notification_service_inbox_line">%1$s (%2$d Minuten, %3$d Meter)</string>
     <string name="notification_service_content_pokemon_nearby">%1$d Pokemon in der Nähe.</string>
     <string name="notification_service_inbox_pokemon_nearby">%1$d Pokemon in Reichweite:</string>
+    <string name="allow">Erlauben</string>
+    <string name="app_settings">App Einstellungen</string>
+    <string name="disclaimer">Haftungsausschluss</string>
+    <string name="meters">Meter</string>
+    <string name="permition_message">Bitte erlaube GPS-Ortung um diese App zu nutzen</string>
 </resources>
