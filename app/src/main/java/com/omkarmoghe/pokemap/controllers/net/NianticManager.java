@@ -2,6 +2,7 @@ package com.omkarmoghe.pokemap.controllers.net;
 
 import android.os.HandlerThread;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -12,8 +13,8 @@ import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.map.LatLng;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
@@ -278,27 +280,27 @@ public class NianticManager {
         });
     }
 
-    public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+    public void getMapInformation(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (mPokemonGo != null) {
 
-                        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(lat, longitude));
-                        List<LatLng> list = params.getSearchArea();
-                        List<CatchablePokemon> pokemon = new ArrayList<>();
-                        for (LatLng p : list) {
-                            mPokemonGo.setLocation(p.latitude, p.longitude, alt);
-                            pokemon.addAll(mPokemonGo.getMap().getCatchablePokemon());
-                        }
+                        //This fixes Exception of missind ID
+                        Thread.sleep(50);
+                        mPokemonGo.setLocation(lat, longitude, alt);
+                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+              		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
 
-                        EventBus.getDefault().post(new CatchablePokemonEvent(pokemon));
                     }
+
                 } catch (LoginFailedException e) {
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 } catch (Exception e) {
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }

@@ -4,6 +4,7 @@ A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 <img src="http://imgur.com/yMoVZBR.png" width="270" height="480"/>
 <img src="http://imgur.com/B3S8XHg.png" width="270" height="480"/>
 <img src="http://imgur.com/ttKW5YW.png" width="270" height="480"/>
+<img src="http://imgur.com/u9xaWGK.png" width="270" height="480"/>
 
 screenshots from @linkout @mike @z14942744
 
