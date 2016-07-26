@@ -13,6 +13,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
     private static final String GOOGLE_TOKEN_KEY = "GoogleTokenKey";
+    private static final String GOOGLE_REFRESH_TOKEN = "GoogleRefreshToken";
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
@@ -70,6 +71,16 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public String getGoogleRefreshToken() {
+        return sharedPreferences.getString(GOOGLE_REFRESH_TOKEN, "");
+    }
+
+    @Override
+    public void setGoogleRefreshToken(@NonNull String token) {
+        sharedPreferences.edit().putString(GOOGLE_REFRESH_TOKEN, token).apply();
+    }
+
+    @Override
     public boolean getShowScannedPlaces() {
         return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, false);
     }
@@ -88,6 +99,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     public void clearLoginCredentials() {
 
         sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(GOOGLE_REFRESH_TOKEN).apply();
         sharedPreferences.edit().remove(USERNAME_KEY).apply();
         sharedPreferences.edit().remove(PASSWORD_KEY).apply();
     }
