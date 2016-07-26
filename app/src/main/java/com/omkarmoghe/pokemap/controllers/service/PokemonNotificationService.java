@@ -31,6 +31,9 @@ import java.util.concurrent.TimeUnit;
 
 
 public class PokemonNotificationService extends Service{
+
+    private static final String TAG = "NotificationService";
+
     private static final int notificationId = 2423235;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
@@ -52,7 +55,7 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
-        Log.d("PokeMap","Service.onCreate()");
+
         EventBus.getDefault().register(this);
         createNotification();
 
@@ -173,8 +176,9 @@ public class PokemonNotificationService extends Service{
                     }
                     Thread.sleep(refreshRate);
 
-                }catch(Exception e){
+                } catch (InterruptedException | NullPointerException e) {
                     e.printStackTrace();
+                    Log.e(TAG, "Failed updating. UpdateRunnable.run() raised: " + e.getMessage());
                 }
             }
         }
