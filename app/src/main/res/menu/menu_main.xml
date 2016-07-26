@@ -4,6 +4,6 @@
     tools:context=".views.MainActivity">
     <item android:id="@+id/action_settings" android:orderInCategory="100"
         android:title="@string/action_settings" app:showAsAction="never" />
-    <item android:id="@+id/action_relogin" android:orderInCategory="200"
-        android:title="@string/action_relogin" app:showAsAction="never" />
+    <item android:id="@+id/action_logout" android:orderInCategory="200"
+        android:title="@string/action_logout" app:showAsAction="never" />
 </menu>

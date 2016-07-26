@@ -45,4 +45,6 @@ public interface PokemapAppPreferences {
     boolean getShowScannedPlaces();
     boolean getShowPokestops();
     boolean getShowGyms();
+
+    void clearLoginCredentials();
 }

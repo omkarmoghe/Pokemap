@@ -83,4 +83,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     public boolean getShowGyms() {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
+
+	@Override
+    public void clearLoginCredentials() {
+
+        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(USERNAME_KEY).apply();
+        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    }
+
+
 }

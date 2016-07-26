@@ -276,11 +276,16 @@ public class LoginActivity extends AppCompatActivity{
 
     private void triggerAutoLogin() {
 
-        showProgress(true);
-
         if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
+
+            showProgress(true);
+
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+
         } else if (mPref.isGoogleTokenAvailable()) {
+
+            showProgress(true);
+
             mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
         }
     }
@@ -299,13 +304,9 @@ public class LoginActivity extends AppCompatActivity{
 
                 if (result.isLoggedIn()) {
 
-                    showProgress(false);
                     finishLogin();
 
                 } else {
-
-                    // show triggerAutoLogin form again
-                    showProgress(false);
 
                     showAuthFailed();
                 }
