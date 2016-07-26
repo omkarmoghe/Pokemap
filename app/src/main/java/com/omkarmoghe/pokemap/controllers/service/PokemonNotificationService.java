@@ -176,9 +176,8 @@ public class PokemonNotificationService extends Service{
         if(vibrate){
             if(!previousFoundPokemon.isEmpty() && !previousFoundPokemon.equals(currentFoundSet)){
                 vibratorManager.vibrate(VIBRATE_PATTERN,-1);
-            }else{
-                previousFoundPokemon = currentFoundSet;
             }
+            previousFoundPokemon = currentFoundSet;
         }
     }
 
