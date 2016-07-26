@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
@@ -279,7 +280,7 @@ public class NianticManager {
         });
     }
 
-    public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+    public void getMapInformation(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -290,6 +291,8 @@ public class NianticManager {
                         Thread.sleep(50);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+              		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
+
                     }
 
                 } catch (LoginFailedException e) {
