@@ -6,8 +6,8 @@
 
 
     <string name="pref_cat_user_account">Uživatelský účet</string>
-    <string name="pref_warning">Poznámka: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
-        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem. Savana pastevci, Pegas.</string>
+    <string name="pref_warning">Savana pastevci, Pegas varuje: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
+        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem.</string>
     <string name="pref_username">Nastavit uživatelské jméno</string>
     <string name="pref_default_username">Jan Novák</string>
     <string name="pref_password">Nastavit heslo</string>
@@ -36,6 +36,9 @@
 
     <string name="request_credentials_title">Zadejte své přihlášení k Pokémon GO</string>
     <string name="search_pokemon_map_suggestion">(Dlouhým stiskem na mapě změníte svou polohu)</string>
+
+    <string name="pokemon_to_show">Ukázat tyto Pokémony</string>
+
     <string name="action_relogin">Znovupřihlášení</string>
     <string name="ban">zabanován</string>
     <string name="minutes">"minut/y"</string>
