@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
+
 /**
  * Provide convenience methods to access shared preferences
  */
@@ -19,6 +24,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SERVICE_VIBRATE_KEY = "new_poke_vibrate";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
+    private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
 
     private final SharedPreferences sharedPreferences;
 
@@ -36,6 +42,22 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.contains(PASSWORD_KEY);
     }
 
+    public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
+        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
+        Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
+        for (String stringId : showablePokemonStringIDs) {
+            showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
+        }
+        return showablePokemonIDs;
+    }
+
+    public void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> ids) {
+        Set<String> showablePokemonStringIDs = new HashSet<>();
+        for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
+            showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+        }
+        sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
+    }
 
     @Override
     public String getUsername() {
@@ -69,7 +91,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public void setServiceState(@NonNull boolean isEnabled) {
-        sharedPreferences.edit().putBoolean(SERVICE_KEY,isEnabled).apply();
+        sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
     }
 
     public boolean isServiceVibrationEnabled(){
@@ -96,7 +118,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
-	@Override
+    @Override
     public void clearLoginCredentials() {
 
         sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
@@ -107,11 +129,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean isServiceEnabled() {
-        return sharedPreferences.getBoolean(SERVICE_KEY,false);
+        return sharedPreferences.getBoolean(SERVICE_KEY, false);
     }
 
     @Override
     public int getServiceRefreshRate() {
-        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY,"60"));
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
     }
 }

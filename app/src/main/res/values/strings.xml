@@ -23,6 +23,7 @@
     <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Show Scanned Locations</string>
     <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
+    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
     <string name="pokestop" translatable="false">Pokéstop</string>
 
@@ -33,7 +34,7 @@
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
-    <string name="pref_service_vibrate_on_new_poke_title">Vibrate on new Pokémon</string>
+    <string name="pref_service_vibrate_on_change_title">Vibrate on Change</string>
     <string name="pref_service_vibrate_on_new_poke_key" translatable="false">new_poke_vibrate</string>
 
 
@@ -52,6 +53,9 @@
 
     <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
+
+    <string name="pokemon_to_show">Pokemon to show</string>
+
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
     <string name="minutes">"minutes"</string>

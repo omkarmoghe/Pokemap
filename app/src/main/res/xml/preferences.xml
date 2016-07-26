@@ -1,61 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="@string/pref_cat_user_account"
-        android:key="@string/pref_cat_user_account">
+	<PreferenceCategory
+		android:key="@string/pref_cat_user_account"
+		android:title="@string/pref_cat_user_account">
 
-        <PreferenceScreen
-            android:summary="@string/pref_warning" />
+		<PreferenceScreen
+			android:summary="@string/pref_warning"/>
 
-        <EditTextPreference
-            android:key="@string/pref_username_key"
-            android:title="@string/pref_username"
-            android:summary="@string/pref_default_username"/>
+		<EditTextPreference
+			android:key="@string/pref_username_key"
+			android:summary="@string/pref_default_username"
+			android:title="@string/pref_username"/>
 
-        <EditTextPreference
-            android:key="@string/pref_password_key"
-            android:title="@string/pref_password"
-            android:summary="@string/pref_default_password"
-            android:inputType="textPassword" />
+		<EditTextPreference
+			android:inputType="textPassword"
+			android:key="@string/pref_password_key"
+			android:summary="@string/pref_default_password"
+			android:title="@string/pref_password"/>
 
-    </PreferenceCategory>
+	</PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_cat_general">
+	<PreferenceCategory android:title="@string/pref_cat_general">
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_pokestops_title"
-            android:key="@string/pref_pokestops_key" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_gyms_title"
-            android:key="@string/pref_gyms_key" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_scanned_title"
-            android:key="@string/pref_scanned_key" />
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/pref_pokestops_key"
+			android:title="@string/pref_pokestops_title"/>
 
-    </PreferenceCategory>
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/pref_gyms_key"
+			android:title="@string/pref_gyms_title"/>
 
-    <PreferenceCategory android:title="@string/pref_cat_service">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_service_enable_title"
-            android:key="@string/pref_service_enable_key" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_service_vibrate_on_new_poke_title"
-            android:key="@string/pref_service_vibrate_on_new_poke_key" />
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/pref_scanned_key"
+			android:title="@string/pref_scanned_title"/>
 
-        <EditTextPreference
-            android:key="@string/pref_service_refresh_key"
-            android:title="@string/pref_service_refresh_title"
-            android:summary="@string/pref_service_refresh_summary"
-            android:defaultValue="60"
-            android:inputType="number"
-            />
+		<com.omkarmoghe.pokemap.views.settings.PokemonToShowPreference
+			android:dialogTitle="@string/pokemon_to_show"
+			android:title="@string/pokemon_to_show"
+			android:entries="@array/pokemon_names"
+			android:defaultValue="@array/pref_pokemons_to_show_default"
+			android:key="@string/pref_pokemons_to_show_key"/>
 
-    </PreferenceCategory>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/pref_cat_service">
+
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/pref_service_enable_key"
+			android:title="@string/pref_service_enable_title"/>
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:title="@string/pref_service_vibrate_on_change_title"
+			android:key="@string/pref_service_vibrate_on_new_poke_key" />
+
+		<EditTextPreference
+			android:defaultValue="60"
+			android:inputType="number"
+			android:key="@string/pref_service_refresh_key"
+			android:summary="@string/pref_service_refresh_summary"
+			android:title="@string/pref_service_refresh_title"/>
+
+	</PreferenceCategory>
 
 </PreferenceScreen>
