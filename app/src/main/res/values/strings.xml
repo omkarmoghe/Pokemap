@@ -51,12 +51,12 @@
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
-    <string name="minutes">" Minutes "</string>
+    <string name="minutes">"minutes"</string>
     <string name="pokemon_disappearing_in">"Dissappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
     <string name="pokemon_found_new">" new catchable Pokemon found."</string>
     <string name="position_picked">Position Picked</string>
-    <string name="seconds">" Sekunden"</string>
+    <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Waiting for Position...</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_map_not_initialized">Problem Initializing Google Map</string>
@@ -83,5 +83,8 @@
     <string name="notification_service_inbox_line">%1$s (%2$d minutes, %3$d meters)</string>
     <string name="notification_service_content_pokemon_nearby">%1$d Pokemon(s) nearby.</string>
     <string name="notification_service_inbox_pokemon_nearby">%1$d Pokemon(s) in area:</string>
-
+    <string name="permition_message">Please allow locations in order to use the app</string>
+    <string name="allow">Allow</string>
+    <string name="app_settings">App Settings</string>
+    <string name="disclaimer">Disclaimer</string>
 </resources>

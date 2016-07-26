@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity{
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
                         .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton(android.R.string.ok, null)
                         .show();
             }
         });

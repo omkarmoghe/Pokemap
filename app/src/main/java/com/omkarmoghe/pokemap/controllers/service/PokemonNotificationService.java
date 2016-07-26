@@ -156,7 +156,6 @@ public class PokemonNotificationService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
-
     }
 
     private final class UpdateRunnable implements Runnable{
