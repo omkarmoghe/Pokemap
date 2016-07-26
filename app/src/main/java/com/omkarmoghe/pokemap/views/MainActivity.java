@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
@@ -78,6 +79,8 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.action_clear) {
+            EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
             logout();
         }
