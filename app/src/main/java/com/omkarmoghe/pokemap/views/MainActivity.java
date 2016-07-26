@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity {
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
 
             if (latLng != null) {
-                nianticManager.getMapInformation(latLng.latitude, latLng.longitude, 0D);
+                nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
             } else {
                 Snackbar.make(findViewById(R.id.root), getString(R.string.toast_login_error), Snackbar.LENGTH_LONG).show();
             }
@@ -196,8 +196,12 @@ public class MainActivity extends BaseActivity {
         MapWrapperFragment.pokeSnackbar.show();
         MapWrapperFragment.pokemonFound = 0;
         MapWrapperFragment.positionNum = 0;
+
+        nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);
+        nianticManager.getPokeStops(event.getPosition().latitude, event.getPosition().longitude, 0D);
+
         for (LatLng p : list) {
-            nianticManager.getMapInformation(p.latitude, p.longitude, 0D);
+            nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
         }
     }
 
