@@ -11,7 +11,15 @@ public abstract class LoginInfo {
     public static final String PROVIDER_GOOGLE = "google";
     public static final String PROVIDER_PTC = "PTC";
 
-    protected String mToken;
+    private String mToken;
+
+    public LoginInfo(String token){
+        mToken = token;
+    }
+
+    public void setToken(String token) {
+        this.mToken = token;
+    }
 
     public String getToken(){
         return mToken;
