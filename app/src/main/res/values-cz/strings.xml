@@ -65,7 +65,7 @@
     <string name="allow">Povolit</string>
     <string name="app_settings">Nastavení aplikace</string>
     <string name="disclaimer">Výstraha</string>
-    <string name="notification_service_title">Služba Pokemap</string>
+    <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>
     <string name="notification_service_stop">Zastavit službu</string>
     <string name="notification_service_pokemon_near">" Pokémoni poblíž."</string>
