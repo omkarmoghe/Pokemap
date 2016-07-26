@@ -354,17 +354,37 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setPokestopsMarkers(final Collection<Pokestop> pokestops) {
+    private float getDistanceInMeters(double lat1, double lon1, double lat2, double lon2) {
+
+        Location loc1 = new Location("");
+        loc1.setLatitude(lat1);
+        loc1.setLongitude(lon1);
+
+        Location loc2 = new Location("");
+        loc2.setLatitude(lat2);
+        loc2.setLongitude(lon2);
+
+        return loc1.distanceTo(loc2);
+    }
+
+    private void setPokestopsMarkers(final PokestopsEvent event) {
         if (mGoogleMap != null) {
 
             int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
+            Collection<Pokestop> pokestops = event.getPokestops();
 
             if(pokestops != null && mPref.getShowPokestops()) {
                 Set<String> markerKeys = pokestopsList.keySet();
 
                 for (final Pokestop pokestop : pokestops) {
 
-                    if (!markerKeys.contains(pokestop.getId())) {
+                    // radial boxing
+                    float distanceFromCenterInMeters = getDistanceInMeters(
+                        event.getLatitude(), event.getLongitude(),
+                        pokestop.getLatitude(), pokestop.getLongitude()
+                    );
+
+                    if (!markerKeys.contains(pokestop.getId()) && distanceFromCenterInMeters <= 370) {
 
                             RemoteImageLoader.load(
                             pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
@@ -397,10 +417,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setGymsMarkers(final Collection<FortDataOuterClass.FortData> gyms){
+    private void setGymsMarkers(final GymsEvent event){
         if (mGoogleMap != null) {
 
             int markerSize = getResources().getDimensionPixelSize(R.dimen.gym_marker);
+            Collection<FortDataOuterClass.FortData> gyms = event.getGyms();
 
             if(gyms != null && mPref.getShowGyms()) {
 
@@ -408,7 +429,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                 for (final FortDataOuterClass.FortData gym : gyms) {
 
-                    if (!markerKeys.contains(gym.getId())) {
+                    // radial boxing
+                    float distanceFromCenterInMeters = getDistanceInMeters(
+                            event.getLatitude(), event.getLongitude(),
+                            gym.getLatitude(), gym.getLongitude()
+                    );
+
+                    if (!markerKeys.contains(gym.getId()) && distanceFromCenterInMeters <= 370) {
 
                         RemoteImageLoader.load(
                             gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
@@ -552,7 +579,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PokestopsEvent event) {
-        setPokestopsMarkers(event.getPokestops());
+        setPokestopsMarkers(event);
     }
 
     /**
@@ -563,7 +590,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(GymsEvent event) {
 
-        setGymsMarkers(event.getGyms());
+        setGymsMarkers(event);
     }
 
     private void clearCatchedPokemonCircle() {
