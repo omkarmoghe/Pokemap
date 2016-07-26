@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import POGOProtos.Enums.PokemonIdOuterClass;
@@ -50,6 +48,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
             showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
         }
         return showablePokemonIDs;
+    }
+
+    public void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> ids) {
+        Set<String> showablePokemonStringIDs = new HashSet<>();
+        for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
+            showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+        }
+        sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
     }
 
     @Override

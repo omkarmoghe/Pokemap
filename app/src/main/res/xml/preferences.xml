@@ -40,7 +40,7 @@
 			android:key="@string/pref_scanned_key"
 			android:title="@string/pref_scanned_title"/>
 
-		<com.omkarmoghe.pokemap.views.settings.PokemonsToShowPreference
+		<com.omkarmoghe.pokemap.views.settings.PokemonToShowPreference
 			android:dialogTitle="@string/pokemon_to_show"
 			android:title="@string/pokemon_to_show"
 			android:entries="@array/pokemon_names"

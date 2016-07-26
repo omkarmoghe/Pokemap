@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.omkarmoghe.pokemap.R;
@@ -47,5 +48,11 @@ public class PokemonIdUtils {
         } else {
             return actualNumber;
         }
+    }
+
+    public static int getPokemonIconResource(Context context,
+                                             int position) {
+        String iconName = "p" + position;
+        return context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
     }
 }

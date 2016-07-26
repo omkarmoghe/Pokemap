@@ -70,4 +70,6 @@ public interface PokemapAppPreferences {
      * @return a set of pokemonIDs which can be shown according to the preferences.
      */
     Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs();
+
+    void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> pokemonIDs);
 }
