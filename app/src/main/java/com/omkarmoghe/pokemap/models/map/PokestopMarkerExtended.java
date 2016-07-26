@@ -17,11 +17,11 @@ public class PokestopMarkerExtended {
         this.marker = marker;
     }
 
-    public Pokestop getCatchablePokemon() {
+    public Pokestop getPokestop() {
         return pokestop;
     }
 
-    public void setCatchablePokemon(Pokestop pokestop) {
+    public void setPokestop(Pokestop pokestop) {
         this.pokestop = pokestop;
     }
 
