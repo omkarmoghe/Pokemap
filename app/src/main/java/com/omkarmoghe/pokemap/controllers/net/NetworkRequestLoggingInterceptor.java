@@ -56,7 +56,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
             return buffer.readUtf8();
         } catch (final IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "​NetworkRequestLoggingInterceptor.convertRequestBodyToString() raised: " + e.getMessage());
+            Log.e(TAG, "Failed to convert request body to string via convertRequestBodyToString(). Raised: " + e.getMessage());
             return null;
         }
     }

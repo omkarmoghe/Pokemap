@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 showAuthFailed();
             }
         };
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 showProgress(false);
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
             }
 

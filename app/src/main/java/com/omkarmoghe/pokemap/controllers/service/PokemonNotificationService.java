@@ -55,7 +55,7 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
-        Log.d("PokeMap","Service.onCreate()");
+
         EventBus.getDefault().register(this);
         createNotification();
 
@@ -178,7 +178,7 @@ public class PokemonNotificationService extends Service{
 
                 } catch (InterruptedException | NullPointerException e) {
                     e.printStackTrace();
-                    Log.d(TAG, "UpdateRunnable.run() raised: " + e.getMessage());
+                    Log.e(TAG, "Failed updating. UpdateRunnable.run() raised: " + e.getMessage());
                 }
             }
         }

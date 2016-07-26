@@ -62,7 +62,7 @@ public class GoogleManager {
             @Override
             public void onFailure(Call<GoogleService.AuthRequest> call, Throwable t) {
                 t.printStackTrace();
-                Log.d(TAG, "GoogleManager.authUser()'s googleCallback threw: " + t.getMessage());
+                Log.e(TAG, "Google authentication failed when calling  authUser(). googleCallback's onFailure() threw: " + t.getMessage());
                 loginListener.authFailed("Failed on getting the information for the user auth");
             }
         };
@@ -91,7 +91,7 @@ public class GoogleManager {
             @Override
             public void onFailure(Call<GoogleService.TokenResponse> call, Throwable t) {
                 t.printStackTrace();
-                Log.d(TAG, "GoogleManager.requestToken()'s googleCallback threw: " + t.getMessage());
+                Log.e(TAG, "Google authentication failed while fetching request token using requestToken(). googleCallback's onFailure() threw: " + t.getMessage());
                 loginListener.authFailed("Failed on requesting the id token");
             }
         };
