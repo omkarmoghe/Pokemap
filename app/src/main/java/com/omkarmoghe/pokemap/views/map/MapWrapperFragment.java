@@ -1,7 +1,6 @@
 package com.omkarmoghe.pokemap.views.map;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,17 +37,15 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
-import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
-import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
+import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
-import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-import com.pokegoapi.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +62,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
- *
+ * <p>
  * Use the {@link MapWrapperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -258,9 +255,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     Marker marker = pokestopEntry.getValue().getMarker();
                     int pstopID = getResources().getIdentifier("pstop", "drawable", getActivity().getPackageName());
                     int pstopLuredID = getResources().getIdentifier("pstop_lured", "drawable", getActivity().getPackageName());
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(pokestop.hasLurePokemon() ? pstopLuredID: pstopID));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(pokestop.hasLurePokemon() ? pstopLuredID : pstopID));
                 }
-            } else if(pokestopsList != null && !pokestopsList.isEmpty() && !mPref.getShowPokestops()){
+            } else if (pokestopsList != null && !pokestopsList.isEmpty() && !mPref.getShowPokestops()) {
                 for (Iterator<Map.Entry<String, PokestopMarkerExtended>> pokestopIterator = pokestopsList.entrySet().iterator(); pokestopIterator.hasNext(); ) {
                     Map.Entry<String, PokestopMarkerExtended> pokestopEntry = pokestopIterator.next();
                     Pokestop pokestop = pokestopEntry.getValue().getPokestop();
@@ -282,10 +279,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    private void setPokestopsMarkers(final Collection<Pokestop> pokestops){
+    private void setPokestopsMarkers(final Collection<Pokestop> pokestops) {
         if (mGoogleMap != null) {
 
-            if(pokestops != null && mPref.getShowPokestops()) {
+            if (pokestops != null && mPref.getShowPokestops()) {
                 Set<String> markerKeys = pokestopsList.keySet();
                 int pstopID = getResources().getIdentifier("pstop", "drawable", getActivity().getPackageName());
                 int pstopLuredID = getResources().getIdentifier("pstop_lured", "drawable", getActivity().getPackageName());
@@ -294,7 +291,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
                                 .title(getString(R.string.pokestop))
-                                .icon(BitmapDescriptorFactory.fromResource(pokestop.hasLurePokemon() ? pstopLuredID: pstopID))
+                                .icon(BitmapDescriptorFactory.fromResource(pokestop.hasLurePokemon() ? pstopLuredID : pstopID))
                                 .anchor(0.5f, 0.5f));
 
                         //adding pokemons to list to be removed on next search
@@ -309,17 +306,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+    private void setPokemonMarkers(final List<CatchablePokemon> pokeList) {
         positionNum++;
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
             for (final CatchablePokemon poke : pokeList) {
 
-                if(!markerKeys.contains(poke.getSpawnPointId())) {
+                if (!markerKeys.contains(poke.getSpawnPointId())) {
                     //Showing images using glide
                     Glide.with(getActivity())
-                            .load("http://serebii.net/pokemongo/pokemon/"+getCorrectPokemonImageId(poke.getPokemonId().getNumber())+".png")
+                            .load("http://serebii.net/pokemongo/pokemon/" + getCorrectPokemonImageId(poke.getPokemonId().getNumber()) + ".png")
                             .asBitmap()
                             .skipMemoryCache(false)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -341,14 +338,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     pokemonFound++;
                 }
             }
-            if(getView() != null) {
-                if(positionNum != LOCATION_PERMISSION_REQUEST) {
+            if (getView() != null) {
+                if (positionNum != LOCATION_PERMISSION_REQUEST) {
                     String text = " Searching...." + pokemonFound + " Pokemon found";
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
 
-                }
-                else {
+                } else {
                     String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
@@ -361,31 +357,31 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
-    private String getCorrectPokemonImageId (int pokemonId){
+    private String getCorrectPokemonImageId(int pokemonId) {
         String actualNumber = String.valueOf(pokemonId);
-        if(pokemonId < 10){
+        if (pokemonId < 10) {
             return "00" + actualNumber;
-        }else if(pokemonId < 100) {
+        } else if (pokemonId < 100) {
             return "0" + actualNumber;
-        }else {
+        } else {
             return actualNumber;
         }
     }
 
     private void showMapNotInitializedError() {
-        if(getView() != null){
+        if (getView() != null) {
             Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void showLocationFetchFailed() {
-        if(getView() != null){
+        if (getView() != null) {
             Snackbar.make(getView(), "Failed to Find GPS Location", Snackbar.LENGTH_SHORT).show();
         }
     }
 
     public static String getExpirationBreakdown(long millis) {
-        if(millis < 0) {
+        if (millis < 0) {
             return "Expired";
         }
 
@@ -393,7 +389,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
+        return (String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
     }
 
     /**
@@ -450,7 +446,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapLongClick(LatLng position) {
         //Draw user position marker with circle
-        drawMarkerWithCircle (position);
+        drawMarkerWithCircle(position);
 
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
@@ -460,7 +456,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
-    private void drawMarkerWithCircle(LatLng position){
+    private void drawMarkerWithCircle(LatLng position) {
         if (mGoogleMap != null) {
 
 
@@ -473,7 +469,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 userSelectedPositionCircles.clear();
             }
 
-            if(mPref.getShowScannedPlaces()) {
+            if (mPref.getShowScannedPlaces()) {
                 double radiusInMeters = 100.0;
                 int strokeColor = 0x4400CCFF; // outline
                 int shadeColor = 0x4400CCFF; // fill

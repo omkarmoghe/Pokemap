@@ -23,6 +23,7 @@
     <string name="pref_gyms_key">gyms_checkbox</string>
     <string name="pref_scanned_title">Show Scanned Locations</string>
     <string name="pref_scanned_key">scanned_checkbox</string>
+    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
     <string name="pokestop">Pokestop</string>
 
@@ -49,5 +50,6 @@
 
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
+    <string name="pokemons_to_show">Pokemons to show</string>
 
 </resources>
