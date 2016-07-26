@@ -112,7 +112,7 @@ public class PokemonNotificationService extends Service{
         stopService.setAction(ACTION_STOP_SELF);
 
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
-        builder.addAction(R.drawable.ic_cancel_black_24px,"Stop Service",piStopService);
+        builder.addAction(R.drawable.ic_cancel_black_24px,getString(R.string.notification_service_stop),piStopService);
 
         nm.notify(notificationId,builder.build());
     }

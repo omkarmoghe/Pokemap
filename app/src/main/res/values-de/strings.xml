@@ -60,4 +60,5 @@
     <string name="notification_service_pokemon_nearby">Pokemon in der Nähe</string>
     <string name="notification_service_scanning">Scanne...</string>
     <string name="notification_service_title">Pokemonscanner</string>
+    <string name="notification_service_stop">Dienst beenden</string>
 </resources>

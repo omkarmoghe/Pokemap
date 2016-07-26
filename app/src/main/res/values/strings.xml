@@ -78,5 +78,6 @@
     <string name="notification_service_pokemon_nearby">pokemon nearby</string>
     <string name="notification_meters">meters</string>
     <string name="notification_minutes">minutes</string>
+    <string name="notification_service_stop">Stop Service</string>
 
 </resources>
