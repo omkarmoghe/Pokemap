@@ -84,9 +84,6 @@ public class PokemonNotificationService extends Service{
         initBroadcastReciever();
         workThread.start();
         locationManager.onResume();
-
-        previousFoundPokemon = new HashSet<>();
-
     }
 
     /**
@@ -174,7 +171,7 @@ public class PokemonNotificationService extends Service{
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
         if(vibrate){
-            if(!previousFoundPokemon.isEmpty() && !previousFoundPokemon.equals(currentFoundSet)){
+            if(previousFoundPokemon != null && !previousFoundPokemon.equals(currentFoundSet)){
                 vibratorManager.vibrate(VIBRATE_PATTERN,-1);
             }
             previousFoundPokemon = currentFoundSet;
