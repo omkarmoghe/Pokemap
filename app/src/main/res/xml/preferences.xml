@@ -35,6 +35,14 @@
             android:defaultValue="false"
             android:title="@string/pref_scanned_title"
             android:key="@string/pref_scanned_key" />
+        <ListPreference
+            android:title="@string/pref_color_of_map_location_marker_title"
+            android:key="@string/pref_color_of_map_location_marker_key"
+            android:entries="@array/pref_map_location_marker_colors"
+            android:entryValues="@array/pref_map_location_marker_colors_data"
+            android:summary=""
+            android:defaultValue="0"
+            />
 
     </PreferenceCategory>
 

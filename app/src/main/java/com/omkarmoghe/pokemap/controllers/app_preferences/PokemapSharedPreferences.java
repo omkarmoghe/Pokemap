@@ -16,6 +16,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String MAP_LOCATION_MARKER_COLOR = "color_of_map_location_marker";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
 
@@ -91,7 +92,12 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
-	@Override
+    @Override
+    public int getMapLocationMarkerColor() {
+        return Integer.parseInt(sharedPreferences.getString(MAP_LOCATION_MARKER_COLOR, "0"));
+    }
+
+    @Override
     public void clearLoginCredentials() {
 
         sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();

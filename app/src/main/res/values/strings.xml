@@ -24,6 +24,17 @@
     <string name="pref_scanned_title">Show Scanned Locations</string>
     <string name="pref_scanned_key">scanned_checkbox</string>
 
+    <string name="pref_color_of_map_location_marker_key">color_of_map_location_marker</string>
+    <string name="pref_color_of_map_location_marker_title">Color of Map Location Marker</string>
+    <string-array name="pref_map_location_marker_colors">
+        <item>Black</item>
+        <item>White</item>
+    </string-array>
+    <string-array name="pref_map_location_marker_colors_data">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string name="pokestop">Pokestop</string>
 
 

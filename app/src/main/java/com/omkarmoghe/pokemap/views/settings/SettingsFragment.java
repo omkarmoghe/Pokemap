@@ -1,6 +1,7 @@
 package com.omkarmoghe.pokemap.views.settings;
 
 import android.content.SharedPreferences;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
@@ -27,14 +28,21 @@ public class SettingsFragment extends PreferenceFragment {
         final Preference passwordPref = findPreference(getString(R.string.pref_password_key));
         passwordPref.setSummary(pref.getString(getString(R.string.pref_password_key), getString(R.string.pref_default_password)));
 
+        final ListPreference markerColorPref = (ListPreference) findPreference(getString(R.string.pref_color_of_map_location_marker_key));
+        markerColorPref.setSummary(markerColorPref.getEntry());
+
         // Create change listener
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
                 if(s.equals(getString(R.string.pref_username_key)))
                     usernamePref.setSummary(pref.getString(getString(R.string.pref_username_key), getString(R.string.pref_default_username)));
-                else if(s.equals(getString(R.string.pref_password_key)))
+
+                if(s.equals(getString(R.string.pref_password_key)))
                     passwordPref.setSummary(pref.getString(getString(R.string.pref_password_key), getString(R.string.pref_default_password).replaceAll(".", "*")));
+
+                if(s.equals(getString(R.string.pref_color_of_map_location_marker_key)))
+                    markerColorPref.setSummary(markerColorPref.getEntry());
             }
         };
     }

@@ -46,6 +46,8 @@ public interface PokemapAppPreferences {
     boolean getShowPokestops();
     boolean getShowGyms();
 
+    int getMapLocationMarkerColor();
+
     void clearLoginCredentials();
     /**
      *
