@@ -12,6 +12,12 @@ import android.support.annotation.NonNull;
 public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String USERNAME_KEY = "UsernameKey";
     private static final String PASSWORD_KEY = "PasswordKey";
+    private static final String GOOGLE_TOKEN_KEY = "GoogleTokenKey";
+    private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
+    private static final String SHOW_POKESTOPS = "pokestops_checkbox";
+    private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String SERVICE_KEY = "background_poke_service";
+    private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
 
     private final SharedPreferences sharedPreferences;
 
@@ -48,5 +54,59 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public String getPassword() {
         return sharedPreferences.getString(PASSWORD_KEY, "");
+    }
+
+    @Override
+    public boolean isGoogleTokenAvailable() {
+        return sharedPreferences.contains(GOOGLE_TOKEN_KEY);
+    }
+
+    @Override
+    public String getGoogleToken() {
+        return sharedPreferences.getString(GOOGLE_TOKEN_KEY, "");
+    }
+
+    @Override
+    public void setServiceState(@NonNull boolean isEnabled) {
+        sharedPreferences.edit().putBoolean(SERVICE_KEY,isEnabled).apply();
+    }
+
+    @Override
+    public void setGoogleToken(@NonNull String token) {
+        sharedPreferences.edit().putString(GOOGLE_TOKEN_KEY, token).apply();
+    }
+
+    @Override
+    public boolean getShowScannedPlaces() {
+        return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, false);
+    }
+
+    @Override
+    public boolean getShowPokestops() {
+        return sharedPreferences.getBoolean(SHOW_POKESTOPS, false);
+    }
+
+    @Override
+    public boolean getShowGyms() {
+        return sharedPreferences.getBoolean(SHOW_GYMS, false);
+    }
+
+	@Override
+    public void clearLoginCredentials() {
+
+        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(USERNAME_KEY).apply();
+        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    }
+
+
+    @Override
+    public boolean isServiceEnabled() {
+        return sharedPreferences.getBoolean(SERVICE_KEY,false);
+    }
+
+    @Override
+    public int getServiceRefreshRate() {
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY,"60"));
     }
 }

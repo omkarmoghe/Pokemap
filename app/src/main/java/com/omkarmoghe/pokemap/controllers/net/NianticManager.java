@@ -2,6 +2,7 @@ package com.omkarmoghe.pokemap.controllers.net;
 
 import android.os.HandlerThread;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -10,10 +11,13 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
@@ -160,11 +165,11 @@ public class NianticManager {
         Callback<NianticService.LoginResponse> loginCallback = new Callback<NianticService.LoginResponse>() {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
-                    String location = response.headers().get("location");
-                if(location != null){
+                String location = response.headers().get("location");
+                if (location != null) {
                     String ticket = location.split("ticket=")[1];
                     requestToken(ticket, loginListener);
-                }else{
+                } else {
                     loginListener.authFailed("Pokemon Trainer Club Login Failed");
                 }
             }
@@ -193,8 +198,14 @@ public class NianticManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String token = response.body().string().split("token=")[1];
-                    token = token.split("&")[0];
-                    loginListener.authSuccessful(token);
+
+                    if (token != null) {
+                        token = token.split("&")[0];
+
+                        loginListener.authSuccessful(token);
+                    } else {
+                        loginListener.authFailed("Pokemon Trainer Club Login Failed");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     loginListener.authFailed("Pokemon Trainer Club Authentication Failed");
@@ -224,15 +235,13 @@ public class NianticManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
-                    mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
-                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                } catch (RemoteServerException e) {
-                    e.printStackTrace();
-                }
+            try {
+                mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
+                mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
+                EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
+            } catch (Exception e) {
+                EventBus.getDefault().post(new LoginEventResult(false, null, null));
+            }
             }
         });
     }
@@ -249,10 +258,8 @@ public class NianticManager {
                     mAuthInfo = new PtcLogin(mPoGoClient).login(token);
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                } catch (RemoteServerException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 }
             }
         });
@@ -266,26 +273,36 @@ public class NianticManager {
                     mAuthInfo = new PtcLogin(mPoGoClient).login(username, password);
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (LoginFailedException e) {
+                } catch (Exception e) {
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
-                } catch (RemoteServerException e) {
-                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 }
             }
         });
     }
 
-    public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+    public void getMapInformation(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mPokemonGo.setLocation(lat, longitude, alt);
-                    EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+                    if (mPokemonGo != null) {
+
+                        //This fixes Exception of missind ID
+                        Thread.sleep(50);
+                        mPokemonGo.setLocation(lat, longitude, alt);
+                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+              		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
+
+                    }
+
                 } catch (LoginFailedException e) {
-                    EventBus.getDefault().post(new TokenExpiredEvent()); //Because we aren't coming from a log in event, the token must have expired.
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
         });

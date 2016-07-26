@@ -4,32 +4,40 @@ A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 <img src="http://imgur.com/yMoVZBR.png" width="270" height="480"/>
 <img src="http://imgur.com/B3S8XHg.png" width="270" height="480"/>
 <img src="http://imgur.com/ttKW5YW.png" width="270" height="480"/>
+<img src="http://imgur.com/u9xaWGK.png" width="270" height="480"/>
 
 screenshots from @linkout @mike @z14942744
 
 [Join the Slack channel](https://github.com/omkarmoghe/Pokemap/issues/56) **Please accept your invite ASAP. We have a limit on how many invites we can send out based on the number of people that actually accept them. We want to give everyone interested an opportunity to join the Slack.**
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
-## Why aren't Pokemon showing up?
-We're still testing and haven't merged it into this repo yet. 
-
-# PRs - please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
-## All PRs should go to the `dev` branch. `master` will be updated periodically with stable(ish) releases.
+Please read this before opening an issue.
 
 ## [Building] (https://github.com/omkarmoghe/Pokemap/wiki/Building)
 Make sure you use the latest [android studio version 2.2 (canary builds)] (http://tools.android.com/download/studio/canary/latest) and have installed the latest versions of the build tools and support libraries in order to successfully compile and run the project. 
 
+# Contributing
+Please follow the [Android style guides & best practices](https://source.android.com/source/code-style.html)
+
+All PRs should go to the `dev` branch. `master` will be updated periodically with stable* releases.</str>
+
 ## [TODO](https://slack-files.com/T1TQY34KE-F1TSY25UL-10400392c2)
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
 
-Also please read this: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
+Also, please read this to understand how this all works: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
 
 #[Official Website] (https://jz6.github.io/PoGoMap/#)
-Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
-
-Using this software is against the ToS and can get you banned. Use at your own risk.
-
-Building off [Mila432](https://github.com/Mila432/Pokemon_Go_API)'s PokemonGo API, [tejado's additions](https://github.com/tejado/pokemongo-api-demo), [leegao's additions](https://github.com/leegao/pokemongo-api-demo/tree/simulation) and [Flask-GoogleMaps](https://github.com/rochacbruno/Flask-GoogleMaps).
+From the main repo:
+> Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
+> 
+> Using this software is against the ToS and can get you banned. Use at your own risk.
+> 
+> Building off [Mila432](https://github.com/Mila432/Pokemon_Go_API)'s PokemonGo API, [tejado's additions](https://github.com/tejado/pokemongo-api-demo), [leegao's additions](https://github.com/leegao/pokemongo-api-demo/tree/simulation) and [Flask-GoogleMaps](https://github.com/rochacbruno/Flask-GoogleMaps).
+> 
+> For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)  
 
 ---
-For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)
+
+\* lol
+
+:pineapple:

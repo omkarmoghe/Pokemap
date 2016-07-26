@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
+import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
+import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.events.TokenExpiredEvent;
-import com.omkarmoghe.pokemap.views.login.RequestCredentialsDialogFragment;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -28,10 +28,16 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
+<<<<<<< HEAD
+=======
+    private boolean skipNotificationServer;
+>>>>>>> refs/remotes/omkarmoghe/dev
     private PokemapAppPreferences pref;
 
     //region Lifecycle Methods
@@ -41,7 +47,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,23 +58,31 @@ public class MainActivity extends BaseActivity {
         }
         fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
-    }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        EventBus.getDefault().register(this);
+        if(pref.isServiceEnabled()){
+            startNotificationService();
+        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        EventBus.getDefault().register(this);
+
+        if(pref.isServiceEnabled()){
+            stopNotificationService();
+        }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
+
+        if(!skipNotificationServer && pref.isServiceEnabled()){
+            startNotificationService();
+        }
+
     }
 
     //region Menu Methods
@@ -83,17 +96,32 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.action_relogin) {
-            login();
+            skipNotificationServer = true;
+            startActivityForResult(new Intent(this, SettingsActivity.class),0);
+        } else if (id == R.id.action_clear) {
+            EventBus.getDefault().post(new ClearMapEvent());
+        } else if (id == R.id.action_logout) {
+            logout();
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        skipNotificationServer = true;
+        pref.clearLoginCredentials();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        skipNotificationServer = false;
     }
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        skipNotificationServer = true;
+        finish();
     }
 
     @Override
@@ -108,39 +136,41 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void login() {
-        if (!pref.isUsernameSet() || !pref.isPasswordSet()) {
-            requestLoginCredentials();
-        } else {
-            nianticManager.login(pref.getUsername(), pref.getPassword());
-        }
+    private void startNotificationService(){
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        startService(intent);
     }
 
-    private void requestLoginCredentials() {
-        getSupportFragmentManager().beginTransaction().add(RequestCredentialsDialogFragment.newInstance(
-                new RequestCredentialsDialogFragment.Listener() {
-                    @Override
-                    public void credentialsIntroduced(String username, String password) {
-                        pref.setUsername(username);
-                        pref.setPassword(password);
-                        login();
-                    }
-                }), "request_credentials").commit();
+    private void stopNotificationService() {
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        stopService(intent);
     }
 
     /**
-     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
+     * Triggers a first pokemon scan after a successful login
      *
      * @param result Results of a log in attempt
      */
     @Subscribe
     public void onEvent(LoginEventResult result) {
+
         if (result.isLoggedIn()) {
+<<<<<<< HEAD
             toastMe(getString(R.string.toast_login_successful));
             LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
             nianticManager.getCatchablePokemon(latLng.latitude, latLng.longitude, 0D);
         } else {
             toastMe(getString(R.string.toast_credentials));
+=======
+
+            LatLng latLng = LocationManager.getInstance(MainActivity.this).getLocation();
+
+            if (latLng != null) {
+                nianticManager.getMapInformation(latLng.latitude, latLng.longitude, 0D);
+            } else {
+                Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
+            }
+>>>>>>> refs/remotes/omkarmoghe/dev
         }
     }
 
@@ -151,8 +181,20 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
+<<<<<<< HEAD
         toastMe(getString(R.string.toast_searching));
         nianticManager.getCatchablePokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
+=======
+        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        List<LatLng> list = params.getSearchArea();
+        MapWrapperFragment.pokeSnackbar.setText("Searching...");
+        MapWrapperFragment.pokeSnackbar.show();
+        MapWrapperFragment.pokemonFound = 0;
+        MapWrapperFragment.positionNum = 0;
+        for (LatLng p : list) {
+            nianticManager.getMapInformation(p.latitude, p.longitude, 0D);
+        }
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     /**
@@ -162,18 +204,29 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
+<<<<<<< HEAD
         toastMe(getString(R.string.toast_server_unreachable));
+=======
+        Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
+        event.getE().printStackTrace();
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
     /**
-     * Called whenever a TokenExpiredEvent is posted to the bus. Posted when the token from the login expired.
+     * Called whenever a InternalExceptionEvent is posted to the bus. Posted when the server cannot be reached
      *
      * @param event The event information
      */
     @Subscribe
+<<<<<<< HEAD
     public void onEvent(TokenExpiredEvent event) {
         toastMe(getString(R.string.toast_token_expired));
         login();
+=======
+    public void onEvent(InternalExceptionEvent event) {
+        event.getE().printStackTrace();
+        Snackbar.make(findViewById(R.id.root), "An internal error occurred. This might happen when you are offline or the servers are down.", Snackbar.LENGTH_LONG).show();
+>>>>>>> refs/remotes/omkarmoghe/dev
     }
 
 }
