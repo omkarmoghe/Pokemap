@@ -90,9 +90,10 @@ public class LoginActivity extends AppCompatActivity{
 
         mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
-            public void authSuccessful(String authToken) {
+            public void authSuccessful(String authToken, String refreshToken) {
                 showProgress(false);
                 mPref.setGoogleToken(authToken);
+                mPref.setGoogleRefreshToken(refreshToken);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
                 mNianticManager.setGoogleAuthToken(authToken);
                 finishLogin();
