@@ -152,18 +152,22 @@ public class PokemonNotificationService extends Service{
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
+            Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
+            
             for(CatchablePokemon cp : catchablePokemon){
-                Location pokeLocation = new Location("");
-                PokemonIdOuterClass.PokemonId pokemonId = cp.getPokemonId();
-
-                pokeLocation.setLatitude(cp.getLatitude());
-                pokeLocation.setLongitude(cp.getLongitude());
-                long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(pokemonId.name() + "(" +
-                        TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
-                                                R.string.meters)+")");
-                currentFoundSet.add(pokemonId);
+                //Only show the notification if the Pokemon is in the preference list
+                if(showablePokemonIDs.contains(cp.getPokemonId())) {
+                    Location pokeLocation = new Location("");
+                    PokemonIdOuterClass.PokemonId pokemonId = cp.getPokemonId();
+                    pokeLocation.setLatitude(cp.getLatitude());
+                    pokeLocation.setLongitude(cp.getLongitude());
+                    long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
+                    inboxStyle.addLine(pokemonId.name() + "(" +
+                            TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
+                            " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
+                            R.string.meters)+")");
+                    currentFoundSet.add(pokemonId);
+                }
             }
             builder.setStyle(inboxStyle);
         }

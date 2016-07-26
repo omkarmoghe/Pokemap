@@ -199,7 +199,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.enable_location_permission_title))
                         .setMessage(getString(R.string.enable_location_permission_message))
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton(getString(R.string.button_ok), null)
                         .show();
                 return;
             }
@@ -362,12 +362,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (positionNum != LOCATION_PERMISSION_REQUEST) {
-                    String text = " Searching...." + pokemonFound + " Pokemon found";
-                    pokeSnackbar.setText(text);
+                    pokeSnackbar.setText(String.format("%s %s %s",getString(R.string.toast_searching), pokemonFound, getString(R.string.toast_pokemon_found_count)));
                     pokeSnackbar.show();
 
                 } else {
-                    String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                    String text = pokemonFound > 0 ? String.format("%s %s", pokemonFound, getString(R.string.pokemon_found_new)) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }

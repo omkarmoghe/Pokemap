@@ -47,7 +47,7 @@
     <string name="toast_login_successful">Успешный вход.</string>
     <string name="toast_map_not_initialized">Ошибка инициализации Google Map</string>
     <string name="toast_searching">Поиск&#8230;</string>
-    <string name="toast_server_unreachable">Невозможно подключится к серверам Pokémon GO. Серверы могут быть отключены.</string>
+    <string name="toast_server_unreachable">Невозможно подключиться к серверам Pokémon GO. Серверы могут быть отключены.</string>
     <string name="toast_token_expired">Token для входа устарел. Запрос нового token.</string>
     <string name="toast_user_found">Найдена ваша позиция!</string>
     <string name="toast_login_error">Ошибка входа.</string>
