@@ -7,7 +7,7 @@
 
     <string name="pref_cat_user_account">Uživatelský účet</string>
     <string name="pref_warning">Poznámka: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
-        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem.</string>
+        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem. Savana pastevci, Pegas.</string>
     <string name="pref_username">Nastavit uživatelské jméno</string>
     <string name="pref_default_username">Jan Novák</string>
     <string name="pref_password">Nastavit heslo</string>
@@ -57,8 +57,8 @@
     <string name="enable_location_permission_title">Práva k použití polohy</string>
     <string name="enable_location_permission_message">Prosím povolte aplikaci používat Vaši polohu.</string>
     <string name="toast_pokemon_found_count">" Pokémon nalezen"</string>
-    <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :'( .</string>
-    <string name="toast_no_location">Nemohu naléz GPS polohu</string>
+    <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :\'( .</string>
+    <string name="toast_no_location">Nemohu nalézt GPS polohu</string>
     <string name="expiring_in">"Vyprší za: "</string>
     <string name="google_login_failed">Selhalo přihlášení ke Google účtu</string>
     <string name="permition_message">Prosím povolte aplikaci používat Vaši polohu</string>
