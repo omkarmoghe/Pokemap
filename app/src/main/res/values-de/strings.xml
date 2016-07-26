@@ -30,12 +30,12 @@
     <string name="toast_server_unreachable">Pokemon GO Server nicht erreichbar. Eventuell sind die Server offline.</string>
     <string name="toast_token_expired">Der Logintoken ist abgelaufen. Hole einen neuen.</string>
     <string name="ban">gebannt</string>
-    <string name="minutes">" Minuten "</string>
+    <string name="minutes">"minuten"</string>
     <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
     <string name="pokemon_expired">Abgelaufen</string>
     <string name="pokemon_found_new">" neue fangbare Pokemon wurden gefunden."</string>
     <string name="position_picked">Gewählte Position</string>
-    <string name="seconds">" Sekunden"</string>
+    <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Warte auf Koordinaten...</string>
     <string name="toast_map_not_initialized">Die Karte konnte nicht initialisiert werden.</string>
     <string name="toast_user_found">Position gefunden</string>
@@ -56,4 +56,14 @@
     <string name="toast_pokemon_found_count">" Pokemon gefunden"</string>
     <string name="toast_ptc_login_error">PTC Login fehlgeschlagen</string>
     <string name="google_login_failed">Google Login fehlgeschlagen</string>
+    <string name="permition_message">Please allow locations in order to use the app</string>
+    <string name="allow">Allow</string>
+    <string name="app_settings">App Settings</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="notification_service_title">Pokemap Service</string>
+    <string name="notification_service_scanning">Scanning</string>
+    <string name="notification_service_stop">Stop Service</string>
+    <string name="notification_service_pokemon_near">" pokemon nearby."</string>
+    <string name="notification_service_pokemon_in_area">" pokemon in area:"</string>
+    <string name="meters">meters</string>
 </resources>
