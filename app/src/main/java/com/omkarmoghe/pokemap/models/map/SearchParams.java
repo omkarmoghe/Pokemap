@@ -38,6 +38,7 @@ public class SearchParams {
             LatLng next = MapHelper.translatePoint(prev, DISTANCE, 0.0);
             searchArea.add(next);
 
+            // go east
             for (int j = 0; j < i - 1; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
                 next = MapHelper.translatePoint(prev, DISTANCE, 120.0);
@@ -74,8 +75,7 @@ public class SearchParams {
                 next = MapHelper.translatePoint(prev, DISTANCE, 60.0);
                 searchArea.add(next);
             }
-
-            count = count == 0 ? 6 - 1 : (count+ 1) *2 - 1;
+            count = 6*(i-1)-1;
         }
 
         Log.d(TAG, "getSearchArea: searchArea size = " + searchArea.size());

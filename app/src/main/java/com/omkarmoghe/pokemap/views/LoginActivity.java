@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 showAuthFailed();
             }
         };
@@ -101,8 +101,8 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 showProgress(false);
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
-                Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
+                Snackbar.make((View)mLoginFormView.getParent(), R.string.google_login_failed, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity{
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
                         .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton(android.R.string.ok, null)
                         .show();
             }
         });

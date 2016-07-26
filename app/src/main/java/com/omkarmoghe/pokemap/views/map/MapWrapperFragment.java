@@ -399,7 +399,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(getString(R.string.expiring_in) + String.format(Locale.US, "%1$d:%2$02ds", minutes, seconds));
+        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.seconds)));
     }
 
     /**
@@ -410,6 +410,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
         setPokemonMarkers(event.getCatchablePokemon());
+        drawCatchedPokemonCircle(event.getLat(), event.getLongitude());
     }
 
     /**
@@ -430,6 +431,35 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PokestopsEvent event) {
         setPokestopsMarkers(event.getPokestops());
+    }
+
+    private void clearCatchedPokemonCircle() {
+
+        //Check and eventually remove old marker
+        if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
+            userSelectedPositionMarker.remove();
+            for (Circle circle : userSelectedPositionCircles) {
+                circle.remove();
+            }
+            userSelectedPositionCircles.clear();
+        }
+    }
+
+    private void drawCatchedPokemonCircle(double latitude, double longitude) {
+
+        if (mGoogleMap != null) {
+
+            if (mPref.getShowScannedPlaces()) {
+
+                double radiusInMeters = 100.0;
+                int strokeColor = 0x4400CCFF; // outline
+                int shadeColor = 0x4400CCFF; // fill
+
+
+                CircleOptions circleOptions = new CircleOptions().center(new LatLng(latitude, longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+            }
+        }
     }
 
     @Override
@@ -454,8 +484,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapLongClick(LatLng position) {
+
+        clearCatchedPokemonCircle();
+
         //Draw user position marker with circle
-        drawMarkerWithCircle(position);
+        drawMarker(position);
 
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
@@ -465,31 +498,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
-    private void drawMarkerWithCircle(LatLng position) {
+    private void drawMarker(LatLng position){
         if (mGoogleMap != null) {
-
-            //Check and eventually remove old marker
-            if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
-                userSelectedPositionMarker.remove();
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
-
-            if (mPref.getShowScannedPlaces()) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0x4400CCFF; // outline
-                int shadeColor = 0x4400CCFF; // fill
-
-                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-                List<LatLng> list = params.getSearchArea();
-                for (LatLng p : list) {
-                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
-                }
-            }
 
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(position)
