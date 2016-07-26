@@ -1,0 +1,75 @@
+<resources>
+
+    <string name="action_settings">Nastavení</string>
+    <string name="action_clearmap">Vyčistit mapu</string>
+    <string name="action_logout">Odhlásit se</string>
+
+
+    <string name="pref_cat_user_account">Uživatelský účet</string>
+    <string name="pref_warning">Poznámka: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
+        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem.</string>
+    <string name="pref_username">Nastavit uživatelské jméno</string>
+    <string name="pref_default_username">Jan Novák</string>
+    <string name="pref_password">Nastavit heslo</string>
+
+    <string name="pref_cat_general">Obecné</string>
+    <string name="pref_pokestops_title">Ukázat Pokéstopy</string>
+    <string name="pref_gyms_title">Ukázat Tělocvičny</string>
+    <string name="pref_scanned_title">Ukázat proskenované lokace</string>
+
+    <string name="pref_service_enable_title">Povolit</string>
+    <string name="pref_service_refresh_title">Rychlost aktualizace</string>
+    <string name="pref_service_refresh_summary">Jak často se služba aktualizuje, ve vteřinách.</string>
+
+    <string name="toast_credentials">Nelze se přihlásit, prosím zkontrolujte svá pověření (jméno a heslo)</string>
+    <string name="title_activity_poke_map">Pokémoni v okolí</string>
+
+    <string name="login_warning">Poznámka: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
+        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem. 
+		Není doporučeno ani používat Google účet. Je možné, že účet bude </string>
+    <string name="prompt_username">PTC Uživatelské jmoéno</string>
+    <string name="prompt_password">PTC Heslo</string>
+    <string name="action_sign_in">Přihlásit se</string>
+    <string name="error_field_required">Povinná položka</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="login_warning_title">Upozornění:</string>
+
+    <string name="request_credentials_title">Zadejte své přihlášení k Pokémon GO</string>
+    <string name="search_pokemon_map_suggestion">(Dlouhým stiskem na mapě změníte svou polohu)</string>
+    <string name="action_relogin">Znovupřihlášení</string>
+    <string name="ban">zabanován</string>
+    <string name="minutes">"minut/y"</string>
+    <string name="pokemon_disappearing_in">"Zmizí za: "</string>
+    <string name="pokemon_expired">Zmizel</string>
+    <string name="pokemon_found_new">" se objevil nový chytitelný Pokémon."</string>
+    <string name="position_picked">Pozice zvolena</string>
+    <string name="seconds">"s"</string>
+    <string name="toast_localization_waiting">Čekám na pozici...</string>
+    <string name="toast_login_successful">Úspěšně přihlášení.</string>
+    <string name="toast_map_not_initialized">Problém s inicializací Google Map</string>
+    <string name="toast_searching">Hledám...</string>
+    <string name="toast_server_unreachable">Nemohu zkontaktovat Pokémon GO servery. Možná jsou přetížené.</string>
+    <string name="toast_token_expired">Přihlášení vypršelo. Znovupřihlašuji.</string>
+    <string name="toast_user_found">A mám Tě!</string>
+    <string name="toast_login_error">Nelze přihlásit.</string>
+    <string name="toast_internal_error">Nastala vnitřní chyba. Toto obvykle znamená, že jste offline, nebo Pokémon GO servery nefungují jak mají.</string>
+    <string name="toast_ptc_login_error">PTC přihlášení selhalo.</string>
+    <string name="enable_location_permission_title">Práva k použití polohy</string>
+    <string name="enable_location_permission_message">Prosím povolte aplikaci používat Vaši polohu.</string>
+    <string name="toast_pokemon_found_count">" Pokémon nalezen"</string>
+    <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :'( .</string>
+    <string name="toast_no_location">Nemohu naléz GPS polohu</string>
+    <string name="expiring_in">"Vyprší za: "</string>
+    <string name="google_login_failed">Selhalo přihlášení ke Google účtu</string>
+    <string name="permition_message">Prosím povolte aplikaci používat Vaši polohu</string>
+    <string name="allow">Povolit</string>
+    <string name="app_settings">Nastavení aplikace</string>
+    <string name="disclaimer">Výstraha</string>
+    <string name="notification_service_title">Služba Pokemap</string>
+    <string name="notification_service_scanning">Skenuji</string>
+    <string name="notification_service_stop">Zastavit službu</string>
+    <string name="notification_service_pokemon_near">" Pokémoni poblíž."</string>
+    <string name="notification_service_pokemon_in_area">" Pokémoni v oblasti:"</string>
+    <string name="meters">metrů</string>
+
+</resources>
