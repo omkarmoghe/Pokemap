@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pokemap</string>
+    <string name="app_name" translatable="false">Pokemap</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_clearmap">Clear Map</string>
@@ -10,30 +10,30 @@
     <string name="pref_warning">NOTE: Do NOT use your main account for this application!
         Instead, create and use a fake Pokémon Trainer Club account with a different password and email.</string>
     <string name="pref_username">Set Username</string>
-    <string name="pref_username_key">UsernameKey</string>
+    <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Set Password</string>
-    <string name="pref_password_key">PasswordKey</string>
-    <string name="pref_default_password">***</string>
+    <string name="pref_password_key" translatable="false">PasswordKey</string>
+    <string name="pref_default_password" translatable="false">***</string>
 
     <string name="pref_cat_general">General</string>
     <string name="pref_pokestops_title">Show Pokéstops</string>
-    <string name="pref_pokestops_key">pokestops_checkbox</string>
+    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
     <string name="pref_gyms_title">Show Gyms</string>
-    <string name="pref_gyms_key">gyms_checkbox</string>
+    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Show Scanned Locations</string>
-    <string name="pref_scanned_key">scanned_checkbox</string>
+    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
     <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
-    <string name="pokestop">Pokestop</string>
+    <string name="pokestop" translatable="false">Pokestop</string>
 
 
-    <string name="pref_cat_service">Background Service</string>
+    <string name="pref_cat_service" translatable="false">Background Service</string>
     <string name="pref_service_enable_title">Enable</string>
-    <string name="pref_service_enable_key">background_poke_service</string>
+    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
-    <string name="pref_service_refresh_key">service_refresh_rate</string>
+    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokemon Nearby</string>
@@ -50,6 +50,32 @@
 
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
+
     <string name="pokemons_to_show">Pokemons to show</string>
+
+    <string name="action_relogin">Relogin</string>
+    <string name="ban">banned</string>
+    <string name="minutes">" Minutes "</string>
+    <string name="pokemon_disappearing_in">"Dissappearing in: "</string>
+    <string name="pokemon_expired">Expired</string>
+    <string name="pokemon_found_new">" new catchable Pokemon found."</string>
+    <string name="position_picked">Position Picked</string>
+    <string name="seconds">" Sekunden"</string>
+    <string name="toast_localization_waiting">Waiting for Position...</string>
+    <string name="toast_login_successful">Login successful.</string>
+    <string name="toast_map_not_initialized">Problem Initializing Google Map</string>
+    <string name="toast_searching">Searching...</string>
+    <string name="toast_server_unreachable">Unable to contact the Pokemon GO servers. The servers may be down.</string>
+    <string name="toast_token_expired">The Login token has expired. Getting a new one.</string>
+    <string name="toast_user_found">Found You!</string>
+    <string name="toast_login_error">Failed to Login.</string>
+    <string name="toast_internal_error">An internal error occurred. This might happen when you are offline or the servers are down.</string>
+    <string name="toast_ptc_login_error">PTC Login Failed</string>
+    <string name="enable_location_permission_title">Enable Location Permission</string>
+    <string name="enable_location_permission_message">Please enable location permission to use this application</string>
+    <string name="toast_pokemon_found_count">" Pokemon found"</string>
+    <string name="pokemon_found_none">No new catchable Pokemon have been found.</string>
+    <string name="toast_no_location">Failed to Find GPS Location</string>
+    <string name="expiring_in">"Expires in: "</string>
 
 </resources>
