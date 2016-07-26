@@ -1,28 +1,19 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.protobuf'
 apply plugin: 'android-apt'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
-
+    buildToolsVersion "24.0.1"
     defaultConfig {
-        multiDexEnabled true
-        jackOptions.enabled false
         applicationId "com.omkarmoghe.pokemap"
         minSdkVersion 17
         targetSdkVersion 24
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
     buildTypes {
         debug {
             minifyEnabled true
@@ -33,78 +24,44 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     lintOptions {
-        abortOnError true
+        abortOnError false
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
+//https://jitpack.io/#Grover-c13/PokeGOAPI-Java/4f5b715380
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Google Play services
-    compile 'com.android.support:appcompat-v7:24.1.0'
-    compile 'com.android.support:design:24.1.0'
-    compile 'com.android.support:support-v4:24.1.0'
-
-    compile 'com.google.android.gms:play-services-maps:9.2.1'
-    compile 'com.google.android.gms:play-services-location:9.2.1'
-
-    // REST client
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
-
-    // Android Annotations
-    def AAVersion = '3.3.2'
-
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    androidTestCompile "org.androidannotations:androidannotations-api:$AAVersion"
-
-    // S2 geometry by Google
-    compile 'org.isuper:s2-geometry-library-java:0.0.1'
-
-    // Retrolambda
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
-
-    // RxJava and RxAndroid
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-
-    // OKHttp client
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.jakewharton.retrofit:retrofit1-okhttp3-client:1.0.2'
-
-    // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
-
-    // Protobuf
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '2.6.0'
-
-    // Nucleus
-    def nucleusVersion = '3.0.0'
-    compile "info.android15.nucleus:nucleus:$nucleusVersion"
-    compile "info.android15.nucleus:nucleus-support-v4:$nucleusVersion"
-    compile "info.android15.nucleus:nucleus-support-v7:$nucleusVersion"
-
-    // Icepick
-    compile 'com.github.frankiesardo:icepick:2.3.6'
-    apt 'com.github.frankiesardo:icepick-processor:2.3.6'
-
-    // Dagger
-    def daggerVersion = '2.4'
-    compile "javax.annotation:javax.annotation-api:1.2"
-    compile "com.google.dagger:dagger:$daggerVersion"
-    compile "com.google.guava:guava:19.0"
-    apt "com.google.guava:guava:19.0"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
-
-    // Testing
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    //Android Support Library
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:cardview-v7:24.0.0'
+    //Google Play Services
+    compile 'com.google.android.gms:play-services-maps:9.2.1'
+    compile 'com.google.android.gms:play-services-location:9.2.1'
+
+    //Pokemon Go API
+    compile 'com.github.Grover-c13:PokeGOAPI-Java:2e14fab7f0'
+
+    //Image handler
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    //Network
+    compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.5'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.5'
+
 }
