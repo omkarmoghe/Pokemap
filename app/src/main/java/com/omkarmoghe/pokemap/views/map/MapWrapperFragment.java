@@ -363,13 +363,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if(getView() != null) {
                 if(positionNum != LOCATION_PERMISSION_REQUEST) {
-                    String text = getString(R.string.toast_searching) + pokemonFound + getString(R.string.toast_pokemon_found_count);
-                    pokeSnackbar.setText(text);
+                    pokeSnackbar.setText(getString(R.string.toast_pokemon_found_count, pokemonFound));
                     pokeSnackbar.show();
-
                 }
                 else {
-                    String text = pokemonFound > 0 ? pokemonFound + getString(R.string.pokemon_found_new) : getString(R.string.pokemon_found_none);
+                    String text = pokemonFound > 0 ? getString(R.string.pokemon_found_new, pokemonFound) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }
@@ -413,7 +411,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02ds", minutes, seconds));
+        return getString(R.string.expiring_in, minutes, seconds);
     }
 
     /**
