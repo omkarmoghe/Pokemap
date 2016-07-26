@@ -280,25 +280,25 @@ public class NianticManager {
         });
     }
 
+
     public void getMapInformation(final double lat, final double longitude, final double alt){
+        getMapInformation(lat,longitude,alt,RequestedMapEvents.values());
+    }
+
+    public void getMapInformation(final double lat, final double longitude, final double alt,final RequestedMapEvents... events){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (mPokemonGo != null) {
-
                         //This fixes Exception of missind ID
                         Thread.sleep(50);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
-              		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
-
+                        for(RequestedMapEvents e : events){
+                            e.sendEvent(mPokemonGo);
+                        }
                     }
 
-                } catch (LoginFailedException e) {
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
-                } catch (RemoteServerException e) {
-                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -306,6 +306,36 @@ public class NianticManager {
                 }
             }
         });
+    }
+
+    public static enum RequestedMapEvents{
+        POKE_STOPS{
+            @Override
+            public void sendEvent(PokemonGo pokemonGo) {
+                try {
+                    EventBus.getDefault().post(new PokestopsEvent(pokemonGo.getMap().getMapObjects().getPokestops()));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                }
+            }
+        },
+        POKEMON{
+            @Override
+            public void sendEvent(PokemonGo pokemonGo) {
+                try {
+                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemonGo.getMap().getCatchablePokemon()));
+                } catch (LoginFailedException e) {
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                }
+
+            }
+        };
+
+        public abstract void sendEvent(PokemonGo pokemonGo);
     }
 
 }
