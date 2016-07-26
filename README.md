@@ -26,6 +26,9 @@ Please read through the main repo to see how the Python code is grabbing the spa
 
 Also, please read this to understand how this all works: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
 
+## Translations
+If you are contributing a PR related to language translations, please have 2 other members of the community (anyone who understands the language you are translating to) :thumbsup: your change.
+
 #[Official Website] (https://jz6.github.io/PoGoMap/#)
 From the main repo:
 > Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
