@@ -45,7 +45,7 @@ public class PokemonToShowPreference extends MultiSelectListPreference {
 
         for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
             if ((pokemonId != PokemonIdOuterClass.PokemonId.MISSINGNO) && (pokemonId != PokemonIdOuterClass.PokemonId.UNRECOGNIZED)) {
-                entries.add(PokemonIdUtils.getLocalePokemonName(context.getResources(), pokemonId));
+                entries.add(PokemonIdUtils.getLocalePokemonName(context, pokemonId.name()));
                 entriesValues.add(String.valueOf(pokemonId.getNumber()));
                 defaultValues.add(String.valueOf(pokemonId.getNumber()));
             }
