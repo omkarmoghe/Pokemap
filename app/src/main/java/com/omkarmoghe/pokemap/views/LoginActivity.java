@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity{
             public void authFailed(String message) {
                 showProgress(false);
                 Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
-                Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
+                Snackbar.make((View)mLoginFormView.getParent(), R.string.google_login_failed, Snackbar.LENGTH_LONG).show();
             }
 
             @Override

@@ -73,5 +73,6 @@
     <string name="pokemon_found_none">No new catchable Pokemon have been found.</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
     <string name="expiring_in">"Expires in: "</string>
+    <string name="google_login_failed">Google login failed</string>
 
 </resources>
