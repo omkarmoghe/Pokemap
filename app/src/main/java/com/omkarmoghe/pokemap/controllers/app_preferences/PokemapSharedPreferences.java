@@ -74,6 +74,15 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public void clearLoginCredentials() {
+
+        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(USERNAME_KEY).apply();
+        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    }
+
+
+    @Override
     public boolean isServiceEnabled() {
         return sharedPreferences.getBoolean(SERVICE_KEY,false);
     }

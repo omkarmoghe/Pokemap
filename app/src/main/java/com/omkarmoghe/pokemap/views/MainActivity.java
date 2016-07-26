@@ -94,10 +94,17 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
             startActivityForResult(new Intent(this, SettingsActivity.class),0);
-        } else if (id == R.id.action_relogin) {
-            startActivity(new Intent(this, LoginActivity.class));
+        } else if (id == R.id.action_logout) {
+            logout();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        skipNotificationServer = true;
+        pref.clearLoginCredentials();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     @Override
@@ -108,7 +115,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         skipNotificationServer = true;
-        this.finish();
+        finish();
     }
 
     @Override
