@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+	<string-array name="pokemon_names">
+		<item>MISSINGNO</item>
+		<item>Pikachu</item>
+		<item>Bulbasaur</item>
+		<item>Drowsee</item>
+	</string-array>
+
+	<string-array name="pref_pokemons_to_show_default"/>
+
+</resources>
