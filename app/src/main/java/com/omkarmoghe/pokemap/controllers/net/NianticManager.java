@@ -306,7 +306,7 @@ public class NianticManager {
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(33);
-                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
+                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon(), lat, longitude));
                         Thread.sleep(33);
                         EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
                     }
