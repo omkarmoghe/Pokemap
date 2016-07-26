@@ -10,9 +10,13 @@ import POGOProtos.Map.Fort.FortDataOuterClass;
 public class GymsEvent implements IEvent {
 
     private Collection<FortDataOuterClass.FortData> gyms;
+    private double lat;
+    private double longitude;
 
-    public GymsEvent(Collection<FortDataOuterClass.FortData> gyms) {
+    public GymsEvent(Collection<FortDataOuterClass.FortData> gyms, double lat, double longitude) {
         this.gyms = gyms;
+        this.lat = lat;
+        this.longitude = longitude;
     }
 
     public Collection<FortDataOuterClass.FortData> getGyms() {
@@ -21,5 +25,21 @@ public class GymsEvent implements IEvent {
 
     public void setGyms(Collection<FortDataOuterClass.FortData> gyms) {
         this.gyms = gyms;
+    }
+
+    public double getLatitude() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
