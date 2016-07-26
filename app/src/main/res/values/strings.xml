@@ -56,7 +56,7 @@
     <string name="pokemon_expired">Expired</string>
     <string name="pokemon_found_new">" new catchable Pokemon found."</string>
     <string name="position_picked">Position Picked</string>
-    <string name="seconds">" Sekunden"</string>
+    <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Waiting for Position...</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_map_not_initialized">Problem Initializing Google Map</string>

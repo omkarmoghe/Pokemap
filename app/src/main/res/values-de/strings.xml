@@ -35,7 +35,7 @@
     <string name="pokemon_expired">Abgelaufen</string>
     <string name="pokemon_found_new">" neue fangbare Pokemon wurden gefunden."</string>
     <string name="position_picked">Gewählte Position</string>
-    <string name="seconds">" Sekunden"</string>
+    <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Warte auf Koordinaten...</string>
     <string name="toast_map_not_initialized">Die Karte ist nicht initialisiert.</string>
     <string name="toast_user_found">Hab dich!</string>

@@ -42,7 +42,7 @@
     <string name="pokemon_expired">Исчез</string>
     <string name="pokemon_found_new">" новый Покемон найден."</string>
     <string name="position_picked">Выбранная позиция</string>
-    <string name="seconds">" Секунд"</string>
+    <string name="seconds">"сек"</string>
     <string name="toast_localization_waiting">Ожидание позиции...</string>
     <string name="toast_login_successful">Успешный вход.</string>
     <string name="toast_map_not_initialized">Ошибка инициализации Google Map</string>
