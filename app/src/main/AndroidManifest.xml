@@ -50,6 +50,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhI6GH4cMfMtv8kA-nQE9jPVmMa0PLuMg" />
+
+        <service
+            android:name=".controllers.service.PokemonNotificationService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.omkarmoghe.pokemap.STOP_SERVICE"/>
+            </intent-filter>
+
+
+        </service>
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@
     <TextView
         android:textSize="20dp"
         android:layout_margin="10dp"
-        android:text="Please allow locations in order to use the app"
+        android:text="@string/permition_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -17,14 +17,14 @@
         android:layout_height="wrap_content">
         <Button
             android:layout_margin="10dp"
-            android:text="Allow"
+            android:text="@string/allow"
             android:id="@+id/allowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <Button
             android:layout_margin="10dp"
-            android:text="App Settings"
+            android:text="@string/app_settings"
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

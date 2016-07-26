@@ -2,6 +2,9 @@ package com.omkarmoghe.pokemap.models.map;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.omkarmoghe.pokemap.helpers.MapHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,47 +35,47 @@ public class SearchParams {
         for (int i = 2; i <= steps; i++) {
 
             LatLng prev = searchArea.get(searchArea.size() - (1 + count));
-            LatLng next = prev.translatePoint(DISTANCE, 0.0);
+            LatLng next = MapHelper.translatePoint(prev, DISTANCE, 0.0);
             searchArea.add(next);
 
+            // go east
             for (int j = 0; j < i - 1; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 120.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 120.0);
                 searchArea.add(next);
             }
 
             // go due south
             for (int j = 0; j < i - 1; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 180.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 180.0);
                 searchArea.add(next);
             }
             // go south-west
             for (int j = 0; j < i - 1 ; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 240.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 240.0);
                 searchArea.add(next);
             }
             // go north-west
             for (int j = 0; j < i - 1; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 300.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 300.0);
                 searchArea.add(next);
             }
             // go due north
             for (int j = 0; j < i - 1; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 0.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 0.0);
                 searchArea.add(next);
             }
             // go north-east
             for (int j = 0; j < i - 2; j ++) {
                 prev = searchArea.get(searchArea.size() - 1);
-                next = prev.translatePoint(DISTANCE, 60.0);
+                next = MapHelper.translatePoint(prev, DISTANCE, 60.0);
                 searchArea.add(next);
             }
-
-            count = count == 0 ? 6 - 1 : (count+ 1) *2 - 1;
+            count = 6*(i-1)-1;
         }
 
         Log.d(TAG, "getSearchArea: searchArea size = " + searchArea.size());

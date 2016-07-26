@@ -2,12 +2,13 @@
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 <img src="http://imgur.com/yMoVZBR.png" width="270" height="480"/>
-<img src="http://imgur.com/B3S8XHg.png" width="270" height="480"/>
+<img src="http://imgur.com/pegdiZY.png" width="270" height="480"/>
 <img src="http://imgur.com/ttKW5YW.png" width="270" height="480"/>
+<img src="http://imgur.com/u9xaWGK.png" width="270" height="480"/>
 
-screenshots from @linkout @mike @z14942744
+screenshots from @linkout @mike @z14942744 
 
-[Join the Slack channel](https://github.com/omkarmoghe/Pokemap/issues/56) **Please accept your invite ASAP. We have a limit on how many invites we can send out based on the number of people that actually accept them. We want to give everyone interested an opportunity to join the Slack.**
+### **Slack invites are now restricted to contributors only. Please comment your email when you submit a PR and we will send you an invite.**
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
 Please read this before opening an issue.
@@ -24,6 +25,9 @@ All PRs should go to the `dev` branch. `master` will be updated periodically wit
 Please read through the main repo to see how the Python code is grabbing the spawned Pokemon, etc. We need to recreate that functionality in Java :D.
 
 Also, please read this to understand how this all works: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
+
+## Translations
+If you are contributing a PR related to language translations, please have 2 other members of the community (anyone who understands the language you are translating to) :thumbsup: your change.
 
 #[Official Website] (https://jz6.github.io/PoGoMap/#)
 From the main repo:
