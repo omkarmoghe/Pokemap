@@ -65,4 +65,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     public void setGoogleToken(@NonNull String token) {
         sharedPreferences.edit().putString(GOOGLE_TOKEN_KEY, token).apply();
     }
+
+    @Override
+    public void clearLoginCredentials() {
+
+        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
+        sharedPreferences.edit().remove(USERNAME_KEY).apply();
+        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    }
+
+
 }

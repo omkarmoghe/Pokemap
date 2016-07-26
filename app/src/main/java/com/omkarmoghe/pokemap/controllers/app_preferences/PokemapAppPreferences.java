@@ -41,4 +41,6 @@ public interface PokemapAppPreferences {
     String getGoogleToken();
 
     void setGoogleToken(@NonNull String token);
+
+    void clearLoginCredentials();
 }
