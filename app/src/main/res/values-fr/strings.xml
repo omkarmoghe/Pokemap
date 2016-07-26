@@ -52,7 +52,7 @@
     <string name="login_warning_title">Attention:</string>
 
     <string name="request_credentials_title">Veuillez saisir les informations de connexon à Pokémon Go</string>
-    <string name="search_pokemon_map_suggestion">(Restez appuyé pour chercher à partir d'un nouveau lieu.)</string>
+    <string name="search_pokemon_map_suggestion">(Restez appuyé pour chercher à partir d\'un nouveau lieu.)</string>
 
     <string name="pokemon_to_show">Pokemon à afficher</string>
 
