@@ -61,5 +61,8 @@
     <string name="pokemon_found_none">Не найдено новых Покемонов.</string>
     <string name="toast_no_location">Ошибка отслеживания GPS позиции.</string>
     <string name="expiring_in">"Исчезнет через: "</string>
+    <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
+    <string name="allow">Разрешить</string>
+    <string name="app_settings">Настройки приложения</string>
 
 </resources>

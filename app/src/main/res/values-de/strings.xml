@@ -55,4 +55,7 @@
     <string name="toast_no_location">Fehler bei der GPS-Ortung.</string>
     <string name="toast_pokemon_found_count">" Pokemon gefunden"</string>
     <string name="toast_ptc_login_error">PTC Login gescheitert</string>
+    <string name="permition_message">Please allow locations in order to use the app</string>
+    <string name="allow">Allow</string>
+    <string name="app_settings">App Settings</string>
 </resources>
