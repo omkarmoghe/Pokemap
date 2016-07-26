@@ -56,7 +56,13 @@ public class GoogleManager {
             @Override
             public void onResponse(Call<GoogleService.AuthRequest> call, Response<GoogleService.AuthRequest> response) {
                 GoogleService.AuthRequest body = response.body();
-                loginListener.authRequested(body);
+
+                if (body != null) {
+                    loginListener.authRequested(body);
+                } else {
+                    Log.e(TAG, "Google login failed while authenticating. response.body() is null.");
+                    loginListener.authFailed("Google login failed while authenticating");
+                }
             }
 
             @Override
@@ -85,7 +91,13 @@ public class GoogleManager {
         Callback<GoogleService.TokenResponse> googleCallback = new Callback<GoogleService.TokenResponse>() {
             @Override
             public void onResponse(Call<GoogleService.TokenResponse> call, Response<GoogleService.TokenResponse> response) {
-                loginListener.authSuccessful(response.body().getIdToken());
+
+                if (response.body() != null) {
+                    loginListener.authSuccessful(response.body().getIdToken());
+                } else {
+                    Log.e(TAG, "Google login failed while fetching token. response.body() is null.");
+                    loginListener.authFailed("Google login failed while authenticating. Token missing.");
+                }
             }
 
             @Override
