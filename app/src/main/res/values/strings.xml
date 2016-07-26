@@ -51,7 +51,7 @@
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
-    <string name="minutes">" Minutes "</string>
+    <string name="minutes">"minutes"</string>
     <string name="pokemon_disappearing_in">"Dissappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
     <string name="pokemon_found_new">" new catchable Pokemon found."</string>
@@ -78,5 +78,11 @@
     <string name="allow">Allow</string>
     <string name="app_settings">App Settings</string>
     <string name="disclaimer">Disclaimer</string>
+    <string name="notification_service_title">Pokemap Service</string>
+    <string name="notification_service_scanning">Scanning</string>
+    <string name="notification_service_stop">Stop Service</string>
+    <string name="notification_service_pokemon_near">" pokemon nearby."</string>
+    <string name="notification_service_pokemon_in_area">" pokemon in area:"</string>
+    <string name="meters">meters</string>
 
 </resources>

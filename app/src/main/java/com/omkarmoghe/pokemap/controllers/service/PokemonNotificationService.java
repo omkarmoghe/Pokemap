@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
@@ -98,8 +96,8 @@ public class PokemonNotificationService extends Service{
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
                 .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
-                .setContentTitle("Pokemon Service")
-                .setContentText("Scanning").setOngoing(true);
+                .setContentTitle(getString(R.string.notification_service_title))
+                .setContentText(getString(R.string.notification_service_scanning)).setOngoing(true);
 
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -114,7 +112,7 @@ public class PokemonNotificationService extends Service{
         stopService.setAction(ACTION_STOP_SELF);
 
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
-        builder.addAction(R.drawable.ic_cancel_black_24px,"Stop Service",piStopService);
+        builder.addAction(R.drawable.ic_cancel_black_24px, getString(R.string.notification_service_stop), piStopService);
 
         nm.notify(notificationId,builder.build());
     }
@@ -132,12 +130,12 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + " pokemon nearby.");
+        builder.setContentText(catchablePokemon.size() + getString(R.string.notification_service_pokemon_near));
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + " pokemon in area:");
+            inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
                 pokeLocation.setLatitude(cp.getLatitude());
@@ -145,7 +143,8 @@ public class PokemonNotificationService extends Service{
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
                 inboxStyle.addLine(cp.getPokemonId().name() + "(" +
                         TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " minutes," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " meters)");
+                        " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
+                                                R.string.meters)+")");
             }
 
             builder.setStyle(inboxStyle);
