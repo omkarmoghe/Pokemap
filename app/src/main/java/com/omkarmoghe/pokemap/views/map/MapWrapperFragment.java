@@ -317,6 +317,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     private String getLocalePokemonName(String apiPokeName){
         int resId = 0;
+
         try{
             Class resClass = R.string.class;
             Field field = resClass.getField(apiPokeName.toLowerCase());

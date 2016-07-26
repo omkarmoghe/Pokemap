@@ -134,6 +134,7 @@ public class NianticManager {
 
             @Override
             public void onFailure(Call<NianticService.LoginValues> call, Throwable t) {
+                Log.d(TAG, "NianticManager.login()'s valuesCallback.onFailure() threw: " + t.getMessage());
                 loginListener.authFailed("Fetching Pokemon Trainer Club's Login Url Values Failed");
             }
         };
@@ -176,6 +177,7 @@ public class NianticManager {
 
             @Override
             public void onFailure(Call<NianticService.LoginResponse> call, Throwable t) {
+                Log.d(TAG, "NianticManager.loginPTC()'s loginCallback.onFailure() threw: " + t.getMessage());
                 loginListener.authFailed("Pokemon Trainer Club Login Failed");
             }
         };
@@ -207,14 +209,14 @@ public class NianticManager {
                         loginListener.authFailed("Pokemon Trainer Club Login Failed");
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, "NianticManager.requestToken()'s authCallback.onResponse() raised: " + e.getMessage());
                     loginListener.authFailed("Pokemon Trainer Club Authentication Failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
+                Log.d(TAG, "NianticManager.requestToken()'s authCallback.onFailure() threw: " + t.getMessage());
                 loginListener.authFailed("Pokemon Trainer Club Authentication Failed");
             }
         };
@@ -239,7 +241,8 @@ public class NianticManager {
                 mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
                 mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                 EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-            } catch (Exception e) {
+            } catch (RemoteServerException | LoginFailedException | NullPointerException e) {
+                Log.d(TAG, "NianticManager.setGoogleAuthToken() raised: " + e.getMessage());
                 EventBus.getDefault().post(new LoginEventResult(false, null, null));
             }
             }
@@ -258,7 +261,8 @@ public class NianticManager {
                     mAuthInfo = new PtcLogin(mPoGoClient).login(token);
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (Exception e) {
+                } catch (RemoteServerException | LoginFailedException | NullPointerException e) {
+                    Log.d(TAG, "NianticManager.setPTCAuthToken() raised: " + e.getMessage());
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 }
             }
@@ -273,7 +277,8 @@ public class NianticManager {
                     mAuthInfo = new PtcLogin(mPoGoClient).login(username, password);
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                     EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (Exception e) {
+                } catch (RemoteServerException | LoginFailedException | NullPointerException e) {
+                    Log.d(TAG, "NianticManager.login() raised: " + e.getMessage());
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 }
             }
@@ -296,12 +301,13 @@ public class NianticManager {
                     }
 
                 } catch (LoginFailedException e) {
+                    Log.d(TAG, "NianticManager.getMapInformation() raised: " + e.getMessage());
                     EventBus.getDefault().post(new LoginEventResult(false, null, null));
                 } catch (RemoteServerException e) {
+                    Log.d(TAG, "NianticManager.getMapInformation() raised: " + e.getMessage());
                     EventBus.getDefault().post(new ServerUnreachableEvent(e));
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
+                } catch (InterruptedException | NullPointerException e) {
+                    Log.d(TAG, "NianticManager.getMapInformation() raised: " + e.getMessage());
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
             }
