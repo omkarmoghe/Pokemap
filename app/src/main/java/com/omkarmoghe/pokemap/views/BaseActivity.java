@@ -2,7 +2,6 @@ package com.omkarmoghe.pokemap.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
@@ -13,17 +12,9 @@ import com.omkarmoghe.pokemap.controllers.net.NianticManager;
  */
 public class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
-    public static Toast toast;
-
     protected LocationManager.Listener locationListener;
     LocationManager locationManager;
     protected NianticManager nianticManager;
-
-
-    public static void toastMe(String message){
-        toast.setText(message);
-        toast.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -35,10 +35,21 @@ public class MainActivity extends BaseActivity {
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     private boolean skipNotificationServer;
 >>>>>>> refs/remotes/omkarmoghe/dev
+=======
+
+>>>>>>> parent of 2543e84... Refactoring
     private PokemapAppPreferences pref;
+
+    public static Toast toast;
+
+    public static void toastMe(String message){
+        toast.setText(message);
+        toast.show();
+    }
 
     //region Lifecycle Methods
     @Override
