@@ -131,11 +131,11 @@ public class LoginActivity extends AppCompatActivity{
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                validatePTCLoginForm();
-                return true;
-            }
-            return false;
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    validatePTCLoginForm();
+                    return true;
+                }
+                return false;
             }
         });
 

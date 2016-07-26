@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
+import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
@@ -94,6 +95,8 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
             startActivityForResult(new Intent(this, SettingsActivity.class),0);
+        } else if (id == R.id.action_clear) {
+            EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
             logout();
         }
@@ -169,11 +172,13 @@ public class MainActivity extends BaseActivity {
     public void onEvent(SearchInPosition event) {
         SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
+        MapWrapperFragment.pokeSnackbar.setText("Searching...");
+        MapWrapperFragment.pokeSnackbar.show();
+        MapWrapperFragment.pokemonFound = 0;
+        MapWrapperFragment.positionNum = 0;
         for (LatLng p : list) {
             nianticManager.getMapInformation(p.latitude, p.longitude, 0D);
         }
-
-
     }
 
     /**

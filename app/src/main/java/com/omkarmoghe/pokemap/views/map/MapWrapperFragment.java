@@ -38,6 +38,7 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -47,6 +48,7 @@ import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,8 +70,8 @@ import java.util.concurrent.TimeUnit;
  * create an instance of this fragment.
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
-                                                            GoogleMap.OnMapLongClickListener,
-                                                            ActivityCompat.OnRequestPermissionsResultCallback {
+        GoogleMap.OnMapLongClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
 
@@ -84,6 +86,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
     private HashMap<String, PokestopMarkerExtended> pokestopsList = new HashMap<>();
+
+    public static Snackbar pokeSnackbar;
+    public static int pokemonFound = 0;
+    public static int positionNum = 0;
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -179,6 +185,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void initMap() {
+        pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null) {
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -196,6 +203,33 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         } else {
             showLocationFetchFailed();
         }
+    }
+
+    private void clearMarkers() {
+        if (mGoogleMap != null) {
+            if (markerList != null && !markerList.isEmpty()) {
+                for (Iterator<Map.Entry<String, PokemonMarkerExtended>> pokemonIterator = markerList.entrySet().iterator(); pokemonIterator.hasNext(); ) {
+                    Map.Entry<String, PokemonMarkerExtended> pokemonEntry = pokemonIterator.next();
+                    pokemonEntry.getValue().getMarker().remove();
+                    pokemonIterator.remove();
+                }
+            }
+            if (pokestopsList != null && !pokestopsList.isEmpty()) {
+                for (Iterator<Map.Entry<String, PokestopMarkerExtended>> pokestopIterator = pokestopsList.entrySet().iterator(); pokestopIterator.hasNext(); ) {
+                    Map.Entry<String, PokestopMarkerExtended> pokestopEntry = pokestopIterator.next();
+                    pokestopEntry.getValue().getMarker().remove();
+                    pokestopIterator.remove();
+                }
+            }
+
+            if (userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
+                for (Circle circle : userSelectedPositionCircles) {
+                    circle.remove();
+                }
+                userSelectedPositionCircles.clear();
+            }
+        }
+
     }
 
     private void updateMarkers() {
@@ -276,10 +310,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+        positionNum++;
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
-            int pokemonFound = 0;
             for (final CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
@@ -308,8 +342,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
             if(getView() != null) {
-                String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
-                Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
+                if(positionNum != LOCATION_PERMISSION_REQUEST) {
+                    String text = " Searching...." + pokemonFound + " Pokemon found";
+                    pokeSnackbar.setText(text);
+                    pokeSnackbar.show();
+
+                }
+                else {
+                    String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                    pokeSnackbar.setText(text);
+                    pokeSnackbar.show();
+                }
             }
             updateMarkers();
         } else {
@@ -364,6 +407,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     * Called whenever a ClearMapEvent is posted to the bus. Posted when the user wants to clear map of any pokemon or marker.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ClearMapEvent event) {
+        clearMarkers();
+    }
+
+    /**
      * Called whenever a PokestopsEvent is posted to the bus. Posted when new pokestops are found.
      *
      * @param event The event information
@@ -392,7 +445,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMapLongClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
-        initMap();
     }
 
     @Override
@@ -404,44 +456,46 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         SearchInPosition sip = new SearchInPosition();
         sip.setPosition(position);
         EventBus.getDefault().post(sip);
+
+        mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
     private void drawMarkerWithCircle(LatLng position){
-            if (mGoogleMap != null) {
+        if (mGoogleMap != null) {
 
 
-                //Check and eventually remove old marker
-                if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
-                    userSelectedPositionMarker.remove();
-                    for (Circle circle : userSelectedPositionCircles) {
-                        circle.remove();
-                    }
-                    userSelectedPositionCircles.clear();
+            //Check and eventually remove old marker
+            if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
+                userSelectedPositionMarker.remove();
+                for (Circle circle : userSelectedPositionCircles) {
+                    circle.remove();
                 }
-
-                if(mPref.getShowScannedPlaces()) {
-                    double radiusInMeters = 100.0;
-                    int strokeColor = 0x4400CCFF; // outline
-                    int shadeColor = 0x4400CCFF; // fill
-
-                    SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-                    List<LatLng> list = params.getSearchArea();
-                    for (LatLng p : list) {
-                        CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                        userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
-                    }
-                }
-
-                userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .title("Position Picked")
-                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                                R.drawable.ic_my_location_white_24dp)))
-                        .anchor(0.5f, 0.5f));
-            } else {
-                showMapNotInitializedError();
+                userSelectedPositionCircles.clear();
             }
+
+            if(mPref.getShowScannedPlaces()) {
+                double radiusInMeters = 100.0;
+                int strokeColor = 0x4400CCFF; // outline
+                int shadeColor = 0x4400CCFF; // fill
+
+                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
+                List<LatLng> list = params.getSearchArea();
+                for (LatLng p : list) {
+                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+
+                }
+            }
+
+            userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title("Position Picked")
+                    .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
+                            R.drawable.ic_my_location_white_24dp)))
+                    .anchor(0.5f, 0.5f));
+        } else {
+            showMapNotInitializedError();
+        }
     }
 
 }
