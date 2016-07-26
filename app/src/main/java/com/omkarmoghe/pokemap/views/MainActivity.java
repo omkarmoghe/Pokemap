@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
+    private boolean skipNotificationServer;
     private PokemapAppPreferences pref;
 
     //region Lifecycle Methods
@@ -53,18 +55,31 @@ public class MainActivity extends BaseActivity {
         }
         fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
+
+        if(pref.isServiceEnabled()){
+            startNotificationService();
+        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
         EventBus.getDefault().register(this);
+
+        if(pref.isServiceEnabled()){
+            stopNotificationService();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+
+        if(!skipNotificationServer && pref.isServiceEnabled()){
+            startNotificationService();
+        }
+
     }
 
     //region Menu Methods
@@ -78,7 +93,8 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            skipNotificationServer = true;
+            startActivityForResult(new Intent(this, SettingsActivity.class),0);
         } else if (id == R.id.action_clear) {
             EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
@@ -88,15 +104,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void logout() {
-
+        skipNotificationServer = true;
         pref.clearLoginCredentials();
-
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        skipNotificationServer = false;
+    }
+
+    @Override
     public void onBackPressed() {
+        skipNotificationServer = true;
         finish();
     }
 
@@ -110,6 +131,16 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    private void startNotificationService(){
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        startService(intent);
+    }
+
+    private void stopNotificationService() {
+        Intent intent = new Intent(this, PokemonNotificationService.class);
+        stopService(intent);
     }
 
     /**

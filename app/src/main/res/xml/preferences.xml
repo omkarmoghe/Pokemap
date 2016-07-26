@@ -38,4 +38,19 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_cat_service">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/pref_service_enable_title"
+            android:key="@string/pref_service_enable_key" />
+        <EditTextPreference
+            android:key="@string/pref_service_refresh_key"
+            android:title="@string/pref_service_refresh_title"
+            android:summary="@string/pref_service_refresh_summary"
+            android:defaultValue="60"
+            android:inputType="number"
+            />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
