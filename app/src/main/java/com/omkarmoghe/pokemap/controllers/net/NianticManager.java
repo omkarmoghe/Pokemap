@@ -295,30 +295,25 @@ public class NianticManager {
         });
     }
 
+
     public void getMapInformation(final double lat, final double longitude, final double alt){
+        getMapInformation(lat,longitude,alt,RequestedMapEvents.values());
+    }
+
+    public void getMapInformation(final double lat, final double longitude, final double alt,final RequestedMapEvents... events){
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
 
                     if (mPokemonGo != null) {
-
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(33);
-                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon(), lat, longitude));
-                        Thread.sleep(33);
-                        EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
+                        for(RequestedMapEvents e : events){
+                            e.sendEvent(mPokemonGo);
+                            Thread.sleep(33);
+                        }
                     }
-
-                } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Login credentials wrong or user banned. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
-                } catch (RemoteServerException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Remote server unreachable. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
                 } catch (InterruptedException | RuntimeException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to fetch map information via getMapInformation(). PoGoAPI crashed. Raised: " + e.getMessage());
@@ -326,6 +321,48 @@ public class NianticManager {
                 }
             }
         });
+    }
+
+    public static enum RequestedMapEvents{
+        POKE_STOPS{
+            @Override
+            public void sendEvent(PokemonGo pokemonGo) {
+                try {
+                    EventBus.getDefault().post(new PokestopsEvent(pokemonGo.getMap().getMapObjects().getPokestops()));
+                } catch (LoginFailedException e) {
+                    handleFailedLogin(e);
+                } catch (RemoteServerException e) {
+                    handleRemoteServerException(e);
+                }
+            }
+        },
+        POKEMON{
+            @Override
+            public void sendEvent(PokemonGo pokemonGo) {
+                try {
+                    EventBus.getDefault().post(new CatchablePokemonEvent(pokemonGo.getMap().getCatchablePokemon(),pokemonGo.getLatitude(),pokemonGo.getLongitude()));
+                } catch (LoginFailedException e) {
+                    handleFailedLogin(e);
+                } catch (RemoteServerException e) {
+                    handleRemoteServerException(e);
+                }
+
+            }
+        };
+
+        public abstract void sendEvent(PokemonGo pokemonGo);
+
+        private static void handleFailedLogin(LoginFailedException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to fetch map information via getMapInformation(). Login credentials wrong or user banned. Raised: " + e.getMessage());
+            EventBus.getDefault().post(new LoginEventResult(false, null, null));
+        }
+
+        private static void handleRemoteServerException(RemoteServerException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to fetch map information via getMapInformation(). Remote server unreachable. Raised: " + e.getMessage());
+            EventBus.getDefault().post(new ServerUnreachableEvent(e));
+        }
     }
 
 }
