@@ -51,7 +51,7 @@
     <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
 
-    <string name="pokemon_to_show">Pokemon to show</string>
+    <string name="pokemon_to_show">Pokémon to show</string>
 
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>

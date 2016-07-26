@@ -56,15 +56,19 @@
     <string name="toast_pokemon_found_count">" Pokémon gefunden"</string>
     <string name="toast_ptc_login_error">PTC Login fehlgeschlagen</string>
     <string name="google_login_failed">Google Login fehlgeschlagen</string>
-    <string name="permition_message">Please allow locations in order to use the app</string>
-    <string name="allow">Allow</string>
-    <string name="app_settings">App Settings</string>
+    <string name="permition_message">Bitte erlaube die GPS-Positionierung</string>
+    <string name="allow">Erlauben</string>
+    <string name="app_settings">Einstellungen</string>
     <string name="disclaimer">Disclaimer</string>
     <string name="notification_service_title">Pokémap Service</string>
-    <string name="notification_service_scanning">Scanning</string>
-    <string name="notification_service_stop">Stop Service</string>
-    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
-    <string name="meters">meters</string>
+    <string name="notification_service_scanning">Scanne...</string>
+    <string name="notification_service_stop">Beenden</string>
+    <string name="notification_service_pokemon_near">" Pokémon in der Nähe."</string>
+    <string name="notification_service_pokemon_in_area">" Pokémon in der Gegend:"</string>
+    <string name="meters">Meter</string>
     <string name="gym">Arena</string>
+
+    <string name="pref_cat_service" translatable="false">Benachrichtigungs-Dienst</string>
+    <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
+
 </resources>
