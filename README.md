@@ -2,13 +2,13 @@
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 <img src="http://imgur.com/yMoVZBR.png" width="270" height="480"/>
-<img src="http://imgur.com/B3S8XHg.png" width="270" height="480"/>
+<img src="http://imgur.com/pegdiZY.png" width="270" height="480"/>
 <img src="http://imgur.com/ttKW5YW.png" width="270" height="480"/>
 <img src="http://imgur.com/u9xaWGK.png" width="270" height="480"/>
 
-screenshots from @linkout @mike @z14942744
+screenshots from @linkout @mike @z14942744 
 
-[Join the Slack channel](https://github.com/omkarmoghe/Pokemap/issues/56) **Please accept your invite ASAP. We have a limit on how many invites we can send out based on the number of people that actually accept them. We want to give everyone interested an opportunity to join the Slack.**
+### **Slack invites are now restricted to contributors only. Please comment your email when you submit a PR and we will send you an invite.**
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
 Please read this before opening an issue.
