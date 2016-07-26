@@ -26,6 +26,7 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -98,8 +99,8 @@ public class PokemonNotificationService extends Service{
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
                 .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
-                .setContentTitle("Pokemon Service")
-                .setContentText("Scanning").setOngoing(true);
+                .setContentTitle(getString(R.string.notification_service_title))
+                .setContentText(getString(R.string.notification_service_scanning)).setOngoing(true);
 
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -114,7 +115,7 @@ public class PokemonNotificationService extends Service{
         stopService.setAction(ACTION_STOP_SELF);
 
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
-        builder.addAction(R.drawable.ic_cancel_black_24px,"Stop Service",piStopService);
+        builder.addAction(R.drawable.ic_cancel_black_24px,getString(R.string.notification_service_stop),piStopService);
 
         nm.notify(notificationId,builder.build());
     }
@@ -132,20 +133,22 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + " pokemon nearby.");
+        builder.setContentText(getString(R.string.notification_service_content_pokemon_nearby, catchablePokemon.size()));
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + " pokemon in area:");
+            inboxStyle.setBigContentTitle(getString(R.string.notification_service_inbox_pokemon_nearby, catchablePokemon.size()));
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
                 pokeLocation.setLatitude(cp.getLatitude());
                 pokeLocation.setLongitude(cp.getLongitude());
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(cp.getPokemonId().name() + "(" +
-                        TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " minutes," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " meters)");
+                String pokeName = getLocalePokemonName(cp.getPokemonId().name());
+                long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
+                double dist = Math.ceil(pokeLocation.distanceTo(myLoc));
+
+                inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime, dist));
             }
 
             builder.setStyle(inboxStyle);
@@ -153,6 +156,7 @@ public class PokemonNotificationService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
+
     }
 
     private final class UpdateRunnable implements Runnable{
@@ -195,4 +199,22 @@ public class PokemonNotificationService extends Service{
             locationManager.onPause();
         }
     };
+
+    /**
+     * try to resolve PokemonName from Resources
+     * @param apiPokeName
+     * @return
+     */
+    private String getLocalePokemonName(String apiPokeName){
+        int resId = 0;
+        try{
+            Class resClass = R.string.class;
+            Field field = resClass.getField(apiPokeName.toLowerCase());
+            resId = field.getInt(null);
+        }catch(Exception e){
+            com.pokegoapi.util.Log.e("PokemonTranslation","Failure to get Name",e);
+            resId = -1;
+        }
+        return resId > 0 ? getString(resId) : apiPokeName;
+    }
 }
