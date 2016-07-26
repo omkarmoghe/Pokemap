@@ -5,6 +5,9 @@
     <string name="action_clearmap">Clear Map</string>
     <string name="action_logout">Logout</string>
 
+    <string name="logout_prompt_message">Are you sure you want to log out?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
     <string name="pref_cat_user_account">User Account</string>
     <string name="pref_warning">NOTE: Do NOT use your main account for this application!
