@@ -292,8 +292,8 @@ public class NianticManager {
                 try {
                     if (mPokemonGo != null) {
 
-                        //This fixes Exception of missind ID
-                        Thread.sleep(50);
+                        Thread.sleep(100);
+
                         mPokemonGo.setLocation(lat, longitude, alt);
                         EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
               		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
