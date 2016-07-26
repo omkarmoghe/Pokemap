@@ -175,9 +175,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Enable Location Permission")
-                        .setMessage("Please enable location permission to use this application")
-                        .setPositiveButton("OK", null)
+                        .setTitle(getResourceString(R.string.permissions_location_request))
+                        .setMessage(getResourceString(R.string.permissions_location_request_message))
+                        .setPositiveButton(getResourceString(R.string.button_ok), null)
                         .show();
                 return;
             }
@@ -234,7 +234,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                             .title(poke.getPokemonId().name())
                                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                                             .anchor(0.5f, 0.5f));
-                                    //adding pokemons to list to be removed on next search
+                                    //adding pokémon to list to be removed on next search
                                     markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
                                 }
                             });
@@ -243,7 +243,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
             if(getView() != null) {
-                String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                String text = pokemonFound > 0 ? pokemonFound + " " + getResourceString(R.string.pokemon_found) : getResourceString(R.string.pokemon_not_found);
                 Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
             }
 
@@ -267,26 +267,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void showMapNotInitializedError() {
         if(getView() != null){
-            Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(), getResourceString(R.string.error_gmap_init), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void showLocationFetchFailed() {
         if(getView() != null){
-            Snackbar.make(getView(), "Failed to Find GPS Location", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(), getResourceString(R.string.error_gps_location_not_found), Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    public static String getExpirationBreakdown(long millis) {
+    public String getExpirationBreakdown(long millis) {
         if(millis < 0) {
-            return "Expired";
+            return getResourceString(R.string.pokemon_time_expired);
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
+        return(String.format(getResourceString(R.string.pokemon_time) + ": %1$d:%2$02ds", minutes, seconds));
     }
 
     /**
@@ -366,5 +366,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
     }
 
+    private String getResourceString(int resourceId) {
+        return getResources().getString(resourceId);
+    }
 }
 

@@ -65,6 +65,13 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleManager = GoogleManager.getInstance();
         mPref = new PokemapSharedPreferences(this);
 
+        if(mPref.isUsernameSet() && mPref.isPasswordSet()) {
+            triggerAutoLogin();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_login);
 
         mNianticLoginListener = new NianticManager.LoginListener() {
@@ -159,7 +166,7 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        triggerAutoLogin();
+        //triggerAutoLogin();
     }
 
     private void showAuthFailed() {

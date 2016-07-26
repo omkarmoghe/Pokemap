@@ -6,8 +6,7 @@
 
 
     <string name="pref_cat_user_account">User Account</string>
-    <string name="pref_warning">NOTE: Do NOT use your main account for this application!
-        Instead, create and use a fake Pokémon Trainer Club account with a different password and email.</string>
+    <string name="pref_warning">NOTE: Do NOT use your main account for this application! Instead, create and use a fake Pokémon Trainer Club account with a different password and email.</string>
     <string name="pref_username">Set Username</string>
     <string name="pref_username_key">UsernameKey</string>
     <string name="pref_default_username">John Doe</string>
@@ -24,9 +23,7 @@
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
 
-    <string name="login_warning">It is recommended to
-    instead create and use a fake Pokémon Trainer Club account with a different password and email or
-        use a Google account not attached to your Pokémon Go account. As using this app could result in your account being </string>
+    <string name="login_warning">It is recommended to instead create and use a fake Pokémon Trainer Club account with a different password and email or use a Google account not attached to your Pokémon Go account. As using this app could result in your account being </string>
     <string name="prompt_username">PTC Username</string>
     <string name="prompt_password">PTC Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -37,4 +34,16 @@
     <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
 
+    <string name="permissions_location_request">Enable Location Permission</string>
+    <string name="permissions_location_request_message">Please enable location permission to use this application</string>
+
+    <string name="button_ok">Ok</string>
+
+    <string name="pokemon_found">new catchable Pokémon have been found.</string>
+    <string name="pokemon_not_found">No new Pokémon have been found.</string>
+    <string name="pokemon_time_expired">Expired</string>
+    <string name="pokemon_time">Expires in</string>
+
+    <string name="error_gmap_init">Problem Initializing Google Map</string>
+    <string name="error_gps_location_not_found">Failed to Find GPS Location</string>
 </resources>
