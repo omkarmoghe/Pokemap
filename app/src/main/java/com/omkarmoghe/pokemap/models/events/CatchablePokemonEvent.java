@@ -10,9 +10,13 @@ import java.util.List;
 public class CatchablePokemonEvent implements IEvent {
 
     private List<CatchablePokemon> catchablePokemon;
+    private double lat;
+    private double longitude;
 
-    public CatchablePokemonEvent(List<CatchablePokemon> catchablePokemon) {
+    public CatchablePokemonEvent(List<CatchablePokemon> catchablePokemon, double lat, double longitude) {
         this.catchablePokemon = catchablePokemon;
+        this.lat = lat;
+        this.longitude = longitude;
     }
 
     public List<CatchablePokemon> getCatchablePokemon() {
@@ -21,5 +25,21 @@ public class CatchablePokemonEvent implements IEvent {
 
     public void setCatchablePokemon(List<CatchablePokemon> catchablePokemon) {
         this.catchablePokemon = catchablePokemon;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
