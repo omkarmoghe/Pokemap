@@ -247,7 +247,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
             if(getView() != null) {
-                if(positionNum != 19) {
+                if(positionNum != LOCATION_PERMISSION_REQUEST) {
                     String text = " Searching...." + pokemonFound + " Pokemon found";
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
