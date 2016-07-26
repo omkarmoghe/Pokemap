@@ -330,13 +330,9 @@ public class NianticManager {
                 try {
                     EventBus.getDefault().post(new PokestopsEvent(pokemonGo.getMap().getMapObjects().getPokestops()));
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Login credentials wrong or user banned. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                    handleFailedLogin(e);
                 } catch (RemoteServerException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Remote server unreachable. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                    handleRemoteServerException(e);
                 }
             }
         },
@@ -346,19 +342,27 @@ public class NianticManager {
                 try {
                     EventBus.getDefault().post(new CatchablePokemonEvent(pokemonGo.getMap().getCatchablePokemon(),pokemonGo.getLatitude(),pokemonGo.getLongitude()));
                 } catch (LoginFailedException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Login credentials wrong or user banned. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                    handleFailedLogin(e);
                 } catch (RemoteServerException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "Failed to fetch map information via getMapInformation(). Remote server unreachable. Raised: " + e.getMessage());
-                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                    handleRemoteServerException(e);
                 }
 
             }
         };
 
         public abstract void sendEvent(PokemonGo pokemonGo);
+
+        private static void handleFailedLogin(LoginFailedException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to fetch map information via getMapInformation(). Login credentials wrong or user banned. Raised: " + e.getMessage());
+            EventBus.getDefault().post(new LoginEventResult(false, null, null));
+        }
+
+        private static void handleRemoteServerException(RemoteServerException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Failed to fetch map information via getMapInformation(). Remote server unreachable. Raised: " + e.getMessage());
+            EventBus.getDefault().post(new ServerUnreachableEvent(e));
+        }
     }
 
 }
