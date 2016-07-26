@@ -36,9 +36,13 @@ public class MainActivity extends BaseActivity {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     private boolean skipNotificationServer;
 >>>>>>> refs/remotes/omkarmoghe/dev
+=======
+
+>>>>>>> parent of 2543e84... Refactoring
 =======
 
 >>>>>>> parent of 2543e84... Refactoring
