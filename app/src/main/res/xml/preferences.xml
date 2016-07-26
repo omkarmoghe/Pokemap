@@ -34,4 +34,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_cat_other">
+
+        <Preference
+            android:title="@string/pref_theme_button"
+            android:key="@string/pref_theme_button_key"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

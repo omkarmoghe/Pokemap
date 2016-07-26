@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.views.settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -32,6 +33,19 @@ public class SettingsFragment extends PreferenceFragment {
                     usernamePref.setSummary(pref.getString(getString(R.string.pref_username_key), getString(R.string.pref_default_username)));
             }
         };
+
+        // Create Theme button to link to Theme Fragment
+        Preference button = (Preference) getPreferenceManager().findPreference(getString(R.string.pref_theme_button_key));
+        if (button != null) {
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), ThemeActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+        }
     }
 
     @Override

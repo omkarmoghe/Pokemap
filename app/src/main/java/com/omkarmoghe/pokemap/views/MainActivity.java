@@ -1,6 +1,8 @@
 package com.omkarmoghe.pokemap.views;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +37,8 @@ public class MainActivity extends BaseActivity {
 
 
     private PokemapAppPreferences pref;
+    private SharedPreferences sharedPref;
+    private int themeId;
 
     public static Toast toast;
 
@@ -42,6 +46,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPref = this.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        themeId = sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar);
+        setTheme(themeId);
         setContentView(R.layout.activity_main);
 
         pref = new PokemapSharedPreferences(this);
@@ -63,6 +71,11 @@ public class MainActivity extends BaseActivity {
     public void onResume(){
         super.onResume();
         EventBus.getDefault().register(this);
+
+        // If the theme has changed, recreate the activity.
+        if(themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
+            recreate();
+        }
     }
 
     @Override
