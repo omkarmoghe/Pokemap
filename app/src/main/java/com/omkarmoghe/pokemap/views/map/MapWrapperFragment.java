@@ -210,7 +210,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     currentLatLngLocation, 15));
 
             //Run the initial scan at the current location reusing the long click function
-            onMapLongClick(currentLatLngLocation);
+            SearchInPosition sip = new SearchInPosition();
+            sip.setPosition(currentLatLngLocation);
+            EventBus.getDefault().post(sip);
         } else {
             showLocationFetchFailed();
         }
