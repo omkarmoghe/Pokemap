@@ -1,27 +1,45 @@
 language: android
-
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 android:
   components:
-    - platform-tools
-    - tools
-
-    # The BuildTools version used by your project
-    - build-tools-24.0.0
-
-    # The SDK version used to compile your project
-    - android-24
-
-    # Additional components
-    - extra-android-m2repository
-    
+  - platform-tools
+  - tools
+  - build-tools-24.0.1
+  - android-24
+  - extra-google-google_play_services
+  - extra-android-m2repository
+  - extra-google-m2repository
   licenses:
-    - 'android-sdk-license-.+'
-
+  - android-sdk-license-.+
+  - google-gdk-license-.+
 before_script:
-    - chmod +x gradlew
-
+  - chmod +x gradlew
 script:
-  - ./gradlew build connectedCheck
+  - "./gradlew build"
+before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export GIT_TAG=$TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER
+  - git tag $GIT_TAG -a -m "Pokemap development build $TRAVIS_BUILD_NUMBER"
+  - git push -q https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG --tags
+  - ls -R
+deploy:
+  skip_cleanup: true
+  provider: releases
+  prerelease: true
+  api_key:
+    secure: OQHzpHLLrxjZZ/vgSmi8sv8xYTW4ddHENSi37IEQMZC0uQig0sdUDgunadS9rMq7/Wf3lvJsYIItBHLLteVcUJC1opo7RqDEBBho3xnSPPW89f3c2j9LC43FFOgTmgr9obf9nC3fdZb/icpK+eK+jlrQ7FO3S+OkbeK+UuduqpzOn79pE1TN8IIQ6fsdJyGektEBsuHJ/bEYNnc++KAgkfVHqS8JWMoTtwo61H2Bn/rtgrQBVEiijpuzZ6W3/klFP9FjETlGcXGiFgCT0jR+QrNC4RtveEit7MyUc8pEyBxwt+5GW6dzA+pgX1jEqHIdlY28Zc04743fP93iXhGSHxXRw9+F9JcY3qLToLGPDemnLY2PbAQN+/07SrO9OAczDjCSEfBoObaVbwHal6/GSimcrA+K3lWpnbDTrer5IZnEq9UPEYEtf5yF0PpCkQlFkfxzJSyla2+ER3uSb/azBvWUz8R93dDA101HAyurqLSa3QwfVGw+M+YN5C8C/jLAgfZRfEKGrtogX8GHG3ioXKUpbjKfX+vwXemvK//6M1zdRUhpxt69a1dTR9hx3mpt8eYmfDCioCP40ZWFrfb8nmacsCqUAn2stV1i2r2yrn9JsUnaM9qVco8ztrXo9SN7cdIFFx8Je5ZKUp6Vxyg0vQjPKNrauueWngRcjdzpcD4=
+  file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
+  on:
+    tags: false
+    repo: omkarmoghe/Pokemap
+    branch: dev
+branches:
+  except:
+  - "/^*-rev[0-9]/"
+notifications:
+  email: false
+env:
+  global:
+    secure: Q8ujMb2AcMsN4x6Z92K5U2zSkhDI9C2yRzfN/8CHZBqt4Wr0bNMeMWA8LuwSzGAqrJFkwjI76M7WGqCcQmM6sCakAS3zD/GwK6vJ96fN537lGF8zhJv9+qk1hYCrK/LSBwY2m+RJGwLRh0da5V5aD23r/oiNdH9Bo8fcWsN/SpGD4CHI2Q3F9nIvMBB3FMnrZRUC3hEzNFdTpdoYGxUiSOFs3uAKYHKJWc8tJ1AQfd58f8Uf2TQ5LBlBk8I2kUieU8RaRweuFwVBPwLa0rJzuIlmhBUJrZxIC/evxRnBYjEITwbYCixymj8JicHT9JgPkvRJJkhbjX+H7AX+xjjXKQgqDgSye5dTDFqfkjgdgnpAoCbXhzl8JXKPB/cDsiMuJGE2Az9asZN7EgvPDz7/NpqKc3nhzLkcNy8EWo0K28HPqLw2IZdST9ivrh3uUG+ry2GkXv8j4+4YP9VYJ3hz3OtLZXGXXnfqDr+ruOIKZez36gUH4HmrgssZCUa8O1kZq+geiMzqBq2NfR+QZ5NK+2zpNtT5jANma4hrpEJaeHC5m2l62HKlzMGTCmmitHkmOk2zuI/2xUW63K7bIqY5ioHA5H07RoDB79O6sHJuVMsZL/5vq+lMEzBxEvsW+KA8XtQZuk1Xktv4Fkgf41UGymeT+hqUbmxPCuKbPlIg2VA=
