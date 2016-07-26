@@ -32,15 +32,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
 
-
     private PokemapAppPreferences pref;
-
-    public static Toast toast;
-
-    public static void toastMe(String message){
-        toast.setText(message);
-        toast.show();
-    }
 
     //region Lifecycle Methods
     @Override
