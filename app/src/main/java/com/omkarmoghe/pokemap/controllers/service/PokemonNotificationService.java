@@ -177,6 +177,7 @@ public class PokemonNotificationService extends Service{
                     Thread.sleep(refreshRate);
 
                 } catch (InterruptedException | NullPointerException e) {
+                    e.printStackTrace();
                     Log.d(TAG, "UpdateRunnable.run() raised: " + e.getMessage());
                 }
             }
