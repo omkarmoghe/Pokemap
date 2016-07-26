@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <PreferenceCategory
-        android:title="@string/pref_cat_user_account"
-        android:key="@string/pref_cat_user_account">
-
-        <PreferenceScreen
-            android:summary="@string/pref_warning" />
-
-        <EditTextPreference
-            android:key="@string/pref_username_key"
-            android:title="@string/pref_username"
-            android:summary="@string/pref_default_username"/>
-
-        <EditTextPreference
-            android:key="@string/pref_password_key"
-            android:title="@string/pref_password"
-            android:summary="@string/pref_default_password"
-            android:inputType="textPassword" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_cat_general">
+        <PreferenceCategory android:title="@string/pref_cat_general">
 
         <CheckBoxPreference
             android:defaultValue="false"
