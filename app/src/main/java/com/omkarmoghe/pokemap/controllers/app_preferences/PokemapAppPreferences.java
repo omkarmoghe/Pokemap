@@ -53,6 +53,8 @@ public interface PokemapAppPreferences {
      */
     void setServiceState(@NonNull boolean isEnabled);
 
+    boolean isServiceVibrationEnabled();
+
     /**
      *
      * @return Returns service state as set in preffs

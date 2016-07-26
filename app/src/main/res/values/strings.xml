@@ -33,6 +33,9 @@
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+    <string name="pref_service_vibrate_on_new_poke_title">Vibrate on new Pokémon</string>
+    <string name="pref_service_vibrate_on_new_poke_key" translatable="false">new_poke_vibrate</string>
+
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>

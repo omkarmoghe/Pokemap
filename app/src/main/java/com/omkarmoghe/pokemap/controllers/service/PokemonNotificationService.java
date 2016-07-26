@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -20,12 +21,17 @@ import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.api.pokemon.Pokemon;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
 
 
 public class PokemonNotificationService extends Service{
@@ -34,6 +40,7 @@ public class PokemonNotificationService extends Service{
 
     private static final int notificationId = 2423235;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
+    private static final long[] VIBRATE_PATTERN = new long[]{0,100,200,100};
 
     private UpdateRunnable updateRunnable;
     private Thread workThread;
@@ -41,7 +48,10 @@ public class PokemonNotificationService extends Service{
     private NianticManager nianticManager;
     private NotificationCompat.Builder builder;
     private PokemapSharedPreferences preffs;
+    private Vibrator vibratorManager;
+    private boolean vibrate;
 
+    private Set<PokemonIdOuterClass.PokemonId> previousFoundPokemon;
 
     public PokemonNotificationService() {
     }
@@ -58,6 +68,12 @@ public class PokemonNotificationService extends Service{
         createNotification();
 
         preffs = new PokemapSharedPreferences(this);
+        vibrate = preffs.isServiceVibrationEnabled();
+
+        if(vibrate){
+            vibratorManager = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            vibrate = vibratorManager.hasVibrator();
+        }
 
         locationManager = LocationManager.getInstance(this);
         nianticManager = NianticManager.getInstance();
@@ -68,6 +84,8 @@ public class PokemonNotificationService extends Service{
         initBroadcastReciever();
         workThread.start();
         locationManager.onResume();
+
+        previousFoundPokemon = new HashSet<>();
 
     }
 
@@ -133,33 +151,43 @@ public class PokemonNotificationService extends Service{
         builder.setContentText(catchablePokemon.size() + getString(R.string.notification_service_pokemon_near));
         builder.setStyle(null);
 
+        Set<PokemonIdOuterClass.PokemonId> currentFoundSet = new HashSet<>();
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
+                PokemonIdOuterClass.PokemonId pokemonId = cp.getPokemonId();
+
                 pokeLocation.setLatitude(cp.getLatitude());
                 pokeLocation.setLongitude(cp.getLongitude());
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(cp.getPokemonId().name() + "(" +
+                inboxStyle.addLine(pokemonId.name() + "(" +
                         TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
                         " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
                                                 R.string.meters)+")");
+                currentFoundSet.add(pokemonId);
             }
-
             builder.setStyle(inboxStyle);
         }
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
+        if(vibrate){
+            if(!previousFoundPokemon.isEmpty() && !previousFoundPokemon.equals(currentFoundSet)){
+                vibratorManager.vibrate(VIBRATE_PATTERN,-1);
+            }else{
+                previousFoundPokemon = currentFoundSet;
+            }
+        }
     }
 
     private final class UpdateRunnable implements Runnable{
-        private long refreshRate = preffs.getServiceRefreshRate() * 1000;
+        private long refreshRate ;
         private boolean isRunning = true;
 
         public UpdateRunnable(int refreshRate){
-            this.refreshRate = refreshRate;
+            this.refreshRate = refreshRate * 1000;
         }
 
         @Override
