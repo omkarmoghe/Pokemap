@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
@@ -64,6 +66,7 @@ public class PokemonNotificationService extends Service{
 
         initBroadcastReciever();
         workThread.start();
+        locationManager.onResume();
 
     }
 
@@ -184,7 +187,8 @@ public class PokemonNotificationService extends Service{
     private BroadcastReceiver mBroadcastReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           stopSelf();
+            stopSelf();
+            locationManager.onPause();
         }
     };
 }
