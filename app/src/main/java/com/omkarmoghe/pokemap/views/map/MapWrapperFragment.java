@@ -311,6 +311,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         positionNum++;
+        int markerSize = getResources().getDimensionPixelSize(R.dimen.pokemon_marker);
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
@@ -323,7 +324,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             .asBitmap()
                             .skipMemoryCache(false)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(new SimpleTarget<Bitmap>(120, 120) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
+                            .into(new SimpleTarget<Bitmap>(markerSize, markerSize) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
                                 @Override
                                 public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
                                     //Setting marker since we got image
