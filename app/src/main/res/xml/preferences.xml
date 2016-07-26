@@ -41,8 +41,8 @@
 			android:title="@string/pref_scanned_title"/>
 
 		<com.omkarmoghe.pokemap.views.settings.PokemonsToShowPreference
-			android:dialogTitle="@string/pokemons_to_show"
-			android:title="@string/pokemons_to_show"
+			android:dialogTitle="@string/pokemon_to_show"
+			android:title="@string/pokemon_to_show"
 			android:entries="@array/pokemon_names"
 			android:defaultValue="@array/pref_pokemons_to_show_default"
 			android:key="@string/pref_pokemons_to_show_key"/>
