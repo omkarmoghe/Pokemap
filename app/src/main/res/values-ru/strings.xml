@@ -25,15 +25,14 @@
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
     <string name="title_activity_poke_map">Покемон Рядом</string>
 
-    <string name="login_warning">It is recommended to
-    instead create and use a fake Pokémon Trainer Club account with a different password and email or
-        use a Google account not attached to your Pokemon Go account. As using this app could result in your account being </string>
+    <string name="login_warning">"Рекомендуется создавать и использовать поддельные аккаунты Pokémon Trainer Club с другим паролем и адресом электронной почты\nили\n
+         использовать учетную запись Google, которая не используется в вашем игравом аккаунте Pokemon Go. Т.к. использование данного приложения может привести к тому, что данный аккаунт будет "</string>
     <string name="prompt_username">PTC Имя пользователя</string>
     <string name="prompt_password">PTC Пароль</string>
     <string name="action_sign_in">Войти</string>
     <string name="error_field_required">Необнодимые данные</string>
     <string name="title_activity_maps">Карта</string>
-    <string name="login_warning_title">Ошибка:</string>
+    <string name="login_warning_title">Предупреждение:</string>
 
     <string name="request_credentials_title">Введите ваши данные для входа в Pokemon Go</string>
     <string name="search_pokemon_map_suggestion">(Долгое нажатие на карту для смены позиции для Поиска)</string>
