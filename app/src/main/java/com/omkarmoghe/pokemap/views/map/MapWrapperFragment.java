@@ -1,7 +1,6 @@
 package com.omkarmoghe.pokemap.views.map;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,7 +39,6 @@ import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
-import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +74,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Marker userSelectedPositionMarker = null;
     private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
+
+    public static Snackbar pokeSnackbar;
+    public static int pokemonFound = 0;
+    public static int positionNum = 0;
 
     public MapWrapperFragment() {
         // Required empty public constructor
@@ -170,6 +172,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         return mView;
     }
     private void initMap(){
+        pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null){
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -211,10 +214,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+        positionNum++;
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
-            int pokemonFound = 0;
+//            int pokemonFound = 0;
             for (final CatchablePokemon poke : pokeList) {
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
@@ -243,8 +247,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
             if(getView() != null) {
-                String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
-                Snackbar.make(getView(), text, Snackbar.LENGTH_SHORT).show();
+                if(positionNum != LOCATION_PERMISSION_REQUEST) {
+                    String text = " Searching...." + pokemonFound + " Pokemon found";
+                    pokeSnackbar.setText(text);
+                    pokeSnackbar.show();
+
+                }
+                else {
+                    String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                    pokeSnackbar.setText(text);
+                    pokeSnackbar.show();
+                }
+
             }
 
             updatePokemonMarkers();
@@ -317,7 +331,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMapLongClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
-        initMap();
+//        initMap();
     }
 
     @Override

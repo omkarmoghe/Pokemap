@@ -138,11 +138,13 @@ public class MainActivity extends BaseActivity {
     public void onEvent(SearchInPosition event) {
         SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
+        MapWrapperFragment.pokeSnackbar.setText("Searching...");
+        MapWrapperFragment.pokeSnackbar.show();
+        MapWrapperFragment.pokemonFound = 0;
+        MapWrapperFragment.positionNum = 0;
         for (LatLng p : list) {
             nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
         }
-
-
     }
 
     /**
