@@ -79,7 +79,7 @@ public class GoogleManager {
         }
     }
 
-    public void requestToken(String deviceCode, final LoginListener loginListener){
+    public void requestToken(String deviceCode, final LoginListener loginListener) {
         HttpUrl url = HttpUrl.parse(OAUTH_TOKEN_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("client_secret", SECRET)
@@ -116,7 +116,9 @@ public class GoogleManager {
 
     public interface LoginListener {
         void authSuccessful(String authToken);
+
         void authFailed(String message);
+
         void authRequested(GoogleService.AuthRequest body);
     }
 }

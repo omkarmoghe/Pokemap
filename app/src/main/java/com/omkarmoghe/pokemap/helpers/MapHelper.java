@@ -15,7 +15,7 @@ public class MapHelper {
      *
      * @return Distance between this point and destination point, in same units as radius.
      */
-    public static double distance(LatLng pointA, LatLng pointB){
+    public static double distance(LatLng pointA, LatLng pointB) {
         //Getting the coordinates and converting them to radians
         double lat = Math.toRadians(pointA.latitude);
         double lat2 = Math.toRadians(pointB.latitude);
@@ -26,11 +26,11 @@ public class MapHelper {
         double difLong = Math.toRadians(pointB.longitude - pointA.longitude);
 
         //Calculating the Haversine formula - a
-        double a = (Math.pow(Math.sin(difLat/2), 2)) +
-                (Math.cos(lat) * Math.cos(lat2) * Math.pow(Math.sin(difLong/2), 2));
+        double a = (Math.pow(Math.sin(difLat / 2), 2)) +
+                (Math.cos(lat) * Math.cos(lat2) * Math.pow(Math.sin(difLong / 2), 2));
 
         //Calculating the Haversine formula - c
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         //Calculating the distance using c and the radius of the earth
         return EARTH * c;
@@ -39,14 +39,15 @@ public class MapHelper {
     /**
      * Returns the destination point from the starting point point having travelled the given distance on the
      * given initial bearing (bearing normally varies around path followed).
-     * @param point - original location in the map to translate
+     *
+     * @param point    - original location in the map to translate
      * @param distance - the distance between the current point and the new point
-     * @param bearing - the bearing of the object moving (clockwise from north) in degrees (0-360)
+     * @param bearing  - the bearing of the object moving (clockwise from north) in degrees (0-360)
      * @return An ArcGIS Point class storing the the Latitude and Longitude in decimal degrees.
-     *  The x coordinate is the Longitude, the y coordinate is the Latitude
+     * The x coordinate is the Longitude, the y coordinate is the Latitude
      */
-    public static LatLng translatePoint(LatLng point, double distance, double bearing){
-        distance = distance/1000d;
+    public static LatLng translatePoint(LatLng point, double distance, double bearing) {
+        distance = distance / 1000d;
 
         //converts the Latitude, Longitude and bearings into radians
         double lat = Math.toRadians(point.latitude);
@@ -54,12 +55,12 @@ public class MapHelper {
         bearing = Math.toRadians(bearing);
 
         //Give the distance and the first Latitude, computes the second latitude
-        double Lat2 = Math.asin( (Math.sin(lat)*Math.cos(distance/EARTH)) +
-                (Math.cos(lat)*Math.sin(distance/EARTH)*Math.cos(bearing)) );
+        double Lat2 = Math.asin((Math.sin(lat) * Math.cos(distance / EARTH)) +
+                (Math.cos(lat) * Math.sin(distance / EARTH) * Math.cos(bearing)));
 
         //Give the distance and the first longitude, computes the second longitude
-        double Long2 = lng + Math.atan2(Math.sin(bearing)*Math.sin(distance/EARTH)*Math.cos(lat),
-                Math.cos(distance/EARTH)- (Math.sin(lat)*Math.sin(Lat2)) );
+        double Long2 = lng + Math.atan2(Math.sin(bearing) * Math.sin(distance / EARTH) * Math.cos(lat),
+                Math.cos(distance / EARTH) - (Math.sin(lat) * Math.sin(Lat2)));
 
         //Converting the new Latitude and Longitude from radians to degrees
         Lat2 = Math.toDegrees(Lat2);

@@ -68,7 +68,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public void setServiceState(@NonNull boolean isEnabled) {
-        sharedPreferences.edit().putBoolean(SERVICE_KEY,isEnabled).apply();
+        sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
     }
 
     @Override
@@ -91,7 +91,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
-	@Override
+    @Override
     public void clearLoginCredentials() {
 
         sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
@@ -102,11 +102,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean isServiceEnabled() {
-        return sharedPreferences.getBoolean(SERVICE_KEY,false);
+        return sharedPreferences.getBoolean(SERVICE_KEY, false);
     }
 
     @Override
     public int getServiceRefreshRate() {
-        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY,"60"));
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
     }
 }

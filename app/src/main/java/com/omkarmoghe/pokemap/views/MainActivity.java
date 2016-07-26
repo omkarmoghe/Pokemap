@@ -10,8 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
@@ -19,11 +23,8 @@ import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
-import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,23 +51,23 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
-        if(mapWrapperFragment == null) {
+        if (mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
-        if(pref.isServiceEnabled()){
+        if (pref.isServiceEnabled()) {
             startNotificationService();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
 
-        if(pref.isServiceEnabled()){
+        if (pref.isServiceEnabled()) {
             stopNotificationService();
         }
     }
@@ -76,7 +77,7 @@ public class MainActivity extends BaseActivity {
         super.onPause();
         EventBus.getDefault().unregister(this);
 
-        if(!skipNotificationServer && pref.isServiceEnabled()){
+        if (!skipNotificationServer && pref.isServiceEnabled()) {
             startNotificationService();
         }
 
@@ -94,7 +95,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
-            startActivityForResult(new Intent(this, SettingsActivity.class),0);
+            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
         } else if (id == R.id.action_clear) {
             EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
@@ -133,7 +134,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startNotificationService(){
+    private void startNotificationService() {
         Intent intent = new Intent(this, PokemonNotificationService.class);
         startService(intent);
     }

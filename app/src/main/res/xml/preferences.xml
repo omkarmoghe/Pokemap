@@ -5,13 +5,12 @@
         android:title="@string/pref_cat_user_account"
         android:key="@string/pref_cat_user_account">
 
-        <PreferenceScreen
-            android:summary="@string/pref_warning" />
+        <PreferenceScreen android:summary="@string/pref_warning" />
 
         <EditTextPreference
             android:key="@string/pref_username_key"
             android:title="@string/pref_username"
-            android:summary="@string/pref_default_username"/>
+            android:summary="@string/pref_default_username" />
 
         <EditTextPreference
             android:key="@string/pref_password_key"

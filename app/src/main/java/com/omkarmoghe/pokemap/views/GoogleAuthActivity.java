@@ -2,8 +2,8 @@ package com.omkarmoghe.pokemap.views;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,7 +27,7 @@ public class GoogleAuthActivity extends AppCompatActivity {
     private TextView codeView;
 
     public static void startForResult(Activity starter, int requestCode,
-                                              String url, String code){
+                                      String url, String code) {
         Intent intent = new Intent(starter, GoogleAuthActivity.class);
         intent.putExtra(ARG_URL, url);
         intent.putExtra(ARG_CODE, code);
@@ -50,10 +50,10 @@ public class GoogleAuthActivity extends AppCompatActivity {
 
         codeView.setText(userCode);
 
-        WebViewClient client = new WebViewClient(){
+        WebViewClient client = new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "onPageFinished: url = " + url);
-                if(url.contains("https://accounts.google.com/o/oauth2/device/approval?")){
+                if (url.contains("https://accounts.google.com/o/oauth2/device/approval?")) {
                     sendResults();
                 }
             }
@@ -76,7 +76,7 @@ public class GoogleAuthActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fetchIntentData(){
+    private void fetchIntentData() {
         Intent intent = getIntent();
         url = intent.getStringExtra(ARG_URL);
         userCode = intent.getStringExtra(ARG_CODE);
@@ -88,7 +88,7 @@ public class GoogleAuthActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendResults(){
+    private void sendResults() {
         setResult(RESULT_OK);
         finish();
     }

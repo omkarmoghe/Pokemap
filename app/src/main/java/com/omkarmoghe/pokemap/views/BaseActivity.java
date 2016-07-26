@@ -24,18 +24,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         locationManager.onResume();
-        if(locationListener != null){
+        if (locationListener != null) {
             locationManager.register(locationListener);
         }
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         LocationManager.getInstance(this).onPause();
-        if(locationListener != null){
+        if (locationListener != null) {
             locationManager.unregister(locationListener);
         }
         super.onPause();

@@ -1,7 +1,7 @@
 package com.omkarmoghe.pokemap.models.map;
 
-import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.google.android.gms.maps.model.Marker;
+import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
 /**
  * Created by socrates on 7/24/2016.

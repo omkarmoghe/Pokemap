@@ -70,7 +70,7 @@ public class PermissionActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CODE && isGranted(MUST_PERMISSIONS)) {
+        if (requestCode == REQUEST_CODE && isGranted(MUST_PERMISSIONS)) {
             continueToLoginScreen();
         }
     }
