@@ -88,7 +88,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private Marker userSelectedPositionMarker = null;
     private Map<String, GymMarkerExtended> gymsList = new HashMap<>();
     Map<Integer, String> gymTeamImageUrls = new HashMap<>();
-    String lurePokeStopImageUrl = "http://i.imgur.com/lGCXc7v.png";
+    String lurePokeStopImageUrl = "http://i.imgur.com/2BI3Cqv.png";
     String pokeStopImageUrl = "http://i.imgur.com/pmLrx3R.png";
 
     private List<Circle> userSelectedPositionCircles = new ArrayList<>();
@@ -103,10 +103,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     public MapWrapperFragment() {
 
-        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.NEUTRAL_VALUE, "http://i.imgur.com/3XxAnUd.png");
-        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.BLUE_VALUE, "http://i.imgur.com/OTK2G8L.png");
-        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.RED_VALUE, "http://i.imgur.com/ORj5EyP.png");
-        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.YELLOW_VALUE, "http://i.imgur.com/8kbSsQZ.png");
+        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.NEUTRAL_VALUE, "http://i.imgur.com/If3mHMM.png");
+        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.BLUE_VALUE, "http://i.imgur.com/ElM6sqb.png");
+        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.RED_VALUE, "http://i.imgur.com/wO13iJ0.png");
+        gymTeamImageUrls.put(TeamColorOuterClass.TeamColor.YELLOW_VALUE, "http://i.imgur.com/F8Jq1dc.png");
     }
 
     /**
