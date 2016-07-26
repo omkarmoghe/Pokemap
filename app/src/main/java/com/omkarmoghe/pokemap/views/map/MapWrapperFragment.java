@@ -48,6 +48,7 @@ import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
+import com.pokegoapi.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
