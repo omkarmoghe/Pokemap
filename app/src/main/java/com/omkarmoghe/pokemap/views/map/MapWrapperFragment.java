@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
@@ -73,6 +75,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private LocationManager locationManager;
 
+    private PokemapAppPreferences mPref;
     private View mView;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
@@ -104,6 +107,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        mPref = new PokemapSharedPreferences(getContext());
     }
 
     @Override
@@ -213,7 +217,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     }
                 }
             }
-            if (pokestopsList != null && !pokestopsList.isEmpty()) {
+            if (pokestopsList != null && !pokestopsList.isEmpty() && mPref.getShowPokestops()) {
                 for (Iterator<Map.Entry<String, PokestopMarkerExtended>> pokestopIterator = pokestopsList.entrySet().iterator(); pokestopIterator.hasNext(); ) {
                     Map.Entry<String, PokestopMarkerExtended> pokestopEntry = pokestopIterator.next();
                     Pokestop pokestop = pokestopEntry.getValue().getPokestop();
@@ -222,6 +226,23 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     int pstopLuredID = getResources().getIdentifier("pstop_lured", "drawable", getActivity().getPackageName());
                     marker.setIcon(BitmapDescriptorFactory.fromResource(pokestop.hasLurePokemon() ? pstopLuredID: pstopID));
                 }
+            } else if(pokestopsList != null && !pokestopsList.isEmpty() && !mPref.getShowPokestops()){
+                for (Iterator<Map.Entry<String, PokestopMarkerExtended>> pokestopIterator = pokestopsList.entrySet().iterator(); pokestopIterator.hasNext(); ) {
+                    Map.Entry<String, PokestopMarkerExtended> pokestopEntry = pokestopIterator.next();
+                    Pokestop pokestop = pokestopEntry.getValue().getPokestop();
+                    Marker marker = pokestopEntry.getValue().getMarker();
+                    marker.remove();
+                    pokestopIterator.remove();
+                }
+
+            }
+
+
+            if (!mPref.getShowScannedPlaces() && userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
+                for (Circle circle : userSelectedPositionCircles) {
+                    circle.remove();
+                }
+                userSelectedPositionCircles.clear();
             }
         }
 
@@ -230,7 +251,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void setPokestopsMarkers(final Collection<Pokestop> pokestops){
         if (mGoogleMap != null) {
 
-            if(pokestops != null) {
+            if(pokestops != null && mPref.getShowPokestops()) {
                 Set<String> markerKeys = pokestopsList.keySet();
                 int pstopID = getResources().getIdentifier("pstop", "drawable", getActivity().getPackageName());
                 int pstopLuredID = getResources().getIdentifier("pstop_lured", "drawable", getActivity().getPackageName());
@@ -387,7 +408,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void drawMarkerWithCircle(LatLng position){
             if (mGoogleMap != null) {
-                    //Check and eventually remove old marker
+
+
+                //Check and eventually remove old marker
                 if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
                     userSelectedPositionMarker.remove();
                     for (Circle circle : userSelectedPositionCircles) {
@@ -396,17 +419,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     userSelectedPositionCircles.clear();
                 }
 
+                if(mPref.getShowScannedPlaces()) {
+                    double radiusInMeters = 100.0;
+                    int strokeColor = 0x4400CCFF; // outline
+                    int shadeColor = 0x4400CCFF; // fill
 
-                double radiusInMeters = 100.0;
-                int strokeColor = 0x4400CCFF; // outline
-                int shadeColor = 0x4400CCFF; // fill
+                    SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
+                    List<LatLng> list = params.getSearchArea();
+                    for (LatLng p : list) {
+                        CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                        userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
 
-                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-                List<LatLng> list = params.getSearchArea();
-                for (LatLng p : list) {
-                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
+                    }
                 }
 
                 userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()

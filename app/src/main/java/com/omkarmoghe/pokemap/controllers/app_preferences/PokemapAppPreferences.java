@@ -41,4 +41,8 @@ public interface PokemapAppPreferences {
     String getGoogleToken();
 
     void setGoogleToken(@NonNull String token);
+
+    boolean getShowScannedPlaces();
+    boolean getShowPokestops();
+    boolean getShowGyms();
 }
