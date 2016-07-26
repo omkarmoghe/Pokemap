@@ -39,10 +39,4 @@ public class PokemonIdUtils {
         int resId = context.getResources().getIdentifier(apiPokeName.toLowerCase(), "string", context.getPackageName());
         return resId > 0 ? context.getString(resId) : apiPokeName;
     }
-
-    public static int getPokemonIconResource(Context context,
-                                             int position) {
-        String iconName = "p" + position;
-        return context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
-    }
 }

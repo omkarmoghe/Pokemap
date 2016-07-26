@@ -2,6 +2,7 @@ package com.omkarmoghe.pokemap.views.map;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
@@ -294,8 +295,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         getActivity(),
                         new RemoteImageLoader.Callback() {
                             @Override
-                            public void onFetch(BitmapDescriptor bitmapDescriptor) {
+                            public void onFetch(Bitmap bitmap) {
 
+                                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 marker.setIcon(bitmapDescriptor);
                             }
                         }
@@ -325,8 +327,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         getActivity(),
                         new RemoteImageLoader.Callback() {
                             @Override
-                            public void onFetch(BitmapDescriptor bitmapDescriptor) {
+                            public void onFetch(Bitmap  bitmap) {
 
+                                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 marker.setIcon(bitmapDescriptor);
                             }
                         }
@@ -369,7 +372,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             getActivity(),
                             new RemoteImageLoader.Callback() {
                                 @Override
-                                public void onFetch(BitmapDescriptor bitmapDescriptor) {
+                                public void onFetch(Bitmap bitmap) {
+
+                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
                                     Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
@@ -411,7 +416,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             getActivity(),
                             new RemoteImageLoader.Callback() {
                                 @Override
-                                public void onFetch(BitmapDescriptor bitmapDescriptor) {
+                                public void onFetch(Bitmap bitmap) {
+
+                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
                                     Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(gym.getLatitude(), gym.getLongitude()))
@@ -454,7 +461,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                             getActivity(),
                             new RemoteImageLoader.Callback() {
                                 @Override
-                                public void onFetch(BitmapDescriptor bitmapDescriptor) {
+                                public void onFetch(Bitmap bitmap) {
+
+                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
                                     //Setting marker since we got image
                                     //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());

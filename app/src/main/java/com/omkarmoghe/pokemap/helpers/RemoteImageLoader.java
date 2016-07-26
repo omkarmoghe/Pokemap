@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class RemoteImageLoader {
 
-    private static  Map<String, BitmapDescriptor> bitmapCache = new HashMap<>();
+    private static  Map<String, Bitmap> bitmapCache = new HashMap<>();
 
     public static void load(final String url, int pxWidth, int pxHeight, Context context, final Callback onFetch) {
 
@@ -37,18 +37,14 @@ public class RemoteImageLoader {
                 .into(new SimpleTarget<Bitmap>(pxWidth, pxHeight) {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-
-                        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-
-                        bitmapCache.put(url, bitmapDescriptor);
-
-                        onFetch.onFetch(bitmapDescriptor);
+                        bitmapCache.put(url, bitmap);
+                        onFetch.onFetch(bitmap);
                     }
                 });
         }
     }
 
     public interface Callback {
-        void onFetch(BitmapDescriptor bitmapDescriptor);
+        void onFetch(Bitmap bitmap);
     }
 }
