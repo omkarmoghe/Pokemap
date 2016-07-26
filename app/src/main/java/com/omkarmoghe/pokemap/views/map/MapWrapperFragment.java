@@ -322,6 +322,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList) {
         positionNum++;
+        int markerSize = getResources().getDimensionPixelSize(R.dimen.pokemon_marker);
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
