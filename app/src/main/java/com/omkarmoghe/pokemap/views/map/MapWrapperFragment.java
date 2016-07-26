@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
+import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
@@ -38,6 +39,7 @@ import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
+import com.omkarmoghe.pokemap.models.events.MarkerUpdateEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
@@ -352,6 +354,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 userSelectedPositionCircles.clear();
             }
         }
+        MarkerRefreshController.getInstance().reset();
     }
 
     private float getDistanceInMeters(double lat1, double lon1, double lat2, double lon2) {
@@ -527,6 +530,33 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private void removeExpiredMarkers() {
+
+                if (mGoogleMap != null) {
+                    if (markerList != null && !markerList.isEmpty()) {
+                        for (Iterator<Map.Entry<String, PokemonMarkerExtended>> pokemonIterator = markerList.entrySet().iterator(); pokemonIterator.hasNext(); ) {
+                            Map.Entry<String, PokemonMarkerExtended> pokemonEntry = pokemonIterator.next();
+                            CatchablePokemon catchablePokemon = pokemonEntry.getValue().getCatchablePokemon();
+                            Marker marker = pokemonEntry.getValue().getMarker();
+
+                                long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
+                                if (millisLeft < 0) {
+                                    marker.remove();
+                                    pokemonIterator.remove();
+                                } else {
+                                    marker.setSnippet(getExpirationBreakdown(millisLeft));
+                                    if (marker.isInfoWindowShown()) {
+                                        marker.showInfoWindow();
+                                    }
+                                    MarkerRefreshController.getInstance().notifyTimeToExpiry(millisLeft);}
+                        }
+                        MarkerRefreshController.getInstance().reset();
+                    }
+                }
+
+    }
+
+
     private void showMapNotInitializedError() {
         if(getView() != null){
             Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
@@ -592,6 +622,19 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
         setGymsMarkers(event);
     }
+
+    /**
+     * Called whenever a MarkerUpdateEvent is posted to the bus. Posted by {@link MarkerRefreshController} when
+     * expired markers need to be removed.
+     *
+     * @param event
+     */
+
+     @Subscribe(threadMode = ThreadMode.MAIN)
+     public void onEvent(MarkerUpdateEvent event){
+         removeExpiredMarkers();
+     }
+
 
     private void clearCatchedPokemonCircle() {
 
