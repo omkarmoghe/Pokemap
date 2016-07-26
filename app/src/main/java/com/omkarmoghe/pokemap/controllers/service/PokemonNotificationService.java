@@ -26,6 +26,7 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -95,8 +96,8 @@ public class PokemonNotificationService extends Service{
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
                 .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
-                .setContentTitle("Pokemon Service")
-                .setContentText("Scanning").setOngoing(true);
+                .setContentTitle(getString(R.string.notification_service_title))
+                .setContentText(getString(R.string.notification_service_scanning)).setOngoing(true);
 
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -129,20 +130,20 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + " pokemon nearby.");
+        builder.setContentText(catchablePokemon.size() + " "+getString(R.string.notification_service_pokemon_nearby)+".");
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + " pokemon in area:");
+            inboxStyle.setBigContentTitle(catchablePokemon.size() + " "+getString(R.string.notification_service_pokemon_nearby)+":");
             for(CatchablePokemon cp : catchablePokemon){
                 Location pokeLocation = new Location("");
                 pokeLocation.setLatitude(cp.getLatitude());
                 pokeLocation.setLongitude(cp.getLongitude());
                 long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(cp.getPokemonId().name() + "(" +
+                inboxStyle.addLine(getLocalePokemonName(cp.getPokemonId().name()) + "(" +
                         TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " minutes," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " meters)");
+                        " "+getString(R.string.notification_minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(R.string.notification_meters)+")");
             }
 
             builder.setStyle(inboxStyle);
@@ -191,4 +192,22 @@ public class PokemonNotificationService extends Service{
             locationManager.onPause();
         }
     };
+
+    /**
+     * try to resolve PokemonName from Resources
+     * @param apiPokeName
+     * @return
+     */
+    private String getLocalePokemonName(String apiPokeName){
+        int resId = 0;
+        try{
+            Class resClass = R.string.class;
+            Field field = resClass.getField(apiPokeName.toLowerCase());
+            resId = field.getInt(null);
+        }catch(Exception e){
+            com.pokegoapi.util.Log.e("PokemonTranslation","Failure to get Name",e);
+            resId = -1;
+        }
+        return resId > 0 ? getString(resId) : apiPokeName;
+    }
 }

@@ -73,5 +73,10 @@
     <string name="pokemon_found_none">No new catchable Pokemon have been found.</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
     <string name="expiring_in">"Expires in: "</string>
+    <string name="notification_service_title">Pokemon Service</string>
+    <string name="notification_service_scanning">Scanning</string>
+    <string name="notification_service_pokemon_nearby">pokemon nearby</string>
+    <string name="notification_meters">meters</string>
+    <string name="notification_minutes">minutes</string>
 
 </resources>

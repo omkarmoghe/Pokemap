@@ -55,4 +55,9 @@
     <string name="toast_no_location">Fehler bei der GPS-Ortung.</string>
     <string name="toast_pokemon_found_count">" Pokemon gefunden"</string>
     <string name="toast_ptc_login_error">PTC Login gescheitert</string>
+    <string name="notification_meters">Meter</string>
+    <string name="notification_minutes">Minuten</string>
+    <string name="notification_service_pokemon_nearby">Pokemon in der Nähe</string>
+    <string name="notification_service_scanning">Scanne...</string>
+    <string name="notification_service_title">Pokemonscanner</string>
 </resources>
