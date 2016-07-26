@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +52,7 @@ public class PokemonNotificationService extends Service{
     private Vibrator vibratorManager;
     private boolean vibrate;
 
-    private Set<PokemonIdOuterClass.PokemonId> previousFoundPokemon;
+    private List<PokemonIdOuterClass.PokemonId> previousFoundPokemon;
 
     public PokemonNotificationService() {
     }
@@ -145,13 +146,11 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + getString(R.string.notification_service_pokemon_near));
         builder.setStyle(null);
 
-        Set<PokemonIdOuterClass.PokemonId> currentFoundSet = new HashSet<>();
+        List<PokemonIdOuterClass.PokemonId> currentFoundSet = new LinkedList<>();
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
             
             for(CatchablePokemon cp : catchablePokemon){
@@ -170,7 +169,9 @@ public class PokemonNotificationService extends Service{
                 }
             }
             builder.setStyle(inboxStyle);
+            inboxStyle.setBigContentTitle(currentFoundSet.size() + getString(R.string.notification_service_pokemon_in_area));
         }
+        builder.setContentText(currentFoundSet.size() + getString(R.string.notification_service_pokemon_near));
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
