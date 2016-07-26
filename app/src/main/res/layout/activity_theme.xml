@@ -52,6 +52,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/radioButton4"
             android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="Default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton5"
+            android:onClick="onRadioButtonClicked"/>
     </RadioGroup>
 
 

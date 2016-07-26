@@ -2,6 +2,7 @@
 <resources>
 
     <color name="material_black">#000000</color>
+    <color name="material_white">#ffffff</color>
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -11,9 +12,9 @@
     <color name="colorPrimaryDarkSquirtle">#0288D1</color>
     <color name="colorAccentSquirtle">#795548</color>
 
-    <color name="colorPrimaryCharmander">#FF5722</color>
-    <color name="colorPrimaryDarkCharmander">#E64A19</color>
-    <color name="colorAccentCharmander">#FFC107</color>
+    <color name="colorPrimaryCharmander">#FF9800</color>
+    <color name="colorPrimaryDarkCharmander">#F57C00</color>
+    <color name="colorAccentCharmander">#2196F3</color>
 
     <color name="colorPrimaryBulbasaur">#009688</color>
     <color name="colorPrimaryDarkBulbasaur">#00796B</color>
