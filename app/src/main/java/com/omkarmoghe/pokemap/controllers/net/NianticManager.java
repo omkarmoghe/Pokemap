@@ -300,17 +300,15 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
+
                     if (mPokemonGo != null) {
 
-                        Thread.sleep(100);
-
+                        Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
+                        Thread.sleep(33);
                         EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon()));
-              		    EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
-
-                    } else {
-
-                        Log.e(TAG, "Failed to fetch map information. mPokemonGo API object is null.");
+                        Thread.sleep(33);
+                        EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
                     }
 
                 } catch (LoginFailedException e) {
