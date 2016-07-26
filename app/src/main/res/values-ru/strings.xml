@@ -1,7 +1,7 @@
 <resources>
     <string name="action_settings">Настройки</string>
     <string name="action_clearmap">Очистить Карту</string>
-    <string name="action_logout">Выход</string>
+    <string name="action_logout">Выйти</string>
 
 
     <string name="pref_cat_user_account">Аккаунт</string>
