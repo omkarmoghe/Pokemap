@@ -4,6 +4,8 @@ import android.content.Context;
 import android.preference.MultiSelectListPreference;
 import android.util.AttributeSet;
 
+import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +39,7 @@ public class PokemonsToShowPreference extends MultiSelectListPreference {
 
         for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
             if ((pokemonId != PokemonIdOuterClass.PokemonId.MISSINGNO) && (pokemonId != PokemonIdOuterClass.PokemonId.UNRECOGNIZED)) {
-                // TODO: 26.07.16 maybe enable localization here?
-                entries.add(capitalize(pokemonId.name().toLowerCase()));
+                entries.add(PokemonIdUtils.getLocalePokemonName(context.getResources(), pokemonId));
                 entriesValues.add(String.valueOf(pokemonId.getNumber()));
                 defaultValues.add(String.valueOf(pokemonId.getNumber()));
             }
@@ -48,9 +49,5 @@ public class PokemonsToShowPreference extends MultiSelectListPreference {
         setEntryValues(entriesValues.toArray(new CharSequence[]{}));
         // all pokemons are shown by default
         setDefaultValue(defaultValues);
-    }
-
-    private String capitalize(String string) {
-        return string.toUpperCase().charAt(0) + string.substring(1);
     }
 }
