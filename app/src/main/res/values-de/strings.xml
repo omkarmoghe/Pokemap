@@ -58,4 +58,5 @@
     <string name="permition_message">Please allow locations in order to use the app</string>
     <string name="allow">Allow</string>
     <string name="app_settings">App Settings</string>
+    <string name="disclaimer">Disclaimer</string>
 </resources>

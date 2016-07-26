@@ -5,13 +5,12 @@
 
 
     <string name="pref_cat_user_account">Аккаунт</string>
-    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения!
-        Вместо этого создрайте и используйте новый аккаунт Pokémon Trainer Club с другим email и паролем.</string>
+    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения!Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
     <string name="pref_username">Введите Имя аккаунта</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Введите Пароль</string>
 
-    <string name="pref_cat_general">Главная</string>
+    <string name="pref_cat_general">Главные опции</string>
     <string name="pref_pokestops_title">Показать Pokéstops</string>
     <string name="pref_gyms_title">Показать Gyms</string>
     <string name="pref_scanned_title">Показать отсканированную область</string>
@@ -25,7 +24,7 @@
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
     <string name="title_activity_poke_map">Покемон Рядом</string>
 
-    <string name="login_warning">"Рекомендуется создавать и использовать поддельные аккаунты Pokémon Trainer Club с другим паролем и адресом электронной почты\nили\n
+    <string name="login_warning">"Рекомендуется создать и использовать поддельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
          использовать учетную запись Google, которая не используется в вашем игравом аккаунте Pokemon Go. Т.к. использование данного приложения может привести к тому, что данный аккаунт будет "</string>
     <string name="prompt_username">PTC Имя пользователя</string>
     <string name="prompt_password">PTC Пароль</string>
@@ -63,5 +62,6 @@
     <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
     <string name="allow">Разрешить</string>
     <string name="app_settings">Настройки приложения</string>
+    <string name="disclaimer">Совет</string>
 
 </resources>
