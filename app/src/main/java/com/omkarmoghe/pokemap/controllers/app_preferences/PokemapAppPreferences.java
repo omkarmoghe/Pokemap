@@ -3,6 +3,7 @@ package com.omkarmoghe.pokemap.controllers.app_preferences;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Set;
 
 import POGOProtos.Enums.PokemonIdOuterClass;
 
@@ -66,7 +67,7 @@ public interface PokemapAppPreferences {
     int getServiceRefreshRate();
 
     /**
-     * @return a list of pokemonIDs which can be shown according to the preferences.
+     * @return a set of pokemonIDs which can be shown according to the preferences.
      */
-    List<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs();
+    Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs();
 }

@@ -54,8 +54,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -87,7 +89,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
     private HashMap<String, PokestopMarkerExtended> pokestopsList = new HashMap<>();
 
-    private List<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new ArrayList<>();
+    private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
 
     public static Snackbar pokeSnackbar;
     public static int pokemonFound = 0;
@@ -242,14 +244,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     Map.Entry<String, PokemonMarkerExtended> pokemonEntry = pokemonIterator.next();
                     CatchablePokemon catchablePokemon = pokemonEntry.getValue().getCatchablePokemon();
                     Marker marker = pokemonEntry.getValue().getMarker();
-                    long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
-                    if (millisLeft < 0) {
+
+                    if (!showablePokemonIDs.contains(catchablePokemon.getPokemonId())) {
                         marker.remove();
                         pokemonIterator.remove();
                     } else {
-                        marker.setSnippet(getExpirationBreakdown(millisLeft));
-                        if (marker.isInfoWindowShown()) {
-                            marker.showInfoWindow();
+                        long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
+                        if (millisLeft < 0) {
+                            marker.remove();
+                            pokemonIterator.remove();
+                        } else {
+                            marker.setSnippet(getExpirationBreakdown(millisLeft));
+                            if (marker.isInfoWindowShown()) {
+                                marker.showInfoWindow();
+                            }
                         }
                     }
                 }
@@ -320,28 +328,34 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             for (final CatchablePokemon poke : pokeList) {
 
                 if (!markerKeys.contains(poke.getSpawnPointId())) {
-                    //Showing images using glide
-                    Glide.with(getActivity())
-                            .load("http://serebii.net/pokemongo/pokemon/" + getCorrectPokemonImageId(poke.getPokemonId().getNumber()) + ".png")
-                            .asBitmap()
-                            .skipMemoryCache(false)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(new SimpleTarget<Bitmap>(120, 120) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
-                                @Override
-                                public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                                    //Setting marker since we got image
-                                    //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                                            .title(poke.getPokemonId().name())
-                                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                                            .anchor(0.5f, 0.5f));
-                                    //adding pokemons to list to be removed on next search
-                                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
-                                }
-                            });
-                    //Increase founded pokemon counter
-                    pokemonFound++;
+
+                    // checking if we need to show this pokemon
+                    PokemonIdOuterClass.PokemonId pokemonId = poke.getPokemonId();
+                    if (showablePokemonIDs.contains(pokemonId)) {
+
+                        //Showing images using glide
+                        Glide.with(getActivity())
+                                .load("http://serebii.net/pokemongo/pokemon/" + getCorrectPokemonImageId(pokemonId.getNumber()) + ".png")
+                                .asBitmap()
+                                .skipMemoryCache(false)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(new SimpleTarget<Bitmap>(120, 120) { // Width and height FIXME: Maybe get different sizes based on devices DPI? this need tests
+                                    @Override
+                                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                                        //Setting marker since we got image
+                                        //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                                .title(poke.getPokemonId().name())
+                                                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                                                .anchor(0.5f, 0.5f));
+                                        //adding pokemons to list to be removed on next search
+                                        markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                                    }
+                                });
+                        //Increase founded pokemon counter
+                        pokemonFound++;
+                    }
                 }
             }
             if (getView() != null) {
@@ -395,7 +409,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return (String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
+        return (String.format(Locale.US, "Expires in: %1$d:%2$02ds", minutes, seconds));
     }
 
     /**
@@ -425,7 +439,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PokestopsEvent event) {
-
         setPokestopsMarkers(event.getPokestops());
     }
 
@@ -465,7 +478,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void drawMarkerWithCircle(LatLng position) {
         if (mGoogleMap != null) {
 
-
             //Check and eventually remove old marker
             if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
                 userSelectedPositionMarker.remove();
@@ -499,6 +511,4 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             showMapNotInitializedError();
         }
     }
-
 }
-

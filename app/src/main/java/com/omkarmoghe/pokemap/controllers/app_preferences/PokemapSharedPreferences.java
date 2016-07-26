@@ -43,9 +43,9 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.contains(PASSWORD_KEY);
     }
 
-    public List<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
+    public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
         Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
-        List<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new ArrayList<>();
+        Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
         for (String stringId : showablePokemonStringIDs) {
             showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
         }
