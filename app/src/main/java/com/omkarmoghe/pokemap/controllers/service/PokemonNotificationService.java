@@ -169,7 +169,7 @@ public class PokemonNotificationService extends Service{
                     LatLng currentLocation = locationManager.getLocation();
 
                     if(currentLocation != null){
-                        nianticManager.getMapInformation(currentLocation.latitude,currentLocation.longitude,0);
+                        nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
                     }else {
                         locationManager = LocationManager.getInstance(PokemonNotificationService.this);
                     }

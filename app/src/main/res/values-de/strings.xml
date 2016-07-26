@@ -66,4 +66,5 @@
     <string name="notification_service_pokemon_near">" pokemon nearby."</string>
     <string name="notification_service_pokemon_in_area">" pokemon in area:"</string>
     <string name="meters">meters</string>
+    <string name="gym">Arena</string>
 </resources>
