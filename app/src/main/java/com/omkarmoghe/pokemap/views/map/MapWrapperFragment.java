@@ -46,13 +46,11 @@ import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-import com.pokegoapi.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -314,15 +312,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      * @return
      */
     private String getLocalePokemonName(String apiPokeName){
-        int resId = 0;
-        try{
-            Class resClass = R.string.class;
-            Field field = resClass.getField(apiPokeName.toLowerCase());
-            resId = field.getInt(null);
-        }catch(Exception e){
-            Log.e("PokemonTranslation","Failure to get Name",e);
-            resId = -1;
-        }
+
+        int resId = getResources().getIdentifier(apiPokeName.toLowerCase(), "string", getActivity().getPackageName());
         return resId > 0 ? getString(resId) : apiPokeName;
     }
 
@@ -422,6 +413,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CatchablePokemonEvent event) {
         setPokemonMarkers(event.getCatchablePokemon());
+        drawCatchedPokemonCircle(event.getLat(), event.getLongitude());
     }
 
     /**
@@ -443,6 +435,35 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onEvent(PokestopsEvent event) {
 
         setPokestopsMarkers(event.getPokestops());
+    }
+
+    private void clearCatchedPokemonCircle() {
+
+        //Check and eventually remove old marker
+        if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
+            userSelectedPositionMarker.remove();
+            for (Circle circle : userSelectedPositionCircles) {
+                circle.remove();
+            }
+            userSelectedPositionCircles.clear();
+        }
+    }
+
+    private void drawCatchedPokemonCircle(double latitude, double longitude) {
+
+        if (mGoogleMap != null) {
+
+            if (mPref.getShowScannedPlaces()) {
+
+                double radiusInMeters = 100.0;
+                int strokeColor = 0x4400CCFF; // outline
+                int shadeColor = 0x4400CCFF; // fill
+
+
+                CircleOptions circleOptions = new CircleOptions().center(new LatLng(latitude, longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+            }
+        }
     }
 
     @Override
@@ -467,8 +488,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapLongClick(LatLng position) {
+
+        clearCatchedPokemonCircle();
+
         //Draw user position marker with circle
-        drawMarkerWithCircle (position);
+        drawMarker(position);
 
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
@@ -478,32 +502,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
-    private void drawMarkerWithCircle(LatLng position){
+    private void drawMarker(LatLng position){
         if (mGoogleMap != null) {
-
-
-            //Check and eventually remove old marker
-            if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
-                userSelectedPositionMarker.remove();
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
-
-            if(mPref.getShowScannedPlaces()) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0x4400CCFF; // outline
-                int shadeColor = 0x4400CCFF; // fill
-
-                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-                List<LatLng> list = params.getSearchArea();
-                for (LatLng p : list) {
-                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
-                }
-            }
 
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(position)
