@@ -91,7 +91,7 @@ public class PokemonNotificationService extends Service{
 
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
-                .setSmallIcon(R.drawable.ic_gps_fixed_white_24dp)
+                .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
                 .setContentTitle("Pokemon Service")
                 .setContentText("Scanning").setOngoing(true);
 
@@ -108,7 +108,7 @@ public class PokemonNotificationService extends Service{
         stopService.setAction(ACTION_STOP_SELF);
 
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
-        builder.addAction(R.drawable.ic_cancel_black_24dp,"Stop Service",piStopService);
+        builder.addAction(R.drawable.ic_cancel_black_24px,"Stop Service",piStopService);
 
         nm.notify(notificationId,builder.build());
     }
