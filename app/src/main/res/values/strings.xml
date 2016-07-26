@@ -37,9 +37,9 @@
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokemon Nearby</string>
 
-    <string name="login_warning">It is recommended to
+    <string name="login_warning"><![CDATA[It is recommended to
     instead create and use a fake Pokémon Trainer Club account with a different password and email or
-        use a Google account not attached to your Pokemon Go account. As using this app could result in your account being </string>
+        use a Google account not attached to your Pokemon Go account. As using this app could result in your account being <b>banned</b>]]></string>
     <string name="prompt_username">PTC Username</string>
     <string name="prompt_password">PTC Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -50,17 +50,16 @@
     <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
     <string name="action_relogin">Relogin</string>
-    <string name="ban">banned</string>
     <string name="minutes">" Minutes "</string>
     <string name="pokemon_disappearing_in">"Dissappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
-    <string name="pokemon_found_new">" new catchable Pokemon found."</string>
+    <string name="pokemon_found_new">%1$d new catchable Pokemon(s) found.</string>
     <string name="position_picked">Position Picked</string>
     <string name="seconds">" Sekunden"</string>
     <string name="toast_localization_waiting">Waiting for Position...</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_map_not_initialized">Problem Initializing Google Map</string>
-    <string name="toast_searching">Searching...</string>
+    <string name="toast_pokemon_found_count">Searching... %1$d Pokemon(s) found</string>
     <string name="toast_server_unreachable">Unable to contact the Pokemon GO servers. The servers may be down.</string>
     <string name="toast_token_expired">The Login token has expired. Getting a new one.</string>
     <string name="toast_user_found">Found You!</string>
@@ -69,9 +68,8 @@
     <string name="toast_ptc_login_error">PTC Login Failed</string>
     <string name="enable_location_permission_title">Enable Location Permission</string>
     <string name="enable_location_permission_message">Please enable location permission to use this application</string>
-    <string name="toast_pokemon_found_count">" Pokemon found"</string>
     <string name="pokemon_found_none">No new catchable Pokemon have been found.</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
-    <string name="expiring_in">"Expires in: "</string>
+    <string name="expiring_in">Expires in: %1$d:%2$02ds</string>
 
 </resources>

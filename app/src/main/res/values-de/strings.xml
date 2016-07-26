@@ -29,7 +29,6 @@
     <string name="toast_searching">Suche...</string>
     <string name="toast_server_unreachable">Pokemon GO Server nicht erreichbar. Eventuell sind die Server offline.</string>
     <string name="toast_token_expired">Der Logintoken ist abgelaufen. Hole einen neuen.</string>
-    <string name="ban">gebannt</string>
     <string name="minutes">" Minuten "</string>
     <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
     <string name="pokemon_expired">Abgelaufen</string>
