@@ -1,11 +1,8 @@
 package com.omkarmoghe.pokemap.views.settings;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.preference.MultiSelectListPreference;
 import android.util.AttributeSet;
-
-import com.omkarmoghe.pokemap.R;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,22 +33,24 @@ public class PokemonsToShowPreference extends MultiSelectListPreference {
         List<CharSequence> entriesValues = new ArrayList<>();
         Set<String> defaultValues = new HashSet<>();
 
-        String[] pokemonNames = context.getResources().getStringArray(R.array.pokemon_names);
         PokemonIdOuterClass.PokemonId[] ids = PokemonIdOuterClass.PokemonId.values();
 
-        int min = Math.min(pokemonNames.length, ids.length);
-
-        for (int i = 0; i < min; i++) {
-            int number = ids[i].getNumber();
-            if (number > 0) {
-                entries.add(pokemonNames[i]);
-                entriesValues.add(String.valueOf(ids[i]));
-                defaultValues.add(String.valueOf(ids[i]));
+        for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
+            if ((pokemonId != PokemonIdOuterClass.PokemonId.MISSINGNO) && (pokemonId != PokemonIdOuterClass.PokemonId.UNRECOGNIZED)) {
+                // TODO: 26.07.16 maybe enable localization here?
+                entries.add(capitalize(pokemonId.name().toLowerCase()));
+                entriesValues.add(String.valueOf(pokemonId.getNumber()));
+                defaultValues.add(String.valueOf(pokemonId.getNumber()));
             }
         }
 
         setEntries(entries.toArray(new CharSequence[]{}));
         setEntryValues(entriesValues.toArray(new CharSequence[]{}));
+        // all pokemons are shown by default
         setDefaultValue(defaultValues);
+    }
+
+    private String capitalize(String string) {
+        return string.toUpperCase().charAt(0) + string.substring(1);
     }
 }

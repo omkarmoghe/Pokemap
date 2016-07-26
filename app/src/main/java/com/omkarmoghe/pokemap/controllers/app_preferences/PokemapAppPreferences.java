@@ -2,6 +2,10 @@ package com.omkarmoghe.pokemap.controllers.app_preferences;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
+
 /**
  * A contract which defines a user's app preferences
  */
@@ -60,4 +64,9 @@ public interface PokemapAppPreferences {
     boolean isServiceEnabled();
 
     int getServiceRefreshRate();
+
+    /**
+     * @return a list of pokemonIDs which can be shown according to the preferences.
+     */
+    List<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs();
 }

@@ -60,6 +60,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import POGOProtos.Enums.PokemonIdOuterClass;
+
 /**
  * A simple {@link Fragment} subclass.
  * <p>
@@ -80,9 +82,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
+
     private ArrayList<Circle> userSelectedPositionCircles = new ArrayList<>();
     private HashMap<String, PokemonMarkerExtended> markerList = new HashMap<>();
     private HashMap<String, PokestopMarkerExtended> pokestopsList = new HashMap<>();
+
+    private List<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new ArrayList<>();
 
     public static Snackbar pokeSnackbar;
     public static int pokemonFound = 0;
@@ -111,6 +116,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mPref = new PokemapSharedPreferences(getContext());
+        showablePokemonIDs = mPref.getShowablePokemonIDs();
     }
 
     @Override
