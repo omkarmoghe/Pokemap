@@ -276,7 +276,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private void triggerAutoLogin() {
 
-        showProgress(true);
+        //showProgress(true);
 
         if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());

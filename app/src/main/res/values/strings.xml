@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pokemap</string>
+    <string name="app_name">Pokémap</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_relogin">Relogin</string>
@@ -22,11 +22,11 @@
     <string name="pref_gyms_key">gyms_checkbox</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
-    <string name="title_activity_poke_map">Pokemon Nearby</string>
+    <string name="title_activity_poke_map">Pokémon Nearby</string>
 
     <string name="login_warning">It is recommended to
     instead create and use a fake Pokémon Trainer Club account with a different password and email or
-        use a Google account not attached to your Pokemon Go account. As using this app could result in your account being </string>
+        use a Google account not attached to your Pokémon Go account. As using this app could result in your account being </string>
     <string name="prompt_username">PTC Username</string>
     <string name="prompt_password">PTC Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -34,7 +34,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="login_warning_title">Warning:</string>
 
-    <string name="request_credentials_title">Insert your Pokemon Go credentials</string>
+    <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
 
 </resources>
