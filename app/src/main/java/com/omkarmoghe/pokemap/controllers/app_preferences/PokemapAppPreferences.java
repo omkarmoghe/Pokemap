@@ -41,4 +41,23 @@ public interface PokemapAppPreferences {
     String getGoogleToken();
 
     void setGoogleToken(@NonNull String token);
+
+    boolean getShowScannedPlaces();
+    boolean getShowPokestops();
+    boolean getShowGyms();
+
+    void clearLoginCredentials();
+    /**
+     *
+     * @param isEnabled Sets if the background service is enabled.
+     */
+    void setServiceState(@NonNull boolean isEnabled);
+
+    /**
+     *
+     * @return Returns service state as set in preffs
+     */
+    boolean isServiceEnabled();
+
+    int getServiceRefreshRate();
 }

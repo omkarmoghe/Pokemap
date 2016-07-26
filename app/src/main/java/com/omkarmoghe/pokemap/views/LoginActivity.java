@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 showAuthFailed();
             }
         };
@@ -101,8 +101,8 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 showProgress(false);
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
-                Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
+                Snackbar.make((View)mLoginFormView.getParent(), R.string.google_login_failed, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View view) {
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</b>"))
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
                         .setPositiveButton("OK", null)
                         .show();
             }
@@ -131,11 +131,11 @@ public class LoginActivity extends AppCompatActivity{
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                validatePTCLoginForm();
-                return true;
-            }
-            return false;
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    validatePTCLoginForm();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity{
         mUsernameView.setText(mPref.getUsername());
         mPasswordView.setText(mPref.getPassword());
 
-        Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+        Snackbar.make((View)mLoginFormView.getParent(),getString(R.string.toast_ptc_login_error), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -276,11 +276,16 @@ public class LoginActivity extends AppCompatActivity{
 
     private void triggerAutoLogin() {
 
-        showProgress(true);
-
         if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
+
+            showProgress(true);
+
             mNianticManager.login(mPref.getUsername(), mPref.getPassword());
+
         } else if (mPref.isGoogleTokenAvailable()) {
+
+            showProgress(true);
+
             mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
         }
     }
@@ -299,13 +304,9 @@ public class LoginActivity extends AppCompatActivity{
 
                 if (result.isLoggedIn()) {
 
-                    showProgress(false);
                     finishLogin();
 
                 } else {
-
-                    // show triggerAutoLogin form again
-                    showProgress(false);
 
                     showAuthFailed();
                 }
