@@ -38,6 +38,7 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -196,6 +197,33 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         } else {
             showLocationFetchFailed();
         }
+    }
+
+    private void clearMarkers() {
+        if (mGoogleMap != null) {
+            if (markerList != null && !markerList.isEmpty()) {
+                for (Iterator<Map.Entry<String, PokemonMarkerExtended>> pokemonIterator = markerList.entrySet().iterator(); pokemonIterator.hasNext(); ) {
+                    Map.Entry<String, PokemonMarkerExtended> pokemonEntry = pokemonIterator.next();
+                    pokemonEntry.getValue().getMarker().remove();
+                    pokemonIterator.remove();
+                }
+            }
+            if (pokestopsList != null && !pokestopsList.isEmpty()) {
+                for (Iterator<Map.Entry<String, PokestopMarkerExtended>> pokestopIterator = pokestopsList.entrySet().iterator(); pokestopIterator.hasNext(); ) {
+                    Map.Entry<String, PokestopMarkerExtended> pokestopEntry = pokestopIterator.next();
+                    pokestopEntry.getValue().getMarker().remove();
+                    pokestopIterator.remove();
+                }
+            }
+
+            if (userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
+                for (Circle circle : userSelectedPositionCircles) {
+                    circle.remove();
+                }
+                userSelectedPositionCircles.clear();
+            }
+        }
+
     }
 
     private void updateMarkers() {
@@ -364,6 +392,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     * Called whenever a ClearMapEvent is posted to the bus. Posted when the user wants to clear map of any pokemon or marker.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ClearMapEvent event) {
+        clearMarkers();
+    }
+
+    /**
      * Called whenever a PokestopsEvent is posted to the bus. Posted when new pokestops are found.
      *
      * @param event The event information
@@ -404,6 +442,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         SearchInPosition sip = new SearchInPosition();
         sip.setPosition(position);
         EventBus.getDefault().post(sip);
+
+        mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
     private void drawMarkerWithCircle(LatLng position){
