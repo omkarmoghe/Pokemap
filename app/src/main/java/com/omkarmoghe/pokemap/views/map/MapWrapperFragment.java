@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -191,8 +192,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Enable Location Permission")
-                        .setMessage("Please enable location permission to use this application")
+                        .setTitle(getString(R.string.enable_location_permission_title))
+                        .setMessage(getString(R.string.enable_location_permission_message))
                         .setPositiveButton("OK", null)
                         .show();
                 return;
@@ -309,6 +310,24 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    /**
+     * try to resolve PokemonName from Resources
+     * @param apiPokeName
+     * @return
+     */
+    private String getLocalePokemonName(String apiPokeName){
+        int resId = 0;
+        try{
+            Class resClass = R.string.class;
+            Field field = resClass.getField(apiPokeName.toLowerCase());
+            resId = field.getInt(null);
+        }catch(Exception e){
+            Log.e("PokemonTranslation","Failure to get Name",e);
+            resId = -1;
+        }
+        return resId > 0 ? getString(resId) : apiPokeName;
+    }
+
     private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
         positionNum++;
         if (mGoogleMap != null) {
@@ -330,7 +349,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                     //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
                                     Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                                             .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                                            .title(poke.getPokemonId().name())
+                                            .title(getLocalePokemonName(poke.getPokemonId().name()))
                                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                                             .anchor(0.5f, 0.5f));
                                     //adding pokemons to list to be removed on next search
@@ -343,13 +362,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if(getView() != null) {
                 if(positionNum != LOCATION_PERMISSION_REQUEST) {
-                    String text = " Searching...." + pokemonFound + " Pokemon found";
+                    String text = getString(R.string.toast_searching) + pokemonFound + getString(R.string.toast_pokemon_found_count);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
 
                 }
                 else {
-                    String text = pokemonFound > 0 ? pokemonFound + " new catchable Pokemon have been found." : "No new Pokemon have been found.";
+                    String text = pokemonFound > 0 ? pokemonFound + getString(R.string.pokemon_found_new) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }
@@ -374,26 +393,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void showMapNotInitializedError() {
         if(getView() != null){
-            Snackbar.make(getView(), "Problem Initializing Google Map", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void showLocationFetchFailed() {
         if(getView() != null){
-            Snackbar.make(getView(), "Failed to Find GPS Location", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(),getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    public static String getExpirationBreakdown(long millis) {
+    public String getExpirationBreakdown(long millis) {
         if(millis < 0) {
-            return "Expired";
+            return getString(R.string.pokemon_expired);
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(String.format("Expires in: %1$d:%2$02ds", minutes, seconds));
+        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02ds", minutes, seconds));
     }
 
     /**
@@ -489,7 +508,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(position)
-                    .title("Position Picked")
+                    .title(getString(R.string.position_picked))
                     .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
                             R.drawable.ic_my_location_white_24dp)))
                     .anchor(0.5f, 0.5f));

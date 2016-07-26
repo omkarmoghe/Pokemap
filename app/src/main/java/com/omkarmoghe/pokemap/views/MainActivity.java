@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity {
             if (latLng != null) {
                 nianticManager.getMapInformation(latLng.latitude, latLng.longitude, 0D);
             } else {
-                Snackbar.make(findViewById(R.id.root), "Failed to Login.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.root), getString(R.string.toast_login_error), Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity {
     public void onEvent(SearchInPosition event) {
         SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
-        MapWrapperFragment.pokeSnackbar.setText("Searching...");
+        MapWrapperFragment.pokeSnackbar.setText(getString(R.string.toast_searching));
         MapWrapperFragment.pokeSnackbar.show();
         MapWrapperFragment.pokemonFound = 0;
         MapWrapperFragment.positionNum = 0;
@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(ServerUnreachableEvent event) {
-        Snackbar.make(findViewById(R.id.root), "Unable to contact the Pokemon GO servers. The servers may be down.", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.root), getString(R.string.toast_server_unreachable), Snackbar.LENGTH_LONG).show();
         event.getE().printStackTrace();
     }
 
@@ -200,7 +200,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(InternalExceptionEvent event) {
         event.getE().printStackTrace();
-        Snackbar.make(findViewById(R.id.root), "An internal error occurred. This might happen when you are offline or the servers are down.", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.root), getString(R.string.toast_internal_error), Snackbar.LENGTH_LONG).show();
     }
 
 }
