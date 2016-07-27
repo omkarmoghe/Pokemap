@@ -10,6 +10,7 @@ import android.util.Log;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+import com.pokegoapi.api.pokemon.Pokemon;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -167,7 +168,16 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
-        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
+        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, null);
+        if(showablePokemonStringIDs == null) {
+            //Provides the filter with all available pokemon if no filter is set.
+            showablePokemonStringIDs = new HashSet<>();
+            for (PokemonIdOuterClass.PokemonId pokemonId : PokemonIdOuterClass.PokemonId.values()) {
+                if(pokemonId != PokemonIdOuterClass.PokemonId.UNRECOGNIZED) {
+                    showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+                }
+            }
+        }
         Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
         for (String stringId : showablePokemonStringIDs) {
             showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
