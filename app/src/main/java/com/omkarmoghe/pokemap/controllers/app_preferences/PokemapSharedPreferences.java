@@ -4,20 +4,37 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.ArraySet;
+import android.util.Log;
+
+import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
+import com.omkarmoghe.pokemap.models.login.LoginInfo;
+import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
 
 /**
  * Provide convenience methods to access shared preferences
  */
 
 public final class PokemapSharedPreferences implements PokemapAppPreferences {
-    private static final String USERNAME_KEY = "UsernameKey";
-    private static final String PASSWORD_KEY = "PasswordKey";
-    private static final String GOOGLE_TOKEN_KEY = "GoogleTokenKey";
+    private static final String TAG = "PokemapSharedPreference";
+
+    private static final String PTC_INFO_KEY = "PTCKey";
+    private static final String GOOGLE_INFO_KEY = "GoogleKey";
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
+    private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
 
     private final SharedPreferences sharedPreferences;
 
@@ -26,54 +43,65 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
-    public boolean isUsernameSet() {
-        return sharedPreferences.contains(USERNAME_KEY);
+    public LoginInfo getLoginInfo() {
+
+        if(sharedPreferences.contains(PTC_INFO_KEY)){
+            Set<String> ptcInfo = sharedPreferences.getStringSet(PTC_INFO_KEY, null);
+            if(ptcInfo != null && !ptcInfo.isEmpty()) {
+                String[] info = ptcInfo.toArray(new String[3]);
+                Log.d(TAG, "getLoginInfo: info = " + Arrays.toString(info));
+                return new PtcLoginInfo(info[0], info[1], info[2]);
+            }
+        }
+
+        if(sharedPreferences.contains(GOOGLE_INFO_KEY)) {
+            Set<String> googleInfo = sharedPreferences.getStringSet(GOOGLE_INFO_KEY, null);
+            if (googleInfo != null) {
+                String[] info = googleInfo.toArray(new String[2]);
+                Log.d(TAG, "getLoginInfo: info = " + Arrays.toString(info));
+                return new GoogleLoginInfo(info[0], info[1]);
+            }
+        }
+
+        return null;
     }
 
     @Override
-    public boolean isPasswordSet() {
-        return sharedPreferences.contains(PASSWORD_KEY);
-    }
+    public void setLoginInfo(LoginInfo loginInfo) {
+        Log.d(TAG, "setLoginInfo: LoginInfo = " + loginInfo);
 
+        clearLoginCredentials();
 
-    @Override
-    public String getUsername() {
-        return sharedPreferences.getString(USERNAME_KEY, "");
-    }
+        if(loginInfo instanceof PtcLoginInfo){
+            Set<String> info = new HashSet<>();
+            PtcLoginInfo ptc = (PtcLoginInfo) loginInfo;
+            info.add(ptc.getToken());
+            info.add(ptc.getUsername());
+            info.add(ptc.getPassword());
+            Log.d(TAG, "setLoginInfo: PTCinfo = " + info);
+            sharedPreferences.edit().putStringSet(PTC_INFO_KEY, info).apply();
+        }
 
-    @Override
-    public void setUsername(@NonNull String username) {
-        sharedPreferences.edit().putString(USERNAME_KEY, username).apply();
-    }
-
-    @Override
-    public void setPassword(@NonNull String password) {
-        sharedPreferences.edit().putString(PASSWORD_KEY, password).apply();
-    }
-
-    @Override
-    public String getPassword() {
-        return sharedPreferences.getString(PASSWORD_KEY, "");
-    }
-
-    @Override
-    public boolean isGoogleTokenAvailable() {
-        return sharedPreferences.contains(GOOGLE_TOKEN_KEY);
+        if(loginInfo instanceof GoogleLoginInfo){
+            Set<String> info = new HashSet<>();
+            GoogleLoginInfo google = (GoogleLoginInfo) loginInfo;
+            info.add(google.getToken());
+            info.add(google.getRefreshToken());
+            Log.d(TAG, "setLoginInfo: Googleinfo = " + info);
+            sharedPreferences.edit().putStringSet(GOOGLE_INFO_KEY, info).apply();
+        }
     }
 
     @Override
-    public String getGoogleToken() {
-        return sharedPreferences.getString(GOOGLE_TOKEN_KEY, "");
+    public boolean isLoggedIn() {
+        return sharedPreferences.contains(PTC_INFO_KEY) || sharedPreferences.contains(GOOGLE_INFO_KEY);
     }
 
     @Override
-    public void setServiceState(@NonNull boolean isEnabled) {
-        sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
-    }
+    public void clearLoginCredentials() {
 
-    @Override
-    public void setGoogleToken(@NonNull String token) {
-        sharedPreferences.edit().putString(GOOGLE_TOKEN_KEY, token).apply();
+        sharedPreferences.edit().remove(GOOGLE_INFO_KEY).apply();
+        sharedPreferences.edit().remove(PTC_INFO_KEY).apply();
     }
 
     @Override
@@ -91,14 +119,27 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
-    @Override
-    public void clearLoginCredentials() {
-
-        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
-        sharedPreferences.edit().remove(USERNAME_KEY).apply();
-        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
+        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
+        Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
+        for (String stringId : showablePokemonStringIDs) {
+            showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
+        }
+        return showablePokemonIDs;
     }
 
+    public void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> ids) {
+        Set<String> showablePokemonStringIDs = new HashSet<>();
+        for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
+            showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+        }
+        sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
+    }
+
+    @Override
+    public void setServiceState(@NonNull boolean isEnabled) {
+        sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
+    }
 
     @Override
     public boolean isServiceEnabled() {

@@ -2,19 +2,74 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="AppThemeSquirtle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimarySquirtle</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkSquirtle</item>
+        <item name="colorAccent">@color/colorAccentSquirtle</item>
+    </style>
+
+    <style name="AppThemeCharmander" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryCharmander</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkCharmander</item>
+        <item name="colorAccent">@color/colorAccentCharmander</item>
+    </style>
+
+    <style name="AppThemeBulbasaur" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBulbasaur</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBulbasaur</item>
+        <item name="colorAccent">@color/colorAccentBulbasaur</item>
+    </style>
+
+    <style name="AppThemePikachu" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimaryPikachu</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkPikachu</item>
+        <item name="colorAccent">@color/colorAccentPikachu</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlay</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppThemeSquirtle.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlay</item>
+    </style>
 
+    <style name="AppThemeCharmander.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="AppThemeBulbasaur.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="AppThemePikachu.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBarOverlay">@style/AppTheme.AppBarOverlayLight</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/material_white</item>
+        <item name="android:textColorSecondary">@color/material_white</item>
+    </style>
+    <style name="AppTheme.AppBarOverlayLight" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/material_black</item>
+        <item name="android:textColorSecondary">@color/material_black</item>
+    </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -10,6 +10,13 @@ public class MapHelper {
     //Radius of the Earth in km
     public static final double EARTH = 6371;
 
+    // Layers
+    public static final float LAYER_SCANNED_LOCATIONS = 0;
+    public static final float LAYER_MY_SEARCH = 50;
+    public static final float LAYER_POKESTOPS = 100;
+    public static final float LAYER_GYMS = 150;
+    public static final float LAYER_POKEMONS = 200;
+
     /**
      * Returns the distance from 'this' point to destination point (using haversine formula).
      *
