@@ -33,6 +33,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String SERVICE_VIBRATE_KEY = "new_poke_vibrate";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
@@ -140,6 +141,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.contains(PTC_INFO_KEY) || sharedPreferences.contains(GOOGLE_INFO_KEY);
     }
 
+    public boolean isServiceVibrationEnabled(){
+        return sharedPreferences.getBoolean(SERVICE_VIBRATE_KEY,false);
+    }
+
     @Override
     public void clearLoginCredentials() {
 
@@ -196,6 +201,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public void setServiceState(@NonNull boolean isEnabled) {
         sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
+    }
+
+    @Override
+    public void setServiceVibration(boolean isEnabled){
+        sharedPreferences.edit().putBoolean(SERVICE_VIBRATE_KEY,isEnabled);
     }
 
     @Override

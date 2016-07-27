@@ -33,6 +33,8 @@
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+    <string name="pref_service_vibrate_on_change_title">Vibrate on Change</string>
+    <string name="pref_service_vibrate_on_new_poke_key" translatable="false">new_poke_vibrate</string>
     <string name="pref_cat_other">Other</string>
     <string name="pref_theme_button">Theme</string>
     <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
