@@ -516,15 +516,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                             .icon(bitmapDescriptor)
                                             .zIndex(MapHelper.LAYER_POKEMONS)
                                             .anchor(0.5f, 0.5f));
+
                                     //adding pokemons to list to be removed on next search
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
-                                            markerList.put(poke.getSpawnPointId(), markerExtended);
-                                            MarkerRefreshController.getInstance().postMarker(markerExtended);
-                                        }
-                                    });
+                                    Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
+                                    PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
+                                    markerList.put(poke.getSpawnPointId(), markerExtended);
+                                    MarkerRefreshController.getInstance().postMarker(markerExtended);
+
                                 }
                             }
                         );
@@ -552,7 +550,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void removeExpiredMarker(PokemonMarkerExtended pokemonMarker) {
-        Log.d(TAG, "removeExpiredMarker: ");
         pokemonMarker.getMarker().remove();
         markerList.remove(pokemonMarker);
     }
