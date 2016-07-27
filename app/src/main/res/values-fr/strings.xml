@@ -1,9 +1,14 @@
 <resources>
-    <string name="app_name" translatable="false">Pokémap</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="action_clearmap">Effacer la carte</string>
     <string name="action_logout">Se déconnecter</string>
+
+
+    <string name="pref_file_key">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
+    <string name="pref_theme">PresetTheme</string>
+    <string name="pref_theme_no_action_bar">PresetThemeNoAb</string>
+	
 
     <string name="logout_prompt_message">Êtes vous sur de vouloir vous déconnecter ?</string>
     <string name="yes">OUI</string>
@@ -13,36 +18,27 @@
     <string name="pref_warning">NOTE: NE PAS UTILISER votre compte principal pour cette application!
         Créez et utilisez un "faux" compte du Club de Dresseur de Pokemons</string>
     <string name="pref_username">Votre pseudo</string>
-    <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">Dupont</string>
     <string name="pref_password">Votre mot de passe</string>
-    <string name="pref_password_key" translatable="false">PasswordKey</string>
-    <string name="pref_default_password" translatable="false">***</string>
 
     <string name="pref_cat_general">Général</string>
     <string name="pref_pokestops_title">Afficher les Pokéstops</string>
-    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
     <string name="pref_gyms_title">Afficher les Arènes</string>
-    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Afficher les lieux scannés</string>
-    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
     <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
-
-    <string name="pokestop" translatable="false">Pokéstop</string>
 
 
     <string name="pref_cat_service" translatable="false">Travail en tâche de fond</string>
     <string name="pref_service_enable_title">Activer</string>
-    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Fréquence de mise à jour</string>
     <string name="pref_service_refresh_summary">Tous les combien de secondes le scan doit avoir lieu.</string>
-    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
+    <string name="pref_cat_other">Autre</string>
+    <string name="pref_theme_button">Thème</string>
     <string name="toast_credentials">Impossible de se connecter, vérifiez votre pseudo/mot de passe</string>
     <string name="title_activity_poke_map">Pokémon proches</string>
 
-    <string name="login_warning">
-	NE PAS UTILISER votre compte principal pour cette application !
+    <string name="login_warning">NE PAS UTILISER votre compte principal pour cette application !
         Créez et utilisez un "faux" compte du Club de Dresseur de Pokemons</string>
     <string name="prompt_username">Pseudo</string>
     <string name="prompt_password">Mot de passe</string>
@@ -80,7 +76,7 @@
     <string name="permition_message">Merci d\'autoriser la géolocalisation pour utiliser cette application</string>
     <string name="allow">Autoriser</string>
     <string name="app_settings">Paramètres</string>
-    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer">Avertissement</string>
 
 
     <string name="toast_searching">Recherche&#8230;</string>
@@ -94,6 +90,7 @@
     <string name="notification_service_pokemon_near">" Pokémon proche."</string>
     <string name="notification_service_pokemon_in_area">" Pokémon dans la zone:"</string>
     <string name="meters">metres</string>
+	<string name="gym">Arène</string>
 
     <string name="button_ok">Ok</string>
 
