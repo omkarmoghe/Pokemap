@@ -5,6 +5,13 @@
     <string name="action_clearmap">Clear Map</string>
     <string name="action_logout">Logout</string>
 
+    <string name="pref_file_key">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
+    <string name="pref_theme">PresetTheme</string>
+    <string name="pref_theme_no_action_bar">PresetThemeNoAb</string>
+
+    <string name="logout_prompt_message">Are you sure you want to log out?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
     <string name="pref_cat_user_account">User Account</string>
     <string name="pref_warning">NOTE: Do NOT use your main account for this application!
@@ -35,6 +42,10 @@
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
+    <string name="pref_cat_other">Other</string>
+    <string name="pref_theme_button">Theme</string>
+    <string name="pref_theme_button_key">ThemeKey</string>
+
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
 
@@ -51,20 +62,18 @@
     <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
 
-    <string name="pokemon_to_show">Pokemon to show</string>
+    <string name="pokemon_to_show">Pokémon to show</string>
 
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
     <string name="minutes">"minutes"</string>
     <string name="pokemon_disappearing_in">"Disappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
-    <string name="pokemon_found_new">" new catchable Pokémon found."</string>
     <string name="position_picked">Position Picked</string>
     <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Waiting for Position&#8230;</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_map_not_initialized">Problem Initializing Google Map</string>
-    <string name="toast_searching">Searching&#8230;</string>
     <string name="toast_server_unreachable">Unable to contact the Pokémon GO servers. The servers may be down.</string>
     <string name="toast_token_expired">The Login token has expired. Getting a new one.</string>
     <string name="toast_user_found">Found You!</string>
@@ -73,8 +82,6 @@
     <string name="toast_ptc_login_error">PTC Login Failed</string>
     <string name="enable_location_permission_title">Enable Location Permission</string>
     <string name="enable_location_permission_message">Please enable location permission to use this application</string>
-    <string name="toast_pokemon_found_count">" Pokémon found"</string>
-    <string name="pokemon_found_none">No new catchable Pokémon have been found.</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
     <string name="expiring_in">"Expires in: "</string>
     <string name="google_login_failed">Google login failed</string>
@@ -82,11 +89,21 @@
     <string name="allow">Allow</string>
     <string name="app_settings">App Settings</string>
     <string name="disclaimer">Disclaimer</string>
+
+
+    <string name="toast_searching">Searching&#8230;</string>
+    <string name="toast_pokemon_found_count">"Pokémon found"</string>
+    <string name="pokemon_found_none">No new catchable Pokémon have been found.</string>
+    <string name="pokemon_found_new">"new catchable Pokémon found."</string>
+
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanning</string>
     <string name="notification_service_stop">Stop Service</string>
     <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
     <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
     <string name="meters">meters</string>
+    <string name="gym">Gym</string>
+
+    <string name="button_ok">Ok</string>
 
 </resources>
