@@ -31,6 +31,10 @@
     <string name="pref_scanned_title">Show Scanned Locations</string>
     <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
     <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
+    <string name="pref_search_steps">Search steps</string>
+    <string name="pref_search_steps_key">search_steps</string>
+    <string name="pre_lured_key">lured_checkbox</string>
+    <string name="pref_lured_title">Show Lured Pokémon</string>
 
     <string name="pokestop" translatable="false">Pokéstop</string>
 
@@ -41,6 +45,7 @@
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+
 
     <string name="pref_cat_other">Other</string>
     <string name="pref_theme_button">Theme</string>
@@ -105,8 +110,5 @@
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
-
-    <string name="pref_search_steps">Search steps</string>
-    <string name="pref_search_steps_key">search_steps</string>
 
 </resources>

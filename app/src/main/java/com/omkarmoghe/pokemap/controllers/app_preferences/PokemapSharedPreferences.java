@@ -33,6 +33,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String SHOW_LURED = "lured_checkbox";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
@@ -165,6 +166,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public boolean getShowGyms() {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
+    }
+
+    @Override
+    public boolean getShowLuredPokemon() {
+        return sharedPreferences.getBoolean(SHOW_LURED, false);
     }
 
     public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
