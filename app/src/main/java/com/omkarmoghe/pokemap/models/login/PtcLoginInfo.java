@@ -11,6 +11,8 @@ public class PtcLoginInfo extends LoginInfo {
 
     public PtcLoginInfo(String authToken, String username, String password){
         super(authToken);
+        mUsername = username;
+        mPassword = password;
     }
 
     public String getUsername() {

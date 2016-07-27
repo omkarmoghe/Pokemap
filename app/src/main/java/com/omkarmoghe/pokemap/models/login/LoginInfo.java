@@ -9,7 +9,7 @@ import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope
 public abstract class LoginInfo {
 
     public static final String PROVIDER_GOOGLE = "google";
-    public static final String PROVIDER_PTC = "PTC";
+    public static final String PROVIDER_PTC = "ptc";
 
     private String mToken;
 
