@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class SearchInPosition {
 
     private LatLng position;
+    private int steps;
 
     public LatLng getPosition() {
         return position;
@@ -15,5 +16,13 @@ public class SearchInPosition {
 
     public void setPosition(LatLng position) {
         this.position = position;
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
     }
 }
