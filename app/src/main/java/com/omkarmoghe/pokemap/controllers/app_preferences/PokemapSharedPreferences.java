@@ -127,7 +127,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     private String getStoredString(String value){
-        return value.split("=")[1];
+        if (value == null) return null;
+        String[] parts = value.split("=");
+        
+        return (parts.length > 1) ? parts[1] : null;
     }
 
     @Override
