@@ -1,30 +1,30 @@
 package com.omkarmoghe.pokemap.models.events;
 
-import com.pokegoapi.api.map.fort.Pokestop;
-
 import java.util.Collection;
 
-/**
- * Created by socrates on 7/23/2016.
- */
-public class PokestopsEvent implements IEvent {
+import POGOProtos.Map.Fort.FortDataOuterClass;
 
-    private Collection<Pokestop> pokestops;
+/**
+ * Created by aronhomberg on 7/23/2016.
+ */
+public class GymsEvent implements IEvent {
+
+    private Collection<FortDataOuterClass.FortData> gyms;
     private double lat;
     private double longitude;
 
-    public PokestopsEvent(Collection<Pokestop> pokestops, double lat, double longitude) {
-        this.pokestops = pokestops;
+    public GymsEvent(Collection<FortDataOuterClass.FortData> gyms, double lat, double longitude) {
+        this.gyms = gyms;
         this.lat = lat;
         this.longitude = longitude;
     }
 
-    public Collection<Pokestop> getPokestops() {
-        return pokestops;
+    public Collection<FortDataOuterClass.FortData> getGyms() {
+        return gyms;
     }
 
-    public void setPokestops(Collection<Pokestop> pokestops) {
-        this.pokestops = pokestops;
+    public void setGyms(Collection<FortDataOuterClass.FortData> gyms) {
+        this.gyms = gyms;
     }
 
     public double getLatitude() {
