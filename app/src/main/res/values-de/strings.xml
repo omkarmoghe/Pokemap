@@ -48,7 +48,7 @@
     <string name="pref_service_refresh_title">Aktualisierungsrate</string>
     <string name="enable_location_permission_message">Bitte genehmige GPS-Erlaubnis für die App.</string>
     <string name="enable_location_permission_title">GPS-Erlaubnis erteilen</string>
-    <string name="expiring_in">"Läuft ab in: "</string>
+    <string name="expiring_in">Läuft ab in %1$d:%2$d</string>
     <string name="pokemon_found_none">Keine neuen Pokémon gefunden.</string>
     <string name="toast_internal_error">Ein interner Fehler ist aufgetreten. Eventuell sind die Server offline.</string>
     <string name="toast_login_error">Fehler beim einloggen.</string>
@@ -59,7 +59,7 @@
     <string name="permition_message">Bitte erlaube die GPS-Positionierung</string>
     <string name="allow">Erlauben</string>
     <string name="app_settings">Einstellungen</string>
-    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer">Haftungsausschluss</string>
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanne...</string>
     <string name="notification_service_stop">Beenden</string>
@@ -74,4 +74,5 @@
     <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
     <string name="yes">JA</string>
     <string name="no">NEIN</string>
+    <string name="button_ok">OK</string>
 </resources>

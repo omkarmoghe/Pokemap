@@ -586,8 +586,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-
-        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.seconds)));
+        return getString(R.string.expiring_in, minutes, seconds);
     }
 
     /**
