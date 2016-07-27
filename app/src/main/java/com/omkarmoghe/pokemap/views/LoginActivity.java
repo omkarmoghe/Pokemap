@@ -31,6 +31,7 @@ import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
+import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
 
 /**
@@ -146,6 +147,12 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        LoginInfo loginInfo = mPref.getLoginInfo();
+        if (loginInfo != null && loginInfo instanceof PtcLoginInfo) {
+            mUsernameView.setText(((PtcLoginInfo) loginInfo).getUsername());
+            mPasswordView.setText(((PtcLoginInfo) loginInfo).getPassword());
+        }
 
         Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
         signInButton.setOnClickListener(new OnClickListener() {
