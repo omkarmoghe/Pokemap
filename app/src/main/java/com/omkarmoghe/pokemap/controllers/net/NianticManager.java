@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.app.Activity;
 import android.os.HandlerThread;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -15,6 +16,8 @@ import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
+import com.omkarmoghe.pokemap.models.login.LoginInfo;
+import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
@@ -227,16 +230,20 @@ public class NianticManager {
         void authFailed(String message);
     }
 
+    public interface AuthListener{
+        void authSuccessful();
+        void authFailed(String message);
+    }
+
     /**
      * Sets the google auth token for the auth info also invokes the onLogin callback.
-     * @param token - a valid google auth token.
      */
-    public void setGoogleAuthToken(@NonNull final String token) {
+    public void setLoginInfo(@NonNull final LoginInfo info) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
             try {
-                mAuthInfo = new GoogleLogin(mPoGoClient).login(token);
+                mAuthInfo = info.createAuthInfo();
                 mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
                 EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
             } catch (Exception e) {
@@ -248,33 +255,38 @@ public class NianticManager {
 
     /**
      * Sets the pokemon trainer club auth token for the auth info also invokes the onLogin callback.
-     * @param token - a valid pokemon trainer club auth token.
      */
-    public void setPTCAuthToken(@NonNull final String token) {
+    public void setLoginInfo(final Activity activity, @NonNull final LoginInfo info, @NonNull final AuthListener listener) {
+        Log.d(TAG, "setLoginInfo: LoginInfo = " +info);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mAuthInfo = new PtcLogin(mPoGoClient).login(token);
+                    mAuthInfo = info.createAuthInfo();
                     mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
-                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (Exception e) {
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
-                }
-            }
-        });
-    }
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.authSuccessful();
+                        }
+                    });
+                } catch (final LoginFailedException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.authFailed(e.getMessage());
+                        }
+                    });
 
-    public void login(@NonNull final String username, @NonNull final String password) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mAuthInfo = new PtcLogin(mPoGoClient).login(username, password);
-                    mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
-                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-                } catch (Exception e) {
-                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (final RemoteServerException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.authFailed(e.getMessage());
+                        }
+                    });
                 }
             }
         });

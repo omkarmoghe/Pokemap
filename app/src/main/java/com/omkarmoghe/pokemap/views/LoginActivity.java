@@ -30,6 +30,10 @@ import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
+import com.omkarmoghe.pokemap.models.login.LoginInfo;
+import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+import com.pokegoapi.auth.PtcLogin;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +55,7 @@ public class LoginActivity extends AppCompatActivity{
     private View mLoginFormView;
     private NianticManager mNianticManager;
     private NianticManager.LoginListener mNianticLoginListener;
+    private NianticManager.AuthListener mNianticAuthListener;
     private GoogleManager mGoogleManager;
     private GoogleManager.LoginListener mGoogleLoginListener;
 
@@ -67,18 +72,27 @@ public class LoginActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_login);
 
+        mNianticAuthListener = new NianticManager.AuthListener() {
+            @Override
+            public void authSuccessful() {
+                finishLogin();
+            }
+
+            @Override
+            public void authFailed(String message) {
+                showAuthFailed();
+                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+            }
+        };
+
         mNianticLoginListener = new NianticManager.LoginListener() {
             @Override
             public void authSuccessful(String authToken) {
-                showProgress(false);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
-                mNianticManager.setPTCAuthToken(authToken);
-
-                // store prefs
-                mPref.setUsername(mUsernameView.getText().toString());
-                mPref.setPassword(mPasswordView.getText().toString());
-
-                finishLogin();
+                PtcLoginInfo info = new PtcLoginInfo(authToken,
+                        mUsernameView.getText().toString(), mPasswordView.getText().toString());
+                mPref.setLoginInfo(info);
+                mNianticManager.setLoginInfo(LoginActivity.this, info, mNianticAuthListener);
             }
 
             @Override
@@ -91,19 +105,16 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleLoginListener = new GoogleManager.LoginListener() {
             @Override
             public void authSuccessful(String authToken, String refreshToken) {
-                showProgress(false);
-                mPref.setGoogleToken(authToken);
-                mPref.setGoogleRefreshToken(refreshToken);
+                GoogleLoginInfo info = new GoogleLoginInfo(authToken, refreshToken);
                 Log.d(TAG, "authSuccessful() called with: authToken = [" + authToken + "]");
-                mNianticManager.setGoogleAuthToken(authToken);
-                finishLogin();
+                mPref.setLoginInfo(info);
+                mNianticManager.setLoginInfo(LoginActivity.this, info, mNianticAuthListener);
             }
 
             @Override
             public void authFailed(String message) {
-                showProgress(false);
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
-                Snackbar.make((View)mLoginFormView.getParent(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
+                showAuthFailed();
             }
 
             @Override
@@ -164,13 +175,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void showAuthFailed() {
-
         showProgress(false);
-
-        // set Ptc credentials (remembering)
-        mUsernameView.setText(mPref.getUsername());
-        mPasswordView.setText(mPref.getPassword());
-
         Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
     }
 
@@ -216,11 +221,6 @@ public class LoginActivity extends AppCompatActivity{
             cancel = true;
         }
 
-        // auto-login is reading from here,
-        // if not persisted, you can't change the values in the form
-        mPref.setPassword(password);
-        mPref.setUsername(username);
-
         if (cancel) {
             // There was an error; don't attempt triggerAutoLogin and focus the first
             // form field with an error.
@@ -228,7 +228,8 @@ public class LoginActivity extends AppCompatActivity{
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user triggerAutoLogin attempt.
-            triggerAutoLogin();
+            showProgress(true);
+            mNianticManager.login(username, password, mNianticLoginListener);
         }
     }
 
@@ -276,55 +277,10 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void triggerAutoLogin() {
-
-        if (mPref.isUsernameSet() || mPref.isPasswordSet()) {
-
+        if(mPref.isLoggedIn()){
             showProgress(true);
-
-            mNianticManager.login(mPref.getUsername(), mPref.getPassword());
-
-        } else if (mPref.isGoogleTokenAvailable()) {
-
-            showProgress(true);
-
-            mNianticManager.setGoogleAuthToken(mPref.getGoogleToken());
+            mNianticManager.setLoginInfo(this, mPref.getLoginInfo(), mNianticAuthListener);
         }
-    }
-
-    /**
-     * Called whenever a LoginEventResult is posted to the bus. Originates from LoginTask.java
-     *
-     * @param result Results of a log in attempt
-     */
-    @Subscribe
-    public void onEvent(final LoginEventResult result) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                if (result.isLoggedIn()) {
-
-                    finishLogin();
-
-                } else {
-
-                    showAuthFailed();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        EventBus.getDefault().unregister(this);
     }
 }
 
