@@ -109,10 +109,8 @@ public class MarkerRefreshController {
     public void postMarker(PokemonMarkerExtended markerData){
         long time = markerData.getCatchablePokemon().getExpirationTimestampMs() - System.currentTimeMillis();
         if(time > 0) {
-            Log.d(TAG, "postMarker: time = " + time/1000);
             Message message = mHandler.obtainMessage(MARKER_EXPIRED, markerData);
-            boolean added = mHandler.sendMessageDelayed(message, time);
-            Log.d(TAG, "postMarker: added? " + added);
+            mHandler.sendMessageDelayed(message, time);
         }
     }
 }
