@@ -21,18 +21,19 @@ public interface PokemapAppPreferences {
     boolean isLoggedIn();
 
     boolean getShowScannedPlaces();
+
     boolean getShowPokestops();
+
     boolean getShowGyms();
 
     void clearLoginCredentials();
+
     /**
-     *
      * @param isEnabled Sets if the background service is enabled.
      */
     void setServiceState(@NonNull boolean isEnabled);
 
     /**
-     *
      * @return Returns service state as set in preffs
      */
     boolean isServiceEnabled();

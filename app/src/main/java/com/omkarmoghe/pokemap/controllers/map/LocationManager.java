@@ -43,6 +43,7 @@ public class LocationManager {
 
         return instance;
     }
+
     private LocationManager(final Context context) {
         final LocationListener locationListener = new LocationListener() {
             @Override
@@ -94,9 +95,9 @@ public class LocationManager {
         listeners = new ArrayList<>();
     }
 
-    public LatLng getLocation(){
+    public LatLng getLocation() {
         //Don't getLatitude without checking if location is not null... it will throw sys err...
-        if(location != null){
+        if (location != null) {
             return new LatLng(location.getLatitude(), location.getLongitude());
         } else {
             notifyLocationFetchFailed(null);
@@ -104,27 +105,28 @@ public class LocationManager {
         return null;
     }
 
-    public void onResume(){
+    public void onResume() {
 
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
     }
 
-    public void onPause(){
+    public void onPause() {
 
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
     }
 
-    public void unregister(Listener listener){
-        if(listeners != null && listeners.indexOf(listener) != -1){
+    public void unregister(Listener listener) {
+        if (listeners != null && listeners.indexOf(listener) != -1) {
             listeners.remove(listener);
         }
     }
-    public void register(Listener listener){
-        if(listeners != null && listeners.indexOf(listener) == -1){
+
+    public void register(Listener listener) {
+        if (listeners != null && listeners.indexOf(listener) == -1) {
             listeners.add(listener);
         }
     }
@@ -139,7 +141,7 @@ public class LocationManager {
         }
     }
 
-    private void notifyLocationChanged(Location location){
+    private void notifyLocationChanged(Location location) {
 
         if (listeners != null) {
             for (Listener listener : listeners) {
@@ -151,6 +153,7 @@ public class LocationManager {
 
     public interface Listener {
         void onLocationChanged(Location location);
+
         void onLocationFetchFailed(@Nullable ConnectionResult connectionResult);
     }
 

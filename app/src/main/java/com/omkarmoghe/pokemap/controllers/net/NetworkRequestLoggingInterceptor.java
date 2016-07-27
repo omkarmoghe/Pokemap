@@ -15,7 +15,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 
-public  class NetworkRequestLoggingInterceptor implements Interceptor {
+public class NetworkRequestLoggingInterceptor implements Interceptor {
 
     private final String TAG = "NetworkRequest";
 
@@ -30,7 +30,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
 
         // Log request
         Log.d(TAG, MessageFormat.format(REQUEST_SEND_LOG, request.method(), request.url(), chain.connection(), request.headers()));
-        if(request.method().compareToIgnoreCase("post") == 0)
+        if (request.method().compareToIgnoreCase("post") == 0)
             Log.d(TAG, MessageFormat.format(REQUEST_BODY_LOG, convertRequestBodyToString(request)));
 
         final long requestStart = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
         // Log response
         Log.d(TAG, MessageFormat.format(RESPONSE_RECEIVE_LOG, responseTime, response.request().url(), response.headers()));
         final String responseBodyString = response.body().string();
-        if(responseBodyString.length() > 0)
+        if (responseBodyString.length() > 0)
             Log.d(TAG, MessageFormat.format(RESPONSE_BODY_LOG, responseBodyString.trim()));
 
         return response.newBuilder().body(ResponseBody.create(response.body().contentType(), responseBodyString)).build();

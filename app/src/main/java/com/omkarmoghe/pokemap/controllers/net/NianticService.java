@@ -1,7 +1,5 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
-import com.google.gson.annotations.SerializedName;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -30,23 +28,24 @@ public interface NianticService {
         private String lt;
         private String execution;
 
-        public LoginValues(){
+        public LoginValues() {
         }
 
         public String getLt() {
             return lt;
         }
+
         public String getExecution() {
             return execution;
         }
     }
 
-    class LoginResponse{
-        public LoginResponse(){
+    class LoginResponse {
+        public LoginResponse() {
         }
     }
 
-    class LoginError{
+    class LoginError {
         private String[] errors;
     }
 }

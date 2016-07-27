@@ -19,7 +19,7 @@ public interface GoogleService {
     Call<TokenResponse> requestToken(@Url String url);
 
 
-    class AuthRequest{
+    class AuthRequest {
         @SerializedName("device_code")
         String deviceCode;
         @SerializedName("user_code")
@@ -31,7 +31,7 @@ public interface GoogleService {
         @SerializedName("interval")
         int interval;
 
-        public AuthRequest(){
+        public AuthRequest() {
         }
 
         public String getDeviceCode() {

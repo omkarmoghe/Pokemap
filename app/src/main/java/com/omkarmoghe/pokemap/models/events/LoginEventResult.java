@@ -1,6 +1,7 @@
 package com.omkarmoghe.pokemap.models.events;
 
 import com.pokegoapi.api.PokemonGo;
+
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
 /**

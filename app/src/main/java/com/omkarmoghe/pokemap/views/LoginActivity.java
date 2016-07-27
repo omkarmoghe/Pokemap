@@ -4,14 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.text.Html;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,18 +31,12 @@ import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
-import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.pokegoapi.auth.PtcLogin;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * A login screen that offers login via username/password. And a Google Sign in
- *
  */
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -127,9 +122,11 @@ public class LoginActivity extends AppCompatActivity{
         findViewById(R.id.txtDisclaimer).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                SpannableString ban = new SpannableString(getString(R.string.ban));
+                ban.setSpan(new StyleSpan(Typeface.BOLD), 0, ban.length(), 0);
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
+                        .setMessage(TextUtils.concat(getString(R.string.login_warning), " ", ban, "."))
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
             }
@@ -181,14 +178,14 @@ public class LoginActivity extends AppCompatActivity{
 
     private void showAuthFailed() {
         showProgress(false);
-        Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+        Snackbar.make((View) mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == REQUEST_USER_AUTH){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_USER_AUTH) {
                 showProgress(true);
                 mGoogleManager.requestToken(mDeviceCode, mGoogleLoginListener);
             }
@@ -238,7 +235,7 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    private void finishLogin(){
+    private void finishLogin() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -282,7 +279,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void triggerAutoLogin() {
-        if(mPref.isLoggedIn()){
+        if (mPref.isLoggedIn()) {
             showProgress(true);
             mNianticManager.setLoginInfo(this, mPref.getLoginInfo(), mNianticAuthListener);
         }
