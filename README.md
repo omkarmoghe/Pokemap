@@ -29,7 +29,7 @@ Also, please read this to understand how this all works: https://www.reddit.com/
 ## Translations
 If you are contributing a PR related to language translations, please have 2 other members of the community (anyone who understands the language you are translating to) :thumbsup: your change.
 
-#[Official Website] (https://jz6.github.io/PoGoMap/#)
+# [Official Website] (https://jz6.github.io/PoGoMap/#)
 From the main repo:
 > Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
 > 
@@ -39,6 +39,8 @@ From the main repo:
 > 
 > For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)  
 
+## iOS Version  
+There is an [iOS port](https://github.com/istornz/iPokeGo) in the works. All iOS related prs and issues please refer to this [repo](https://github.com/istornz/iPokeGo).
 ---
 
 \* lol
