@@ -18,16 +18,16 @@
             android:name=".views.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".views.LoginActivity"></activity>
-        <activity android:name=".views.PermissionActivity"></activity>
         <activity
             android:name=".views.settings.SettingsActivity"
-            android:launchMode="singleTask"
-            android:parentActivityName=".views.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".views.MainActivity" />
         <activity
             android:name=".views.GoogleAuthActivity"
             android:parentActivityName=".views.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".views.settings.ThemeActivity"
+            android:parentActivityName=".views.settings.SettingsActivity"/>
 
         <!--
              use an alias in case we want to change the launch activity later without breaking
@@ -36,7 +36,7 @@
         <activity-alias
             android:name=".Launcher"
             android:label="@string/app_name"
-            android:targetActivity=".views.PermissionActivity">
+            android:targetActivity=".views.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

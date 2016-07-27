@@ -19,6 +19,7 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.util.PokemonIdUtils;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.api.pokemon.Pokemon;
@@ -161,17 +162,17 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                    inboxStyle.addLine(pokemonId.name() + "(" +
-                            TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                            " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
-                            R.string.meters)+")");
                     currentFoundSet.add(pokemonId);
+                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),pokemonId.name());
+                    long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
+                    int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
+                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
                 }
             }
             builder.setStyle(inboxStyle);
-            inboxStyle.setBigContentTitle(currentFoundSet.size() + getString(R.string.notification_service_pokemon_in_area));
+            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, currentFoundSet.size()));
         }
-        builder.setContentText(currentFoundSet.size() + getString(R.string.notification_service_pokemon_near));
+        builder.setContentText(getString(R.string.notification_service_pokemon_near,currentFoundSet.size()));
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
