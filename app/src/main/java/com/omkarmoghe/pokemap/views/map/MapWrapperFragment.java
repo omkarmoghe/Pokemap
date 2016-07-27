@@ -734,30 +734,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void drawMarker(LatLng position){
         if (mGoogleMap != null) {
 
-
-            //Check and eventually remove old marker
-            if (userSelectedPositionMarker != null && userSelectedPositionCircles != null) {
-                userSelectedPositionMarker.remove();
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
-
-            if(mPref.getShowScannedPlaces()) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0x4400CCFF; // outline
-                int shadeColor = 0x4400CCFF; // fill
-
-                SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(position.latitude, position.longitude));
-                List<LatLng> list = params.getSearchArea();
-                for (LatLng p : list) {
-                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(p.latitude, p.longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
-
-                }
-            }
-
             int myLocationDrawable;
             if(mPref.getMapLocationMarkerColor() == 0)
                 myLocationDrawable = R.drawable.ic_my_location_black_24dp;

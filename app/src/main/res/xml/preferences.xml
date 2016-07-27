@@ -23,26 +23,6 @@
 			android:entries="@array/pokemon_names"
 			android:defaultValue="@array/pref_pokemons_to_show_default"
 			android:key="@string/pref_pokemons_to_show_key"/>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_pokestops_title"
-            android:key="@string/pref_pokestops_key" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_gyms_title"
-            android:key="@string/pref_gyms_key" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/pref_scanned_title"
-            android:key="@string/pref_scanned_key" />
-        <ListPreference
-            android:title="@string/pref_color_of_map_location_marker_title"
-            android:key="@string/pref_color_of_map_location_marker_key"
-            android:entries="@array/pref_map_location_marker_colors"
-            android:entryValues="@array/pref_map_location_marker_colors_data"
-            android:summary=""
-            android:defaultValue="0"
-            />
 
 	</PreferenceCategory>
 
@@ -69,6 +49,16 @@
         <Preference
             android:title="@string/pref_theme_button"
             android:key="@string/pref_theme_button_key"/>
+
+
+		<ListPreference
+			android:title="@string/pref_color_of_map_location_marker_title"
+			android:key="@string/pref_color_of_map_location_marker_key"
+			android:entries="@array/pref_map_location_marker_colors"
+			android:entryValues="@array/pref_map_location_marker_colors_data"
+			android:summary=""
+			android:defaultValue="0"
+			/>
 
     </PreferenceCategory>
 
