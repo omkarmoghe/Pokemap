@@ -1,1 +1,100 @@
+<resources>
+    <string name="app_name" translatable="false">Pokémap</string>
 
+    <string name="action_settings">tautuhinga</string>
+    <string name="action_clearmap">Ūkui Map</string>
+    <string name="action_logout">Takiuru Out</string>
+
+    <string name="logout_prompt_message">Kei te tino hiahia ki te takiuru atu koutou a koutou?</string>
+    <string name="yes">YES</string>
+    <string name="no">KORE</string>
+
+    <string name="pref_cat_user_account">Pūkete kaiwhakamahi</string>
+    <string name="pref_warning">FAKATOKANGA: Kaua NOT whakamahi tō pūkete matua mō tenei tono!
+         Engari, te waihanga me te whakamahi i te pūkete pokemon Trainer Club rūpahu ki te kupuhipa rerekē, me te īmēra.</string>
+    <string name="pref_username">whakatakotoria Ingoa Kaiwhakamahi</string>
+    <string name="pref_username_key" translatable="false">UsernameKey</string>
+    <string name="pref_default_username">John Doe</string>
+    <string name="pref_password">Set Password</string>
+    <string name="pref_password_key" translatable="false">PasswordKey</string>
+    <string name="pref_default_password" translatable="false">***</string>
+
+    <string name="pref_cat_general">General</string>
+    <string name="pref_pokestops_title">Whakaatu Pokéstops</string>
+    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
+    <string name="pref_gyms_title">Whakaatu kori</string>
+    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
+    <string name="pref_scanned_title">Whakaatu Karapa Tauwāhi</string>
+    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
+    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
+
+    <string name="pokestop" translatable="false">Pokéstop</string>
+
+
+    <string name="pref_cat_service" translatable="false">Background Service</string>
+    <string name="pref_service_enable_title">Whakahohea</string>
+    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
+    <string name="pref_service_refresh_title">Tāmata Auau</string>
+    <string name="pref_service_refresh_summary">Kia pehea te maha ka whakahou i te mahi i roto i te hēkona.</string>
+    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+
+    <string name="toast_credentials">Kāore e taea te takiuru. Koa tirohia koutou taipitopito tuakiri</string>
+    <string name="title_activity_poke_map">Pokémon Nearby</string>
+
+    <string name="login_warning">e tūtohu ana ki
+     hei utu mo te hanga me te whakamahi i te pūkete pokemon Trainer Club rūpahu ki te kupuhipa rerekē, me te īmēra ranei
+         te whakamahi i te pūkete Google kore piri ki tō pūkete pokemon Haere. Ka rite ki te whakamahi i tēnei taupānga taea e hua i roto i tō pūkete te </string>
+    <string name="prompt_username">PTC ingoa kaiwhakamahi</string>
+    <string name="prompt_password">PTC kupuhipa</string>
+    <string name="action_sign_in">Waitohu i roto i</string>
+    <string name="error_field_required">Field hiahiatia</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="login_warning_title">whakatūpato:</string>
+
+    <string name="request_credentials_title">Kōkuhu koutou taipitopito tuakiri pokemon Haere</string>
+    <string name="search_pokemon_map_suggestion">(press roa i runga i te mahere ki te huri i rapu tūranga)</string>
+
+    <string name="pokemon_to_show">Pokemon ki te whakaatu</string>
+
+    <string name="action_relogin">re Takiuru</string>
+    <string name="ban">rāhuitia</string>
+    <string name="minutes">"minutes"</string>
+    <string name="pokemon_disappearing_in">"Disappearing in: "</string>
+    <string name="pokemon_expired">Expired</string>
+    <string name="position_picked">Position Picked</string>
+    <string name="seconds">"s"</string>
+    <string name="toast_localization_waiting">Tatari hoki Tūnga&#8230;</string>
+    <string name="toast_login_successful">angitu takiuru.</string>
+    <string name="toast_map_not_initialized">Raruraru Arawhiti Google Map</string>
+    <string name="toast_server_unreachable">Kāore e taea te whakapā atu i te tūmau pokemon GO. pea ki raro nga tūmau.</string>
+    <string name="toast_token_expired">Kua hemo te tohu Takiuru. Whiwhi i tētahi tangata hou.</string>
+    <string name="toast_user_found">kitea e koe!</string>
+    <string name="toast_login_error">I rahua te Takiuru.</string>
+    <string name="toast_internal_error">He hapa ā-roto puta. Tenei kia tupu, ka e tuimotu koe ranei e heke iho nga tūmau.</string>
+    <string name="toast_ptc_login_error">PTC Login Failed</string>
+    <string name="enable_location_permission_title">Whakahohe Wāhi Whakaaetanga</string>
+    <string name="enable_location_permission_message">Tēnā taea whakaaetanga wāhi ki te whakamahi i tēnei taupānga</string>
+    <string name="toast_no_location">I rahua ki te Kimihia Wāhi GPS</string>
+    <string name="expiring_in">"Expires in: "</string>
+    <string name="google_login_failed">rahua takiuru Google</string>
+    <string name="permition_message">Tena tukua wāhi i roto i te tikanga ki te whakamahi i te taupānga</string>
+    <string name="allow">tukua</string>
+    <string name="app_settings">Tautuhinga App</string>
+    <string name="disclaimer">Whakakape</string>
+
+
+    <string name="toast_searching">rapu&#8230;</string>
+    <string name="toast_pokemon_found_count">"Pokémon found"</string>
+    <string name="pokemon_found_none">Kua kitea he pokemon catchable hou kua.</string>
+    <string name="pokemon_found_new">"Pokemon catchable hou kitea."</string>
+
+    <string name="notification_service_title">Pokémap Service</string>
+    <string name="notification_service_scanning">matawai</string>
+    <string name="notification_service_stop">Ratonga Stop</string>
+    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
+    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
+    <string name="meters">mita</string>
+
+    <string name="button_ok">Ok</string>
+
+</resources>
