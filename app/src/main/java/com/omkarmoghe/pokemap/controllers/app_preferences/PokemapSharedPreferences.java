@@ -140,17 +140,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public void setServiceState(@NonNull boolean isEnabled) {
         sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
-    @Override
-    public int getMapLocationMarkerColor() {
-        return Integer.parseInt(sharedPreferences.getString(MAP_LOCATION_MARKER_COLOR, "0"));
     }
 
     @Override
-    public void clearLoginCredentials() {
-
-        sharedPreferences.edit().remove(GOOGLE_TOKEN_KEY).apply();
-        sharedPreferences.edit().remove(USERNAME_KEY).apply();
-        sharedPreferences.edit().remove(PASSWORD_KEY).apply();
+    public int getMapLocationMarkerColor() {
+        return Integer.parseInt(sharedPreferences.getString(MAP_LOCATION_MARKER_COLOR, "0"));
     }
 
     @Override
