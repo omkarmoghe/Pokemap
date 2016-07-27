@@ -39,8 +39,9 @@ From the main repo:
 > 
 > For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)  
 
-## iOS Version  
+## iOS Version
 There is an [iOS port](https://github.com/istornz/iPokeGo) in the works. All iOS related prs and issues please refer to this [repo](https://github.com/istornz/iPokeGo).
+
 ---
 
 \* lol
