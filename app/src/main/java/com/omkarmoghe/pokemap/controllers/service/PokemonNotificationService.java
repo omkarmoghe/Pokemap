@@ -18,6 +18,7 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.util.PokemonIdUtils;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -149,7 +150,7 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
 
-                    String pokeName = cp.getPokemonId().name();
+                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
 
