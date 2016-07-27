@@ -73,14 +73,17 @@ public class MarkerRefreshController {
 
     }
 
-    public void startTimer(PokemonMarkerExtended markerData){
+    public void startTimer(long duration){
         if(mTimer != null){
             mTimer.cancel();
         }
 
-        long time = markerData.getCatchablePokemon().getExpirationTimestampMs() - System.currentTimeMillis();
-        final MarkerUpdate event = new MarkerUpdate(markerData);
-        mTimer = new CountDownTimer(time, DEFAULT_UPDATE_INTERVAL) {
+        if(duration <= 0) {
+            return;
+        }
+
+        final MarkerUpdate event = new MarkerUpdate();
+        mTimer = new CountDownTimer(duration, DEFAULT_UPDATE_INTERVAL) {
             @Override
             public void onTick(long l) {
                 EventBus.getDefault().post(event);

@@ -12,17 +12,4 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
  * Empty event.
  */
 public class MarkerUpdate {
-    private PokemonMarkerExtended mData;
-
-    public MarkerUpdate(PokemonMarkerExtended markerData){
-        mData = markerData;
-    }
-
-    public Marker getMarker(){
-        return mData.getMarker();
-    }
-
-    public CatchablePokemon getPokemon(){
-        return mData.getCatchablePokemon();
-    }
 }
