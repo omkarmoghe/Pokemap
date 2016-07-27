@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                 ban.setSpan(new StyleSpan(Typeface.BOLD), 0, ban.length(), 0);
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(TextUtils.concat(getString(R.string.login_warning), getString(R.string.ban)))
+                        .setMessage(TextUtils.concat(getString(R.string.login_warning), " ", ban, "."))
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
             }

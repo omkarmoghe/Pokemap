@@ -15,9 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Property;
 import android.view.LayoutInflater;
@@ -73,10 +71,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import POGOProtos.Enums.PokemonIdOuterClass;
 import POGOProtos.Enums.TeamColorOuterClass;
 import POGOProtos.Map.Fort.FortDataOuterClass;
-
-import POGOProtos.Enums.PokemonIdOuterClass;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -306,18 +303,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
 
                     RemoteImageLoader.load(
-                        pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                        markerSize, markerSize,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
-                            @Override
-                            public void onFetch(Bitmap bitmap) {
+                            pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                            markerSize, markerSize,
+                            getActivity(),
+                            new RemoteImageLoader.Callback() {
+                                @Override
+                                public void onFetch(Bitmap bitmap) {
 
-                                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                marker.setIcon(bitmapDescriptor);
-                                marker.setZIndex(pokestop.hasLurePokemon() ? 1.0f : 0.5f);
+                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                    marker.setIcon(bitmapDescriptor);
+                                    marker.setZIndex(pokestop.hasLurePokemon() ? 1.0f : 0.5f);
+                                }
                             }
-                        }
                     );
                 }
             } else if (pokestopsList != null && !pokestopsList.isEmpty() && !mPref.getShowPokestops()) {
@@ -339,20 +336,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.gym_marker);
 
                     RemoteImageLoader.load(
-                        gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                        markerSize, markerSize,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
-                            @Override
-                            public void onFetch(Bitmap  bitmap) {
+                            gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                            markerSize, markerSize,
+                            getActivity(),
+                            new RemoteImageLoader.Callback() {
+                                @Override
+                                public void onFetch(Bitmap bitmap) {
 
-                                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                marker.setIcon(bitmapDescriptor);
+                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                    marker.setIcon(bitmapDescriptor);
+                                }
                             }
-                        }
                     );
                 }
-            } else if(gymsList != null && !gymsList.isEmpty() && !mPref.getShowGyms()){
+            } else if (gymsList != null && !gymsList.isEmpty() && !mPref.getShowGyms()) {
                 for (Iterator<Map.Entry<String, GymMarkerExtended>> gymIterator = gymsList.entrySet().iterator(); gymIterator.hasNext(); ) {
                     Map.Entry<String, GymMarkerExtended> gymEntry = gymIterator.next();
                     Marker marker = gymEntry.getValue().getMarker();
@@ -386,45 +383,42 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void setPokestopsMarkers(final PokestopsEvent event) {
         if (mGoogleMap != null) {
-
             int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
             Collection<Pokestop> pokestops = event.getPokestops();
 
-            if(pokestops != null && mPref.getShowPokestops()) {
+            if (pokestops != null && mPref.getShowPokestops()) {
                 Set<String> markerKeys = pokestopsList.keySet();
 
                 for (final Pokestop pokestop : pokestops) {
-
                     // radial boxing
                     float distanceFromCenterInMeters = getDistanceInMeters(
-                        event.getLatitude(), event.getLongitude(),
-                        pokestop.getLatitude(), pokestop.getLongitude()
+                            event.getLatitude(), event.getLongitude(),
+                            pokestop.getLatitude(), pokestop.getLongitude()
                     );
 
                     if (!markerKeys.contains(pokestop.getId()) && distanceFromCenterInMeters <= 370) {
+                        RemoteImageLoader.load(
+                                pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                                markerSize, markerSize,
+                                getActivity(),
+                                new RemoteImageLoader.Callback() {
+                                    @Override
+                                    public void onFetch(Bitmap bitmap) {
 
-                            RemoteImageLoader.load(
-                            pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                            markerSize, markerSize,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
-                                @Override
-                                public void onFetch(Bitmap bitmap) {
+                                        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
-                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
+                                                .title(getString(R.string.pokestop))
+                                                .icon(bitmapDescriptor)
+                                                .zIndex(MapHelper.LAYER_POKESTOPS)
+                                                .alpha(pokestop.hasLurePokemon() ? 1.0f : 0.5f));
+                                        //.anchor(0.5f, 0.5f));
 
-                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
-                                        .title(getString(R.string.pokestop))
-                                        .icon(bitmapDescriptor)
-                                        .zIndex(MapHelper.LAYER_POKESTOPS)
-                                        .alpha(pokestop.hasLurePokemon() ? 1.0f : 0.5f)
-                                        .anchor(0.5f, 0.5f));
-
-                                    //adding pokemons to list to be removed on next search
-                                    pokestopsList.put(pokestop.getId(), new PokestopMarkerExtended(pokestop, marker));
+                                        //adding pokemons to list to be removed on next search
+                                        pokestopsList.put(pokestop.getId(), new PokestopMarkerExtended(pokestop, marker));
+                                    }
                                 }
-                            }
                         );
                     }
                 }
@@ -436,18 +430,15 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setGymsMarkers(final GymsEvent event){
+    private void setGymsMarkers(final GymsEvent event) {
         if (mGoogleMap != null) {
-
             int markerSize = getResources().getDimensionPixelSize(R.dimen.gym_marker);
             Collection<FortDataOuterClass.FortData> gyms = event.getGyms();
 
-            if(gyms != null && mPref.getShowGyms()) {
-
+            if (gyms != null && mPref.getShowGyms()) {
                 Set<String> markerKeys = gymsList.keySet();
 
                 for (final FortDataOuterClass.FortData gym : gyms) {
-
                     // radial boxing
                     float distanceFromCenterInMeters = getDistanceInMeters(
                             event.getLatitude(), event.getLongitude(),
@@ -455,28 +446,27 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     );
 
                     if (!markerKeys.contains(gym.getId()) && distanceFromCenterInMeters <= 370) {
-
                         RemoteImageLoader.load(
-                            gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                            markerSize, markerSize,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
-                                @Override
-                                public void onFetch(Bitmap bitmap) {
+                                gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                                markerSize, markerSize,
+                                getActivity(),
+                                new RemoteImageLoader.Callback() {
+                                    @Override
+                                    public void onFetch(Bitmap bitmap) {
 
-                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
-                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(gym.getLatitude(), gym.getLongitude()))
-                                        .title(getString(R.string.gym))
-                                        .icon(bitmapDescriptor)
-                                        .zIndex(MapHelper.LAYER_GYMS)
-                                        .anchor(0.5f, 0.5f));
+                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(gym.getLatitude(), gym.getLongitude()))
+                                                .title(getString(R.string.gym))
+                                                .icon(bitmapDescriptor)
+                                                .zIndex(MapHelper.LAYER_GYMS)
+                                                .anchor(0.5f, 0.5f));
 
-                                    // adding gyms to list to be removed on next search
-                                    gymsList.put(gym.getId(), new GymMarkerExtended(gym, marker));
+                                        // adding gyms to list to be removed on next search
+                                        gymsList.put(gym.getId(), new GymMarkerExtended(gym, marker));
+                                    }
                                 }
-                            }
                         );
                     }
                 }
@@ -488,7 +478,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void setPokemonMarkers(final List<CatchablePokemon> pokeList){
+    private void setPokemonMarkers(final List<CatchablePokemon> pokeList) {
         positionNum++;
         int markerSize = getResources().getDimensionPixelSize(R.dimen.pokemon_marker);
         if (mGoogleMap != null) {
@@ -496,39 +486,39 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             Set<String> markerKeys = markerList.keySet();
             for (final CatchablePokemon poke : pokeList) {
 
-                if(!markerKeys.contains(poke.getSpawnPointId())) {
+                if (!markerKeys.contains(poke.getSpawnPointId())) {
 
                     // checking if we need to show this pokemon
                     PokemonIdOuterClass.PokemonId pokemonId = poke.getPokemonId();
                     if (showablePokemonIDs.contains(pokemonId)) {
 
                         RemoteImageLoader.load(
-                            "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
-                            markerSize, markerSize,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
-                                @Override
-                                public void onFetch(Bitmap bitmap) {
+                                "http://serebii.net/pokemongo/pokemon/" + PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber()) + ".png",
+                                markerSize, markerSize,
+                                getActivity(),
+                                new RemoteImageLoader.Callback() {
+                                    @Override
+                                    public void onFetch(Bitmap bitmap) {
 
-                                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+                                        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
 
-                                    //Setting marker since we got image
-                                    //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                                    final Marker marker = mGoogleMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
-                                            .title(PokemonIdUtils.getLocalePokemonName(getContext(), poke.getPokemonId().name()))
-                                            .icon(bitmapDescriptor)
-                                            .zIndex(MapHelper.LAYER_POKEMONS)
-                                            .anchor(0.5f, 0.5f));
+                                        //Setting marker since we got image
+                                        //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
+                                        final Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
+                                                .title(PokemonIdUtils.getLocalePokemonName(getContext(), poke.getPokemonId().name()))
+                                                .icon(bitmapDescriptor)
+                                                .zIndex(MapHelper.LAYER_POKEMONS)
+                                                .anchor(0.5f, 0.5f));
 
-                                    //adding pokemons to list to be removed on next search
-                                    Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
-                                    PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
-                                    markerList.put(poke.getSpawnPointId(), markerExtended);
-                                    MarkerRefreshController.getInstance().postMarker(markerExtended);
+                                        //adding pokemons to list to be removed on next search
+                                        Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
+                                        PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
+                                        markerList.put(poke.getSpawnPointId(), markerExtended);
+                                        MarkerRefreshController.getInstance().postMarker(markerExtended);
 
+                                    }
                                 }
-                            }
                         );
 
                         //Increase founded pokemon counter
@@ -538,7 +528,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (positionNum != LOCATION_PERMISSION_REQUEST) {
-                    pokeSnackbar.setText(String.format("%s %s %s",getString(R.string.toast_searching), pokemonFound, getString(R.string.toast_pokemon_found_count)));
+                    pokeSnackbar.setText(String.format("%s %s %s", getString(R.string.toast_searching), pokemonFound, getString(R.string.toast_pokemon_found_count)));
                     pokeSnackbar.show();
 
                 } else {
@@ -585,19 +575,19 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
 
     private void showMapNotInitializedError() {
-        if(getView() != null){
+        if (getView() != null) {
             Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void showLocationFetchFailed() {
-        if(getView() != null){
-            Snackbar.make(getView(),getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
+        if (getView() != null) {
+            Snackbar.make(getView(), getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private String getExpirationBreakdown(long millis) {
-        if(millis < 0) {
+        if (millis < 0) {
             return getString(R.string.pokemon_expired);
         }
 
@@ -605,7 +595,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.minutes)));
+        return getString(R.string.expiring_in) + String.format("%1$d:%2$02d", minutes, seconds);
     }
 
     /**
@@ -617,17 +607,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onEvent(CatchablePokemonEvent event) {
         setPokemonMarkers(event.getCatchablePokemon());
         drawCatchedPokemonCircle(event.getLat(), event.getLongitude());
-        if(positionNum == 1) {
+        if (positionNum == 1) {
             currentCenter.setLatitude(event.getLat());
             currentCenter.setLongitude(event.getLongitude());
         }
-        if(positionNum == LOCATION_PERMISSION_REQUEST)
-        {
+        if (positionNum == LOCATION_PERMISSION_REQUEST) {
             if (mGoogleMap != null) {
 
                 if (mPref.getShowScannedPlaces()) {
 
-                    double radiusInMeters = ((SearchParams.DEFAULT_RADIUS *3)-(27*3))*2;//((3*100)-(27*3))*2
+                    double radiusInMeters = ((SearchParams.DEFAULT_RADIUS * 3) - (27 * 3)) * 2;//((3*100)-(27*3))*2
                     int strokeColor = 0x4400CCFF; // outline
                     int shadeColor = 0x4400CCFF; // fill
 
@@ -678,22 +667,21 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      * @param event
      */
 
-     @Subscribe(threadMode = ThreadMode.MAIN)
-     public void onEvent(MarkerExpired event){
-         removeExpiredMarker(event.getData());
-     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MarkerExpired event) {
+        removeExpiredMarker(event.getData());
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(MarkerUpdate event){
+    public void onEvent(MarkerUpdate event) {
         Marker marker = mSelectedMarker.getMarker();
-        if(marker.isInfoWindowShown()){
+        if (marker.isInfoWindowShown()) {
             long time = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
                     - System.currentTimeMillis();
             marker.setSnippet(getExpirationBreakdown(time));
             marker.showInfoWindow();
         }
     }
-
 
 
     private void clearCatchedPokemonCircle() {
@@ -764,7 +752,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
     }
 
-    private void drawMarker(LatLng position){
+    private void drawMarker(LatLng position) {
         if (mGoogleMap != null) {
 
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
@@ -783,7 +771,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
         for (Map.Entry<String, PokemonMarkerExtended> pm : markerList.entrySet()) {
-            if(pm.getValue().getMarker().equals(marker)){
+            if (pm.getValue().getMarker().equals(marker)) {
                 mSelectedMarker = pm.getValue();
                 long duration = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
                         - System.currentTimeMillis();
