@@ -66,8 +66,8 @@
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
     <string name="notification_service_stop">Остановить Сервис</string>
-    <string name="notification_service_pokemon_near">" покемон рядом."</string>
-    <string name="notification_service_pokemon_in_area">" покемон в досягаемости:"</string>
+    <string name="notification_service_pokemon_near">%1$d покемон рядом.</string>
+    <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
     <string name="meters">метров</string>
 
 </resources>

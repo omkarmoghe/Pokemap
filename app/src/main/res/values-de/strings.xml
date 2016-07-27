@@ -63,15 +63,15 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanne...</string>
     <string name="notification_service_stop">Beenden</string>
-    <string name="notification_service_pokemon_near">" Pokémon in der Nähe."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in der Gegend:"</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémon in der Nähe.</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémon in der Gegend:</string>
     <string name="meters">Meter</string>
     <string name="gym">Arena</string>
 
     <string name="pref_cat_service" translatable="false">Benachrichtigungs-Dienst</string>
     <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
 
-    <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
+    <string name="logout_prompt_message">Möchtest du dich wirklich ausloggen?</string>
     <string name="yes">JA</string>
     <string name="no">NEIN</string>
     <string name="button_ok">OK</string>

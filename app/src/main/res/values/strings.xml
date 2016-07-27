@@ -99,11 +99,12 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanning</string>
     <string name="notification_service_stop">Stop Service</string>
-    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémon nearby.</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémon in area:</string>
     <string name="meters">meters</string>
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d minutes, %3$d meters)</string>
 
 </resources>
