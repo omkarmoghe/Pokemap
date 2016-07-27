@@ -24,6 +24,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
+    private static final String STEPS = "search_steps";
 
     private final SharedPreferences sharedPreferences;
 
@@ -106,6 +107,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public boolean getShowPokestops() {
         return sharedPreferences.getBoolean(SHOW_POKESTOPS, false);
+    }
+
+    @Override
+    public int getSteps() {
+        return Integer.parseInt(sharedPreferences.getString(STEPS, "3"));
     }
 
     @Override
