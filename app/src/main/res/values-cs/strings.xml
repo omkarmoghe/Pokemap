@@ -15,7 +15,7 @@
 
     <string name="pref_cat_user_account">Uživatelský účet</string>
     <string name="pref_warning">Pegas varuje: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
-        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem. Savana pastevci.</string>
+        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainer Clubu s jiným heslem a emailem. Savana pastevci.</string>
     <string name="pref_username">Nastavit uživatelské jméno</string>
     <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">Jan Novák</string>
@@ -65,7 +65,7 @@
     <string name="pokemon_to_show">Ukázat tyto Pokémony</string>
 
     <string name="action_relogin">Znovupřihlášení</string>
-    <string name="ban">zabanován</string>
+    <string name="ban"> zabanován</string>
     <string name="minutes">"minut/y"</string>
     <string name="pokemon_disappearing_in">"Zmizí za: "</string>
     <string name="pokemon_expired">Zmizel</string>
