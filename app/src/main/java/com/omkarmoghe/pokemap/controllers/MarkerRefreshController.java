@@ -35,10 +35,14 @@ public class MarkerRefreshController {
         Handler.Callback callback = new Handler.Callback() {
             @Override
             public boolean handleMessage(Message message) {
-                Log.d(TAG, "handleMessage: ");
-                if(message.obj instanceof PokemonMarkerExtended){
-                    EventBus.getDefault().post(new MarkerExpired((PokemonMarkerExtended) message.obj));
-                    return true;
+                switch (message.what) {
+                    case MARKER_EXPIRED:
+                        //If Marker Expired
+                        if (message.obj instanceof PokemonMarkerExtended) {
+                            EventBus.getDefault().post(new MarkerExpired((PokemonMarkerExtended) message.obj));
+                            return true;
+                        }
+                        break;
                 }
                 return false;
             }
@@ -58,8 +62,7 @@ public class MarkerRefreshController {
 
 
     /**
-     * Cleanup thread state.
-     * Must ensure thread is properly quitting to allow safe reInit when needed
+     * Cleanup Messages and cancels the timer if it is running.
      */
     public void clear() {
         if(mTimer != null){
