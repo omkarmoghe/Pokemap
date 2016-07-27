@@ -33,7 +33,7 @@
     <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
     <string name="pokestop" translatable="false">Pokéstop</string>
-    <string name="pref_color_of_map_location_marker_key">color_of_map_location_marker</string>
+    <string name="pref_color_of_map_location_marker_key" translatable="false">color_of_map_location_marker</string>
     <string name="pref_color_of_map_location_marker_title">Color of Map Location Marker</string>
     <string-array name="pref_map_location_marker_colors">
         <item>Black</item>
@@ -43,9 +43,6 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-
-    <string name="pokestop" translatable="false">Pokestop</string>
-
 
     <string name="pref_cat_service" translatable="false">Background Service</string>
     <string name="pref_service_enable_title">Enable</string>
