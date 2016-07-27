@@ -17,27 +17,6 @@ import POGOProtos.Enums.PokemonIdOuterClass;
  */
 public class PokemonIdUtils {
 
-    /**
-     * try to resolve PokemonName from Resources
-     *
-     * @param pokemonId the PokemonID from the API.
-     * @return a localized name of the pokemon.
-     */
-    public static String getLocalePokemonName(Resources resources,
-                                              PokemonIdOuterClass.PokemonId pokemonId) {
-        String apiPokeName = pokemonId.name();
-        int resId = 0;
-        try {
-            Class resClass = R.string.class;
-            Field field = resClass.getField(apiPokeName.toLowerCase());
-            resId = field.getInt(null);
-        } catch (Exception e) {
-            Log.e("PokemonTranslation", "Failure to get Name", e);
-            resId = -1;
-        }
-        return resId > 0 ? resources.getString(resId) : apiPokeName;
-    }
-
     //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
     public static String getCorrectPokemonImageId(int pokemonNumber) {
         String actualNumber = String.valueOf(pokemonNumber);
@@ -50,9 +29,14 @@ public class PokemonIdUtils {
         }
     }
 
-    public static int getPokemonIconResource(Context context,
-                                             int position) {
-        String iconName = "p" + position;
-        return context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
+    /**
+     * try to resolve PokemonName from Resources
+     * @param apiPokeName
+     * @return
+     */
+    public static String getLocalePokemonName(Context context, String apiPokeName){
+
+        int resId = context.getResources().getIdentifier(apiPokeName.toLowerCase(), "string", context.getPackageName());
+        return resId > 0 ? context.getString(resId) : apiPokeName;
     }
 }

@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
-
-	<PreferenceCategory
-		android:key="@string/pref_cat_user_account"
-		android:title="@string/pref_cat_user_account">
-
-		<PreferenceScreen
-			android:summary="@string/pref_warning"/>
-
-		<EditTextPreference
-			android:key="@string/pref_username_key"
-			android:summary="@string/pref_default_username"
-			android:title="@string/pref_username"/>
-
-		<EditTextPreference
-			android:inputType="textPassword"
-			android:key="@string/pref_password_key"
-			android:summary="@string/pref_default_password"
-			android:title="@string/pref_password"/>
-
-	</PreferenceCategory>
-
-	<PreferenceCategory android:title="@string/pref_cat_general">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <PreferenceCategory android:title="@string/pref_cat_general">
 
 		<CheckBoxPreference
 			android:defaultValue="false"
@@ -65,5 +42,14 @@
 			android:title="@string/pref_service_refresh_title"/>
 
 	</PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_other">
+
+        <Preference
+            android:title="@string/pref_theme_button"
+            android:key="@string/pref_theme_button_key"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
