@@ -5,9 +5,12 @@
     <string name="action_sign_in">Einloggen</string>
     <string name="action_relogin">Neu einloggen</string>
     <string name="error_field_required">Feld erforderlich</string>
-    <string name="login_warning">Es wird empfohlen NICHT den eigenen Account zu benutzen.
+    <string name="login_warning"><Data><![CDATA[
+    Es wird empfohlen <b>NICHT</b> den eigenen Account zu benutzen.
         Erstelle einen neuen Pokémon-Trainer-Club (PTC) Account mit einem anderem Passwort und anderer E-Mail-Adresse an,
-        oder nutze einen anderen Google Account der nicht mit Deiner E-Mail-Adresse verknüpft ist.</string>
+        oder nutze einen anderen Google Account der nicht mit Deiner E-Mail-Adresse verknüpft ist.
+]]></Data>
+        </string>
     <string name="login_warning_title">Warnung:</string>
     <string name="pref_cat_general">Allgemein</string>
     <string name="pref_cat_user_account">Benutzerkonto</string>
