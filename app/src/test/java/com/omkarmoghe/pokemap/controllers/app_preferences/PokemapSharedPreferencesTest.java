@@ -1,46 +1,46 @@
-package com.omkarmoghe.pokemap.controllers.app_preferences;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(PreferenceManager.class)
-public class PokemapSharedPreferencesTest {
-    private static final String USERNAME_KEY = "UsernameKey";
-    private static final String PASSWORD_KEY = "PasswordKey";
-
-    @Mock
-    private Context context;
-
-    @Mock
-    private SharedPreferences sharedPreferences;
-
-    @Mock
-    SharedPreferences.Editor editor;
-
-    private PokemapSharedPreferences systemUnderTesting;
-
-    @Before
-    public void setUp() throws Exception {
-        PowerMockito.mockStatic(PreferenceManager.class);
-        when(PreferenceManager.getDefaultSharedPreferences(context)).thenReturn(sharedPreferences);
-        when(editor.putString(anyString(), anyString())).thenReturn(editor);
-        when(sharedPreferences.edit()).thenReturn(editor);
-
-        systemUnderTesting = new PokemapSharedPreferences(context);
-    }
+//package com.omkarmoghe.pokemap.controllers.app_preferences;
+//
+//import android.content.Context;
+//import android.content.SharedPreferences;
+//import android.preference.PreferenceManager;
+//
+//import org.junit.Before;
+//import org.junit.Test;
+//import org.junit.runner.RunWith;
+//import org.mockito.Mock;
+//import org.powermock.api.mockito.PowerMockito;
+//import org.powermock.core.classloader.annotations.PrepareForTest;
+//import org.powermock.modules.junit4.PowerMockRunner;
+//
+//import static org.junit.Assert.*;
+//import static org.mockito.Mockito.*;
+//
+//@RunWith(PowerMockRunner.class)
+//@PrepareForTest(PreferenceManager.class)
+//public class PokemapSharedPreferencesTest {
+//    private static final String USERNAME_KEY = "UsernameKey";
+//    private static final String PASSWORD_KEY = "PasswordKey";
+//
+//    @Mock
+//    private Context context;
+//
+//    @Mock
+//    private SharedPreferences sharedPreferences;
+//
+//    @Mock
+//    SharedPreferences.Editor editor;
+//
+//    private PokemapSharedPreferences systemUnderTesting;
+//
+//    @Before
+//    public void setUp() throws Exception {
+//        PowerMockito.mockStatic(PreferenceManager.class);
+//        when(PreferenceManager.getDefaultSharedPreferences(context)).thenReturn(sharedPreferences);
+//        when(editor.putString(anyString(), anyString())).thenReturn(editor);
+//        when(sharedPreferences.edit()).thenReturn(editor);
+//
+//        systemUnderTesting = new PokemapSharedPreferences(context);
+//    }
 //
 //    @Test
 //    public void returnTrueIfUsernameIsSet() {
@@ -151,4 +151,4 @@ public class PokemapSharedPreferencesTest {
 //        verify(sharedPreferences, times(1)).getString(PASSWORD_KEY, "");
 //        assertEquals(returnedValue, passwordStored);
 //    }
-}
+//}
