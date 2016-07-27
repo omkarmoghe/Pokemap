@@ -32,7 +32,7 @@
     <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
     <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
-    <string name="pokestop" translatable="false">Pokéstop</string>
+    <string name="pokestop">Pokéstop</string>
 
 
     <string name="pref_cat_service" translatable="false">Background Service</string>
