@@ -98,6 +98,13 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public void clearLoginCredentials() {
+
+        sharedPreferences.edit().remove(GOOGLE_INFO_KEY).apply();
+        sharedPreferences.edit().remove(PTC_INFO_KEY).apply();
+    }
+
+    @Override
     public boolean getShowScannedPlaces() {
         return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, false);
     }
@@ -129,13 +136,10 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
     }
 
-	@Override
-    public void clearLoginCredentials() {
-
-        sharedPreferences.edit().remove(GOOGLE_INFO_KEY).apply();
-        sharedPreferences.edit().remove(PTC_INFO_KEY).apply();
+    @Override
+    public void setServiceState(@NonNull boolean isEnabled) {
+        sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
     }
-
 
     @Override
     public boolean isServiceEnabled() {
