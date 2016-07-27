@@ -1,6 +1,8 @@
 package com.omkarmoghe.pokemap.views.map;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +15,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +47,8 @@ import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
-import com.omkarmoghe.pokemap.models.events.MarkerUpdateEvent;
+import com.omkarmoghe.pokemap.models.events.MarkerExpired;
+import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
@@ -79,9 +86,10 @@ import POGOProtos.Enums.PokemonIdOuterClass;
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
+    private static final String TAG = "MapWrapperFragment";
 
     private LocationManager locationManager;
 
@@ -91,6 +99,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
+    private PokemonMarkerExtended mSelectedMarker;
     private Location currentCenter = new Location("0,0");
     private Map<String, GymMarkerExtended> gymsList = new HashMap<>();
     Map<Integer, String> gymTeamImageUrls = new HashMap<>();
@@ -221,6 +230,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.setMyLocationEnabled(true);
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+
         } else {
             showLocationFetchFailed();
         }
@@ -359,7 +369,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 userSelectedPositionCircles.clear();
             }
         }
-        MarkerRefreshController.getInstance().reset();
     }
 
     private float getDistanceInMeters(double lat1, double lon1, double lat2, double lon2) {
@@ -505,14 +514,19 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                                     //Setting marker since we got image
                                     //int resourceID = getResources().getIdentifier("p" + poke.getPokemonId().getNumber(), "drawable", getActivity().getPackageName());
-                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions()
+                                    final Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                                             .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                                             .title(PokemonIdUtils.getLocalePokemonName(getContext(), poke.getPokemonId().name()))
                                             .icon(bitmapDescriptor)
                                             .zIndex(MapHelper.LAYER_POKEMONS)
                                             .anchor(0.5f, 0.5f));
+
                                     //adding pokemons to list to be removed on next search
-                                    markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
+                                    Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
+                                    PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
+                                    markerList.put(poke.getSpawnPointId(), markerExtended);
+                                    MarkerRefreshController.getInstance().postMarker(markerExtended);
+
                                 }
                             }
                         );
@@ -539,30 +553,34 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void removeExpiredMarkers() {
+    private void removeExpiredMarker(final PokemonMarkerExtended pokemonMarker) {
+        Property<Marker, Float> property = Property.of(Marker.class, Float.class, "alpha");
+        ObjectAnimator animator = ObjectAnimator.ofFloat(pokemonMarker.getMarker(), property, 1f, 0f);
+        animator.setDuration(400);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
 
-                if (mGoogleMap != null) {
-                    if (markerList != null && !markerList.isEmpty()) {
-                        for (Iterator<Map.Entry<String, PokemonMarkerExtended>> pokemonIterator = markerList.entrySet().iterator(); pokemonIterator.hasNext(); ) {
-                            Map.Entry<String, PokemonMarkerExtended> pokemonEntry = pokemonIterator.next();
-                            CatchablePokemon catchablePokemon = pokemonEntry.getValue().getCatchablePokemon();
-                            Marker marker = pokemonEntry.getValue().getMarker();
+            }
 
-                                long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
-                                if (millisLeft < 0) {
-                                    marker.remove();
-                                    pokemonIterator.remove();
-                                } else {
-                                    marker.setSnippet(getExpirationBreakdown(millisLeft));
-                                    if (marker.isInfoWindowShown()) {
-                                        marker.showInfoWindow();
-                                    }
-                                    MarkerRefreshController.getInstance().notifyTimeToExpiry(millisLeft);}
-                        }
-                        MarkerRefreshController.getInstance().reset();
-                    }
-                }
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                pokemonMarker.getMarker().remove();
+                markerList.remove(pokemonMarker);
+            }
 
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                pokemonMarker.getMarker().remove();
+                markerList.remove(pokemonMarker);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.start();
     }
 
 
@@ -587,7 +605,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.seconds)));
+        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.minutes)));
     }
 
     /**
@@ -629,6 +647,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ClearMapEvent event) {
         clearMarkers();
+        MarkerRefreshController.getInstance().clear();
     }
 
     /**
@@ -653,16 +672,28 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     * Called whenever a MarkerUpdateEvent is posted to the bus. Posted by {@link MarkerRefreshController} when
+     * Called whenever a MarkerUpdate is posted to the bus. Posted by {@link MarkerRefreshController} when
      * expired markers need to be removed.
      *
      * @param event
      */
 
      @Subscribe(threadMode = ThreadMode.MAIN)
-     public void onEvent(MarkerUpdateEvent event){
-         removeExpiredMarkers();
+     public void onEvent(MarkerExpired event){
+         removeExpiredMarker(event.getData());
      }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MarkerUpdate event){
+        Marker marker = mSelectedMarker.getMarker();
+        if(marker.isInfoWindowShown()){
+            long time = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
+                    - System.currentTimeMillis();
+            marker.setSnippet(getExpirationBreakdown(time));
+            marker.showInfoWindow();
+        }
+    }
+
 
 
     private void clearCatchedPokemonCircle() {
@@ -711,6 +742,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         settings.setMyLocationButtonEnabled(false);
         //Handle long click
         mGoogleMap.setOnMapLongClickListener(this);
+        mGoogleMap.setOnMapClickListener(this);
+        mGoogleMap.setOnMarkerClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
     }
@@ -744,5 +777,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         } else {
             showMapNotInitializedError();
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+        for (Map.Entry<String, PokemonMarkerExtended> pm : markerList.entrySet()) {
+            if(pm.getValue().getMarker().equals(marker)){
+                mSelectedMarker = pm.getValue();
+                long duration = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
+                        - System.currentTimeMillis();
+                MarkerRefreshController.getInstance().startTimer(duration);
+                break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        mSelectedMarker = null;
+        MarkerRefreshController.getInstance().stopTimer();
     }
 }
