@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
@@ -301,6 +303,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                                 BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 marker.setIcon(bitmapDescriptor);
+                                marker.setZIndex(pokestop.hasLurePokemon() ? 1.0f : 0.5f);
                             }
                         }
                     );
@@ -403,6 +406,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                         .position(new LatLng(pokestop.getLatitude(), pokestop.getLongitude()))
                                         .title(getString(R.string.pokestop))
                                         .icon(bitmapDescriptor)
+                                        .zIndex(MapHelper.LAYER_POKESTOPS)
+                                        .alpha(pokestop.hasLurePokemon() ? 1.0f : 0.5f)
                                         .anchor(0.5f, 0.5f));
 
                                     //adding pokemons to list to be removed on next search
@@ -454,6 +459,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                         .position(new LatLng(gym.getLatitude(), gym.getLongitude()))
                                         .title(getString(R.string.gym))
                                         .icon(bitmapDescriptor)
+                                        .zIndex(MapHelper.LAYER_GYMS)
                                         .anchor(0.5f, 0.5f));
 
                                     // adding gyms to list to be removed on next search
@@ -501,6 +507,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                             .position(new LatLng(poke.getLatitude(), poke.getLongitude()))
                                             .title(PokemonIdUtils.getLocalePokemonName(getContext(), poke.getPokemonId().name()))
                                             .icon(bitmapDescriptor)
+                                            .zIndex(MapHelper.LAYER_POKEMONS)
                                             .anchor(0.5f, 0.5f));
                                     //adding pokemons to list to be removed on next search
                                     markerList.put(poke.getSpawnPointId(), new PokemonMarkerExtended(poke, marker));
@@ -655,10 +662,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             if (mPref.getShowScannedPlaces()) {
 
                 double radiusInMeters = 100.0;
-                int strokeColor = 0x4400CCFF; // outline
-                int shadeColor = 0x4400CCFF; // fill
-
-                CircleOptions circleOptions = new CircleOptions().center(new LatLng(latitude, longitude)).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                int shadeColor = 0x2200CCFF; // fill
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(new LatLng(latitude, longitude))
+                        .radius(radiusInMeters).fillColor(shadeColor)
+                        .strokeColor(Color.TRANSPARENT)
+                        .zIndex(MapHelper.LAYER_SCANNED_LOCATIONS);
                 userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
             }
         }
@@ -708,6 +717,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     .title(getString(R.string.position_picked))
                     .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
                             R.drawable.ic_my_location_white_24dp)))
+                    .zIndex(MapHelper.LAYER_MY_SEARCH)
                     .anchor(0.5f, 0.5f));
         } else {
             showMapNotInitializedError();
