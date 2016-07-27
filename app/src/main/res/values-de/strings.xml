@@ -42,7 +42,6 @@
     <string name="toast_localization_waiting">Warte auf Koordinaten&#8230;</string>
     <string name="toast_map_not_initialized">Die Karte konnte nicht initialisiert werden.</string>
     <string name="toast_user_found">Position gefunden</string>
-    <string name="farfetch_d">Porenta</string>
     <string name="action_clearmap">Karte leeren</string>
     <string name="action_logout">Ausloggen</string>
     <string name="pref_scanned_title">Zeige gescannte Bereiche</string>
@@ -83,4 +82,5 @@
     <string name="toast_still_searching">Suche läuft... bisher %1$d Pokémon gefunden.</string>
     <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
+    <string name="default_string">Standard</string>
 </resources>
