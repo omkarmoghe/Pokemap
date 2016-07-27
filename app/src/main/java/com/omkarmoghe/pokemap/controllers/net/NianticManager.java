@@ -338,7 +338,9 @@ public class NianticManager {
                     if (mPokemonGo != null) {
 
                         Thread.sleep(33);
-                        EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops()));
+                        mPokemonGo.setLocation(lat, longitude, alt);
+                        Thread.sleep(33);
+                        EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops(), lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -370,7 +372,7 @@ public class NianticManager {
                     Thread.sleep(33);
                     mPokemonGo.setLocation(latitude, longitude, alt);
                     Thread.sleep(33);
-                    EventBus.getDefault().post(new GymsEvent(mPokemonGo.getMap().getMapObjects().getGyms()));
+                    EventBus.getDefault().post(new GymsEvent(mPokemonGo.getMap().getMapObjects().getGyms(), latitude, longitude));
                 }
 
             } catch (LoginFailedException e) {

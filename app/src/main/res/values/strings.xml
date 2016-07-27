@@ -5,6 +5,10 @@
     <string name="action_clearmap">Clear Map</string>
     <string name="action_logout">Logout</string>
 
+    <string name="pref_file_key">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
+    <string name="pref_theme">PresetTheme</string>
+    <string name="pref_theme_no_action_bar">PresetThemeNoAb</string>
+
     <string name="logout_prompt_message">Are you sure you want to log out?</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
@@ -37,6 +41,10 @@
     <string name="pref_service_refresh_title">Refresh Rate</string>
     <string name="pref_service_refresh_summary">How often the service will update in seconds.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+
+    <string name="pref_cat_other">Other</string>
+    <string name="pref_theme_button">Theme</string>
+    <string name="pref_theme_button_key">ThemeKey</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
