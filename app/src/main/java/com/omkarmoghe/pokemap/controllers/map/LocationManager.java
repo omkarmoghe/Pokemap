@@ -48,7 +48,7 @@ public class LocationManager {
             @Override
             public void onLocationChanged(Location newLocation) {
                 location = newLocation;
-                Log.d(TAG, "Location Found: " + location.getLatitude() + ", " + location.getLongitude());
+                Log.d(TAG, "User location found: " + location.getLatitude() + ", " + location.getLongitude());
                 notifyLocationChanged(location);
             }
         };
@@ -77,12 +77,14 @@ public class LocationManager {
 
                         @Override
                         public void onConnectionSuspended(int i) {
+                            Log.e(TAG, "Failed to fetch user location. Connection suspended, code: " + i);
                             notifyLocationFetchFailed(null);
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                            Log.e(TAG, "Failed to fetch user location. Connection result: " + connectionResult.getErrorMessage());
                             notifyLocationFetchFailed(connectionResult);
                         }
                     })

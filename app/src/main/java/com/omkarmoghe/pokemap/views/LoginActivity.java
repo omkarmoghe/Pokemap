@@ -29,7 +29,6 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.net.GoogleManager;
 import com.omkarmoghe.pokemap.controllers.net.GoogleService;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
-import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
@@ -97,7 +96,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 showAuthFailed();
             }
         };
@@ -113,7 +112,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authFailed(String message) {
-                Log.d(TAG, "authFailed() called with: message = [" + message + "]");
+                Log.d(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
                 showAuthFailed();
             }
 
@@ -130,8 +129,8 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View view) {
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>banned</b>"))
-                        .setPositiveButton("OK", null)
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
+                        .setPositiveButton(android.R.string.ok, null)
                         .show();
             }
         });

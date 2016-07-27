@@ -15,6 +15,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
+
 /**
  * Provide convenience methods to access shared preferences
  */
@@ -27,6 +32,9 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String SERVICE_KEY = "background_poke_service";
+    private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
+    private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
 
     private final SharedPreferences sharedPreferences;
 
@@ -104,6 +112,23 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
+    public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
+        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
+        Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
+        for (String stringId : showablePokemonStringIDs) {
+            showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
+        }
+        return showablePokemonIDs;
+    }
+
+    public void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> ids) {
+        Set<String> showablePokemonStringIDs = new HashSet<>();
+        for (PokemonIdOuterClass.PokemonId pokemonId : ids) {
+            showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+        }
+        sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
+    }
+
 	@Override
     public void clearLoginCredentials() {
 
@@ -112,4 +137,13 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
 
+    @Override
+    public boolean isServiceEnabled() {
+        return sharedPreferences.getBoolean(SERVICE_KEY, false);
+    }
+
+    @Override
+    public int getServiceRefreshRate() {
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
+    }
 }
