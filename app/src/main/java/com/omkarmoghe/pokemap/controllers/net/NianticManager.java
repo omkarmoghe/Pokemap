@@ -15,12 +15,15 @@ import android.util.Log;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
+import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
+import com.pokegoapi.api.map.MapObjects;
+import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
@@ -38,6 +41,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import POGOProtos.Map.Fort.FortDataOuterClass;
+import POGOProtos.Map.Fort.FortLureInfoOuterClass;
+import POGOProtos.Map.Pokemon.MapPokemonOuterClass;
+import POGOProtos.Map.Pokemon.WildPokemonOuterClass;
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
 import okhttp3.Cookie;
@@ -329,6 +335,46 @@ public class NianticManager {
             }
         });
     }
+
+    public void getLuredPokemon(final double lat, final double longitude, final double alt){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    if (mPokemonGo != null) {
+
+                        Thread.sleep(33);
+                        mPokemonGo.setLocation(lat, longitude, alt);
+                        Thread.sleep(33);
+
+                        List<CatchablePokemon> pokemon = new ArrayList<>();
+                        for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
+                            if(!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())){
+                                Log.d(TAG, "run: hasFortInfo = " + pokestop.getFortData().getLureInfo());
+                                pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
+                            }
+                        }
+                        EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
+                    }
+
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getPokeStops(). Login credentials wrong or user banned. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getPokeStops(). Remote server unreachable. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (InterruptedException | RuntimeException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getPokeStops(). PoGoAPI crashed. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
+                }
+            }
+        });
+    }
+
 
     public void getPokeStops(final double lat, final double longitude, final double alt){
         mHandler.post(new Runnable() {
