@@ -54,46 +54,46 @@
     <string name="request_credentials_title">Inserisci le tue credenziali di Pokémon Go</string>
     <string name="search_pokemon_map_suggestion">(Premi a lungo sulla mappa per cambiare la posizione di ricerca)</string>
 
-    <string name="pokemon_to_show">Pokemon ki te whakaatu</string>
+    <string name="pokemon_to_show">Pokémon da mostrare</string>
 
-    <string name="action_relogin">re Takiuru</string>
-    <string name="ban">rāhuitia</string>
-    <string name="minutes">"minutes"</string>
-    <string name="pokemon_disappearing_in">"Disappearing in: "</string>
-    <string name="pokemon_expired">Expired</string>
-    <string name="position_picked">Position Picked</string>
-    <string name="seconds">"s"</string>
-    <string name="toast_localization_waiting">Tatari hoki Tūnga&#8230;</string>
-    <string name="toast_login_successful">angitu takiuru.</string>
-    <string name="toast_map_not_initialized">Raruraru Arawhiti Google Map</string>
-    <string name="toast_server_unreachable">Kāore e taea te whakapā atu i te tūmau pokemon GO. pea ki raro nga tūmau.</string>
-    <string name="toast_token_expired">Kua hemo te tohu Takiuru. Whiwhi i tētahi tangata hou.</string>
-    <string name="toast_user_found">kitea e koe!</string>
-    <string name="toast_login_error">I rahua te Takiuru.</string>
-    <string name="toast_internal_error">He hapa ā-roto puta. Tenei kia tupu, ka e tuimotu koe ranei e heke iho nga tūmau.</string>
-    <string name="toast_ptc_login_error">PTC Login Failed</string>
-    <string name="enable_location_permission_title">Whakahohe Wāhi Whakaaetanga</string>
-    <string name="enable_location_permission_message">Tēnā taea whakaaetanga wāhi ki te whakamahi i tēnei taupānga</string>
-    <string name="toast_no_location">I rahua ki te Kimihia Wāhi GPS</string>
-    <string name="expiring_in">"Expires in: "</string>
-    <string name="google_login_failed">rahua takiuru Google</string>
-    <string name="permition_message">Tena tukua wāhi i roto i te tikanga ki te whakamahi i te taupānga</string>
-    <string name="allow">tukua</string>
-    <string name="app_settings">Tautuhinga App</string>
-    <string name="disclaimer">Whakakape</string>
+    <string name="action_relogin">Riaccedi</string>
+    <string name="ban">bannato</string>
+    <string name="minutes">"minuti"</string>
+    <string name="pokemon_disappearing_in">"Scompare tra: "</string>
+    <string name="pokemon_expired">Scomparso</string>
+    <string name="position_picked">Posizione Presa</string>
+    <string name="seconds">"i"</string>
+    <string name="toast_localization_waiting">In attesa della posizione&#8230;</string>
+    <string name="toast_login_successful">Accesso riuscito.</string>
+    <string name="toast_map_not_initialized">Problemi a inizializzare Google Maps</string>
+    <string name="toast_server_unreachable">Impossibile contattare i server Pokémon Go. I server potrebbere essere morti.</string>
+    <string name="toast_token_expired">Il token di login è scaduto. Ne sto creando uno nuovo.</string>
+    <string name="toast_user_found">Ti ho trovato!</string>
+    <string name="toast_login_error">Accesso non riuscito.</string>
+    <string name="toast_internal_error">Errore interno. Potresti essere offline o i server potrebbero essere morti.</string>
+    <string name="toast_ptc_login_error">PTC Login fallito</string>
+    <string name="enable_location_permission_title">Abilita location permission</string>
+    <string name="enable_location_permission_message">Per favore abilita location permission per utilizzare questa app</string>
+    <string name="toast_no_location">Impossibile trovare la posizione GPS</string>
+    <string name="expiring_in">"Scade tra: "</string>
+    <string name="google_login_failed">Accesso con Google fallito</string>
+    <string name="permition_message">Per favore abilita locations per utilizzare questa app</string>
+    <string name="allow">Permetti</string>
+    <string name="app_settings">Impostazioni App</string>
+    <string name="disclaimer">Disclaimer</string>
 
 
-    <string name="toast_searching">rapu&#8230;</string>
-    <string name="toast_pokemon_found_count">"Pokémon found"</string>
-    <string name="pokemon_found_none">Kua kitea he pokemon catchable hou kua.</string>
-    <string name="pokemon_found_new">"Pokemon catchable hou kitea."</string>
+    <string name="toast_searching">Sto cercando&#8230;</string>
+    <string name="toast_pokemon_found_count">"Pokémon trovato"</string>
+    <string name="pokemon_found_none">Non sono stati trovati nuovi Pokèmon da catturare.</string>
+    <string name="pokemon_found_new">"nuovo Pokèmon da catturare trovato."</string>
 
-    <string name="notification_service_title">Pokémap Service</string>
-    <string name="notification_service_scanning">matawai</string>
-    <string name="notification_service_stop">Ratonga Stop</string>
-    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
+    <string name="notification_service_title">Servizio Pokémap</string>
+    <string name="notification_service_scanning">Scansione in corso</string>
+    <string name="notification_service_stop">Ferma il servizio</string>
+    <string name="notification_service_pokemon_near">" Pokémon vicini."</string>
     <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
-    <string name="meters">mita</string>
+    <string name="meters">metri</string>
 
     <string name="button_ok">Ok</string>
 
