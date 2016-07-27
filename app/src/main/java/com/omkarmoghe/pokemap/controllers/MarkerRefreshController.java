@@ -1,13 +1,18 @@
 package com.omkarmoghe.pokemap.controllers;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.design.widget.TabLayout;
+import android.os.Message;
 import android.util.Log;
 
-import com.omkarmoghe.pokemap.models.events.MarkerUpdateEvent;
+import com.omkarmoghe.pokemap.models.events.MarkerExpired;
+import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
+import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.sql.Time;
 
 /**
  * Created by Rohan on 26-07-2016.
@@ -18,38 +23,31 @@ public class MarkerRefreshController {
 
     final private String TAG = MarkerRefreshController.class.getName();
 
-    private HandlerThread mThread;
+    private static final int DEFAULT_UPDATE_INTERVAL = 1000;//1 seconds : heartbeat
+    private static final int MARKER_EXPIRED = 1;
+
     private Handler mHandler;
-    private static final int DEFAULT_UPDATE_INTERVAL = 10 * 1000;//10 seconds : heartbeat
-    private long updateInterval = DEFAULT_UPDATE_INTERVAL;
-    private MarkerUpdateEvent mEvent;
-    private Runnable markerExpiryUpdate;
+    private CountDownTimer mTimer;
 
     private static MarkerRefreshController mInstance;
 
     private MarkerRefreshController() {
-        if (mThread == null) {
-
-            mThread = new HandlerThread("MarkerRefreshThread");
-            mThread.start();
-            mHandler = new Handler(mThread.getLooper());
-            mEvent = new MarkerUpdateEvent();
-            markerExpiryUpdate = new Runnable() {
-                @Override
-                public void run()
-                {
-                    /**
-                     * Talking to:
-                     * {@link com.omkarmoghe.pokemap.views.map.MapWrapperFragment,}
-                     */
-                    EventBus.getDefault().post(new MarkerUpdateEvent());
+        Handler.Callback callback = new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message message) {
+                switch (message.what) {
+                    case MARKER_EXPIRED:
+                        //If Marker Expired
+                        if (message.obj instanceof PokemonMarkerExtended) {
+                            EventBus.getDefault().post(new MarkerExpired((PokemonMarkerExtended) message.obj));
+                            return true;
+                        }
+                        break;
                 }
-            };
-
-        } else {
-            throw new RuntimeException("Invalid state of Marker Refresh Thread.");
-        }
-
+                return false;
+            }
+        };
+        mHandler = new Handler(callback);
     }
 
     /*
@@ -64,44 +62,58 @@ public class MarkerRefreshController {
 
 
     /**
-     * Cleanup thread state.
-     * Must ensure thread is properly quitting to allow safe reInit when needed
+     * Cleanup Messages and cancels the timer if it is running.
      */
     public void clear() {
-        if(mThread!=null) {
-            try {
-                mThread.join();
-                mThread.quit();            //I don't need to process the scheduled messages in queue.
+        if(mTimer != null){
+            mTimer.cancel();
+            mTimer = null;
+        }
+        mHandler.removeMessages(MARKER_EXPIRED);
 
-            } catch (InterruptedException e) {
-                Log.d(TAG, "Quitting too soon.. doing final cleanup");
-            } finally {
-                mThread = null;
-                mInstance = null;
+    }
+
+    public void startTimer(long duration){
+        if(mTimer != null){
+            mTimer.cancel();
+        }
+
+        if(duration <= 0) {
+            return;
+        }
+
+        final MarkerUpdate event = new MarkerUpdate();
+        mTimer = new CountDownTimer(duration, DEFAULT_UPDATE_INTERVAL) {
+            @Override
+            public void onTick(long l) {
+                EventBus.getDefault().post(event);
             }
+
+            @Override
+            public void onFinish() {
+                mTimer = null;
+                EventBus.getDefault().post(event);
+            }
+        };
+        mTimer.start();
+    }
+
+    public void stopTimer(){
+        if(mTimer != null){
+            mTimer.cancel();
+            mTimer = null;
         }
     }
 
-    /**
-     * Combo call for starting, resetting, refreshing, scheduling next update
-     * Must be called separately after [@link notifyTimeToExpiry]
-     */
-    public void reset() {
-        getInstance().mHandler.removeCallbacks(markerExpiryUpdate);
-        getInstance().mHandler.postDelayed(markerExpiryUpdate, updateInterval);
-        updateInterval = DEFAULT_UPDATE_INTERVAL;
+    public void clearMessages(){
+        mHandler.removeMessages(MARKER_EXPIRED);
     }
 
-    /**
-     * Hook to determine next closest expiration time.
-     * Can be scheduled at regular intervals to use as a heartbeat.
-     *
-     * @param timeToExpiry
-     */
-    public void notifyTimeToExpiry(long timeToExpiry) {
-        if (updateInterval > timeToExpiry) {
-            updateInterval = timeToExpiry;
+    public void postMarker(PokemonMarkerExtended markerData){
+        long time = markerData.getCatchablePokemon().getExpirationTimestampMs() - System.currentTimeMillis();
+        if(time > 0) {
+            Message message = mHandler.obtainMessage(MARKER_EXPIRED, markerData);
+            mHandler.sendMessageDelayed(message, time);
         }
     }
-
 }
