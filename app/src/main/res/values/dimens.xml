@@ -9,4 +9,5 @@
     <dimen name="gym_marker">36dp</dimen>
     <dimen name="pokemon_to_show_icon_size">48dip</dimen>
     <dimen name="pokemon_to_show_icon_margin_left">8dip</dimen>
+    <dimen name="suggestion_text_size">14sp</dimen>
 </resources>
