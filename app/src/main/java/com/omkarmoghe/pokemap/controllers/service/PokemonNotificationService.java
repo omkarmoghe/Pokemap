@@ -25,7 +25,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import POGOProtos.Enums.PokemonIdOuterClass;
 
 
 public class PokemonNotificationService extends Service{
@@ -136,15 +139,20 @@ public class PokemonNotificationService extends Service{
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
+            Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
+
             for(CatchablePokemon cp : catchablePokemon){
-                Location pokeLocation = new Location("");
-                pokeLocation.setLatitude(cp.getLatitude());
-                pokeLocation.setLongitude(cp.getLongitude());
-                long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                inboxStyle.addLine(cp.getPokemonId().name() + "(" +
-                        TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                        " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
-                                                R.string.meters)+")");
+                //Only show the notification if the Pokemon is in the preference list
+                if(showablePokemonIDs.contains(cp.getPokemonId())) {
+                    Location pokeLocation = new Location("");
+                    pokeLocation.setLatitude(cp.getLatitude());
+                    pokeLocation.setLongitude(cp.getLongitude());
+                    long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
+                    inboxStyle.addLine(cp.getPokemonId().name() + "(" +
+                            TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
+                            " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
+                            R.string.meters)+")");
+                }
             }
 
             builder.setStyle(inboxStyle);
@@ -169,7 +177,7 @@ public class PokemonNotificationService extends Service{
                     LatLng currentLocation = locationManager.getLocation();
 
                     if(currentLocation != null){
-                        nianticManager.getMapInformation(currentLocation.latitude,currentLocation.longitude,0);
+                        nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
                     }else {
                         locationManager = LocationManager.getInstance(PokemonNotificationService.this);
                     }
