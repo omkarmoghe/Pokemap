@@ -759,6 +759,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
         sip.setPosition(position);
+        sip.setSteps(mPref.getSteps());
         EventBus.getDefault().post(sip);
 
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
