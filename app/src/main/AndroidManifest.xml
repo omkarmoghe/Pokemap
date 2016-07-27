@@ -17,7 +17,6 @@
             android:name=".views.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".views.LoginActivity"></activity>
-        <activity android:name=".views.PermissionActivity"></activity>
         <activity
             android:name=".views.settings.SettingsActivity"
             android:parentActivityName=".views.MainActivity" />
@@ -36,7 +35,7 @@
         <activity-alias
             android:name=".Launcher"
             android:label="@string/app_name"
-            android:targetActivity=".views.PermissionActivity">
+            android:targetActivity=".views.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

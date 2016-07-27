@@ -47,6 +47,7 @@ import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
+import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
@@ -90,6 +91,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
     private Marker userSelectedPositionMarker = null;
+    private Location currentCenter = new Location("0,0");
     private Map<String, GymMarkerExtended> gymsList = new HashMap<>();
     Map<Integer, String> gymTeamImageUrls = new HashMap<>();
     String lurePokeStopImageUrl = "http://i.imgur.com/2BI3Cqv.png";
@@ -597,6 +599,26 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onEvent(CatchablePokemonEvent event) {
         setPokemonMarkers(event.getCatchablePokemon());
         drawCatchedPokemonCircle(event.getLat(), event.getLongitude());
+        if(positionNum == 1) {
+            currentCenter.setLatitude(event.getLat());
+            currentCenter.setLongitude(event.getLongitude());
+        }
+        if(positionNum == LOCATION_PERMISSION_REQUEST)
+        {
+            if (mGoogleMap != null) {
+
+                if (mPref.getShowScannedPlaces()) {
+
+                    double radiusInMeters = ((SearchParams.DEFAULT_RADIUS *3)-(27*3))*2;//((3*100)-(27*3))*2
+                    int strokeColor = 0x4400CCFF; // outline
+                    int shadeColor = 0x4400CCFF; // fill
+
+                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(currentCenter.getLatitude(), currentCenter.getLongitude())).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+                    clearCatchedPokemonCircle();
+                    userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
+                }
+            }
+        }
     }
 
     /**
