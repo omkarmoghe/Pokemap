@@ -150,6 +150,12 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
+        LoginInfo loginInfo = mPref.getLoginInfo();
+        if(loginInfo != null && loginInfo instanceof PtcLoginInfo){
+            mUsernameView.setText(((PtcLoginInfo) loginInfo).getUsername());
+            mPasswordView.setText(((PtcLoginInfo) loginInfo).getPassword());
+        }
+
         Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
