@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.controllers.service;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -7,10 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -71,6 +74,8 @@ public class PokemonNotificationService extends Service{
 
         preffs = new PokemapSharedPreferences(this);
         vibrate = preffs.isServiceVibrationEnabled();
+        vibrate =  ContextCompat.checkSelfPermission(this,
+                Manifest.permission.VIBRATE) ==  PackageManager.PERMISSION_GRANTED;
 
         if(vibrate){
             vibratorManager = (Vibrator) getSystemService(VIBRATOR_SERVICE);

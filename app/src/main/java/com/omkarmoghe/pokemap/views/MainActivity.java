@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.views;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,6 +41,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
+    private static final int VIBRATE_PERMISION = 235;
 
     private boolean skipNotificationServer;
     private PokemapAppPreferences pref;
@@ -150,6 +154,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         skipNotificationServer = false;
+
+        if(pref.isServiceVibrationEnabled() && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.VIBRATE) !=  PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.VIBRATE},
+                    VIBRATE_PERMISION);
+        }
     }
 
     @Override
@@ -165,6 +176,12 @@ public class MainActivity extends BaseActivity {
             case 703:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "permission granted");
+                }
+                break;
+            case VIBRATE_PERMISION:
+                //If they did not give us the permision uncheck the prefference.
+                if(grantResults.length == 0){
+                    pref.setServiceVibration(false);
                 }
                 break;
         }

@@ -204,6 +204,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public void setServiceVibration(boolean isEnabled){
+        sharedPreferences.edit().putBoolean(SERVICE_VIBRATE_KEY,isEnabled);
+    }
+
+    @Override
     public boolean isServiceEnabled() {
         return sharedPreferences.getBoolean(SERVICE_KEY, false);
     }
