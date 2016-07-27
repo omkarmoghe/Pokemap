@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        SearchParams params = new SearchParams(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
         MapWrapperFragment.pokeSnackbar.setText(getString(R.string.toast_searching));
         MapWrapperFragment.pokeSnackbar.show();

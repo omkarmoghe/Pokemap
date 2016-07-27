@@ -106,4 +106,7 @@
 
     <string name="button_ok">Ok</string>
 
+    <string name="pref_search_steps">Search steps</string>
+    <string name="pref_search_steps_key">search_steps</string>
+
 </resources>

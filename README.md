@@ -1,5 +1,5 @@
 # Pokemap [![Build Status](https://travis-ci.org/omkarmoghe/Pokemap.svg?branch=dev)](https://travis-ci.org/omkarmoghe/Pokemap) [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
-[Can't log in? Check the PTC login status before creating an issue.](http://ispokemongodownornot.com/)
+[Can't log in? Check the PTC login status.](http://ispokemongodownornot.com/)
 
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
@@ -14,6 +14,8 @@ screenshots from @linkout @mike @z14942744
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
 Please read the f***ing manual before opening an issue. :heart:
+
+[Contribute to the documentation!](https://github.com/omkarmoghe/Pokemap/issues/17)
 
 ## [Building] (https://github.com/omkarmoghe/Pokemap/wiki/Building)
 Make sure you use the latest [android studio version 2.2 (canary builds)] (http://tools.android.com/download/studio/canary/latest) and have installed the latest versions of the build tools and support libraries in order to successfully compile and run the project. 

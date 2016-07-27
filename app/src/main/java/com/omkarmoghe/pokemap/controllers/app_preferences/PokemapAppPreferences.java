@@ -23,6 +23,7 @@ public interface PokemapAppPreferences {
     boolean getShowScannedPlaces();
     boolean getShowPokestops();
     boolean getShowGyms();
+    int getSteps();
 
     void clearLoginCredentials();
     /**
