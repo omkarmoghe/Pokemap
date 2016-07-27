@@ -254,6 +254,7 @@ public class MainActivity extends BaseActivity {
     public void onEvent(ServerUnreachableEvent event) {
         Snackbar.make(findViewById(R.id.root), getString(R.string.toast_server_unreachable), Snackbar.LENGTH_LONG).show();
         event.getE().printStackTrace();
+        showLoading(false);
     }
 
     /**
@@ -265,6 +266,7 @@ public class MainActivity extends BaseActivity {
     public void onEvent(InternalExceptionEvent event) {
         event.getE().printStackTrace();
         Snackbar.make(findViewById(R.id.root), getString(R.string.toast_internal_error), Snackbar.LENGTH_LONG).show();
+        showLoading(false);
     }
 
 }
