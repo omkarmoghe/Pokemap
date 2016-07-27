@@ -44,7 +44,9 @@
 
     <string name="pref_cat_other">Other</string>
     <string name="pref_theme_button">Theme</string>
-    <string name="pref_theme_button_key">ThemeKey</string>
+    <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="activity_theme_title">Preset Themes</string>
+    <string name="activity_theme_message">Will make this selection look pretty in the future. Select a theme:</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
@@ -62,7 +64,7 @@
     <string name="request_credentials_title">Insert your Pokémon Go credentials</string>
     <string name="search_pokemon_map_suggestion">(Long press on map to change searching position)</string>
 
-    <string name="pokemon_to_show">Pokémon to show</string>
+    <string name="pref_pokemon_to_show">Pokémon to show</string>
 
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
@@ -128,5 +130,7 @@
     <string name="few_new">@string/pokemon_found_new</string>
     <string name="many_new">@string/pokemon_found_new</string>
     <string name="other_new">@string/pokemon_found_new</string>
+
+
 
 </resources>

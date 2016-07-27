@@ -28,7 +28,7 @@ public class ThemeActivity extends AppCompatActivity {
         themeId = sharedPref.getInt(getString(R.string.pref_theme), R.style.AppTheme);
         setTheme(themeId);
 
-        setTitle("Preset Themes");
+        setTitle(getString(R.string.activity_theme_title));
         setContentView(R.layout.activity_theme);
 
         RadioButton r1 = (RadioButton) findViewById(R.id.radioButton1);
@@ -103,5 +103,12 @@ public class ThemeActivity extends AppCompatActivity {
                 }
                 break;
         }
+
+        restartActivity();
+    }
+
+    private void restartActivity() {
+        startActivity(getIntent());
+        finish();
     }
 }

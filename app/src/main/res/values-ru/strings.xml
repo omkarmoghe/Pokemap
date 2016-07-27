@@ -5,7 +5,7 @@
 
 
     <string name="pref_cat_user_account">Аккаунт</string>
-    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения!Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
+    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения! Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
     <string name="pref_username">Введите Имя аккаунта</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Введите Пароль</string>
@@ -14,12 +14,16 @@
     <string name="pref_pokestops_title">Показать Pokéstops</string>
     <string name="pref_gyms_title">Показать Gyms</string>
     <string name="pref_scanned_title">Показать отсканированную область</string>
-
+    <string name="pref_pokemon_to_show">Отображать Покемонов</string>
+    <string name="pref_cat_other">Другое</string>
+    <string name="pref_theme_button">Тема приложения</string>
+    <string name="activity_theme_title">Набор Тем</string>
+    <string name="activity_theme_message">Сделает данное приложение приятнее для использования. Выберите одну из тем:</string>
 
 
     <string name="pref_service_enable_title">Включить</string>
     <string name="pref_service_refresh_title">Интервал обновления</string>
-    <string name="pref_service_refresh_summary">Как часто сервис будет обновлять данные (в секундах).</string>
+    <string name="pref_service_refresh_summary">Частота обновления данных (в секундах).</string>
 
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
     <string name="title_activity_poke_map">Покемон Рядом</string>
@@ -62,7 +66,8 @@
     <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
     <string name="allow">Разрешить</string>
     <string name="app_settings">Настройки приложения</string>
-    <string name="pokemon_to_show">Отображать Покемонов</string>
+
+
     <string name="disclaimer">Совет</string>
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
@@ -94,6 +99,7 @@
     <string name="few_new">новых</string>
     <string name="many_new">новых</string>
     <string name="other_new">новых</string>
+
 
 
 </resources>
