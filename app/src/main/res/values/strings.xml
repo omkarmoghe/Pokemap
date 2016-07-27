@@ -110,12 +110,12 @@
 
     <string name="found">found</string>
 
-    <string name="zero_pokemon">Pokémons</string>
+    <string name="zero_pokemon">Pokémon</string>
     <string name="one_pokemon">Pokémon</string>
-    <string name="two_pokemon">Pokémons</string>
-    <string name="few_pokemon">Pokémons</string>
-    <string name="many_pokemon">Pokémons</string>
-    <string name="other_pokemon">Pokémons</string>
+    <string name="two_pokemon">Pokémon</string>
+    <string name="few_pokemon">Pokémon</string>
+    <string name="many_pokemon">Pokémon</string>
+    <string name="other_pokemon">Pokémon</string>
 
     <string name="zero_found">@string/found</string>
     <string name="one_found">@string/found</string>
