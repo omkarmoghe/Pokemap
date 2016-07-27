@@ -150,11 +150,12 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
 
-                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
-                    int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
-
-                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
+                    if (remTime >= 0){
+                        int dist = (int) Math.ceil(pokeLocation.distanceTo(myLoc));
+                        String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(), cp.getPokemonId().name());
+                        inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime, dist));
+                    }
                 }
             }
 
