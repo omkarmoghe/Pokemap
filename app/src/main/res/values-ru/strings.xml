@@ -40,7 +40,7 @@
     <string name="minutes">"минут"</string>
     <string name="pokemon_disappearing_in">"Исчезнет через: "</string>
     <string name="pokemon_expired">Исчез</string>
-    <string name="pokemon_found_new">" новый Покемон найден."</string>
+    <string name="pokemon_found_new">"новых"</string>
     <string name="position_picked">Выбранная позиция</string>
     <string name="seconds">"сек"</string>
     <string name="toast_localization_waiting">Ожидание позиции&#8230;</string>
@@ -66,8 +66,32 @@
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
     <string name="notification_service_stop">Остановить Сервис</string>
-    <string name="notification_service_pokemon_near">" покемон рядом."</string>
-    <string name="notification_service_pokemon_in_area">" покемон в досягаемости:"</string>
+    <string name="notification_service_pokemon_near">"рядом."</string>
+    <string name="notification_service_pokemon_in_area">"в досягаемости:"</string>
     <string name="meters">метров</string>
+
+    <string name="found">обнаружено</string>
+
+    <string name="zero_pokemon">Покемонов</string>
+    <string name="one_pokemon">Покемон</string>
+    <string name="two_pokemon">Покемона</string>
+    <string name="few_pokemon">Покемона</string>
+    <string name="many_pokemon">Покемонов</string>
+    <string name="other_pokemon">Покемонов</string>
+
+    <string name="zero_found">обнаружено</string>
+    <string name="one_found">обнаружен</string>
+    <string name="two_found">обнаружено</string>
+    <string name="few_found">обнаружено</string>
+    <string name="many_found">обнаружено</string>
+    <string name="other_found">обнаружено</string>
+
+    <string name="zero_new">новых</string>
+    <string name="one_new">новый</string>
+    <string name="two_new">новых</string>
+    <string name="few_new">новых</string>
+    <string name="many_new">новых</string>
+    <string name="other_new">новых</string>
+
 
 </resources>

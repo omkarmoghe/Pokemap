@@ -33,7 +33,7 @@
     <string name="minutes">"minuten"</string>
     <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
     <string name="pokemon_expired">Abgelaufen</string>
-    <string name="pokemon_found_new">" neue fangbare Pokémon wurden gefunden."</string>
+    <string name="pokemon_found_new">"neue fangbare"</string>
     <string name="position_picked">Gewählte Position</string>
     <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Warte auf Koordinaten&#8230;</string>
@@ -63,8 +63,8 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanne...</string>
     <string name="notification_service_stop">Beenden</string>
-    <string name="notification_service_pokemon_near">" Pokémon in der Nähe."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in der Gegend:"</string>
+    <string name="notification_service_pokemon_near">"in der Nähe."</string>
+    <string name="notification_service_pokemon_in_area">"in der Gegend:"</string>
     <string name="meters">Meter</string>
     <string name="gym">Arena</string>
 
@@ -74,4 +74,27 @@
     <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
     <string name="yes">JA</string>
     <string name="no">NEIN</string>
+
+    <string name="found">wurden gefunden</string>
+
+    <string name="zero_pokemon">Pokémon</string>
+    <string name="one_pokemon">Pokémon</string>
+    <string name="two_pokemon">Pokémon</string>
+    <string name="few_pokemon">Pokémon</string>
+    <string name="many_pokemon">Pokémon</string>
+    <string name="other_pokemon">Pokémon</string>
+
+    <string name="zero_found">@string/found</string>
+    <string name="one_found">@string/found</string>
+    <string name="two_found">@string/found</string>
+    <string name="few_found">@string/found</string>
+    <string name="many_found">@string/found</string>
+    <string name="other_found">@string/found</string>
+
+    <string name="zero_new">@string/pokemon_found_new</string>
+    <string name="one_new">@string/pokemon_found_new</string>
+    <string name="two_new">@string/pokemon_found_new</string>
+    <string name="few_new">@string/pokemon_found_new</string>
+    <string name="many_new">@string/pokemon_found_new</string>
+    <string name="other_new">@string/pokemon_found_new</string>
 </resources>

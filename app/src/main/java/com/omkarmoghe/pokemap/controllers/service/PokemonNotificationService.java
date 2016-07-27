@@ -18,6 +18,7 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferenc
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
+import com.omkarmoghe.pokemap.util.PokemonIdUtils;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -25,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +58,6 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
-
         EventBus.getDefault().register(this);
         createNotification();
 
@@ -133,12 +134,15 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(catchablePokemon.size() + getString(R.string.notification_service_pokemon_near));
+        String pokemons = getResources().getQuantityString(R.plurals.plurals_pokemon,catchablePokemon.size());
+        String text = String.format("%s %s %s",catchablePokemon.size(),pokemons,getString(R.string.notification_service_pokemon_near));
+        builder.setContentText(text);
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(catchablePokemon.size() + getString(R.string.notification_service_pokemon_in_area));
+            text = String.format("%s %s %s",catchablePokemon.size(),pokemons,getString(R.string.notification_service_pokemon_in_area));
+            inboxStyle.setBigContentTitle(text);
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
 
             for(CatchablePokemon cp : catchablePokemon){
@@ -148,10 +152,12 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                    inboxStyle.addLine(cp.getPokemonId().name() + "(" +
-                            TimeUnit.MILLISECONDS.toMinutes(remainingTime) +
-                            " "+getString(R.string.minutes)+"," + Math.ceil(pokeLocation.distanceTo(myLoc)) + " "+getString(
-                            R.string.meters)+")");
+                    inboxStyle.addLine(String.format(Locale.getDefault(),"%s(%d %s,%s %s)",
+                                                     PokemonIdUtils.getLocalePokemonName(this, cp.getPokemonId().name()),
+                                                     TimeUnit.MILLISECONDS.toMinutes(remainingTime),
+                                                     getString(R.string.minutes),
+                                                     Math.ceil(pokeLocation.distanceTo(myLoc)),
+                                                     getString(R.string.meters)));
                 }
             }
 

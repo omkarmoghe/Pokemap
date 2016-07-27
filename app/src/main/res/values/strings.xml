@@ -94,16 +94,39 @@
     <string name="toast_searching">Searching&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémon found"</string>
     <string name="pokemon_found_none">No new catchable Pokémon have been found.</string>
-    <string name="pokemon_found_new">"new catchable Pokémon found."</string>
+    <string name="pokemon_found_new">"new catchable"</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanning</string>
     <string name="notification_service_stop">Stop Service</string>
-    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
+    <string name="notification_service_pokemon_near">"nearby."</string>
+    <string name="notification_service_pokemon_in_area">"in area:"</string>
     <string name="meters">meters</string>
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
+
+    <string name="found">found</string>
+
+    <string name="zero_pokemon">Pokémons</string>
+    <string name="one_pokemon">Pokémon</string>
+    <string name="two_pokemon">Pokémons</string>
+    <string name="few_pokemon">Pokémons</string>
+    <string name="many_pokemon">Pokémons</string>
+    <string name="other_pokemon">Pokémons</string>
+
+    <string name="zero_found">@string/found</string>
+    <string name="one_found">@string/found</string>
+    <string name="two_found">@string/found</string>
+    <string name="few_found">@string/found</string>
+    <string name="many_found">@string/found</string>
+    <string name="other_found">@string/found</string>
+
+    <string name="zero_new">@string/pokemon_found_new</string>
+    <string name="one_new">@string/pokemon_found_new</string>
+    <string name="two_new">@string/pokemon_found_new</string>
+    <string name="few_new">@string/pokemon_found_new</string>
+    <string name="many_new">@string/pokemon_found_new</string>
+    <string name="other_new">@string/pokemon_found_new</string>
 
 </resources>
