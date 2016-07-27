@@ -1,7 +1,7 @@
 package com.omkarmoghe.pokemap.views;
 
-import android.content.DialogInterface;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,9 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
+import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
+import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
@@ -24,11 +27,8 @@ import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
-import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
-import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,11 +38,13 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     private static final String TAG = "Pokemap";
     private static final String MAP_FRAGMENT_TAG = "MapFragment";
+    private static final int LOADING_ITEM_ID = 321;
 
     private boolean skipNotificationServer;
     private PokemapAppPreferences pref;
     private SharedPreferences sharedPref;
     private int themeId;
+    private MenuItem loadingMenuItem;
 
     //region Lifecycle Methods
     @Override
@@ -61,28 +63,28 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
-        if(mapWrapperFragment == null) {
+        if (mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
-        if(pref.isServiceEnabled()){
+        if (pref.isServiceEnabled()) {
             startNotificationService();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
 
-        if(pref.isServiceEnabled()) {
+        if (pref.isServiceEnabled()) {
             stopNotificationService();
         }
 
         // If the theme has changed, recreate the activity.
-        if(themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
+        if (themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
             recreate();
         }
     }
@@ -92,7 +94,7 @@ public class MainActivity extends BaseActivity {
         super.onPause();
         EventBus.getDefault().unregister(this);
 
-        if(!skipNotificationServer && pref.isServiceEnabled()){
+        if (!skipNotificationServer && pref.isServiceEnabled()) {
             startNotificationService();
         }
 
@@ -102,6 +104,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.loadingMenuItem = menu.add(0, LOADING_ITEM_ID, 0, "");
+        loadingMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        loadingMenuItem.setActionView(R.layout.toolbar_progress_bar);
+        loadingMenuItem.expandActionView();
+        loadingMenuItem.setVisible(false);
         return true;
     }
 
@@ -110,7 +117,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
-            startActivityForResult(new Intent(this, SettingsActivity.class),0);
+            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
         } else if (id == R.id.action_clear) {
             EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
@@ -121,14 +128,14 @@ public class MainActivity extends BaseActivity {
 
     private void showLogoutPrompt() {
         new AlertDialog.Builder(this).setTitle(R.string.action_logout).setMessage(R.string.logout_prompt_message)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         logout();
                         dialogInterface.dismiss();
                     }
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -142,6 +149,25 @@ public class MainActivity extends BaseActivity {
         pref.clearLoginCredentials();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    public void showLoading(boolean flag) {
+//        MenuItem currentLoadingItem = loadingMenuItem.findItem(LOADING_ITEM_ID);
+//        if (flag) {
+//            if (currentLoadingItem == null) {
+//                MenuItem menuitem = loadingMenuItem.add(0, LOADING_ITEM_ID, 0, "");
+//                menuitem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//                menuitem.setActionView(R.layout.toolbar_progress_bar);
+//                menuitem.expandActionView();
+//            }
+//        } else {
+//            if (currentLoadingItem != null) {
+//                currentLoadingItem.collapseActionView();
+//                loadingMenuItem.removeItem(LOADING_ITEM_ID);
+//            }
+//        }
+        loadingMenuItem.setVisible(flag);
+        Log.d(TAG, "showLoading " + flag);
     }
 
     @Override
@@ -167,7 +193,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startNotificationService(){
+    private void startNotificationService() {
         Intent intent = new Intent(this, PokemonNotificationService.class);
         startService(intent);
     }

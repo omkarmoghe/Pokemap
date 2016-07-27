@@ -54,6 +54,7 @@ import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -535,6 +536,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     String text = pokemonFound > 0 ? String.format("%s %s", pokemonFound, getString(R.string.pokemon_found_new)) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
+                    ((MainActivity) getActivity()).showLoading(false);
                 }
             }
             updateMarkers();
@@ -750,6 +752,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         EventBus.getDefault().post(sip);
 
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
+        ((MainActivity) getActivity()).showLoading(true);
     }
 
     private void drawMarker(LatLng position) {
