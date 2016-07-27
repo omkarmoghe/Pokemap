@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private void showAuthFailed() {
         showProgress(false);
-        Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+        Snackbar.make((View)mLoginFormView.getParent(), getString(R.string.toast_ptc_login_error), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
