@@ -62,6 +62,7 @@
     <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
     <string name="allow">Разрешить</string>
     <string name="app_settings">Настройки приложения</string>
+    <string name="pokemon_to_show">Отображать Покемонов</string>
     <string name="disclaimer">Совет</string>
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
@@ -69,6 +70,7 @@
     <string name="notification_service_pokemon_near">"рядом."</string>
     <string name="notification_service_pokemon_in_area">"в досягаемости:"</string>
     <string name="meters">метров</string>
+
 
     <string name="found">обнаружено</string>
 
