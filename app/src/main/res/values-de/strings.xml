@@ -6,11 +6,11 @@
     <string name="action_relogin">Neu einloggen</string>
     <string name="error_field_required">Feld erforderlich</string>
     <string name="login_warning"><Data><![CDATA[
-    Es wird empfohlen <b>NICHT</b> den eigenen Account zu benutzen.
+        Es wird empfohlen <b>NICHT</b> den eigenen Account zu benutzen.
         Erstelle einen neuen Pokémon-Trainer-Club (PTC) Account mit einem anderem Passwort und anderer E-Mail-Adresse an,
         oder nutze einen anderen Google Account der nicht mit Deiner E-Mail-Adresse verknüpft ist.
-]]></Data>
-        </string>
+        ]]></Data>
+    </string>
     <string name="login_warning_title">Warnung:</string>
     <string name="pref_cat_general">Allgemein</string>
     <string name="pref_cat_user_account">Benutzerkonto</string>
@@ -69,9 +69,7 @@
     <string name="notification_service_pokemon_in_area">%1$d Pokémon in der Gegend:</string>
     <string name="meters">Meter</string>
     <string name="gym">Arena</string>
-
     <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
-
     <string name="logout_prompt_message">Möchtest du dich wirklich ausloggen?</string>
     <string name="yes">JA</string>
     <string name="no">NEIN</string>
@@ -79,7 +77,7 @@
     <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
     <string name="pref_cat_other">Anderes</string>
     <string name="pref_cat_service">Hintergrunddienst</string>
-    <string name="toast_still_searching">Suche läuft... bisher %1$d Pokémon gefunden.</string>
+    <string name="toast_still_searching">Suche läuft&#8230; bisher %1$d Pokémon gefunden.</string>
     <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
     <string name="default_string">Standard</string>
