@@ -1,5 +1,7 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
+import android.util.Log;
+
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -19,7 +21,7 @@ public class GoogleManager {
     private static final String BASE_URL = "https://www.google.com";
     private static final String SECRET = "NCjF1TLi2CcY6t5mt0ZveuL7";
     private static final String CLIENT_ID = "848232511240-73ri3t7plvk96pj4f85uj8otdat2alem.apps.googleusercontent.com";
-    private static final String OAUTH_TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v4/mToken";
+    private static final String OAUTH_TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v4/token";
     private static final String OAUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/device/code";
 
     private final OkHttpClient mClient;
@@ -54,12 +56,19 @@ public class GoogleManager {
             @Override
             public void onResponse(Call<GoogleService.AuthRequest> call, Response<GoogleService.AuthRequest> response) {
                 GoogleService.AuthRequest body = response.body();
-                listener.authRequested(body);
+
+                if (body != null) {
+                    listener.authRequested(body);
+                } else {
+                    Log.e(TAG, "Google login failed while authenticating. response.body() is null.");
+                    listener.authFailed("Google login failed while authenticating");
+                }
             }
 
             @Override
             public void onFailure(Call<GoogleService.AuthRequest> call, Throwable t) {
                 t.printStackTrace();
+                Log.e(TAG, "Google authentication failed when calling  authUser(). googleCallback's onFailure() threw: " + t.getMessage());
                 listener.authFailed("Failed on getting the information for the user auth");
             }
         };
@@ -82,13 +91,20 @@ public class GoogleManager {
         Callback<GoogleService.TokenResponse> googleCallback = new Callback<GoogleService.TokenResponse>() {
             @Override
             public void onResponse(Call<GoogleService.TokenResponse> call, Response<GoogleService.TokenResponse> response) {
-                listener.authSuccessful(response.body().getIdToken(), response.body().getRefreshToken());
+
+                if (response.body() != null) {
+                    listener.authSuccessful(response.body().getIdToken(), response.body().getRefreshToken());
+                } else {
+                    Log.e(TAG, "Google login failed while fetching token. response.body() is null.");
+                    listener.authFailed("Google login failed while authenticating. Token missing.");
+                }
             }
 
             @Override
             public void onFailure(Call<GoogleService.TokenResponse> call, Throwable t) {
                 t.printStackTrace();
-                listener.authFailed("Failed on requesting the id mToken");
+                Log.e(TAG, "Google authentication failed while fetching request token using requestToken(). googleCallback's onFailure() threw: " + t.getMessage());
+                listener.authFailed("Failed on requesting the id token");
             }
         };
 
@@ -98,7 +114,7 @@ public class GoogleManager {
         }
     }
 
-    public void refreshToken(String refreshToken, final LoginListener listener) {
+    public void refreshToken(String refreshToken, final RefreshListener listener) {
         HttpUrl url = HttpUrl.parse(OAUTH_TOKEN_ENDPOINT).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
                 .addQueryParameter("client_secret", SECRET)
@@ -111,16 +127,16 @@ public class GoogleManager {
             @Override
             public void onResponse(Call<GoogleService.TokenResponse> call, Response<GoogleService.TokenResponse> response) {
                 if(response != null && response.body() != null) {
-                    listener.authSuccessful(response.body().getIdToken(), response.body().getRefreshToken());
+                    listener.refreshSuccessful(response.body().getIdToken(), response.body().getRefreshToken());
                 }else {
-                    listener.authFailed("Failed on requesting the id mToken");
+                    listener.refreshFailed("Failed on requesting the id token");
                 }
             }
 
             @Override
             public void onFailure(Call<GoogleService.TokenResponse> call, Throwable t) {
                 t.printStackTrace();
-                listener.authFailed("Failed on requesting the id mToken");
+                listener.refreshFailed("Failed on requesting the id token");
             }
         };
 
