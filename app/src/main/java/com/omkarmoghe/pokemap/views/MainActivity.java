@@ -128,14 +128,14 @@ public class MainActivity extends BaseActivity {
 
     private void showLogoutPrompt() {
         new AlertDialog.Builder(this).setTitle(R.string.action_logout).setMessage(R.string.logout_prompt_message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         logout();
                         dialogInterface.dismiss();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
