@@ -228,9 +228,15 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
+            LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    currentLatLngLocation, 15));
+
+            //Run the initial scan at the current location reusing the long click function
+            SearchInPosition sip = new SearchInPosition();
+            sip.setPosition(currentLatLngLocation);
+            EventBus.getDefault().post(sip);
         } else {
             showLocationFetchFailed();
         }
