@@ -52,7 +52,7 @@
     <string name="toast_user_found">Найдена ваша позиция!</string>
     <string name="toast_login_error">Ошибка входа.</string>
     <string name="toast_internal_error">Внутренняя ошибка приложения.Это может быть если вы offline или Серверы Pokémon GO могут быть отключены.</string>
-    <string name="toast_ptc_login_error">Ошибка входа через PTC аккаунт</string>
+    <string name="toast_ptc_login_error">Ошибка входа через аккаунт PTC</string>
     <string name="enable_location_permission_title">Включить разрешение геолокации.</string>
     <string name="enable_location_permission_message">Пожалуйста, включите разрешение на отслеживание геолокации.</string>
     <string name="toast_pokemon_found_count">" Покемон найден"</string>
@@ -69,5 +69,6 @@
     <string name="notification_service_pokemon_near">%1$d покемон рядом.</string>
     <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
     <string name="meters">метров</string>
+    <string name="toast_google_login_error">Ошибка входа через аккаунт Google</string>
 
 </resources>

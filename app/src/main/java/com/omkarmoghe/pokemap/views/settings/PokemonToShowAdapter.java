@@ -111,7 +111,7 @@ class PokemonToShowAdapter extends BaseAdapter {
 
             RemoteImageLoader.load(
                     "http://serebii.net/pokemongo/pokemon/" + PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber()) + ".png",
-                    64, 64,
+                    64, 64, null,
                     row.getContext(),
                     new RemoteImageLoader.Callback() {
                         @Override
