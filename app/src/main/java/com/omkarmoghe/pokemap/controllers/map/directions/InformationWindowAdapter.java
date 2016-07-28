@@ -1,12 +1,9 @@
 package com.omkarmoghe.pokemap.controllers.map.directions;
 
 import android.app.Activity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.omkarmoghe.pokemap.R;

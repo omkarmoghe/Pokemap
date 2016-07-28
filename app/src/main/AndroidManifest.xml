@@ -15,15 +15,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".views.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".views.LoginActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".views.LoginActivity"/>
         <activity
             android:name=".views.settings.SettingsActivity"
             android:parentActivityName=".views.MainActivity" />
         <activity
             android:name=".views.GoogleAuthActivity"
             android:parentActivityName=".views.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".views.settings.ThemeActivity"
             android:parentActivityName=".views.settings.SettingsActivity"/>

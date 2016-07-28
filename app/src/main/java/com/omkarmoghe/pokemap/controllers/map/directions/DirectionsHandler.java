@@ -2,7 +2,6 @@ package com.omkarmoghe.pokemap.controllers.map.directions;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
@@ -20,6 +19,11 @@ import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.views.settings.DirectionsActivity;
 
 import java.util.ArrayList;
+
+/**
+ * Created by carsten on 28-07-16.
+ * Library documentation: http://www.akexorcist.com/2015/12/google-direction-library-for-android-en.html
+ */
 
 public class DirectionsHandler {
 
@@ -77,8 +81,19 @@ public class DirectionsHandler {
                                 // String duration = durationInfo.getText();
 
                                 ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                                // todo: color based on theme
-                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(context, directionPositionList, 5, ContextCompat.getColor(context, R.color.colorPrimary));
+                                int themeId = sharedPref.getInt(context.getString(R.string.pref_theme), R.style.AppTheme);
+                                int lineColor = ContextCompat.getColor(context, R.color.colorPrimary);
+
+                                if (themeId == R.style.AppThemeSquirtle) {
+                                    lineColor = ContextCompat.getColor(context, R.color.colorPrimarySquirtle);
+                                } else if (themeId == R.style.AppThemeCharmander) {
+                                    lineColor = ContextCompat.getColor(context, R.color.colorPrimaryCharmander);
+                                } else if (themeId == R.style.AppThemeBulbasaur) {
+                                    lineColor = ContextCompat.getColor(context, R.color.colorPrimaryBulbasaur);
+                                } else if (themeId == R.style.AppThemePikachu) {
+                                    lineColor = ContextCompat.getColor(context, R.color.colorPrimaryPikachu);
+                                }
+                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(context, directionPositionList, 5, lineColor);
                                 //currentDirectionsPolyLine = map.addPolyline(polylineOptions);
 
                                 directionsCallback.directionsCreated(polylineOptions);
