@@ -67,7 +67,7 @@
     <string name="enable_location_permission_title">位置情報許可</string>
     <string name="enable_location_permission_message">位置情報の使用を許可してください</string>
     <string name="toast_no_location">GPSの位置情報が取得出来ません</string>
-    <string name="expiring_in">"有効期限: "</string>
+    <string name="expiring_in">"有効期限: %1$d:%2$02d"</string>
     <string name="google_login_failed">Googleにログイン出来ません</string>
     <string name="permition_message">位置情報設定を許可してください</string>
     <string name="allow">許可する</string>
