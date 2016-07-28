@@ -161,7 +161,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             public void onLocationChanged(Location location) {
                 if (mLocation == null) {
                     mLocation = location;
-                    initMap();
+                    setInitialMapLocationAndCallSearch();
                 } else {
                     mLocation = location;
                 }
@@ -195,7 +195,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
                 if (mLocation != null && mGoogleMap != null) {
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
                 } else {
                     showLocationFetchFailed();
@@ -213,32 +213,35 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         return mView;
     }
 
-    private void initMap() {
-        pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
-        if (mLocation != null && mGoogleMap != null) {
-            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void setInitialMapLocationAndCallSearch() {
 
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(getString(R.string.enable_location_permission_title))
-                        .setMessage(getString(R.string.enable_location_permission_message))
-                        .setPositiveButton(getString(R.string.button_ok), null)
-                        .show();
-                return;
+        if (getView() != null) {
+            pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
+            if (mLocation != null && mGoogleMap != null) {
+                if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.enable_location_permission_title))
+                            .setMessage(getString(R.string.enable_location_permission_message))
+                            .setPositiveButton(getString(R.string.button_ok), null)
+                            .show();
+                    return;
+                }
+                mGoogleMap.setMyLocationEnabled(true);
+
+                LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+
+                //Run the initial scan at the current location reusing the long click function
+                SearchInPosition sip = new SearchInPosition();
+                sip.setPosition(currentLatLngLocation);
+                sip.setSteps(mPref.getSteps());
+                EventBus.getDefault().post(sip);
+            } else {
+                showLocationFetchFailed();
             }
-            mGoogleMap.setMyLocationEnabled(true);
-
-            LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    currentLatLngLocation, 15));
-
-            //Run the initial scan at the current location reusing the long click function
-            SearchInPosition sip = new SearchInPosition();
-            sip.setPosition(currentLatLngLocation);
-            sip.setSteps(1);
-            EventBus.getDefault().post(sip);
-        } else {
-            showLocationFetchFailed();
         }
     }
 
