@@ -12,4 +12,7 @@
     <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
     <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="pref_search_steps_key" translatable="false">search_steps</string>
+    <string name="pref_lured_key" translatable="false">lured_checkbox</string>
+    <string name="pref_theme_key" translatable="false">PresetTheme</string>
 </resources>

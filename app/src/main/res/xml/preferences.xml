@@ -4,7 +4,7 @@
 
 		<CheckBoxPreference
 			android:defaultValue="false"
-			android:key="@string/pre_lured_key"
+			android:key="@string/pref_lured_key"
 			android:title="@string/pref_lured_title"/>
 
 		<CheckBoxPreference

@@ -4,8 +4,6 @@
     <string name="action_clearmap">Vyčistit mapu</string>
     <string name="action_logout">Odhlásit se</string>
 
-    <string name="pref_theme">PresetTheme</string>
-
     <string name="logout_prompt_message">Opravdu se chcete odhlásit??</string>
     <string name="yes">ANO</string>
     <string name="no">ne</string>
@@ -84,8 +82,8 @@
     <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>
     <string name="notification_service_stop">Zastavit službu</string>
-    <string name="notification_service_pokemon_near">" Pokémoni poblíž."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémoni v oblasti:"</string>
+    <string name="notification_service_pokemon_near">"poblíž."</string>
+    <string name="notification_service_pokemon_in_area">"v oblasti:"</string>
     <string name="meters">metrů</string>
     <string name="gym">Tělocvična</string>
 

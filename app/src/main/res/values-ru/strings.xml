@@ -108,6 +108,8 @@
     <string name="default_string">Стандартная</string>
     <string name="yes">ДА</string>
     <string name="no">НЕТ</string>
+    <string name="pref_search_steps">Размер зоны поиска</string>
+    <string name="pref_lured_title">Показать Lure Pokéstop</string>
 
 
 </resources>

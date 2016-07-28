@@ -74,7 +74,6 @@
     <string name="button_ok">OK</string>
     <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
     <string name="pref_cat_other">Anderes</string>
-    <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
     <string name="default_string">Standard</string>
 

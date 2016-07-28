@@ -21,11 +21,11 @@ public class ThemeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PREF_ID = getString(R.string.pref_theme);
+        PREF_ID = getString(R.string.pref_theme_key);
         PREF_ID_NO_ACTION_BAR = getString(R.string.pref_theme_no_action_bar);
 
         sharedPref = this.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
-        themeId = sharedPref.getInt(getString(R.string.pref_theme), R.style.AppTheme);
+        themeId = sharedPref.getInt(getString(R.string.pref_theme_key), R.style.AppTheme);
         setTheme(themeId);
 
         setTitle(getString(R.string.activity_theme_title));
