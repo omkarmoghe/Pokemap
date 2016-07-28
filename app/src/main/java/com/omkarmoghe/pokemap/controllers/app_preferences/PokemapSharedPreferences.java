@@ -63,15 +63,15 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String password = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
+                    if(s != null && s.contains(INFO_TOKEN)){
                         token = getStoredString(s);
                         continue;
                     }
-                    if(s.contains(INFO_USERNAME)){
+                    if(s != null && s.contains(INFO_USERNAME)){
                         username = getStoredString(s);
                         continue;
                     }
-                    if(s.contains(INFO_PASSWORD)){
+                    if(s != null && s.contains(INFO_PASSWORD)){
                         password = getStoredString(s);
                     }
                 }
@@ -88,11 +88,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String refresh = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
+                    if(s != null && s.contains(INFO_TOKEN)){
                         token = getStoredString(s);
                         continue;
                     }
-                    if(s.contains(INFO_PASSWORD)){
+                    if(s != null && s.contains(INFO_PASSWORD)){
                         refresh = getStoredString(s);
                     }
                 }
