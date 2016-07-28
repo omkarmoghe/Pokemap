@@ -40,7 +40,7 @@
     <string name="minutes">"минут"</string>
     <string name="pokemon_disappearing_in">"Исчезнет через: "</string>
     <string name="pokemon_expired">Исчез</string>
-    <string name="pokemon_found_new">" новый Покемон найден."</string>
+    <string name="pokemon_found_new">%1$d новый Покемон найден.</string>
     <string name="position_picked">Выбранная позиция</string>
     <string name="seconds">"сек"</string>
     <string name="toast_localization_waiting">Ожидание позиции&#8230;</string>
@@ -58,7 +58,7 @@
     <string name="toast_pokemon_found_count">" Покемон найден"</string>
     <string name="pokemon_found_none">Не найдено новых Покемонов.</string>
     <string name="toast_no_location">Ошибка отслеживания GPS позиции.</string>
-    <string name="expiring_in">"Исчезнет через: "</string>
+    <string name="expiring_in">Исчезнет через: %1$d:%2$d</string>
     <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
     <string name="allow">Разрешить</string>
     <string name="app_settings">Настройки приложения</string>
@@ -66,8 +66,8 @@
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
     <string name="notification_service_stop">Остановить Сервис</string>
-    <string name="notification_service_pokemon_near">" покемон рядом."</string>
-    <string name="notification_service_pokemon_in_area">" покемон в досягаемости:"</string>
+    <string name="notification_service_pokemon_near">%1$d покемон рядом.</string>
+    <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
     <string name="meters">метров</string>
 
 </resources>
