@@ -47,6 +47,7 @@ import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
+import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.MarkerExpired;
 import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
@@ -529,7 +530,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                             .anchor(0.5f, 0.5f));
 
                                     //adding pokemons to list to be removed on next search
-                                    Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
                                     PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
                                     markerList.put(poke.getSpawnPointId(), markerExtended);
                                     MarkerRefreshController.getInstance().postMarker(markerExtended);
@@ -642,6 +642,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
                 }
             }
+        }
+    }
+
+    /**
+     * Called whenever a LurePokemonEvent is posted to the bus. Posted when new catchable pokemon are found.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(LurePokemonEvent event) {
+        if(!event.getCatchablePokemon().isEmpty() && mPref.getShowLuredPokemon()) {
+            setPokemonMarkers(event.getCatchablePokemon());
         }
     }
 

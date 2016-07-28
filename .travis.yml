@@ -16,7 +16,7 @@ android:
 before_script:
   - chmod +x gradlew
 script:
-  - "./gradlew build"
+  - "./gradlew build -PversionCode=$TRAVIS_BUILD_NUMBER"
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
