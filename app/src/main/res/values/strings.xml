@@ -25,13 +25,11 @@
     <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Show Scanned Locations</string>
     <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
-    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
+    <string name="pref_pokemons_to_show_key" translatable="false">pokemons_to_show</string>
     <string name="pref_search_steps">Search steps</string>
     <string name="pref_search_steps_key">search_steps</string>
     <string name="pre_lured_key">lured_checkbox</string>
     <string name="pref_lured_title">Show Lured Pokémon</string>
-
-    <string name="pref_pokemons_to_show_key" translatable="false">pokemons_to_show</string>
     <string name="pokestop" translatable="false">Pokéstop</string>
     <string name="pref_cat_service">Background Service</string>
     <string name="pref_service_enable_title">Enable</string>
@@ -98,7 +96,4 @@
     <string name="notification_service_inbox_line">%1$s (%2$d minutes, %3$d meters)</string>
     <string name="toast_still_searching">Searching&#8230; found %1$d Pokémon so far.</string>
     <string name="preset_themes_title">Preset Themes</string>
-
-    <string name="pref_search_steps">Search steps</string>
-    <string name="pref_search_steps_key">search_steps</string>
 </resources>
