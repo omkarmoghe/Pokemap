@@ -75,7 +75,7 @@
     <string name="enable_location_permission_title">Autoriser la géolocalisation</string>
     <string name="enable_location_permission_message">Merci d\'autoriser la géolocalisation</string>
     <string name="toast_no_location">Impossible de vous géolocaliser</string>
-    <string name="expiring_in">"Disparait dans : "</string>
+    <string name="expiring_in">"Disparait dans : %1$d:%2$02d"</string>
     <string name="google_login_failed">Connexion au compte Google échouée</string>
     <string name="permition_message">Merci d\'autoriser la géolocalisation pour utiliser cette application</string>
     <string name="allow">Autoriser</string>

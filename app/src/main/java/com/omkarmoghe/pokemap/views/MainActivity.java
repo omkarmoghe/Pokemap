@@ -16,14 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
-import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
+import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
 import com.omkarmoghe.pokemap.models.events.SearchInPosition;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
-import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.views.map.MapWrapperFragment;
 import com.omkarmoghe.pokemap.views.settings.SettingsActivity;
@@ -207,12 +206,9 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        SearchParams params = new SearchParams(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
-        List<LatLng> list = params.getSearchArea();
+        List<LatLng> list = MapHelper.getSearchArea(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         MapWrapperFragment.pokeSnackbar.setText(getString(R.string.toast_searching));
         MapWrapperFragment.pokeSnackbar.show();
-        MapWrapperFragment.pokemonFound = 0;
-        MapWrapperFragment.positionNum = 0;
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);
         nianticManager.getPokeStops(event.getPosition().latitude, event.getPosition().longitude, 0D);

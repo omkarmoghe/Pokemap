@@ -50,7 +50,7 @@
     <string name="pref_service_refresh_title">Aktualisierungsrate</string>
     <string name="enable_location_permission_message">Bitte genehmige GPS-Erlaubnis für die App.</string>
     <string name="enable_location_permission_title">GPS-Erlaubnis erteilen</string>
-    <string name="expiring_in">Läuft ab in %1$d:%2$d</string>
+    <string name="expiring_in">Läuft ab in %1$d:%2$02d</string>
     <string name="pokemon_found_none">Keine neuen Pokémon gefunden.</string>
     <string name="toast_internal_error">Ein interner Fehler ist aufgetreten. Eventuell sind die Server offline.</string>
     <string name="toast_login_error">Fehler beim einloggen.</string>

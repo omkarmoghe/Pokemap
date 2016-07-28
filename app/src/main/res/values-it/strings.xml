@@ -75,7 +75,7 @@
     <string name="enable_location_permission_title">Abilita location permission</string>
     <string name="enable_location_permission_message">Per favore abilita location permission per utilizzare questa app</string>
     <string name="toast_no_location">Impossibile trovare la posizione GPS</string>
-    <string name="expiring_in">"Scade tra: "</string>
+    <string name="expiring_in">"Scade tra: %1$d:%2$02d"</string>
     <string name="google_login_failed">Accesso con Google fallito</string>
     <string name="permition_message">Per favore abilita locations per utilizzare questa app</string>
     <string name="allow">Permetti</string>
