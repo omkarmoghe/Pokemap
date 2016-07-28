@@ -156,7 +156,6 @@ public class PokemonNotificationService extends Service{
                     String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
-                    //todo
                     inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
                 }
             }
