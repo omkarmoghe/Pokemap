@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -159,13 +158,6 @@ public class PokemonNotificationService extends Service{
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
                     //todo
                     inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
-                    inboxStyle.addLine(String.format(Locale.getDefault(),"%s(%d %s,%s %s)",
-                                                     PokemonIdUtils.getLocalePokemonName(this, cp.getPokemonId().name()),
-                                                     TimeUnit.MILLISECONDS.toMinutes(remainingTime),
-                                                     getString(R.string.minutes),
-                                                     Math.ceil(pokeLocation.distanceTo(myLoc)),
-                                                     getString(R.string.meters)));
-
                 }
             }
 

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Pokémap</string>
 
     <string name="action_settings">設定</string>
     <string name="action_clearmap">地図クリア</string>
@@ -21,10 +20,10 @@
     <string name="pref_pokestops_title">ポケストップを表示する</string>
     <string name="pref_gyms_title">ジムを表示する</string>
     <string name="pref_scanned_title">スキャンした場所を表示する</string>
-    <string name="pokestop" translatable="false">ポケストップ</string>
+    <string name="pokestop">ポケストップ</string>
 
 
-    <string name="pref_cat_service" translatable="false">バックグラウンドサービス</string>
+    <string name="pref_cat_service">バックグラウンドサービス</string>
     <string name="pref_service_enable_title">有効</string>
     <string name="pref_service_refresh_title">更新間隔</string>
     <string name="pref_service_refresh_summary">何秒ごとに更新しますか。</string>
@@ -46,7 +45,7 @@
     <string name="request_credentials_title">あなたのポケモンGO情報を入力してください</string>
     <string name="search_pokemon_map_suggestion">(探索したい場所で地図上を長押しする) </string>
 
-    <string name="pokemon_to_show">表示するポケモンを選ぶ</string>
+    <string name="pref_pokemon_to_show">表示するポケモンを選ぶ</string>
 
     <string name="action_relogin">再ログイン</string>
     <string name="ban">禁止されました</string>
@@ -67,7 +66,7 @@
     <string name="enable_location_permission_title">位置情報許可</string>
     <string name="enable_location_permission_message">位置情報の使用を許可してください</string>
     <string name="toast_no_location">GPSの位置情報が取得出来ません</string>
-    <string name="expiring_in">"有効期限: "</string>
+    <string name="expiring_in">"有効期限:  %1$d:%2$d"</string>
     <string name="google_login_failed">Googleにログイン出来ません</string>
     <string name="permition_message">位置情報設定を許可してください</string>
     <string name="allow">許可する</string>

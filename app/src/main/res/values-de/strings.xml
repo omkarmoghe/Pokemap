@@ -69,47 +69,20 @@
     <string name="notification_service_pokemon_in_area">"in der Gegend:"</string>
     <string name="meters">Meter</string>
     <string name="gym">Arena</string>
-    <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
-    <string name="logout_prompt_message">Möchtest du dich wirklich ausloggen?</string>
+    <string name="pref_pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
+    <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
     <string name="button_ok">OK</string>
     <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
     <string name="pref_cat_other">Anderes</string>
-    <string name="pref_cat_service">Hintergrunddienst</string>
-    <string name="toast_still_searching">Suche läuft&#8230; bisher %1$d Pokémon gefunden.</string>
     <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
     <string name="default_string">Standard</string>
 
-    <string name="activity_theme_title">Preset Themes</string>
-    <string name="activity_theme_message">Will make this selection look pretty in the future. Select a theme:</string>
+    <string name="pref_cat_service">Benachrichtigungs-Dienst</string>
 
-    <string name="pref_cat_service" translatable="false">Benachrichtigungs-Dienst</string>
-    <string name="pref_pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
-
-    <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
     <string name="yes">JA</string>
     <string name="no">NEIN</string>
     <string name="found">wurden gefunden</string>
 
-    <string name="zero_pokemon">Pokémon</string>
-    <string name="one_pokemon">Pokémon</string>
-    <string name="two_pokemon">Pokémon</string>
-    <string name="few_pokemon">Pokémon</string>
-    <string name="many_pokemon">Pokémon</string>
-    <string name="other_pokemon">Pokémon</string>
-
-    <string name="zero_found">@string/found</string>
-    <string name="one_found">@string/found</string>
-    <string name="two_found">@string/found</string>
-    <string name="few_found">@string/found</string>
-    <string name="many_found">@string/found</string>
-    <string name="other_found">@string/found</string>
-
-    <string name="zero_new">@string/pokemon_found_new</string>
-    <string name="one_new">@string/pokemon_found_new</string>
-    <string name="two_new">@string/pokemon_found_new</string>
-    <string name="few_new">@string/pokemon_found_new</string>
-    <string name="many_new">@string/pokemon_found_new</string>
-    <string name="other_new">@string/pokemon_found_new</string>
 
 </resources>
