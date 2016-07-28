@@ -58,6 +58,7 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
+
         EventBus.getDefault().register(this);
         createNotification();
 
@@ -144,7 +145,7 @@ public class PokemonNotificationService extends Service{
             text = String.format("%s %s %s",catchablePokemon.size(),pokemons,getString(R.string.notification_service_pokemon_in_area));
             inboxStyle.setBigContentTitle(text);
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
-
+            
             for(CatchablePokemon cp : catchablePokemon){
                 //Only show the notification if the Pokemon is in the preference list
                 if(showablePokemonIDs.contains(cp.getPokemonId())) {
@@ -152,12 +153,19 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
+
+                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
+                    long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
+                    int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
+                    //todo
+                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
                     inboxStyle.addLine(String.format(Locale.getDefault(),"%s(%d %s,%s %s)",
                                                      PokemonIdUtils.getLocalePokemonName(this, cp.getPokemonId().name()),
                                                      TimeUnit.MILLISECONDS.toMinutes(remainingTime),
                                                      getString(R.string.minutes),
                                                      Math.ceil(pokeLocation.distanceTo(myLoc)),
                                                      getString(R.string.meters)));
+
                 }
             }
 

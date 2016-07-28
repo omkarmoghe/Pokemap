@@ -26,35 +26,35 @@
 
 
         <RadioButton
-            android:text="Squirtle"
+            android:text="@string/squirtle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton1"
             android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:text="Charmander"
+            android:text="@string/charmander"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton2"
             android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:text="Bulbasaur"
+            android:text="@string/bulbasaur"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton3"
             android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:text="Pikachu"
+            android:text="@string/pikachu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton4"
             android:onClick="onRadioButtonClicked"/>
 
         <RadioButton
-            android:text="Default"
+            android:text="@string/default_string"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioButton5"
