@@ -47,4 +47,8 @@ public interface PokemapAppPreferences {
     Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs();
 
     void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> pokemonIDs);
+
+    void setShowMapSuggestion(boolean showMapSuggestion);
+
+    boolean getShowMapSuggestion();
 }

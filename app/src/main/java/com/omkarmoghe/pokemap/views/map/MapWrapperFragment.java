@@ -94,9 +94,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private View mView;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
-    private Location mLocation = null;
+    private static Location mLocation = null;
     private PokemonMarkerExtended mSelectedMarker;
-    private Location currentCenter = new Location("0,0");
     private Map<String, GymMarkerExtended> gymsList = new HashMap<>();
     Map<Integer, String> gymTeamImageUrls = new HashMap<>();
     String lurePokeStopImageUrl = "http://i.imgur.com/2BI3Cqv.png";
@@ -161,7 +160,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             public void onLocationChanged(Location location) {
                 if (mLocation == null) {
                     mLocation = location;
-                    setInitialMapLocationAndCallSearch();
+                    initMap(true, true);
                 } else {
                     mLocation = location;
                 }
@@ -206,14 +205,28 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
+
+                hideMapSuggestion();
             }
         });
+
+        if (!mPref.getShowMapSuggestion()) {
+            hideMapSuggestion();
+        }
 
         return mView;
     }
 
-    private void setInitialMapLocationAndCallSearch() {
+    private void hideMapSuggestion() {
+
+        mPref.setShowMapSuggestion(false);
+
+        if (mView != null) {
+            mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
+        }
+    }
+
+    private void initMap(boolean animateZoomIn, boolean searchInPlace) {
 
         if (getView() != null) {
             pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
@@ -232,17 +245,29 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                 LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
 
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+                if (animateZoomIn) {
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+                } else {
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+                }
 
-                //Run the initial scan at the current location reusing the long click function
-                SearchInPosition sip = new SearchInPosition();
-                sip.setPosition(currentLatLngLocation);
-                sip.setSteps(mPref.getSteps());
-                EventBus.getDefault().post(sip);
+                if (searchInPlace) {
+                    searchInPlace(currentLatLngLocation);
+                }
+
             } else {
                 showLocationFetchFailed();
             }
         }
+    }
+
+    private void searchInPlace(LatLng latLngLocation) {
+
+        //Run the initial scan at the current location reusing the long click function
+        SearchInPosition sip = new SearchInPosition();
+        sip.setPosition(latLngLocation);
+        sip.setSteps(mPref.getSteps());
+        EventBus.getDefault().post(sip);
     }
 
     private void clearMarkers() {
@@ -725,6 +750,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMarkerClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
+
+        initMap(false, false);
     }
 
     @Override
