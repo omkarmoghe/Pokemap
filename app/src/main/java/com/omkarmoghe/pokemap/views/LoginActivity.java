@@ -73,8 +73,15 @@ public class LoginActivity extends AppCompatActivity{
             }
 
             @Override
-            public void authFailed(String message) {
-                showPTCLoginFailed();
+            public void authFailed(String message, String provider) {
+                switch (provider){
+                    case LoginInfo.PROVIDER_PTC:
+                        showPTCLoginFailed();
+                        break;
+                    case LoginInfo.PROVIDER_GOOGLE:
+                        showGoogleLoginFailed();
+                        break;
+                }
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
             }
         };

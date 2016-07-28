@@ -269,7 +269,7 @@ public class NianticManager {
 
     public interface AuthListener{
         void authSuccessful();
-        void authFailed(String message);
+        void authFailed(String message, String Provider);
     }
 
     /**
@@ -314,7 +314,7 @@ public class NianticManager {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            listener.authFailed(e.getMessage());
+                            listener.authFailed(e.getMessage(), info.getProvider());
                         }
                     });
 
