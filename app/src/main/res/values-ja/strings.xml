@@ -89,5 +89,6 @@
     <string name="gym">ジム</string>
 
     <string name="button_ok">OK</string>
+    <string name="toast_google_login_error">Googleにログインできません。</string>
 
 </resources>

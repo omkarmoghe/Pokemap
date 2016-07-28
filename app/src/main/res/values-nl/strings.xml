@@ -85,4 +85,5 @@
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google Login Mislukt</string>
 </resources>

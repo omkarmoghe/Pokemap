@@ -71,7 +71,8 @@
     <string name="toast_user_found">Found You!</string>
     <string name="toast_login_error">Failed to Login.</string>
     <string name="toast_internal_error">An internal error occurred. This might happen when you are offline or the servers are down.</string>
-    <string name="toast_ptc_login_error">PTC Login Failed</string>
+    <string name="toast_ptc_login_error">PTC login failed</string>
+    <string name="toast_google_login_error">Google login failed</string>
     <string name="enable_location_permission_title">Enable Location Permission</string>
     <string name="enable_location_permission_message">Please enable location permission to use this application</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
