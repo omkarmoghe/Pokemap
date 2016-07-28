@@ -79,9 +79,9 @@ public class NianticManager {
     private final OkHttpClient mPoGoClient;
     private PokemonGo mPokemonGo;
 
-    public static int pokemonFound = 0;
-    public static int currentScan = 0;
-    public static int pendingSearch = 0;
+    public int pokemonFound = 0;
+    public int currentScan = 0;
+    public int pendingSearch = 0;
 
     public static NianticManager getInstance(){
         return instance;
@@ -334,10 +334,10 @@ public class NianticManager {
                     Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). PoGoAPI crashed. Raised: " + e.getMessage());
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
-                NianticManager.currentScan++;
+                NianticManager.getInstance().currentScan++;
             }
         });
-        NianticManager.pendingSearch++;
+        this.pendingSearch++;
     }
 
     public void getLuredPokemon(final double lat, final double longitude, final double alt){
@@ -443,9 +443,9 @@ public class NianticManager {
         });
     }
 
-    public static void resetSearchCount() {
-        NianticManager.pendingSearch = 0;
-        NianticManager.currentScan = 0;
-        NianticManager.pokemonFound = 0;
+    public void resetSearchCount() {
+        this.pendingSearch = 0;
+        this.currentScan = 0;
+        this.pokemonFound = 0;
     }
 }

@@ -91,7 +91,6 @@ public class MapHelper {
         List<LatLng> searchArea = new ArrayList<>();
         searchArea.add(center);
 
-        Log.d(TAG, "getSearchArea: Steps = " + steps);
         int count = 0;
         for (int i = 2; i <= steps; i++) {
 
@@ -138,9 +137,6 @@ public class MapHelper {
             }
             count = 6*(i-1)-1;
         }
-
-        Log.d(TAG, "getSearchArea: searchArea size = " + searchArea.size());
-        Log.d(TAG, "getSearchArea() returned: " + searchArea);
 
         return searchArea;
     }

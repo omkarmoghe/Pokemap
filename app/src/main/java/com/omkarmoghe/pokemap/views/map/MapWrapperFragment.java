@@ -90,6 +90,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private static final String TAG = "MapWrapperFragment";
 
     private LocationManager locationManager;
+    private NianticManager nianticManager;
 
     private PokemapAppPreferences mPref;
     private View mView;
@@ -146,7 +147,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        NianticManager.pokemonFound = markerList.size();
+        nianticManager.pokemonFound = markerList.size();
         updateMarkers();
     }
 
@@ -154,6 +155,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         locationManager = LocationManager.getInstance(getContext());
+
+        nianticManager = NianticManager.getInstance();
+
         locationManager.register(new LocationManager.Listener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -514,20 +518,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         );
 
                         //Increase founded pokemon counter
-                        NianticManager.pokemonFound++;
+                        nianticManager.pokemonFound++;
                     }
                 }
             }
             if (getView() != null) {
-                if (NianticManager.currentScan != NianticManager.pendingSearch) {
-                    pokeSnackbar.setText(getString(R.string.toast_still_searching, NianticManager.pokemonFound));
+                if (nianticManager.currentScan != nianticManager.pendingSearch) {
+                    pokeSnackbar.setText(getString(R.string.toast_still_searching, nianticManager.pokemonFound));
                     pokeSnackbar.show();
 
                 } else {
-                    String text = NianticManager.pokemonFound > 0 ? getString(R.string.pokemon_found_new, NianticManager.pokemonFound) : getString(R.string.pokemon_found_none);
+                    String text = nianticManager.pokemonFound > 0 ? getString(R.string.pokemon_found_new, nianticManager.pokemonFound) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
-                    NianticManager.resetSearchCount();
+                    nianticManager.resetSearchCount();
                 }
             }
             updateMarkers();
@@ -722,7 +726,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapLongClick(LatLng position) {
 
-        if(NianticManager.pendingSearch == 0){
+        if(nianticManager.pendingSearch == 0){
             clearPokemonCircles();
         }
 
