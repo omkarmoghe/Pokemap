@@ -20,7 +20,6 @@ import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -79,6 +78,10 @@ public class NianticManager {
     private final OkHttpClient mClient;
     private final OkHttpClient mPoGoClient;
     private PokemonGo mPokemonGo;
+
+    public static int pokemonFound = 0;
+    public static int currentScan = 0;
+    public static int pendingSearch = 0;
 
     public static NianticManager getInstance(){
         return instance;
@@ -310,13 +313,12 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-
                     if (mPokemonGo != null) {
-
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(33);
-                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon(), lat, longitude));
+                        List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
+                        EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -332,8 +334,10 @@ public class NianticManager {
                     Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). PoGoAPI crashed. Raised: " + e.getMessage());
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
+                NianticManager.currentScan++;
             }
         });
+        NianticManager.pendingSearch++;
     }
 
     public void getLuredPokemon(final double lat, final double longitude, final double alt){
@@ -437,5 +441,11 @@ public class NianticManager {
             }
             }
         });
+    }
+
+    public static void resetSearchCount() {
+        NianticManager.pendingSearch = 0;
+        NianticManager.currentScan = 0;
+        NianticManager.pokemonFound = 0;
     }
 }

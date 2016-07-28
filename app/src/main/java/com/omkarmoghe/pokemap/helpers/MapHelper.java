@@ -1,21 +1,30 @@
 package com.omkarmoghe.pokemap.helpers;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by localuser on 7/25/2016.
  */
 public class MapHelper {
+    private static final String TAG = "MapHelper";
 
     //Radius of the Earth in km
     public static final double EARTH = 6371;
 
     // Layers
-    public static final float LAYER_SCANNED_LOCATIONS = 0;
-    public static final float LAYER_MY_SEARCH = 50;
+    public static final float LAYER_MY_SEARCH = 0;
+    public static final float LAYER_SCANNED_LOCATIONS = 50;
     public static final float LAYER_POKESTOPS = 100;
     public static final float LAYER_GYMS = 150;
     public static final float LAYER_POKEMONS = 200;
+
+    private static final int DEFAULT_RADIUS = 100;
+    private static final double DISTANCE_BETWEEN_CIRCLES = 173.1;
 
     /**
      * Returns the distance from 'this' point to destination point (using haversine formula).
@@ -74,5 +83,70 @@ public class MapHelper {
 
         //Creates a point object to return back. X is the longitude, Y is the Latitude
         return new LatLng(Lat2, Long2);
+    }
+
+
+    public static List<LatLng> getSearchArea(int steps, LatLng center){
+
+        List<LatLng> searchArea = new ArrayList<>();
+        searchArea.add(center);
+
+        Log.d(TAG, "getSearchArea: Steps = " + steps);
+        int count = 0;
+        for (int i = 2; i <= steps; i++) {
+
+            LatLng prev = searchArea.get(searchArea.size() - (1 + count));
+            LatLng next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 0.0);
+            searchArea.add(next);
+
+            // go east
+            for (int j = 0; j < i - 1; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 120.0);
+                searchArea.add(next);
+            }
+
+            // go due south
+            for (int j = 0; j < i - 1; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 180.0);
+                searchArea.add(next);
+            }
+            // go south-west
+            for (int j = 0; j < i - 1 ; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 240.0);
+                searchArea.add(next);
+            }
+            // go north-west
+            for (int j = 0; j < i - 1; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 300.0);
+                searchArea.add(next);
+            }
+            // go due north
+            for (int j = 0; j < i - 1; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 0.0);
+                searchArea.add(next);
+            }
+            // go north-east
+            for (int j = 0; j < i - 2; j ++) {
+                prev = searchArea.get(searchArea.size() - 1);
+                next = MapHelper.translatePoint(prev, MapHelper.DISTANCE_BETWEEN_CIRCLES, 60.0);
+                searchArea.add(next);
+            }
+            count = 6*(i-1)-1;
+        }
+
+        Log.d(TAG, "getSearchArea: searchArea size = " + searchArea.size());
+        Log.d(TAG, "getSearchArea() returned: " + searchArea);
+
+        return searchArea;
+    }
+
+
+    public static double convertStepsToRadius(int steps) {
+        return (steps - 1) * DISTANCE_BETWEEN_CIRCLES + DEFAULT_RADIUS;
     }
 }
