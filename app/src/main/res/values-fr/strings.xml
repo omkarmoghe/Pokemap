@@ -83,8 +83,8 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scan en cours</string>
     <string name="notification_service_stop">Arrêter la tâche de fond</string>
-    <string name="notification_service_pokemon_near">\"%1$d pokémon(s) proche(s).\"</string>
-    <string name="notification_service_pokemon_in_area">%1$d pokémon(s) dans la zone\"</string>
+    <string name="notification_service_pokemon_near">%1$d pokémon(s) proche(s)</string>
+    <string name="notification_service_pokemon_in_area">%1$d pokémon(s) dans la zone</string>
     <string name="meters">metres</string>
 
     <string name="button_ok">Ok</string>
