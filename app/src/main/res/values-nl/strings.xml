@@ -74,7 +74,7 @@
     <string name="toast_searching">Zoeken&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémon gevonden"</string>
     <string name="pokemon_found_none">Geen nieuwe Pokémon gevonden om te vangen.</string>
-    <string name="pokemon_found_new">"nieuwe vangbare Pokémon gevonden."</string>
+    <string name="pokemon_found_new">%1$d nieuwe vangbare Pokémon gevonden.</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scannen</string>

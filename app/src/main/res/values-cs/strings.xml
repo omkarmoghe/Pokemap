@@ -94,7 +94,7 @@
     <string name="toast_searching">Hledám&#8230;</string>
     <string name="toast_pokemon_found_count">" Pokémon nalezeno"</string>
     <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :\'( .</string>
-    <string name="pokemon_found_new">" se objevil nový chytitelný Pokémon."</string>
+    <string name="pokemon_found_new">Objevilo se %1$d nových chytitelných Pokémonů.</string>
 
     <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>

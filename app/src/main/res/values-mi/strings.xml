@@ -86,7 +86,7 @@
     <string name="toast_searching">rapu&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémon found"</string>
     <string name="pokemon_found_none">Kua kitea he pokemon catchable hou kua.</string>
-    <string name="pokemon_found_new">"Pokemon catchable hou kitea."</string>
+    <string name="pokemon_found_new">%1$d Pokemon catchable hou kitea.</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">matawai</string>

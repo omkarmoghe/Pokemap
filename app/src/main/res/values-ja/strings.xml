@@ -78,7 +78,7 @@
     <string name="toast_searching">検索中&#8230;</string>
     <string name="toast_pokemon_found_count">"ポケモン発見"</string>
     <string name="pokemon_found_none">ポケモンを発見できません。</string>
-    <string name="pokemon_found_new">"ポケモンを発見しました。"</string>
+    <string name="pokemon_found_new">%1$d ポケモンを発見しました。</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">検索中</string>

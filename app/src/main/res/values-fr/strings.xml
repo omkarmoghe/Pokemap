@@ -86,7 +86,7 @@
     <string name="toast_searching">Recherche&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémons trouvés"</string>
     <string name="pokemon_found_none">Aucun pokémon trouvé.</string>
-    <string name="pokemon_found_new">"nouveaux pokémons trouvé."</string>
+    <string name="pokemon_found_new">%1$d nouveaux pokémons trouvé.</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scan en cours</string>

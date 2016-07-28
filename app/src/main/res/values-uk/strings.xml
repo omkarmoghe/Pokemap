@@ -40,7 +40,7 @@
 	<string name="minutes">"хвилин"</string>
 	<string name="pokemon_disappearing_in">"Зникне через: "</string>
 	<string name="pokemon_expired">Зик</string>
-	<string name="pokemon_found_new">" знайдено нового покемона."</string>
+	<string name="pokemon_found_new">%1$d знайдено нового покемона.</string>
 	<string name="position_picked">Обрана позиція</string>
 	<string name="seconds">"сек"</string>
 	<string name="toast_localization_waiting">Очікування позиції&#8230;</string>
