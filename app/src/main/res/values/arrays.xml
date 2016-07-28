@@ -11,4 +11,8 @@
 
 	<string-array name="pref_pokemons_to_show_default"/>
 
+	<string-array name="pref_map_location_marker_colors_data">
+		<item>0</item>
+		<item>1</item>
+	</string-array>
 </resources>
