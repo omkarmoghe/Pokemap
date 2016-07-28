@@ -216,6 +216,7 @@ public class MainActivity extends BaseActivity {
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);
         nianticManager.getPokeStops(event.getPosition().latitude, event.getPosition().longitude, 0D);
+        nianticManager.getLuredPokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
 
         for (LatLng p : list) {
             nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);
