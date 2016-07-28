@@ -82,7 +82,7 @@
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">検索中</string>
-    <string name="notification_service_stop">ストップサービス</string>
+    <string name="notification_service_stop">サービスを停止する</string>
     <string name="notification_service_pokemon_near">" 近所のポケモン"</string>
     <string name="notification_service_pokemon_in_area">" このエリアのポケモン:"</string>
     <string name="meters">メートル</string>
