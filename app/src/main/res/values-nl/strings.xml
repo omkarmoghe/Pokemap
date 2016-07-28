@@ -14,7 +14,6 @@
     <string name="pref_username">Gebruikersnaam</string>
     <string name="pref_default_username">Besbos</string>
     <string name="pref_password">Wachtwoord</string>
-    <string name="toast_map_not_initialized">Fout bij initializeren Google Map</string>
     <string name="pref_cat_general">Algemeen</string>
     <string name="pref_pokestops_title">Toon Pokéstops</string>
     <string name="pref_gyms_title">Toon Gyms</string>
