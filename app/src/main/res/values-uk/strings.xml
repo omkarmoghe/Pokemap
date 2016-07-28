@@ -69,5 +69,6 @@
 	<string name="notification_service_pokemon_near">" покемон поруч."</string>
 	<string name="notification_service_pokemon_in_area">" покемон досяжний:"</string>
 	<string name="meters">метрів</string>
+	<string name="toast_google_login_error">Помилка входу через обліковий запис Google.</string>
 
 </resources>

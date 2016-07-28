@@ -81,4 +81,5 @@
     <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
     <string name="default_string">Standard</string>
+    <string name="toast_google_login_error">Google Login fehlgeschlagen</string>
 </resources>
