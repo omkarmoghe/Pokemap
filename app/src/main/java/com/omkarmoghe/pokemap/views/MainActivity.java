@@ -97,6 +97,8 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    //endregion
+
     //region Menu Methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,6 +119,7 @@ public class MainActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
 
     private void showLogoutPrompt() {
         new AlertDialog.Builder(this).setTitle(R.string.action_logout).setMessage(R.string.logout_prompt_message)
@@ -203,7 +206,7 @@ public class MainActivity extends BaseActivity {
      */
     @Subscribe
     public void onEvent(SearchInPosition event) {
-        SearchParams params = new SearchParams(SearchParams.DEFAULT_RADIUS * 3, new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        SearchParams params = new SearchParams(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
         List<LatLng> list = params.getSearchArea();
         MapWrapperFragment.pokeSnackbar.setText(getString(R.string.toast_searching));
         MapWrapperFragment.pokeSnackbar.show();
@@ -212,6 +215,7 @@ public class MainActivity extends BaseActivity {
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);
         nianticManager.getPokeStops(event.getPosition().latitude, event.getPosition().longitude, 0D);
+        nianticManager.getLuredPokemon(event.getPosition().latitude, event.getPosition().longitude, 0D);
 
         for (LatLng p : list) {
             nianticManager.getCatchablePokemon(p.latitude, p.longitude, 0D);

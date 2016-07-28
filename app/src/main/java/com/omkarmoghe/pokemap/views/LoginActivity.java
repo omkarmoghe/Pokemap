@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View view) {
                 new AlertDialog.Builder(LoginActivity.this)
                         .setTitle(getString(R.string.login_warning_title))
-                        .setMessage(Html.fromHtml(getString(R.string.login_warning) + "<b>"+getString(R.string.ban)+"</b>"))
+                        .setMessage(Html.fromHtml(getString(R.string.login_warning)))
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
             }
@@ -149,6 +149,12 @@ public class LoginActivity extends AppCompatActivity{
                 return false;
             }
         });
+
+        LoginInfo loginInfo = mPref.getLoginInfo();
+        if(loginInfo != null && loginInfo instanceof PtcLoginInfo){
+            mUsernameView.setText(((PtcLoginInfo) loginInfo).getUsername());
+            mPasswordView.setText(((PtcLoginInfo) loginInfo).getPassword());
+        }
 
         Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
         signInButton.setOnClickListener(new OnClickListener() {
@@ -175,7 +181,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private void showAuthFailed() {
         showProgress(false);
-        Snackbar.make((View)mLoginFormView.getParent(), "PTC Login Failed", Snackbar.LENGTH_LONG).show();
+        Snackbar.make((View)mLoginFormView.getParent(), getString(R.string.toast_ptc_login_error), Snackbar.LENGTH_LONG).show();
     }
 
     @Override

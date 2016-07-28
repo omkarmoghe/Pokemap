@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'com.getkeepsafe.dexcount'
 
+def getVersionCode = { ->
+    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : 1
+    return code
+}
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
@@ -10,7 +14,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 24
         multiDexEnabled true
-        versionCode 1
+        versionCode getVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

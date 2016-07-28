@@ -72,5 +72,10 @@
 -keep, includedescriptorclasses public class POGOSProtos.**{ *; }
 -keep, includedescriptorclasses public class com.omkarmoghe.**{ *; }
 
+######
+# Google maps animations
+######
+-keep, includedescriptorclasses public class com.google.android.gms.maps.model.** {*;}
+
 
 #-ignorewarnings
