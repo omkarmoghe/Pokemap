@@ -26,6 +26,9 @@
     <string name="pref_gyms_title">Mostrar Ginásios</string>
 
     <string name="pref_scanned_title">Mostrar Localizações Pesquisadas</string>
+    <string name="pref_search_steps">Tamanho de Pesquisa</string>
+    <string name="pref_lured_title">Mostrar Lured Pokémons</string>
+
 
     <string name="pref_cat_service" translatable="false">Serviço de Notificações</string>
     <string name="pref_service_enable_title">Ativar</string>
@@ -35,7 +38,7 @@
 
 
     <string name="pref_cat_other">Outros</string>
-    <string name="pref_theme_button">Tema</string>
+    <string name="pref_theme_button">Temas</string>
 
     <string name="toast_credentials">Impossivel iniciar sessão. Por favor verifica as suas credenciais</string>
     <string name="title_activity_poke_map">Pokémons Perto</string>
@@ -69,7 +72,7 @@
     <string name="enable_location_permission_title">Ativar Permissão de Localização</string>
     <string name="enable_location_permission_message">Por favor ativa as permissões de localização para usar esta aplicação</string>
     <string name="toast_no_location">Falha ao Encontrar Localização GPS</string>
-    <string name="expiring_in">"Expira em: "</string>
+    <string name="expiring_in">Expira em: %1$d:%2$d</string>
     <string name="google_login_failed">Falha no Ínicio de Sessão da Google</string>
     <string name="permition_message">Por favor permita a localização para usar a aplicação</string>
     <string name="allow">Permitir</string>
@@ -80,7 +83,7 @@
     <string name="toast_searching">À procura</string>
     <string name="toast_pokemon_found_count">"Pokémons encontrados"</string>
     <string name="pokemon_found_none">Não foram encontrados novos Pokémons.</string>
-    <string name="pokemon_found_new">"novos pokémons encontrados."</string>
+    <string name="pokemon_found_new">%1$d novos pokémons encontrados.</string>
 
     <string name="notification_service_title">Serviço Pokémap</string>
     <string name="notification_service_scanning">À procura</string>
@@ -89,6 +92,8 @@
     <string name="notification_service_pokemon_in_area">" Pokémons na area:"</string>
     <string name="meters">metros</string>
     <string name="gym">Ginásio</string>
-
+    <string name="notification_service_inbox_line">%1$s (%2$d minutos, %3$d metros)</string>
+    <string name="toast_still_searching">À procura&#8230;  %1$d Pokémons encontrados até agora.</string>
+    <string name="preset_themes_title">Temas Presentes</string>
 
 </resources>
