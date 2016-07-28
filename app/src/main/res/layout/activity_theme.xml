@@ -13,7 +13,7 @@
 
 
     <TextView
-        android:text="Will make this selection look pretty in the future. Select a theme:"
+        android:text="@string/theme_activity_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
