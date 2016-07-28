@@ -9,16 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
-import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
 
 import java.util.ArrayList;
@@ -98,39 +92,34 @@ class PokemonToShowAdapter extends BaseAdapter {
         }
 
         void bind(final View row, final int position) {
-
             final PokemonIdOuterClass.PokemonId pokemonId = PokemonIdOuterClass.PokemonId.forNumber(position + 1);
 
+            mCheckableTextView.setText((CharSequence) getItem(position));
+            mCheckableTextView.setChecked(mSelected.contains(pokemonId));
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PokemonIdOuterClass.PokemonId pokemonId = PokemonIdOuterClass.PokemonId.forNumber(position + 1);
+                    if (mSelected.contains(pokemonId)) {
+                        mSelected.remove(pokemonId);
+                    } else {
+                        mSelected.add(pokemonId);
+                    }
+                    mCheckableTextView.setChecked(mSelected.contains(pokemonId));
+                }
+            });
+
             RemoteImageLoader.load(
-                    "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
+                    "http://serebii.net/pokemongo/pokemon/" + PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber()) + ".png",
                     64, 64,
                     row.getContext(),
                     new RemoteImageLoader.Callback() {
                         @Override
                         public void onFetch(Bitmap bitmap) {
-
-                            mCheckableTextView.setText((CharSequence) getItem(position));
                             mImageView.setImageBitmap(bitmap);
-
-                            mCheckableTextView.setChecked(mSelected.contains(pokemonId));
-
-                            row.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    PokemonIdOuterClass.PokemonId pokemonId = PokemonIdOuterClass.PokemonId.forNumber(position + 1);
-                                    if (mSelected.contains(pokemonId)) {
-                                        mSelected.remove(pokemonId);
-                                    } else {
-                                        mSelected.add(pokemonId);
-                                    }
-                                    mCheckableTextView.setChecked(mSelected.contains(pokemonId));
-                                }
-                            });
                         }
                     }
             );
-
-
         }
     }
 }

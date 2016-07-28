@@ -10,9 +10,13 @@ import java.util.Collection;
 public class PokestopsEvent implements IEvent {
 
     private Collection<Pokestop> pokestops;
+    private double lat;
+    private double longitude;
 
-    public PokestopsEvent(Collection<Pokestop> pokestops) {
+    public PokestopsEvent(Collection<Pokestop> pokestops, double lat, double longitude) {
         this.pokestops = pokestops;
+        this.lat = lat;
+        this.longitude = longitude;
     }
 
     public Collection<Pokestop> getPokestops() {
@@ -21,5 +25,21 @@ public class PokestopsEvent implements IEvent {
 
     public void setPokestops(Collection<Pokestop> pokestops) {
         this.pokestops = pokestops;
+    }
+
+    public double getLatitude() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

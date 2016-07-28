@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
-
-	<PreferenceCategory
-		android:key="@string/pref_cat_user_account"
-		android:title="@string/pref_cat_user_account">
-
-		<PreferenceScreen
-			android:summary="@string/pref_warning"/>
-
-		<EditTextPreference
-			android:key="@string/pref_username_key"
-			android:summary="@string/pref_default_username"
-			android:title="@string/pref_username"/>
-
-		<EditTextPreference
-			android:inputType="textPassword"
-			android:key="@string/pref_password_key"
-			android:summary="@string/pref_default_password"
-			android:title="@string/pref_password"/>
-
-	</PreferenceCategory>
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="@string/pref_cat_general">
+
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/pre_lured_key"
+			android:title="@string/pref_lured_title"/>
 
 		<CheckBoxPreference
 			android:defaultValue="false"
@@ -39,6 +21,14 @@
 			android:defaultValue="false"
 			android:key="@string/pref_scanned_key"
 			android:title="@string/pref_scanned_title"/>
+
+		<ListPreference
+			android:defaultValue="@integer/pref_default_steps"
+			android:entryValues="@array/pref_possible_steps"
+			android:entries="@array/pref_possible_steps"
+			android:key="@string/pref_search_steps_key"
+			android:title="@string/pref_search_steps"
+			/>
 
 		<com.omkarmoghe.pokemap.views.settings.PokemonToShowPreference
 			android:dialogTitle="@string/pokemon_to_show"
@@ -63,6 +53,15 @@
 			android:key="@string/pref_service_refresh_key"
 			android:summary="@string/pref_service_refresh_summary"
 			android:title="@string/pref_service_refresh_title"/>
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/pref_cat_other">
+
+		<Preference
+			android:title="@string/pref_theme_button"
+			android:key="@string/pref_theme_button_key"/>
 
 	</PreferenceCategory>
 

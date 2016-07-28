@@ -21,8 +21,8 @@ public class SearchParams {
     private int mRadius;
     private LatLng mCenter;
 
-    public SearchParams(int radius, LatLng center){
-        mRadius = radius;
+    public SearchParams(int steps, LatLng center){
+        mRadius = DEFAULT_RADIUS * steps;
         mCenter = center;
     }
 
