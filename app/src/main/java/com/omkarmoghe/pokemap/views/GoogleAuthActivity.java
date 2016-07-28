@@ -1,10 +1,13 @@
 package com.omkarmoghe.pokemap.views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -14,55 +17,63 @@ import android.widget.TextView;
 
 import com.omkarmoghe.pokemap.R;
 
+import okhttp3.HttpUrl;
+
+import static com.omkarmoghe.pokemap.controllers.net.GoogleManager.CLIENT_ID;
+import static com.omkarmoghe.pokemap.controllers.net.GoogleManager.OAUTH_ENDPOINT;
+
 public class GoogleAuthActivity extends AppCompatActivity {
     private static final String TAG = "GoogleAuthActivity";
 
     private static final String ARG_URL = "Google Auth Url";
     private static final String ARG_CODE = "Google User Code";
-
-    private String url;
-    private String userCode;
+    public static final String EXTRA_CODE = "Extra Google Code";
 
     private WebView webView;
-    private TextView codeView;
 
-    public static void startForResult(Activity starter, int requestCode,
-                                              String url, String code){
+    public static void startForResult(Activity starter, int requestCode){
         Intent intent = new Intent(starter, GoogleAuthActivity.class);
-        intent.putExtra(ARG_URL, url);
-        intent.putExtra(ARG_CODE, code);
         starter.startActivityForResult(intent, requestCode);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_auth);
 
-        fetchIntentData();
+        HttpUrl url = HttpUrl.parse(OAUTH_ENDPOINT).newBuilder()
+                .addQueryParameter("client_id", CLIENT_ID)
+                .addQueryParameter("scope", "openid email https://www.googleapis.com/auth/userinfo.email")
+                .addQueryParameter("response_type","code")
+                .addQueryParameter("redirect_uri","http://127.0.0.1:8080")
+                .build();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
 
-        codeView = (TextView) findViewById(R.id.auth_code);
         webView = (WebView) findViewById(R.id.webview);
 
-        codeView.setText(userCode);
 
         WebViewClient client = new WebViewClient(){
-            public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "onPageFinished: url = " + url);
-                if(url.contains("https://accounts.google.com/o/oauth2/device/approval?")){
-                    sendResults();
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("http://127.0.0.1")) {
+                    Uri uri = Uri.parse(url);
+
+                    sendResults(uri.getQueryParameter("code"));
+
+                    return true;
                 }
+                return super.shouldOverrideUrlLoading(view, url);
             }
         };
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setWebViewClient(client);
-        webView.loadUrl(url);
+        webView.loadUrl(url.toString());
     }
 
 
@@ -76,20 +87,20 @@ public class GoogleAuthActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fetchIntentData(){
-        Intent intent = getIntent();
-        url = intent.getStringExtra(ARG_URL);
-        userCode = intent.getStringExtra(ARG_CODE);
-    }
-
     @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         finish();
     }
 
-    private void sendResults(){
-        setResult(RESULT_OK);
+    private void sendResults(String code){
+        if(!TextUtils.isEmpty(code)) {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_CODE, code);
+            setResult(RESULT_OK, intent);
+        }else{
+            setResult(RESULT_CANCELED);
+        }
         finish();
     }
 }

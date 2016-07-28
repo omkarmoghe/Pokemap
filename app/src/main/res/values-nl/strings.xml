@@ -64,7 +64,7 @@
     <string name="enable_location_permission_title">Locatie permissie toestaan</string>
     <string name="enable_location_permission_message">Locatie permissie moet worden toegestaan om deze applicatie te kunnen gebruiken.</string>
     <string name="toast_no_location">Kan GPS locatie niet vinden</string>
-    <string name="expiring_in">"Verdwijnt over: "</string>
+    <string name="expiring_in">"Verdwijnt over: %1$d:%2$02d"</string>
     <string name="google_login_failed">Google login mislukt</string>
     <string name="permition_message">Sta locatie toe om de app te gebruiken</string>
     <string name="allow">Toestaan</string>
@@ -85,4 +85,5 @@
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google Login Mislukt</string>
 </resources>

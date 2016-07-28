@@ -3,12 +3,11 @@
 
 A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
-<img src="http://imgur.com/yMoVZBR.png" width="270" height="480"/>
-<img src="http://imgur.com/pegdiZY.png" width="270" height="480"/>
-<img src="http://imgur.com/ttKW5YW.png" width="270" height="480"/>
-<img src="http://imgur.com/u9xaWGK.png" width="270" height="480"/>
+<img src="http://imgur.com/Wd3MPhs.png" width="270" height="480"/>
+<img src="http://imgur.com/2bvp0k5.png" width="270" height="480"/>
+<img src="http://imgur.com/He6oHLw.png" width="270" height="480"/>
 
-screenshots from @linkout @mike @z14942744 
+screenshots from @linkout @mike @z14942744 @kyr0 @rancor
 
 ### **Slack invites are now restricted to contributors only. Please comment your email when you submit a PR and we will send you an invite.**
 
