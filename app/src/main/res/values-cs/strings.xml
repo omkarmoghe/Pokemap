@@ -1,28 +1,14 @@
 <resources>
     <string name="app_name" translatable="false">Pokémap</string>
-
     <string name="action_settings">Nastavení</string>
     <string name="action_clearmap">Vyčistit mapu</string>
     <string name="action_logout">Odhlásit se</string>
-
-    <string name="pref_file_key">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
+    <string name="pref_file_key" translatable="false">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
     <string name="pref_theme">PresetTheme</string>
-    <string name="pref_theme_no_action_bar">PresetThemeNoAb</string>
-
+    <string name="pref_theme_no_action_bar" translatable="false">PresetThemeNoAb</string>
     <string name="logout_prompt_message">Opravdu se chcete odhlásit??</string>
     <string name="yes">ANO</string>
     <string name="no">ne</string>
-
-    <string name="pref_cat_user_account">Uživatelský účet</string>
-    <string name="pref_warning">Pegas varuje: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
-        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainer Clubu s jiným heslem a emailem. Savana pastevci.</string>
-    <string name="pref_username">Nastavit uživatelské jméno</string>
-    <string name="pref_username_key" translatable="false">UsernameKey</string>
-    <string name="pref_default_username">Jan Novák</string>
-    <string name="pref_password">Nastavit heslo</string>
-    <string name="pref_password_key" translatable="false">PasswordKey</string>
-    <string name="pref_default_password" translatable="false">***</string>
-
     <string name="pref_cat_general">Obecné</string>
     <string name="pref_pokestops_title">Ukázat Pokéstopy</string>
     <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
@@ -30,80 +16,56 @@
     <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Ukázat proskenované lokace</string>
     <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
-    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
-
+    <string name="pref_pokemons_to_show_key" translatable="false">pokemons_to_show</string>
+    <string name="pref_search_steps">Prohledat kroků</string>
+    <string name="pref_search_steps_key" translatable="false">search_steps</string>
+    <string name="pre_lured_key" translatable="false">lured_checkbox</string>
+    <string name="pref_lured_title">Ukázat přivábené Pokémony</string>
     <string name="pokestop" translatable="false">Pokéstop</string>
-
-
     <string name="pref_cat_service" translatable="false">Background Service</string>
     <string name="pref_service_enable_title">Povolit</string>
     <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Rychlost aktualizace</string>
     <string name="pref_service_refresh_summary">Jak často se služba aktualizuje, ve vteřinách.</string>
     <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
-
     <string name="pref_cat_other">Jiné</string>
     <string name="pref_theme_button">Motiv</string>
-    <string name="pref_theme_button_key">ThemeKey</string>
-
-    <string name="toast_credentials">Nelze se přihlásit, prosím zkontrolujte své přihlášení pověření (jméno a heslo).</string>
-    <string name="title_activity_poke_map">Pokémoni v okolí</string>
-
-    <string name="login_warning">Poznámka: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
-        Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainet Clubu s jiným heslem a emailem. 
-		Není doporučeno ani používat Google účet. Je možné, že účet bude </string>
-    <string name="prompt_username">PTC Uživatelské jmoéno</string>
+    <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="login_warning"><Data><![CDATA[Pegas varuje: NEpoužívejte svůj hlavní účet pro tuto aplikaci!
+    Vytvořte si z bezpečnostních důvodů nový účet v Pokémon Trainer Clubu (PTC) s jiným heslem a emailem.
+    Není doporučeno používat ani Google účet. Je možné, že váš účet bude <b>zabanován</b>. Savana pastevci.
+    ]]></Data></string>
+    <string name="prompt_username">PTC Uživatelské jméno</string>
     <string name="prompt_password">PTC Heslo</string>
     <string name="action_sign_in">Přihlásit se</string>
     <string name="error_field_required">Povinná položka</string>
-    <string name="title_activity_maps">Mapa</string>
     <string name="login_warning_title">Upozornění:</string>
-
-    <string name="request_credentials_title">Zadejte své přihlášení k Pokémon GO</string>
-    <string name="search_pokemon_map_suggestion">(Dlouhým stiskem na mapě změníte svou polohu)</string>
-
-    <string name="pokemon_to_show">Ukázat tyto Pokémony</string>
-
-    <string name="action_relogin">Znovupřihlášení</string>
-    <string name="ban"> zabanován</string>
-    <string name="minutes">"minut/y"</string>
-    <string name="pokemon_disappearing_in">"Zmizí za: "</string>
+    <string name="search_pokemon_map_suggestion">(Dlouhým stiskem na mapě lze změnit svou polohu)</string>
+    <string name="default_string">Výchozí</string>
+    <string name="pokemon_to_show">Ukázat Pokémony (filtr)</string>
     <string name="pokemon_expired">Zmizel</string>
     <string name="position_picked">Pozice zvolena</string>
-    <string name="seconds">"s"</string>
-    <string name="toast_localization_waiting">Čekám na pozici&#8230;</string>
-    <string name="toast_login_successful">Úspěšně přihlášení.</string>
     <string name="toast_map_not_initialized">Problém s inicializací Google Map</string>
     <string name="toast_server_unreachable">Nemohu zkontaktovat Pokémon GO servery. Možná jsou přetížené.</string>
-    <string name="toast_token_expired">Přihlášení vypršelo. Znovupřihlašuji.</string>
-    <string name="toast_user_found">A mám Tě!</string>
     <string name="toast_login_error">Nelze přihlásit.</string>
     <string name="toast_internal_error">Nastala vnitřní chyba. Toto obvykle znamená, že jste offline, nebo Pokémon GO servery nefungují jak mají.</string>
     <string name="toast_ptc_login_error">PTC přihlášení selhalo.</string>
     <string name="enable_location_permission_title">Práva k použití polohy</string>
     <string name="enable_location_permission_message">Prosím povolte aplikaci používat Vaši polohu.</string>
     <string name="toast_no_location">Nemohu nalézt GPS polohu</string>
-    <string name="expiring_in">"Vyprší za: "</string>
-    <string name="google_login_failed">Selhalo přihlášení ke Google účtu</string>
-    <string name="permition_message">Prosím povolte aplikaci používat Vaši polohu</string>
-    <string name="allow">Povolit</string>
-    <string name="app_settings">Nastavení aplikace</string>
+    <string name="expiring_in">Vyprší za:  %1$d:%2$d</string>
     <string name="disclaimer">Výstraha</string>
-
-	
     <string name="toast_searching">Hledám&#8230;</string>
-    <string name="toast_pokemon_found_count">" Pokémon nalezeno"</string>
     <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :\'( .</string>
-    <string name="pokemon_found_new">" se objevil nový chytitelný Pokémon."</string>
-
+    <string name="pokemon_found_new">Objevilo se %1$d nových chytitelných Pokémonů.</string>
     <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>
     <string name="notification_service_stop">Zastavit službu</string>
-    <string name="notification_service_pokemon_near">" Pokémoni poblíž."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémoni v oblasti:"</string>
-    <string name="meters">metrů</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémoni poblíž.</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémonů v oblasti:</string>
     <string name="gym">Tělocvična</string>
-
     <string name="button_ok">Ok</string>
-
+    <string name="notification_service_inbox_line">%1$s (%2$d minut, %3$d metrů)</string>
+    <string name="toast_still_searching">Searching&#8230; doposud nalezeno %1$d Pokémonů.</string>
+    <string name="preset_themes_title">Přednastavené motivy</string>
 </resources>
