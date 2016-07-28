@@ -79,9 +79,9 @@ public class NianticManager {
     private final OkHttpClient mPoGoClient;
     private PokemonGo mPokemonGo;
 
-    public int pokemonFound = 0;
-    public int currentScan = 0;
-    public int pendingSearch = 0;
+    private int pokemonFound = 0;
+    private int currentScan = 0;
+    private int pendingSearch = 0;
 
     public static NianticManager getInstance(){
         return instance;
@@ -246,6 +246,22 @@ public class NianticManager {
         call.enqueue(authCallback);
     }
 
+    public int getPokemonFound() {
+        return pokemonFound;
+    }
+
+    public void setPokemonFound(int pokemonFound) {
+        this.pokemonFound = pokemonFound;
+    }
+
+    public int getCurrentScan() {
+        return currentScan;
+    }
+
+    public int getPendingSearch() {
+        return pendingSearch;
+    }
+
     public interface LoginListener {
         void authSuccessful(String authToken);
         void authFailed(String message);
@@ -334,7 +350,7 @@ public class NianticManager {
                     Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). PoGoAPI crashed. Raised: " + e.getMessage());
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
-                NianticManager.getInstance().currentScan++;
+                NianticManager.this.currentScan++;
             }
         });
         this.pendingSearch++;

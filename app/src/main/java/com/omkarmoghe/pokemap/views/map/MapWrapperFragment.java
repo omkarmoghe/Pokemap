@@ -16,8 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,7 +145,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        nianticManager.pokemonFound = markerList.size();
+        nianticManager.setPokemonFound(markerList.size());
         updateMarkers();
     }
 
@@ -518,17 +516,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         );
 
                         //Increase founded pokemon counter
-                        nianticManager.pokemonFound++;
+                        nianticManager.setPokemonFound(nianticManager.getPokemonFound() + 1);
                     }
                 }
             }
             if (getView() != null) {
-                if (nianticManager.currentScan != nianticManager.pendingSearch) {
-                    pokeSnackbar.setText(getString(R.string.toast_still_searching, nianticManager.pokemonFound));
+                if (nianticManager.getCurrentScan() != nianticManager.getPendingSearch()) {
+                    pokeSnackbar.setText(getString(R.string.toast_still_searching, nianticManager.getPokemonFound()));
                     pokeSnackbar.show();
 
                 } else {
-                    String text = nianticManager.pokemonFound > 0 ? getString(R.string.pokemon_found_new, nianticManager.pokemonFound) : getString(R.string.pokemon_found_none);
+                    String text = nianticManager.getPokemonFound() > 0 ? getString(R.string.pokemon_found_new, nianticManager.getPokemonFound()) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                     nianticManager.resetSearchCount();
@@ -726,7 +724,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapLongClick(LatLng position) {
 
-        if(nianticManager.pendingSearch == 0){
+        if(nianticManager.getPendingSearch() == 0){
             clearPokemonCircles();
         }
 
