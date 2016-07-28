@@ -703,12 +703,14 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MarkerUpdate event){
-        Marker marker = mSelectedMarker.getMarker();
-        if(marker.isInfoWindowShown()){
-            long time = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
-                    - System.currentTimeMillis();
-            marker.setSnippet(getExpirationBreakdown(time));
-            marker.showInfoWindow();
+        if(mSelectedMarker != null) {
+            Marker marker = mSelectedMarker.getMarker();
+            if(marker.isInfoWindowShown()) {
+                long time = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
+                        - System.currentTimeMillis();
+                marker.setSnippet(getExpirationBreakdown(time));
+                marker.showInfoWindow();
+            }
         }
     }
 
@@ -748,6 +750,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        MarkerRefreshController.getInstance().clear();
     }
 
     @Override
