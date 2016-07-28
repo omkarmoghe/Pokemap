@@ -9,13 +9,6 @@
     <string name="yes">JA</string>
     <string name="no">NEE</string>
 
-    <string name="pref_cat_user_account">Gebruiker Account</string>
-    <string name="pref_warning">ATTENTIE: Gebruikt NIET je hoofdaccount voor deze applicatie!
-        Maak en gebruik een nep Pokémon Trainer Club account met een ander email en wachtwoord.</string>
-    <string name="pref_username">Zet gebruikersnaam</string>
-    <string name="pref_default_username">Jan de Vries</string>
-    <string name="pref_password">Zet wachtwoord</string>
-
     <string name="pref_cat_general">Generiek</string>
     <string name="pref_pokestops_title">Pokéstops laten zien</string>
     <string name="pref_gyms_title">Gyms laten zien</string>
@@ -28,36 +21,22 @@
     <string name="pref_cat_other">Overige</string>
     <string name="pref_theme_button">Thema</string>
 
-    <string name="toast_credentials">Kan niet inloggen. Controleer uw gegevens</string>
-    <string name="title_activity_poke_map">Pokémon in de omgeving</string>
-
     <string name="login_warning">Het is aangeraden om een nep Pokémon Trainer Club account aan te maken en te gebruiken.
         Maak ook geen gebruik van hetzelfde Google account waarmee je normaal speelt want deze app kan ervoor zorgen dat je gebanned wordt.</string>
     <string name="prompt_username">PTC Gebruikersnaam</string>
     <string name="prompt_password">PTC Wachtwoord</string>
     <string name="action_sign_in">Inloggen</string>
     <string name="error_field_required">Veld verplicht</string>
-    <string name="title_activity_maps">Kaart</string>
     <string name="login_warning_title">Waarschuwing:</string>
 
-    <string name="request_credentials_title">Vul je Pokémon Go gegevens in</string>
     <string name="search_pokemon_map_suggestion">(Klik en hou vast op de kaart op zoekpositie aan te passen)</string>
 
     <string name="pokemon_to_show">Zichtbare Pokémon</string>
 
-    <string name="action_relogin">Opnieuw inloggen</string>
-    <string name="ban">banned</string>
-    <string name="minutes">"minuten"</string>
-    <string name="pokemon_disappearing_in">"Verdwijnt over: "</string>
     <string name="pokemon_expired">Verdwenen</string>
     <string name="position_picked">Gekozen positie</string>
-    <string name="seconds">"s"</string>
-    <string name="toast_localization_waiting">Wachten op positie&#8230;</string>
-    <string name="toast_login_successful">Inloggen succesvol</string>
     <string name="toast_map_not_initialized">Fout bij initializeren Google Map</string>
     <string name="toast_server_unreachable">Kan Pokémon Go servers niet bereiken. Servers niet beschikbaar.</string>
-    <string name="toast_token_expired">Login sleutel is verlopen. Nieuwe ophalen&#8230;</string>
-    <string name="toast_user_found">Gevonden!</string>
     <string name="toast_login_error">Inloggen mislukt.</string>
     <string name="toast_internal_error">Interne error. Dit kan gebeuren als je offline bent of de servers niet beschikbaar zijn.</string>
     <string name="toast_ptc_login_error">PTC Login Mislukt</string>
@@ -65,14 +44,9 @@
     <string name="enable_location_permission_message">Locatie permissie moet worden toegestaan om deze applicatie te kunnen gebruiken.</string>
     <string name="toast_no_location">Kan GPS locatie niet vinden</string>
     <string name="expiring_in">"Verdwijnt over: "</string>
-    <string name="google_login_failed">Google login mislukt</string>
-    <string name="permition_message">Sta locatie toe om de app te gebruiken</string>
-    <string name="allow">Toestaan</string>
-    <string name="app_settings">Applicatie instellingen</string>
     <string name="disclaimer">Vrijwaringsclausule</string>
 
     <string name="toast_searching">Zoeken&#8230;</string>
-    <string name="toast_pokemon_found_count">"Pokémon gevonden"</string>
     <string name="pokemon_found_none">Geen nieuwe Pokémon gevonden om te vangen.</string>
     <string name="pokemon_found_new">"nieuwe vangbare Pokémon gevonden."</string>
 
@@ -81,7 +55,6 @@
     <string name="notification_service_stop">Stop Service</string>
     <string name="notification_service_pokemon_near">" Pokémon dichtbij."</string>
     <string name="notification_service_pokemon_in_area">" Pokémon in omgeving:"</string>
-    <string name="meters">meter</string>
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
