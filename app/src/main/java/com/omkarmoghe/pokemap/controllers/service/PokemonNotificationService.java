@@ -39,6 +39,8 @@ public class PokemonNotificationService extends Service{
     private static final int notificationId = 2423235;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
+    public static boolean isRunning = false;
+
     private UpdateRunnable updateRunnable;
     private Thread workThread;
     private LocationManager locationManager;
@@ -57,6 +59,8 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
+
+        isRunning = true;
 
         EventBus.getDefault().register(this);
         createNotification();
@@ -90,6 +94,7 @@ public class PokemonNotificationService extends Service{
         updateRunnable.stop();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(mBroadcastReciever);
+        isRunning = false;
     }
 
     @Override
@@ -205,4 +210,8 @@ public class PokemonNotificationService extends Service{
             locationManager.onPause();
         }
     };
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
 }
