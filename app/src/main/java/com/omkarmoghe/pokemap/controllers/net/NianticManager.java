@@ -101,7 +101,7 @@ public class NianticManager {
 		so it being discarded is completely fine
 		*/
         CookieJar tempJar = new CookieJar() {
-            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
+            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
             @Override
             public void saveFromResponse(okhttp3.HttpUrl url, List<Cookie> cookies) {
@@ -277,7 +277,6 @@ public class NianticManager {
      * Sets the pokemon trainer club auth token for the auth info also invokes the onLogin callback.
      */
     public void setLoginInfo(final Activity activity, @NonNull final LoginInfo info, @NonNull final AuthListener listener) {
-        Log.d(TAG, "setLoginInfo: LoginInfo = " +info);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -292,7 +291,7 @@ public class NianticManager {
                     });
                 } catch (RemoteServerException | LoginFailedException | RuntimeException e){
                     e.printStackTrace();
-                    Log.e(TAG, "Failed to PTC login using PoGoAPI via login(). Raised: " + e.getMessage());
+                    Log.e(TAG, "Failed to login using PoGoAPI via login(). Raised: " + e.getMessage());
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

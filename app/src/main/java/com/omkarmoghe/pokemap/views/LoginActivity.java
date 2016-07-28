@@ -32,7 +32,6 @@ import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.pokegoapi.auth.PtcLogin;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,7 +44,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
 
-    private static final int REQUEST_USER_AUTH = 1;
+    public static final int REQUEST_USER_AUTH = 1;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -58,7 +57,6 @@ public class LoginActivity extends AppCompatActivity{
     private GoogleManager mGoogleManager;
     private GoogleManager.LoginListener mGoogleLoginListener;
 
-    private String mDeviceCode;
     private PokemapAppPreferences mPref;
 
     @Override
@@ -118,9 +116,7 @@ public class LoginActivity extends AppCompatActivity{
 
             @Override
             public void authRequested(GoogleService.AuthRequest body) {
-                GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH,
-                        body.getVerificationUrl(), body.getUserCode());
-                mDeviceCode = body.getDeviceCode();
+                //Do nothing
             }
         };
 
@@ -172,7 +168,7 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleManager.authUser(mGoogleLoginListener);
+                GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH);
             }
         });
 
@@ -190,7 +186,8 @@ public class LoginActivity extends AppCompatActivity{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_USER_AUTH){
                 showProgress(true);
-                mGoogleManager.requestToken(mDeviceCode, mGoogleLoginListener);
+                mGoogleManager.requestToken(data.getStringExtra(GoogleAuthActivity.EXTRA_CODE),
+                        mGoogleLoginListener);
             }
         }
     }
