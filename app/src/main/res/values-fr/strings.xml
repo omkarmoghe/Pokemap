@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Pokémap</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="action_clearmap">Effacer la carte</string>
@@ -13,30 +12,19 @@
     <string name="pref_warning">NOTE: NE PAS UTILISER votre compte principal pour cette application!
         Créez et utilisez un "faux" compte du Club de Dresseur de Pokemons</string>
     <string name="pref_username">Votre pseudo</string>
-    <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">Dupont</string>
     <string name="pref_password">Votre mot de passe</string>
-    <string name="pref_password_key" translatable="false">PasswordKey</string>
-    <string name="pref_default_password" translatable="false">***</string>
 
     <string name="pref_cat_general">Général</string>
     <string name="pref_pokestops_title">Afficher les Pokéstops</string>
-    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
     <string name="pref_gyms_title">Afficher les Arènes</string>
-    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Afficher les lieux scannés</string>
-    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
-    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
-
-    <string name="pokestop" translatable="false">Pokéstop</string>
 
 
-    <string name="pref_cat_service" translatable="false">Travail en tâche de fond</string>
+    <string name="pref_cat_service">Travail en tâche de fond</string>
     <string name="pref_service_enable_title">Activer</string>
-    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Fréquence de mise à jour</string>
     <string name="pref_service_refresh_summary">Tous les combien de secondes le scan doit avoir lieu.</string>
-    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
     <string name="toast_credentials">Impossible de se connecter, vérifiez votre pseudo/mot de passe</string>
     <string name="title_activity_poke_map">Pokémon proches</string>
@@ -54,7 +42,7 @@
     <string name="request_credentials_title">Veuillez saisir les informations de connexon à Pokémon Go</string>
     <string name="search_pokemon_map_suggestion">(Restez appuyé pour chercher à partir d\'un nouveau lieu.)</string>
 
-    <string name="pokemon_to_show">Pokemon à afficher</string>
+    <string name="pref_pokemon_to_show">Pokemon à afficher</string>
 
     <string name="action_relogin">Reconnecter</string>
     <string name="ban">banni</string>
@@ -75,7 +63,7 @@
     <string name="enable_location_permission_title">Autoriser la géolocalisation</string>
     <string name="enable_location_permission_message">Merci d\'autoriser la géolocalisation</string>
     <string name="toast_no_location">Impossible de vous géolocaliser</string>
-    <string name="expiring_in">"Disparait dans : "</string>
+    <string name="expiring_in">"Disparait dans :  %1$d:%2$d"</string>
     <string name="google_login_failed">Connexion au compte Google échouée</string>
     <string name="permition_message">Merci d\'autoriser la géolocalisation pour utiliser cette application</string>
     <string name="allow">Autoriser</string>
@@ -96,5 +84,7 @@
     <string name="meters">metres</string>
 
     <string name="button_ok">Ok</string>
+    <string name="gym">Gym</string>
+    <string name="farfetchd">Farfetch´d</string>
 
 </resources>

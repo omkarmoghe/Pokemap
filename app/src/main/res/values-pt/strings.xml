@@ -27,7 +27,7 @@
 
     <string name="pref_scanned_title">Mostrar Localizações Pesquisadas</string>
 
-    <string name="pref_cat_service" translatable="false">Serviço de Notificações</string>
+    <string name="pref_cat_service">Serviço de Notificações</string>
     <string name="pref_service_enable_title">Ativar</string>
 
     <string name="pref_service_refresh_title">Taxa de Atualização</string>
@@ -50,7 +50,7 @@
     <string name="request_credentials_title">Insira as suas credenciais de acesso Pokémon Go</string>
     <string name="search_pokemon_map_suggestion">(Toque longo no mapa para alterar a area de pesquisa)</string>
 
-    <string name="pokemon_to_show">Pokémons a mostrar</string>
+    <string name="pref_pokemon_to_show">Pokémons a mostrar</string>
 
     <string name="ban">banido</string>
     <string name="minutes">"minutos"</string>
@@ -69,7 +69,7 @@
     <string name="enable_location_permission_title">Ativar Permissão de Localização</string>
     <string name="enable_location_permission_message">Por favor ativa as permissões de localização para usar esta aplicação</string>
     <string name="toast_no_location">Falha ao Encontrar Localização GPS</string>
-    <string name="expiring_in">"Expira em: "</string>
+    <string name="expiring_in">"Expira em:  %1$d:%2$d"</string>
     <string name="google_login_failed">Falha no Ínicio de Sessão da Google</string>
     <string name="permition_message">Por favor permita a localização para usar a aplicação</string>
     <string name="allow">Permitir</string>
@@ -89,6 +89,10 @@
     <string name="notification_service_pokemon_in_area">" Pokémons na area:"</string>
     <string name="meters">metros</string>
     <string name="gym">Ginásio</string>
+    <string name="prompt_password">PTC Password</string>
+    <string name="prompt_username">PTC Username</string>
+    <string name="button_ok">Ok</string>
+    <string name="seconds">"s"</string>
 
 
 </resources>

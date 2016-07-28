@@ -43,7 +43,7 @@
     <string name="request_credentials_title">Vul je Pokémon Go gegevens in</string>
     <string name="search_pokemon_map_suggestion">(Klik en hou vast op de kaart op zoekpositie aan te passen)</string>
 
-    <string name="pokemon_to_show">Zichtbare Pokémon</string>
+    <string name="pref_pokemon_to_show">Zichtbare Pokémon</string>
 
     <string name="action_relogin">Opnieuw inloggen</string>
     <string name="ban">banned</string>
@@ -64,7 +64,7 @@
     <string name="enable_location_permission_title">Locatie permissie toestaan</string>
     <string name="enable_location_permission_message">Locatie permissie moet worden toegestaan om deze applicatie te kunnen gebruiken.</string>
     <string name="toast_no_location">Kan GPS locatie niet vinden</string>
-    <string name="expiring_in">"Verdwijnt over: "</string>
+    <string name="expiring_in">"Verdwijnt over:  %1$d:%2$d"</string>
     <string name="google_login_failed">Google login mislukt</string>
     <string name="permition_message">Sta locatie toe om de app te gebruiken</string>
     <string name="allow">Toestaan</string>

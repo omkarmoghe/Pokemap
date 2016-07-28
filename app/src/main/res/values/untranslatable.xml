@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name" translatable="false">Pokémap</string>
+    <string name="pref_file_key" translatable="false">com.omkarmoghe.pokemap.PREFERENCE_FILE_KEY</string>
+    <string name="pref_theme_no_action_bar" translatable="false">PresetThemeNoAb</string>
+    <string name="pref_username_key" translatable="false">UsernameKey</string>
+    <string name="pref_password_key" translatable="false">PasswordKey</string>
+    <string name="pref_default_password" translatable="false">***</string>
+    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
+    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
+    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
+    <string name="pref_pokemons_to_show_key" translatable="false">pokemons_to_show</string>
+    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
+    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+    <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="pref_search_steps_key" translatable="false">search_steps</string>
+    <string name="pref_lured_key" translatable="false">lured_checkbox</string>
+    <string name="pref_theme_key" translatable="false">PresetTheme</string>
+</resources>

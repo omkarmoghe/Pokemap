@@ -134,12 +134,15 @@ public class PokemonNotificationService extends Service{
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(getString(R.string.notification_service_pokemon_near,catchablePokemon.size()));
+        String pokemons = getResources().getQuantityString(R.plurals.plurals_pokemon,catchablePokemon.size());
+        String text = String.format("%s %s %s",catchablePokemon.size(),pokemons,getString(R.string.notification_service_pokemon_near));
+        builder.setContentText(text);
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, catchablePokemon.size()));
+            text = String.format("%s %s %s",catchablePokemon.size(),pokemons,getString(R.string.notification_service_pokemon_in_area));
+            inboxStyle.setBigContentTitle(text);
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
             
             for(CatchablePokemon cp : catchablePokemon){
@@ -153,7 +156,6 @@ public class PokemonNotificationService extends Service{
                     String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
-
                     inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
                 }
             }

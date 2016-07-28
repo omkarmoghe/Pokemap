@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="plurals_pokemon">
+        <item quantity="zero">@string/purals_pokemon_zero</item>
+        <item quantity="one">@string/purals_pokemon_one</item>
+        <item quantity="two">@string/purals_pokemon_two</item>
+        <item quantity="few">@string/purals_pokemon_few</item>
+        <item quantity="many">@string/purals_pokemon_many</item>
+        <item quantity="other">@string/purals_pokemon_other</item>
+    </plurals>
+    <plurals name="plurals_found">
+        <item quantity="zero">@string/purals_found_zero</item>
+        <item quantity="one">@string/purals_found_one</item>
+        <item quantity="two">@string/purals_found_two</item>
+        <item quantity="few">@string/purals_found_few</item>
+        <item quantity="many">@string/purals_found_many</item>
+        <item quantity="other">@string/purals_found_other</item>
+    </plurals>
+    <plurals name="plurals_new">
+        <item quantity="zero">@string/purals_new_zero</item>
+        <item quantity="one">@string/purals_new_one</item>
+        <item quantity="two">@string/purals_new_two</item>
+        <item quantity="few">@string/purals_new_few</item>
+        <item quantity="many">@string/purals_new_many</item>
+        <item quantity="other">@string/purals_new_other</item>
+    </plurals>
+</resources>

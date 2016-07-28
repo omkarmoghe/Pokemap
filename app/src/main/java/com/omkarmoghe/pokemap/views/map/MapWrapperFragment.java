@@ -545,11 +545,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (positionNum != LOCATION_PERMISSION_REQUEST) {
-                    pokeSnackbar.setText(getString(R.string.toast_still_searching, pokemonFound));
+                    String pokemons = getResources().getQuantityString(R.plurals.plurals_pokemon,pokemonFound);
+                    String found = getResources().getQuantityString(R.plurals.plurals_found,pokemonFound);
+                    String text = String.format("%s %s %s %s",getString(R.string.toast_searching),pokemonFound,pokemons,found);
+                    pokeSnackbar.setText(text);
                     pokeSnackbar.show();
 
                 } else {
-                    String text = pokemonFound > 0 ? getString(R.string.pokemon_found_new, pokemonFound) : getString(R.string.pokemon_found_none);
+                    String string_new = getResources().getQuantityString(R.plurals.plurals_new,pokemonFound);
+                    String pokemons = getResources().getQuantityString(R.plurals.plurals_pokemon,pokemonFound);
+                    String found = getResources().getQuantityString(R.plurals.plurals_found,pokemonFound);
+                    String text = pokemonFound > 0 ? String.format("%s %s %s %s", pokemonFound, string_new,pokemons,found) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }

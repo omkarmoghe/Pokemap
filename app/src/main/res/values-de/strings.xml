@@ -36,7 +36,7 @@
     <string name="minutes">"minuten"</string>
     <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
     <string name="pokemon_expired">Abgelaufen</string>
-    <string name="pokemon_found_new">%1$d neue fangbare Pokémon wurden gefunden.</string>
+    <string name="pokemon_found_new">"neue fangbare"</string>
     <string name="position_picked">Gewählte Position</string>
     <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">Warte auf Koordinaten&#8230;</string>
@@ -65,20 +65,23 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanne</string>
     <string name="notification_service_stop">Beenden</string>
-    <string name="notification_service_pokemon_near">%1$d Pokémon in der Nähe.</string>
-    <string name="notification_service_pokemon_in_area">%1$d Pokémon in der Gegend:</string>
+    <string name="notification_service_pokemon_near">"in der Nähe."</string>
+    <string name="notification_service_pokemon_in_area">"in der Gegend:"</string>
     <string name="meters">Meter</string>
     <string name="gym">Arena</string>
-    <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
-    <string name="logout_prompt_message">Möchtest du dich wirklich ausloggen?</string>
-    <string name="yes">JA</string>
-    <string name="no">NEIN</string>
+    <string name="pref_pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
+    <string name="logout_prompt_message">Möchtest Du Dich wirklich ausloggen?</string>
     <string name="button_ok">OK</string>
     <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
     <string name="pref_cat_other">Anderes</string>
-    <string name="pref_cat_service">Hintergrunddienst</string>
-    <string name="toast_still_searching">Suche läuft&#8230; bisher %1$d Pokémon gefunden.</string>
-    <string name="pref_theme">Standarddesign</string>
     <string name="pref_theme_button">Design</string>
     <string name="default_string">Standard</string>
+
+    <string name="pref_cat_service">Benachrichtigungs-Dienst</string>
+
+    <string name="yes">JA</string>
+    <string name="no">NEIN</string>
+    <string name="found">wurden gefunden</string>
+
+
 </resources>

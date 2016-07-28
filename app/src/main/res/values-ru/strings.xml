@@ -5,7 +5,11 @@
 
 
     <string name="pref_cat_user_account">Аккаунт</string>
-    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения!Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
+    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения! Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
+     <string name="login_warning"><Data><![CDATA[
+     Рекомендуется создать и использовать поддельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
+         использовать учетную запись Google, которая не используется в вашем игровом аккаунте Pokémon Go. Т.к. использование данного приложения может привести к тому, что данный аккаунт будет <b>забанен</b>
+    ]]></Data></string>
     <string name="pref_username">Введите Имя аккаунта</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Введите Пароль</string>
@@ -14,18 +18,20 @@
     <string name="pref_pokestops_title">Показать Pokéstops</string>
     <string name="pref_gyms_title">Показать Gyms</string>
     <string name="pref_scanned_title">Показать отсканированную область</string>
-
+    <string name="pref_pokemon_to_show">Отображать Покемонов</string>
+    <string name="pref_cat_other">Другое</string>
+    <string name="pref_theme_button">Тема приложения</string>
+    <string name="activity_theme_title">Набор Тем</string>
+    <string name="activity_theme_message">Сделает данное приложение приятнее для использования. Выберите одну из тем:</string>
 
 
     <string name="pref_service_enable_title">Включить</string>
     <string name="pref_service_refresh_title">Интервал обновления</string>
-    <string name="pref_service_refresh_summary">Как часто сервис будет обновлять данные (в секундах).</string>
+    <string name="pref_service_refresh_summary">Частота обновления данных (в секундах).</string>
 
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
     <string name="title_activity_poke_map">Покемон Рядом</string>
 
-    <string name="login_warning">"Рекомендуется создать и использовать поддельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
-         использовать учетную запись Google, которая не используется в вашем игравом аккаунте Pokémon Go. Т.к. использование данного приложения может привести к тому, что данный аккаунт будет "</string>
     <string name="prompt_username">PTC Имя пользователя</string>
     <string name="prompt_password">PTC Пароль</string>
     <string name="action_sign_in">Войти</string>
@@ -38,9 +44,10 @@
     <string name="action_relogin">Перезайти</string>
     <string name="ban">забанен</string>
     <string name="minutes">"минут"</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d мин, %3$d сек)</string>
     <string name="pokemon_disappearing_in">"Исчезнет через: "</string>
     <string name="pokemon_expired">Исчез</string>
-    <string name="pokemon_found_new">%1$d новый Покемон найден.</string>
+    <string name="pokemon_found_new">"новых"</string>
     <string name="position_picked">Выбранная позиция</string>
     <string name="seconds">"сек"</string>
     <string name="toast_localization_waiting">Ожидание позиции&#8230;</string>
@@ -66,8 +73,43 @@
     <string name="notification_service_title">Pokémap Сервис</string>
     <string name="notification_service_scanning">Сканирование</string>
     <string name="notification_service_stop">Остановить Сервис</string>
-    <string name="notification_service_pokemon_near">%1$d покемон рядом.</string>
-    <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
+    <string name="notification_service_pokemon_near">"рядом."</string>
+    <string name="notification_service_pokemon_in_area">"в досягаемости:"</string>
     <string name="meters">метров</string>
+
+
+    <string name="found">обнаружено</string>
+
+    <string name="purals_pokemon_zero">Покемонов</string>
+    <string name="purals_pokemon_one">Покемон</string>
+    <string name="purals_pokemon_two">Покемона</string>
+    <string name="purals_pokemon_few">Покемона</string>
+    <string name="purals_pokemon_many">Покемонов</string>
+    <string name="purals_pokemon_other">Покемонов</string>
+
+    <string name="purals_found_zero">обнаружено</string>
+    <string name="purals_found_one">обнаружен</string>
+    <string name="purals_found_two">обнаружено</string>
+    <string name="purals_found_few">обнаружено</string>
+    <string name="purals_found_many">обнаружено</string>
+    <string name="purals_found_other">обнаружено</string>
+
+    <string name="purals_new_zero">новых</string>
+    <string name="purals_new_one">новый</string>
+    <string name="purals_new_two">новых</string>
+    <string name="purals_new_few">новых</string>
+    <string name="purals_new_many">новых</string>
+    <string name="purals_new_other">новых</string>
+    <string name="pref_cat_service">Сервис приложения</string>
+    <string name="google_login_failed">Ошибка входа через Google аккаунт</string>
+    <string name="gym">Gym</string>
+    <string name="logout_prompt_message">Вы уверены, что хотите выйти?</string>
+    <string name="button_ok">Ok</string>
+    <string name="default_string">Стандартная</string>
+    <string name="yes">ДА</string>
+    <string name="no">НЕТ</string>
+    <string name="pref_search_steps">Размер зоны поиска</string>
+    <string name="pref_lured_title">Показать Lure Pokéstop</string>
+
 
 </resources>

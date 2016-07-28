@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Pokémap</string>
 
     <string name="action_settings">tautuhinga</string>
     <string name="action_clearmap">Ūkui Map</string>
@@ -13,30 +12,19 @@
     <string name="pref_warning">FAKATOKANGA: Kaua NOT whakamahi tō pūkete matua mō tenei tono!
          Engari, te waihanga me te whakamahi i te pūkete pokemon Trainer Club rūpahu ki te kupuhipa rerekē, me te īmēra.</string>
     <string name="pref_username">whakatakotoria Ingoa Kaiwhakamahi</string>
-    <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Set Password</string>
-    <string name="pref_password_key" translatable="false">PasswordKey</string>
-    <string name="pref_default_password" translatable="false">***</string>
 
     <string name="pref_cat_general">General</string>
     <string name="pref_pokestops_title">Whakaatu Pokéstops</string>
-    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
     <string name="pref_gyms_title">Whakaatu kori</string>
-    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Whakaatu Karapa Tauwāhi</string>
-    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
-    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
-
-    <string name="pokestop" translatable="false">Pokéstop</string>
 
 
-    <string name="pref_cat_service" translatable="false">Background Service</string>
+    <string name="pref_cat_service">Background Service</string>
     <string name="pref_service_enable_title">Whakahohea</string>
-    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Tāmata Auau</string>
     <string name="pref_service_refresh_summary">Kia pehea te maha ka whakahou i te mahi i roto i te hēkona.</string>
-    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
     <string name="toast_credentials">Kāore e taea te takiuru. Koa tirohia koutou taipitopito tuakiri</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
@@ -54,7 +42,7 @@
     <string name="request_credentials_title">Kōkuhu koutou taipitopito tuakiri pokemon Haere</string>
     <string name="search_pokemon_map_suggestion">(press roa i runga i te mahere ki te huri i rapu tūranga)</string>
 
-    <string name="pokemon_to_show">Pokemon ki te whakaatu</string>
+    <string name="pref_pokemon_to_show">Pokemon ki te whakaatu</string>
 
     <string name="action_relogin">re Takiuru</string>
     <string name="ban">rāhuitia</string>
@@ -75,7 +63,7 @@
     <string name="enable_location_permission_title">Whakahohe Wāhi Whakaaetanga</string>
     <string name="enable_location_permission_message">Tēnā taea whakaaetanga wāhi ki te whakamahi i tēnei taupānga</string>
     <string name="toast_no_location">I rahua ki te Kimihia Wāhi GPS</string>
-    <string name="expiring_in">"Expires in: "</string>
+    <string name="expiring_in">"Expires in:  %1$d:%2$d "</string>
     <string name="google_login_failed">rahua takiuru Google</string>
     <string name="permition_message">Tena tukua wāhi i roto i te tikanga ki te whakamahi i te taupānga</string>
     <string name="allow">tukua</string>
@@ -96,5 +84,6 @@
     <string name="meters">mita</string>
 
     <string name="button_ok">Ok</string>
+    <string name="gym">Gym</string>
 
 </resources>
