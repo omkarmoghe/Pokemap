@@ -26,6 +26,8 @@ public interface PokemapAppPreferences {
     boolean getShowLuredPokemon();
     int getSteps();
 
+    int getMapLocationMarkerColor();
+
     void clearLoginCredentials();
     /**
      *

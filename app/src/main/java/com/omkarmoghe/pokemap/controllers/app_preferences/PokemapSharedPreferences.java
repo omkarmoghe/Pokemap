@@ -34,6 +34,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
     private static final String SHOW_LURED = "lured_checkbox";
+    private static final String MAP_LOCATION_MARKER_COLOR = "color_of_map_location_marker";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
@@ -132,7 +133,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private String getStoredString(String value){
         if (value == null) return null;
         String[] parts = value.split("=");
-        
+
         return (parts.length > 1) ? parts[1] : null;
     }
 
@@ -202,6 +203,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public void setServiceState(@NonNull boolean isEnabled) {
         sharedPreferences.edit().putBoolean(SERVICE_KEY, isEnabled).apply();
+    }
+
+    @Override
+    public int getMapLocationMarkerColor() {
+        return Integer.parseInt(sharedPreferences.getString(MAP_LOCATION_MARKER_COLOR, "0"));
     }
 
     @Override

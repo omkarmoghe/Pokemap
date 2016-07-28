@@ -2,6 +2,7 @@ package com.omkarmoghe.pokemap.views.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.ListPreference;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -22,6 +23,19 @@ public class SettingsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        final ListPreference markerColorPref = (ListPreference) findPreference(getString(R.string.pref_color_of_map_location_marker_key));
+        markerColorPref.setSummary(markerColorPref.getEntry());
+
+        // Create change listener
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+                if(s.equals(getString(R.string.pref_color_of_map_location_marker_key)))
+                    markerColorPref.setSummary(markerColorPref.getEntry());
+            }
+        };
         // Create Theme button to link to Theme Fragment
         Preference button = (Preference) getPreferenceManager().findPreference(getString(R.string.pref_theme_button_key));
         if (button != null) {

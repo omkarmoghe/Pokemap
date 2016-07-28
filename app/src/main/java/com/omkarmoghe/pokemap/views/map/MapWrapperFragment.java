@@ -786,11 +786,17 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void drawMarker(LatLng position){
         if (mGoogleMap != null) {
 
+            int myLocationDrawable;
+            if(mPref.getMapLocationMarkerColor() == 0)
+                myLocationDrawable = R.drawable.ic_my_location_black_24dp;
+            else
+                myLocationDrawable = R.drawable.ic_my_location_white_24dp;
+
             userSelectedPositionMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title(getString(R.string.position_picked))
                     .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.ic_my_location_white_24dp)))
+                            myLocationDrawable)))
                     .zIndex(MapHelper.LAYER_MY_SEARCH)
                     .anchor(0.5f, 0.5f));
         } else {
