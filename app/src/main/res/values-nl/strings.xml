@@ -9,8 +9,7 @@
     <string name="yes">JA</string>
     <string name="no">NEE</string>
     <string name="pref_cat_user_account">Account</string>
-    <string name="pref_warning">LET OP! Gebruik niet je eigen account voor deze applicatie!
-        Maak een nep account aan en gebruik dit account om geen risico's te lopen.</string>
+    <string name="pref_warning">LET OP! Gebruik niet je eigen account voor deze applicatie! Maak een nep account aan en gebruik dit account om geen risico's te lopen.</string>
     <string name="pref_username">Gebruikersnaam</string>
     <string name="pref_default_username">Besbos</string>
     <string name="pref_password">Wachtwoord</string>
