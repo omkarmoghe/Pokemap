@@ -42,10 +42,4 @@ public class SettingsActivity extends AppCompatActivity {
             recreate();
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        NavUtils.navigateUpFromSameTask(this);
-    }
 }
