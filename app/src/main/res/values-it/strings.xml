@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name" translatable="false">Pokémap</string>
+
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_clearmap">Pulisci la mappa</string>
+    <string name="action_logout">Esci</string>
+
+    <string name="logout_prompt_message">Sei sicuro di voler uscire?</string>
+    <string name="yes">SI</string>
+    <string name="no">NO</string>
+
+    <string name="pref_cat_user_account">Account utente</string>
+    <string name="pref_warning">NOTA: NON usare il tuo account ufficiale per questa applicazione!
+        Invece, crea e utilizza un account Pokémon Tainer Club falso con una email e password differenti.</string>
+    <string name="pref_username">Inserisci Username</string>
+    <string name="pref_username_key" translatable="false">UsernameKey</string>
+    <string name="pref_default_username">Mario Rossi</string>
+    <string name="pref_password">Inserisci Password</string>
+    <string name="pref_password_key" translatable="false">PasswordKey</string>
+    <string name="pref_default_password" translatable="false">***</string>
+
+    <string name="pref_cat_general">Generale</string>
+    <string name="pref_pokestops_title">Mostra Pokéstops</string>
+    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
+    <string name="pref_gyms_title">Mostra Palestre</string>
+    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
+    <string name="pref_scanned_title">Mostra aree scansionate</string>
+    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
+    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
+
+    <string name="pokestop" translatable="false">Pokéstop</string>
+
+
+    <string name="pref_cat_service" translatable="false">Background Service</string>
+    <string name="pref_service_enable_title">Abilita</string>
+    <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
+    <string name="pref_service_refresh_title">Frequenza di aggiornamento</string>
+    <string name="pref_service_refresh_summary">Ogni quanti secondi il servizio viene aggiornato.</string>
+    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
+
+    <string name="toast_credentials">Impossibile accedere! Controllare le credenziali inserite</string>
+    <string name="title_activity_poke_map">Pokémon vicini</string>
+
+    <string name="login_warning">Ti consigliamo
+    invece di creare e usare un account Pokémon Trainer Club falso con una email e password diverse oppure
+        usa un account di Google non collegato al tuo account di Pokémon Go. Infatti usando questa app rischi che il tuo account venga </string>
+    <string name="prompt_username">PTC Username</string>
+    <string name="prompt_password">PTC Password</string>
+    <string name="action_sign_in">Accedi</string>
+    <string name="error_field_required">Campo obbligatorio</string>
+    <string name="title_activity_maps">Mappa</string>
+    <string name="login_warning_title">Attenzione:</string>
+
+    <string name="request_credentials_title">Inserisci le tue credenziali di Pokémon Go</string>
+    <string name="search_pokemon_map_suggestion">(Premi a lungo sulla mappa per cambiare la posizione di ricerca)</string>
+
+    <string name="pokemon_to_show">Pokémon da mostrare</string>
+
+    <string name="action_relogin">Riaccedi</string>
+    <string name="ban">bannato</string>
+    <string name="minutes">"minuti"</string>
+    <string name="pokemon_disappearing_in">"Scompare tra: "</string>
+    <string name="pokemon_expired">Scomparso</string>
+    <string name="position_picked">Posizione Presa</string>
+    <string name="seconds">"i"</string>
+    <string name="toast_localization_waiting">In attesa della posizione&#8230;</string>
+    <string name="toast_login_successful">Accesso riuscito.</string>
+    <string name="toast_map_not_initialized">Problemi a inizializzare Google Maps</string>
+    <string name="toast_server_unreachable">Impossibile contattare i server Pokémon Go. I server potrebbere essere morti.</string>
+    <string name="toast_token_expired">Il token di login è scaduto. Ne sto creando uno nuovo.</string>
+    <string name="toast_user_found">Ti ho trovato!</string>
+    <string name="toast_login_error">Accesso non riuscito.</string>
+    <string name="toast_internal_error">Errore interno. Potresti essere offline o i server potrebbero essere morti.</string>
+    <string name="toast_ptc_login_error">PTC Login fallito</string>
+    <string name="enable_location_permission_title">Abilita location permission</string>
+    <string name="enable_location_permission_message">Per favore abilita location permission per utilizzare questa app</string>
+    <string name="toast_no_location">Impossibile trovare la posizione GPS</string>
+    <string name="expiring_in">"Scade tra: "</string>
+    <string name="google_login_failed">Accesso con Google fallito</string>
+    <string name="permition_message">Per favore abilita locations per utilizzare questa app</string>
+    <string name="allow">Permetti</string>
+    <string name="app_settings">Impostazioni App</string>
+    <string name="disclaimer">Disclaimer</string>
+
+
+    <string name="toast_searching">Sto cercando&#8230;</string>
+    <string name="toast_pokemon_found_count">"Pokémon trovato"</string>
+    <string name="pokemon_found_none">Non sono stati trovati nuovi Pokèmon da catturare.</string>
+    <string name="pokemon_found_new">"nuovo Pokèmon da catturare trovato."</string>
+
+    <string name="notification_service_title">Servizio Pokémap</string>
+    <string name="notification_service_scanning">Scansione in corso</string>
+    <string name="notification_service_stop">Ferma il servizio</string>
+    <string name="notification_service_pokemon_near">" Pokémon vicini."</string>
+    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
+    <string name="meters">metri</string>
+
+    <string name="button_ok">Ok</string>
+
+</resources>

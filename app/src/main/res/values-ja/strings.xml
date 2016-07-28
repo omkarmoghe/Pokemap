@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name" translatable="false">Pokémap</string>
+
+    <string name="action_settings">設定</string>
+    <string name="action_clearmap">地図クリア</string>
+    <string name="action_logout">ログアウト</string>
+
+    <string name="logout_prompt_message">ログアウトしますか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+
+    <string name="pref_cat_user_account">アカウント</string>
+    <string name="pref_warning">メモ: このアプリケーションには、あなたのメインアカウントを使用しないでください！
+        代わりのカウントを作成して使用すると良いでしょう。</string>
+    <string name="pref_username">ユーザ名</string>
+    <string name="pref_default_username">Satoshi</string>
+    <string name="pref_password">パスワード</string>
+
+
+    <string name="pref_cat_general">一般</string>
+    <string name="pref_pokestops_title">ポケストップを表示する</string>
+    <string name="pref_gyms_title">ジムを表示する</string>
+    <string name="pref_scanned_title">スキャンした場所を表示する</string>
+    <string name="pokestop" translatable="false">ポケストップ</string>
+
+
+    <string name="pref_cat_service" translatable="false">バックグラウンドサービス</string>
+    <string name="pref_service_enable_title">有効</string>
+    <string name="pref_service_refresh_title">更新間隔</string>
+    <string name="pref_service_refresh_summary">何秒ごとに更新しますか。</string>
+
+    <string name="pref_cat_other">その他</string>
+
+    <string name="toast_credentials">ログインできません。アカウント情報を確認してください。</string>
+    <string name="title_activity_poke_map">近くのポケモン</string>
+
+    <string name="login_warning">あなたが普段使っているポケモンGOのアカウントは使用しないでください。
+        代わりのアカウントを使用することをお勧めします。</string>
+    <string name="prompt_username">PTC ユーザーネーム</string>
+    <string name="prompt_password">PTC パスワード</string>
+    <string name="action_sign_in">サインイン</string>
+    <string name="error_field_required">必須項目</string>
+    <string name="title_activity_maps">地図</string>
+    <string name="login_warning_title">注意：</string>
+
+    <string name="request_credentials_title">あなたのポケモンGO情報を入力してください</string>
+    <string name="search_pokemon_map_suggestion">(探索したい場所で地図上を長押しする) </string>
+
+    <string name="pokemon_to_show">表示するポケモンを選ぶ</string>
+
+    <string name="action_relogin">再ログイン</string>
+    <string name="ban">禁止されました</string>
+    <string name="minutes">"秒"</string>
+    <string name="pokemon_disappearing_in">"消えます: "</string>
+    <string name="pokemon_expired">期限切れ</string>
+    <string name="position_picked">選択位置</string>
+    <string name="seconds">"秒"</string>
+    <string name="toast_localization_waiting">座標を待っています&#8230;</string>
+    <string name="toast_login_successful">ログインに成功しました</string>
+    <string name="toast_map_not_initialized">Google Mapの初期化エラーです</string>
+    <string name="toast_server_unreachable">ポケモンGOのサーバーに接続できません。 サーバーが落ちています。</string>
+    <string name="toast_token_expired">アクセストークンの期限が切れました。新しく取得します。</string>
+    <string name="toast_user_found">見つけた！</string>
+    <string name="toast_login_error">ログインできません。</string>
+    <string name="toast_internal_error">内部エラーが発生しました。 ネットワークがオフラインか、サーバーがダウンしている可能性があります。</string>
+    <string name="toast_ptc_login_error">PTCにログインできません。</string>
+    <string name="enable_location_permission_title">位置情報許可</string>
+    <string name="enable_location_permission_message">位置情報の使用を許可してください</string>
+    <string name="toast_no_location">GPSの位置情報が取得出来ません</string>
+    <string name="expiring_in">"有効期限: "</string>
+    <string name="google_login_failed">Googleにログイン出来ません</string>
+    <string name="permition_message">位置情報設定を許可してください</string>
+    <string name="allow">許可する</string>
+    <string name="app_settings">アプリ設定</string>
+    <string name="disclaimer">免責事項</string>
+
+
+    <string name="toast_searching">検索中&#8230;</string>
+    <string name="toast_pokemon_found_count">"ポケモン発見"</string>
+    <string name="pokemon_found_none">ポケモンを発見できません。</string>
+    <string name="pokemon_found_new">"ポケモンを発見しました。"</string>
+
+    <string name="notification_service_title">Pokémap Service</string>
+    <string name="notification_service_scanning">検索中</string>
+    <string name="notification_service_stop">ストップサービス</string>
+    <string name="notification_service_pokemon_near">" 近所のポケモン"</string>
+    <string name="notification_service_pokemon_in_area">" このエリアのポケモン:"</string>
+    <string name="meters">メートル</string>
+    <string name="gym">ジム</string>
+
+    <string name="button_ok">OK</string>
+
+</resources>
