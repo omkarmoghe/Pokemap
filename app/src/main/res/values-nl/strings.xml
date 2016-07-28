@@ -10,7 +10,7 @@
     <string name="no">NEE</string>
 
     <string name="pref_cat_user_account">Gebruiker Account</string>
-    <string name="pref_warning">ATTENTIE: Gebruikt NIET je hoofdaccount voor deze applicatie!
+    <string name="pref_warning">ATTENTIE: Gebruik NIET je hoofdaccount voor deze applicatie!
         Maak en gebruik een nep Pokémon Trainer Club account met een ander email en wachtwoord.</string>
     <string name="pref_username">Zet gebruikersnaam</string>
     <string name="pref_default_username">Jan de Vries</string>

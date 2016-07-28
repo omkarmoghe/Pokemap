@@ -64,8 +64,7 @@ public class MainActivity extends BaseActivity {
         if(mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
-                .commit();
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG).commit();
 
         if(pref.isServiceEnabled()){
             startNotificationService();
@@ -198,7 +197,7 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * Called whenever a use whats to search pokemons on a different position
+     * Called whenever a user wants to search Pokémon in a different position
      *
      * @param event PoJo with LatLng obj
      */

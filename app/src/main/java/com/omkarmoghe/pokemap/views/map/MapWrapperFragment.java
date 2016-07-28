@@ -3,11 +3,13 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,15 +17,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageButton;
 
+import com.akexorcist.googledirection.constant.TransportMode;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,11 +40,15 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
+import com.omkarmoghe.pokemap.controllers.map.directions.DirectionsHandler;
+import com.omkarmoghe.pokemap.controllers.map.directions.InformationWindowAdapter;
 import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -73,10 +80,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import POGOProtos.Enums.PokemonIdOuterClass;
 import POGOProtos.Enums.TeamColorOuterClass;
 import POGOProtos.Map.Fort.FortDataOuterClass;
-
-import POGOProtos.Enums.PokemonIdOuterClass;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,9 +92,10 @@ import POGOProtos.Enums.PokemonIdOuterClass;
  */
 public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+        ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST = 19;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 469;
     private static final String TAG = "MapWrapperFragment";
 
     private LocationManager locationManager;
@@ -173,10 +180,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 showLocationFetchFailed();
             }
         });
+
         // Inflate the layout for this fragment if the view is not null
-        if (mView == null)
+        if (mView == null) {
             mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        else {
+        } else {
 
         }
 
@@ -217,8 +225,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void initMap() {
         pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null) {
-            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.enable_location_permission_title))
@@ -585,14 +592,20 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
 
     private void showMapNotInitializedError() {
-        if(getView() != null){
+        if (getView() != null) {
             Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
         }
     }
 
     private void showLocationFetchFailed() {
+        if (getView() != null) {
+            Snackbar.make(getView(), getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showGetDirectionsFailed(String reason) {
         if(getView() != null){
-            Snackbar.make(getView(),getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(getView(), getString(R.string.toast_directions_failed) + " " + reason, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -744,6 +757,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMapLongClickListener(this);
         mGoogleMap.setOnMapClickListener(this);
         mGoogleMap.setOnMarkerClickListener(this);
+        mGoogleMap.setOnInfoWindowClickListener(this);
+        mGoogleMap.setInfoWindowAdapter(new InformationWindowAdapter(getActivity()));
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
     }
@@ -792,6 +807,76 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
         }
         return true;
+    }
+
+    @Override
+    public void onInfoWindowClick(final Marker marker) {
+        if (mLocation != null && mGoogleMap != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+
+                return;
+            }
+
+            final Dialog dialogDirections = new Dialog(getActivity());
+            dialogDirections.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogDirections.setContentView(R.layout.dialog_directions);
+
+            ImageButton btnWalk = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_walk);
+            btnWalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.WALKING);
+                    dialogDirections.hide();
+                }
+            });
+
+            ImageButton btnBike = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_bike);
+            btnBike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.BICYCLING);
+                    dialogDirections.hide();
+                }
+            });
+
+            ImageButton btnCar = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_car);
+            btnCar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.DRIVING);
+                    dialogDirections.hide();
+                }
+            });
+
+            dialogDirections.show();
+        } else {
+            showLocationFetchFailed();
+        }
+    }
+
+    private void getDirections(LatLng from, LatLng to, String transportMode) {
+        final DirectionsHandler directionsHandler = DirectionsHandler.getInstance(getContext());
+        directionsHandler.getDirections(from, to, transportMode, new DirectionsHandler.DirectionsHandlerCallback() {
+            @Override
+            public void directionsCreated(PolylineOptions polylineOptions) {
+                Polyline line = mGoogleMap.addPolyline(polylineOptions);
+                directionsHandler.setCurrentDirectionsPolyLine(line);
+            }
+
+            @Override
+            public void directionsUpdated() {
+
+            }
+
+            @Override
+            public void directionsFailed(String reason) {
+                showGetDirectionsFailed(reason);
+            }
+        });
     }
 
     @Override

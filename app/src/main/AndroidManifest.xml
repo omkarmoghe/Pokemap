@@ -3,7 +3,7 @@
     package="com.omkarmoghe.pokemap">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />--> <!-- FINE_LOCATION contains COARSE_LOCATION -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
@@ -26,6 +26,8 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".views.settings.ThemeActivity"
+            android:parentActivityName=".views.settings.SettingsActivity"/>
+        <activity android:name=".views.settings.DirectionsActivity"
             android:parentActivityName=".views.settings.SettingsActivity"/>
 
         <!--

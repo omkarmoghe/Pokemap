@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_directions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.omkarmoghe.pokemap.views.settings.ThemeActivity">
+
+    <TextView
+        android:text="A Google Server API Key is required in order to use the directions API."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <TextView
+        android:text="Create or select a project and enable the Google Maps Directions API Key. Add a SERVER API Key and paste the key in the input field below."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <TextView
+        android:id="@+id/txt_api_console"
+        android:text="Google API Console"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/inp_directions_api_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Server API key"
+            android:imeActionLabel="Register"
+            android:imeOptions="actionGo"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_register_directions_api"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Register"
+        android:textStyle="bold" />
+
+    <TextView
+        android:text="The key might take up to 5 minutes to activate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/TextAppearance.AppCompat.Small"/>
+
+</LinearLayout>

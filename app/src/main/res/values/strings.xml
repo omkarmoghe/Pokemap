@@ -44,7 +44,9 @@
 
     <string name="pref_cat_other">Other</string>
     <string name="pref_theme_button">Theme</string>
-    <string name="pref_theme_button_key">ThemeKey</string>
+    <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="pref_directions_button">Directions</string>
+    <string name="pref_directions_button_key" translatable="false">DirectionsKey</string>
 
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
@@ -83,6 +85,7 @@
     <string name="enable_location_permission_title">Enable Location Permission</string>
     <string name="enable_location_permission_message">Please enable location permission to use this application</string>
     <string name="toast_no_location">Failed to Find GPS Location</string>
+    <string name="toast_directions_failed">Failed to get directions</string>
     <string name="expiring_in">"Expires in: "</string>
     <string name="google_login_failed">Google login failed</string>
     <string name="permition_message">Please allow locations in order to use the app</string>
