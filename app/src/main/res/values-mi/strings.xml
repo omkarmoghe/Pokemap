@@ -75,7 +75,7 @@
     <string name="enable_location_permission_title">Whakahohe Wāhi Whakaaetanga</string>
     <string name="enable_location_permission_message">Tēnā taea whakaaetanga wāhi ki te whakamahi i tēnei taupānga</string>
     <string name="toast_no_location">I rahua ki te Kimihia Wāhi GPS</string>
-    <string name="expiring_in">"Expires in: "</string>
+    <string name="expiring_in">Expires in: %1$d:%2$d</string>
     <string name="google_login_failed">rahua takiuru Google</string>
     <string name="permition_message">Tena tukua wāhi i roto i te tikanga ki te whakamahi i te taupānga</string>
     <string name="allow">tukua</string>
