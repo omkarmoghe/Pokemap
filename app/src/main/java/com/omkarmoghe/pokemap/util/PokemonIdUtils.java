@@ -19,14 +19,7 @@ public class PokemonIdUtils {
 
     //Getting correct pokemon Id eg: 1 must be 001, 10 must be 010
     public static String getCorrectPokemonImageId(int pokemonNumber) {
-        String actualNumber = String.valueOf(pokemonNumber);
-        if (pokemonNumber < 10) {
-            return "00" + actualNumber;
-        } else if (pokemonNumber < 100) {
-            return "0" + actualNumber;
-        } else {
-            return actualNumber;
-        }
+        return String.format("%03d", pokemonNumber);
     }
 
     /**

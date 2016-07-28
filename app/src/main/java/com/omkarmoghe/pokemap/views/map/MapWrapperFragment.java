@@ -47,6 +47,7 @@ import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.ClearMapEvent;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
+import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.MarkerExpired;
 import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
@@ -228,9 +229,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 return;
             }
             mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
 
+            LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    currentLatLngLocation, 15));
+
+            //Run the initial scan at the current location reusing the long click function
+            SearchInPosition sip = new SearchInPosition();
+            sip.setPosition(currentLatLngLocation);
+            sip.setSteps(1);
+            EventBus.getDefault().post(sip);
         } else {
             showLocationFetchFailed();
         }
@@ -522,7 +530,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                             .anchor(0.5f, 0.5f));
 
                                     //adding pokemons to list to be removed on next search
-                                    Log.d(TAG, "onFetch: Thread = " + Thread.currentThread());
                                     PokemonMarkerExtended markerExtended = new PokemonMarkerExtended(poke, marker);
                                     markerList.put(poke.getSpawnPointId(), markerExtended);
                                     MarkerRefreshController.getInstance().postMarker(markerExtended);
@@ -538,11 +545,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (positionNum != LOCATION_PERMISSION_REQUEST) {
-                    pokeSnackbar.setText(String.format("%s %s %s",getString(R.string.toast_searching), pokemonFound, getString(R.string.toast_pokemon_found_count)));
+                    pokeSnackbar.setText(getString(R.string.toast_still_searching, pokemonFound));
                     pokeSnackbar.show();
 
                 } else {
-                    String text = pokemonFound > 0 ? String.format("%s %s", pokemonFound, getString(R.string.pokemon_found_new)) : getString(R.string.pokemon_found_none);
+                    String text = pokemonFound > 0 ? getString(R.string.pokemon_found_new, pokemonFound) : getString(R.string.pokemon_found_none);
                     pokeSnackbar.setText(text);
                     pokeSnackbar.show();
                 }
@@ -604,8 +611,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-
-        return(getString(R.string.expiring_in)+String.format("%1$d:%2$02d %3$s", minutes, seconds,getString(R.string.minutes)));
+        return getString(R.string.expiring_in, minutes, seconds);
     }
 
     /**
@@ -636,6 +642,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     userSelectedPositionCircles.add(mGoogleMap.addCircle(circleOptions));
                 }
             }
+        }
+    }
+
+    /**
+     * Called whenever a LurePokemonEvent is posted to the bus. Posted when new catchable pokemon are found.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(LurePokemonEvent event) {
+        if(!event.getCatchablePokemon().isEmpty() && mPref.getShowLuredPokemon()) {
+            setPokemonMarkers(event.getCatchablePokemon());
         }
     }
 
@@ -759,6 +777,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         //Sending event to MainActivity
         SearchInPosition sip = new SearchInPosition();
         sip.setPosition(position);
+        sip.setSteps(mPref.getSteps());
         EventBus.getDefault().post(sip);
 
         mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+import com.pokegoapi.api.pokemon.Pokemon;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,9 +33,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SHOW_SCANNED_PLACES = "scanned_checkbox";
     private static final String SHOW_POKESTOPS = "pokestops_checkbox";
     private static final String SHOW_GYMS = "gyms_checkbox";
+    private static final String SHOW_LURED = "lured_checkbox";
     private static final String SERVICE_KEY = "background_poke_service";
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
+    private static final String STEPS = "search_steps";
 
     private static final String INFO_TOKEN = "token=";
     private static final String INFO_REFRESH = "refresh=";
@@ -156,12 +159,31 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     }
 
     @Override
+    public int getSteps() {
+        return Integer.parseInt(sharedPreferences.getString(STEPS, "3"));
+    }
+
+    @Override
     public boolean getShowGyms() {
         return sharedPreferences.getBoolean(SHOW_GYMS, false);
     }
 
+    @Override
+    public boolean getShowLuredPokemon() {
+        return sharedPreferences.getBoolean(SHOW_LURED, false);
+    }
+
     public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
-        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, new HashSet<String>());
+        Set<String> showablePokemonStringIDs = sharedPreferences.getStringSet(POKEMONS_TO_SHOW, null);
+        if(showablePokemonStringIDs == null) {
+            //Provides the filter with all available pokemon if no filter is set.
+            showablePokemonStringIDs = new HashSet<>();
+            for (PokemonIdOuterClass.PokemonId pokemonId : PokemonIdOuterClass.PokemonId.values()) {
+                if(pokemonId != PokemonIdOuterClass.PokemonId.UNRECOGNIZED) {
+                    showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
+                }
+            }
+        }
         Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
         for (String stringId : showablePokemonStringIDs) {
             showablePokemonIDs.add(PokemonIdOuterClass.PokemonId.forNumber(Integer.valueOf(stringId)));
