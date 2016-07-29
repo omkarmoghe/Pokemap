@@ -5,7 +5,7 @@
 
 
     <string name="pref_cat_user_account">Аккаунт</string>
-    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения!Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
+    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения! Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
     <string name="pref_username">Введите Имя аккаунта</string>
     <string name="pref_default_username">John Doe</string>
     <string name="pref_password">Введите Пароль</string>
@@ -24,12 +24,12 @@
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
     <string name="title_activity_poke_map">Покемон Рядом</string>
 
-    <string name="login_warning">"Рекомендуется создать и использовать поддельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
-         использовать учетную запись Google, которая не используется в вашем игравом аккаунте Pokémon Go. Т.к. использование данного приложения может привести к тому, что данный аккаунт будет "</string>
+    <string name="login_warning">"Рекомендуется создать и использовать отдельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
+         использовать учетную запись Google, которая не используется в вашем игравом аккаунте Pokémon Go, так как использование данного приложения может привести к тому, что данный аккаунт будет заблокирован."</string>
     <string name="prompt_username">PTC Имя пользователя</string>
     <string name="prompt_password">PTC Пароль</string>
     <string name="action_sign_in">Войти</string>
-    <string name="error_field_required">Необнодимые данные</string>
+    <string name="error_field_required">Необходимые данные</string>
     <string name="title_activity_maps">Карта</string>
     <string name="login_warning_title">Предупреждение:</string>
 
@@ -70,5 +70,8 @@
     <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
     <string name="meters">метров</string>
     <string name="toast_google_login_error">Ошибка входа через аккаунт Google</string>
-
+    <string name="toast_still_searching">Поиск&#8230; найден %1$d Pokémon поблизости.</string>
+    <string name="preset_themes_title">Предустановленые темы</string>
+    <string name="theme_activity_text">В будущем мы сделаем выбор темы более удобным. Выберите тему:</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d минут, %3$d метров)</string>
 </resources>
