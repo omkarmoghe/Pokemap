@@ -232,31 +232,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void initMap() {
-        if (mLocation != null && mGoogleMap != null) {
-            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(getString(R.string.enable_location_permission_title))
-                        .setMessage(getString(R.string.enable_location_permission_message))
-                        .setPositiveButton(getString(R.string.button_ok), null)
-                        .show();
-                return;
-            }
-            mGoogleMap.setMyLocationEnabled(true);
-
-        mPref.setShowMapSuggestion(false);
-
-        if (mView != null) {
-            mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
-        }
-    }
-
     private void initMap(boolean animateZoomIn, boolean searchInPlace) {
 
         if (getView() != null) {
-            pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
             if (mLocation != null && mGoogleMap != null) {
                 if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
