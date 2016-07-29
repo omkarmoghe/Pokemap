@@ -83,6 +83,8 @@ public class NianticManager {
     private int currentScan = 0;
     private int pendingSearch = 0;
 
+    private int currentBatchCall = 0;
+
     public static NianticManager getInstance(){
         return instance;
     }
@@ -324,16 +326,17 @@ public class NianticManager {
     }
 
     public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+        final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (mPokemonGo != null) {
+                    if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(33);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
-                        EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -356,12 +359,13 @@ public class NianticManager {
     }
 
     public void getLuredPokemon(final double lat, final double longitude, final double alt){
+        final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
 
-                    if (mPokemonGo != null) {
+                    if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
@@ -374,7 +378,7 @@ public class NianticManager {
                                 pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
                             }
                         }
-                        EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -396,17 +400,19 @@ public class NianticManager {
 
 
     public void getPokeStops(final double lat, final double longitude, final double alt){
+        final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
 
-                    if (mPokemonGo != null) {
+                    if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(33);
-                        EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops(), lat, longitude));
+                        Collection<Pokestop> pokestops = mPokemonGo.getMap().getMapObjects().getPokestops();
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new PokestopsEvent(pokestops, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -428,17 +434,19 @@ public class NianticManager {
 
     public void getGyms(final double latitude, final double longitude, final double alt) {
 
+        final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
             try {
 
-                if (mPokemonGo != null) {
+                if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
                     Thread.sleep(33);
                     mPokemonGo.setLocation(latitude, longitude, alt);
                     Thread.sleep(33);
-                    EventBus.getDefault().post(new GymsEvent(mPokemonGo.getMap().getMapObjects().getGyms(), latitude, longitude));
+                    Collection<FortDataOuterClass.FortData> gyms = mPokemonGo.getMap().getMapObjects().getGyms();
+                    if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new GymsEvent(gyms, latitude, longitude));
                 }
 
             } catch (LoginFailedException e) {
@@ -462,5 +470,10 @@ public class NianticManager {
         this.pendingSearch = 0;
         this.currentScan = 0;
         this.pokemonFound = 0;
+        this.currentBatchCall++;
+    }
+
+    public void cancelPendingSearches(){
+        this.currentBatchCall++;
     }
 }
