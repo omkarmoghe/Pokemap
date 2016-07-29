@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,12 +25,17 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
     private final String RESPONSE_RECEIVE_LOG = "Received response in {0} ms.\nURL: {1}. \nHeaders:\n{2}\n";
     private final String RESPONSE_BODY_LOG = "Response body:\n{0}\n";
 
+    private String sanitize(HttpUrl url) {
+        return url.toString().replaceAll("username=[^&]+","username=++++++").replaceAll("password=[^&]+","password=++++++");
+    }
+
+
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException {
         final Request request = chain.request();
 
         // Log request
-        Log.d(TAG, MessageFormat.format(REQUEST_SEND_LOG, request.method(), request.url(), chain.connection(), request.headers()));
+        Log.d(TAG, MessageFormat.format(REQUEST_SEND_LOG, request.method(), sanitize(request.url()), chain.connection(), request.headers()));
         if(request.method().compareToIgnoreCase("post") == 0)
             Log.d(TAG, MessageFormat.format(REQUEST_BODY_LOG, convertRequestBodyToString(request)));
 
@@ -39,7 +45,7 @@ public  class NetworkRequestLoggingInterceptor implements Interceptor {
         final long responseTime = requestEnd - requestStart;
 
         // Log response
-        Log.d(TAG, MessageFormat.format(RESPONSE_RECEIVE_LOG, responseTime, response.request().url(), response.headers()));
+        Log.d(TAG, MessageFormat.format(RESPONSE_RECEIVE_LOG, responseTime, sanitize(response.request().url()), response.headers()));
         final String responseBodyString = response.body().string();
         if(responseBodyString.length() > 0)
             Log.d(TAG, MessageFormat.format(RESPONSE_BODY_LOG, responseBodyString.trim()));

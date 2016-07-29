@@ -73,6 +73,7 @@
     <string name="meters">meter</string>
     <string name="gym">Gym</string>
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google Login Mislukt</string>
     <string name="default_string">Standaard</string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
     <string name="pokemon_found_new">%1$d nieuwe vangbare Pokémon gevonden.</string>

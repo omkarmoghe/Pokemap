@@ -50,4 +50,8 @@ public interface PokemapAppPreferences {
 
     void setDirectionsAPIKey(String key);
     String getDirectionsAPIKey();
+
+    void setShowMapSuggestion(boolean showMapSuggestion);
+
+    boolean getShowMapSuggestion();
 }

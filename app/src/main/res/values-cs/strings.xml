@@ -83,7 +83,7 @@
     <string name="enable_location_permission_title">Práva k použití polohy</string>
     <string name="enable_location_permission_message">Prosím povolte aplikaci používat Vaši polohu.</string>
     <string name="toast_no_location">Nemohu nalézt GPS polohu</string>
-    <string name="expiring_in">"Vyprší za: "</string>
+    <string name="expiring_in">"Vyprší za: %1$d:%2$02d"</string>
     <string name="google_login_failed">Selhalo přihlášení ke Google účtu</string>
     <string name="permition_message">Prosím povolte aplikaci používat Vaši polohu</string>
     <string name="allow">Povolit</string>
@@ -105,5 +105,6 @@
     <string name="gym">Tělocvična</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google přihlášení selhalo.</string>
 
 </resources>

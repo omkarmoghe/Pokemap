@@ -32,10 +32,6 @@ import com.omkarmoghe.pokemap.controllers.net.NianticManager;
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.pokegoapi.auth.PtcLogin;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * A login screen that offers login via username/password. And a Google Sign in
@@ -58,7 +54,6 @@ public class LoginActivity extends AppCompatActivity{
     private GoogleManager mGoogleManager;
     private GoogleManager.LoginListener mGoogleLoginListener;
 
-    private String mDeviceCode;
     private PokemapAppPreferences mPref;
 
     @Override
@@ -78,8 +73,15 @@ public class LoginActivity extends AppCompatActivity{
             }
 
             @Override
-            public void authFailed(String message) {
-                showAuthFailed();
+            public void authFailed(String message, String provider) {
+                switch (provider){
+                    case LoginInfo.PROVIDER_PTC:
+                        showPTCLoginFailed();
+                        break;
+                    case LoginInfo.PROVIDER_GOOGLE:
+                        showGoogleLoginFailed();
+                        break;
+                }
                 Log.d(TAG, "authFailed() called with: message = [" + message + "]");
             }
         };
@@ -97,7 +99,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 Log.e(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
-                showAuthFailed();
+                showPTCLoginFailed();
             }
         };
 
@@ -113,14 +115,12 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void authFailed(String message) {
                 Log.d(TAG, "Failed to authenticate. authFailed() called with: message = [" + message + "]");
-                showAuthFailed();
+                showGoogleLoginFailed();
             }
 
             @Override
             public void authRequested(GoogleService.AuthRequest body) {
-                GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH,
-                        body.getVerificationUrl(), body.getUserCode());
-                mDeviceCode = body.getDeviceCode();
+                //Do nothing
             }
         };
 
@@ -172,16 +172,21 @@ public class LoginActivity extends AppCompatActivity{
         signInButtonGoogle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoogleManager.authUser(mGoogleLoginListener);
+                GoogleAuthActivity.startForResult(LoginActivity.this, REQUEST_USER_AUTH);
             }
         });
 
         triggerAutoLogin();
     }
 
-    private void showAuthFailed() {
+    private void showPTCLoginFailed() {
         showProgress(false);
         Snackbar.make((View)mLoginFormView.getParent(), getString(R.string.toast_ptc_login_error), Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showGoogleLoginFailed() {
+        showProgress(false);
+        Snackbar.make((View)mLoginFormView.getParent(), getString(R.string.toast_google_login_error), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -190,7 +195,8 @@ public class LoginActivity extends AppCompatActivity{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_USER_AUTH){
                 showProgress(true);
-                mGoogleManager.requestToken(mDeviceCode, mGoogleLoginListener);
+                mGoogleManager.requestToken(data.getStringExtra(GoogleAuthActivity.EXTRA_CODE),
+                        mGoogleLoginListener);
             }
         }
     }

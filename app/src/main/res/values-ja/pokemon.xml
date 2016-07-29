@@ -28,7 +28,7 @@
 	<string name="raichu">ライチュウ</string>
 	<string name="sandshrew">サンド</string>
 	<string name="sandslash">サンドパン</string>
-	<string name="nidoran_famale">ニドラン♀</string>
+	<string name="nidoran_female">ニドラン♀</string>
 	<string name="nidorina">ニドリーナ</string>
 	<string name="nidoqueen">ニドクイン</string>
 	<string name="nidoran_male">ニドラン♂</string>
@@ -720,4 +720,5 @@
 	<string name="zygarde">ジガルデ</string>
 	<string name="diancie">ディアンシー</string>
 	<string name="hoopa">フーパ</string>
+	<string name="volcanion">ボルケニオン</string>
 </resources>
