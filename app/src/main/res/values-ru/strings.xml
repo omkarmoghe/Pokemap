@@ -22,7 +22,7 @@
     <string name="pref_service_refresh_summary">Как часто сервис будет обновлять данные (в секундах).</string>
 
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
-    <string name="title_activity_poke_map">Покемон Рядом</string>
+    <string name="title_activity_poke_map">Покемон рядом</string>
 
     <string name="login_warning">"Рекомендуется создать и использовать отдельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
          использовать учетную запись Google, которая не используется в вашем игровом аккаунте Pokémon Go, так как использование данного приложения может привести к тому, что данный аккаунт будет заблокирован."</string>
