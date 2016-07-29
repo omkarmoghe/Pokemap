@@ -42,6 +42,8 @@ public class PokemonNotificationService extends Service{
     private static final int notificationId = 2423235;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
+    public static boolean isRunning = false;
+
     private UpdateRunnable updateRunnable;
     private Thread workThread;
     private LocationManager locationManager;
@@ -72,13 +74,14 @@ public class PokemonNotificationService extends Service{
         locationManager = LocationManager.getInstance(this);
         nianticManager = NianticManager.getInstance();
 
-        updateRunnable = new UpdateRunnable(preffs.getServiceRefreshRate());
+        updateRunnable = new UpdateRunnable(preffs.getServiceRefreshRate() * 1000);
         workThread = new Thread(updateRunnable);
 
         initBroadcastReciever();
         workThread.start();
         locationManager.onResume();
 
+        isRunning = true;
     }
 
     /**
@@ -96,6 +99,7 @@ public class PokemonNotificationService extends Service{
         updateRunnable.stop();
         EventBus.getDefault().unregister(this);
         unregisterReceiver(mBroadcastReciever);
+        isRunning = false;
     }
 
     @Override
@@ -197,22 +201,30 @@ public class PokemonNotificationService extends Service{
 
         @Override
         public void run() {
-            while(isRunning){
-                try{
-                    LatLng currentLocation = locationManager.getLocation();
 
-                    if(currentLocation != null){
-                        nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
-                    }else {
-                        locationManager = LocationManager.getInstance(PokemonNotificationService.this);
-                    }
+                try {
+
+                    // initial wait (fFor a reason! Do NOT remove because of cyclic sleep!)
                     Thread.sleep(refreshRate);
 
+                    while (isRunning) {
+
+                        LatLng currentLocation = locationManager.getLocation();
+
+                        if (currentLocation != null){
+                            nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
+                        } else {
+                            locationManager = LocationManager.getInstance(PokemonNotificationService.this);
+                        }
+
+                        // cyclic sleep
+                        Thread.sleep(refreshRate);
+
+                    }
                 } catch (InterruptedException | NullPointerException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed updating. UpdateRunnable.run() raised: " + e.getMessage());
                 }
-            }
         }
 
         public void stop(){
@@ -227,4 +239,8 @@ public class PokemonNotificationService extends Service{
             locationManager.onPause();
         }
     };
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
 }

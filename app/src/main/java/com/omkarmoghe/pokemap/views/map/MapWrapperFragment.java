@@ -94,9 +94,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private View mView;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
-    private Location mLocation = null;
+    private static Location mLocation = null;
     private PokemonMarkerExtended mSelectedMarker;
-    private Location currentCenter = new Location("0,0");
     private Map<String, GymMarkerExtended> gymsList = new HashMap<>();
     Map<Integer, String> gymTeamImageUrls = new HashMap<>();
     String lurePokeStopImageUrl = "http://i.imgur.com/2BI3Cqv.png";
@@ -105,6 +104,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private List<Circle> userSelectedPositionCircles = new ArrayList<>();
     private List<Marker> userSelectedPositionMarkers = new ArrayList<>();
     private Map<String, PokemonMarkerExtended> markerList = new HashMap<>();
+    private Map<String, PokemonMarkerExtended> futureMarkerList = new HashMap<>();
     private Map<String, PokestopMarkerExtended> pokestopsList = new HashMap<>();
 
     private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
@@ -161,7 +161,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             public void onLocationChanged(Location location) {
                 if (mLocation == null) {
                     mLocation = location;
-                    initMap();
+                    initMap(true, true);
                 } else {
                     mLocation = location;
                 }
@@ -195,7 +195,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
                 if (mLocation != null && mGoogleMap != null) {
-                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
                 } else {
                     showLocationFetchFailed();
@@ -206,40 +206,69 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mView.findViewById(R.id.closeSuggestions).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
+
+                hideMapSuggestion();
             }
         });
+
+        if (!mPref.getShowMapSuggestion()) {
+            hideMapSuggestion();
+        }
 
         return mView;
     }
 
-    private void initMap() {
-        pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
-        if (mLocation != null && mGoogleMap != null) {
-            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void hideMapSuggestion() {
 
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(getString(R.string.enable_location_permission_title))
-                        .setMessage(getString(R.string.enable_location_permission_message))
-                        .setPositiveButton(getString(R.string.button_ok), null)
-                        .show();
-                return;
-            }
-            mGoogleMap.setMyLocationEnabled(true);
+        mPref.setShowMapSuggestion(false);
 
-            LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    currentLatLngLocation, 15));
-
-            //Run the initial scan at the current location reusing the long click function
-            SearchInPosition sip = new SearchInPosition();
-            sip.setPosition(currentLatLngLocation);
-            sip.setSteps(1);
-            EventBus.getDefault().post(sip);
-        } else {
-            showLocationFetchFailed();
+        if (mView != null) {
+            mView.findViewById(R.id.layoutSuggestions).setVisibility(View.GONE);
         }
+    }
+
+    private void initMap(boolean animateZoomIn, boolean searchInPlace) {
+
+        if (getView() != null) {
+            pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
+            if (mLocation != null && mGoogleMap != null) {
+                if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.enable_location_permission_title))
+                            .setMessage(getString(R.string.enable_location_permission_message))
+                            .setPositiveButton(getString(R.string.button_ok), null)
+                            .show();
+                    return;
+                }
+                mGoogleMap.setMyLocationEnabled(true);
+
+                LatLng currentLatLngLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+
+                if (animateZoomIn) {
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+                } else {
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLngLocation, 15));
+                }
+
+                if (searchInPlace) {
+                    searchInPlace(currentLatLngLocation);
+                }
+
+            } else {
+                showLocationFetchFailed();
+            }
+        }
+    }
+
+    private void searchInPlace(LatLng latLngLocation) {
+
+        //Run the initial scan at the current location reusing the long click function
+        SearchInPosition sip = new SearchInPosition();
+        sip.setPosition(latLngLocation);
+        sip.setSteps(mPref.getSteps());
+        EventBus.getDefault().post(sip);
     }
 
     private void clearMarkers() {
@@ -267,12 +296,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
-            if (userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
+            clearPokemonCircles();
         }
 
     }
@@ -289,6 +313,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         marker.remove();
                         pokemonIterator.remove();
                     } else {
+                        if(catchablePokemon.getExpirationTimestampMs()==-1) {
+                            futureMarkerList.put(catchablePokemon.getSpawnPointId(),pokemonEntry.getValue());
+                            marker.setAlpha(0.6f);
+                            marker.setSnippet(getString(R.string.pokemon_will_spawn));
+                            continue;
+                        }
                         long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
                         if (millisLeft < 0) {
                             marker.remove();
@@ -479,7 +509,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
+            Set<String> futureKeys = futureMarkerList.keySet();
             for (final CatchablePokemon poke : pokeList) {
+
+                if(futureKeys.contains(poke.getSpawnPointId())){
+                    if(poke.getExpirationTimestampMs()>1) {
+                        futureMarkerList.get(poke.getSpawnPointId()).getMarker().remove();
+                        futureKeys.remove(poke.getSpawnPointId());
+                        futureMarkerList.remove(poke.getSpawnPointId());
+                        markerKeys.remove(poke.getSpawnPointId());
+                        markerList.remove(poke.getSpawnPointId());
+                    }
+                }
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
 
@@ -517,6 +558,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                         //Increase founded pokemon counter
                         nianticManager.setPokemonFound(nianticManager.getPokemonFound() + 1);
+                    }
+                }else if(futureMarkerList.containsKey(poke.getSpawnPointId())){
+                    if(showablePokemonIDs.contains(poke.getPokemonId())){
+                        PokemonMarkerExtended futureMarker = futureMarkerList.get(poke.getSpawnPointId());
+
+                        futureMarkerList.remove(futureMarker);
                     }
                 }
             }
@@ -619,6 +666,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ClearMapEvent event) {
+        nianticManager.cancelPendingSearches();
         clearMarkers();
         MarkerRefreshController.getInstance().clear();
     }
@@ -722,6 +770,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMarkerClickListener(this);
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
+
+        initMap(false, false);
     }
 
     @Override
@@ -767,6 +817,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 mSelectedMarker = pm.getValue();
                 long duration = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
                         - System.currentTimeMillis();
+                if(duration<1)continue;
                 MarkerRefreshController.getInstance().startTimer(duration);
                 break;
             }
