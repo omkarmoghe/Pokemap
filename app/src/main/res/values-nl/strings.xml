@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Translation by Carsten and DoraKlikOpDora -->
+<!-- Translation by DoraKlikOpDora -->
 <resources>
     <string name="action_settings">Instellingen</string>
     <string name="action_clearmap">Leeg de map</string>
@@ -20,21 +20,21 @@
     <string name="pref_search_steps">Zoekgebied</string>
     <string name="pref_search_steps_key">search_steps</string>
     <string name="pre_lured_key">lured_checkbox</string>
-    <string name="pref_lured_title">Toon Pokémons gevonden met Lure</string>
-    <string name="pref_cat_service">Laat de app op de achtergrond lopen</string>
-    <string name="pref_service_enable_title">Ingeschakeld</string>
+    <string name="pref_lured_title">Toon Pokémons bij lured Pokéstops</string>
+    <string name="pref_cat_service">Overig</string>
+    <string name="pref_service_enable_title">Laat de app op de achtergrond lopen</string>
     <string name="pref_service_refresh_title">Ververstijd</string>
     <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart hernieuwd in seconden.</string>
-    <string name="pref_cat_other">Overig</string>
+    <string name="pref_cat_other">Overige instellingen</string>
     <string name="pref_theme_button">Thema</string>
     <string name="toast_credentials">Ongeldige gegevens ingevuld! Kan niet inloggen!</string>
     <string name="title_activity_poke_map">Pokémon in de buurt</string>
     <string name="login_warning"><Data><![CDATA[
-    Door het gebruiken van deze applicatie kun je <b>verbannen worden</b>!
-    Om dit te voorkomen is het handig om een tweede account aan te maken en te gebruiken! Een Pokémon Trainer Club (PTC) account is aangeraden!
+    Door het gebruiken van deze applicatie kun je <b>verbannen worden van Pokémon Go</b>!
+    Om dit te voorkomen is het aangeraden om een tweede account aan te maken en te gebruiken! Een Pokémon Trainer Club (PTC) account is aangeraden en makkelijk te maken.
     ]]></Data></string>
-    <string name="prompt_username">PTC Gebruikersnaam</string>
-    <string name="prompt_password">PTC Wachtwoord</string>
+    <string name="prompt_username">Gebruikersnaam</string>
+    <string name="prompt_password">Wachtwoord</string>
     <string name="action_sign_in">Log in</string>
     <string name="error_field_required">Dit veld is verplicht</string>
     <string name="title_activity_maps">Kaart</string>
@@ -67,7 +67,7 @@
     <string name="permition_message">Sta locaties toe om de app te gebruiken</string>
     <string name="allow">Toestaan</string>
     <string name="app_settings">App instellingen</string>
-    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer">Lees mij!</string>
     <string name="toast_google_login_error">Google Login Mislukt</string>
     <string name="toast_searching">Zoeken&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémons gevonden"</string>
@@ -82,6 +82,6 @@
     <string name="gym">Gym</string>
     <string name="button_ok">Okay</string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
-    <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
-    <string name="preset_themes_title">Ingesteld thema</string>
+    <string name="toast_still_searching">Zoeken&#8230; Al %1$d Pokémons gevonden!</string>
+    <string name="preset_themes_title">Thema</string>
 </resources>
