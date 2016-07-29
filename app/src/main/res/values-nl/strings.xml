@@ -74,11 +74,24 @@
     <string name="gym">Gym</string>
     <string name="button_ok">Ok</string>
     <string name="default_string">Standaard</string>
-    <string name="litwick"></string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
     <string name="pokemon_found_new">%1$d nieuwe vangbare Pokémon gevonden.</string>
     <string name="pref_directions_button">Navigatie</string>
     <string name="preset_themes_title">Preset Thema\'s</string>
-    <string name="toast_directions_failed">Kan route niet ophalen</string>
     <string name="toast_still_searching">Zoeken&#8230; %1$d Pokémon al gevonden.</string>
+    <string name="settings_directions_title">Navigeren</string>
+    <string name="settings_directions_key_required">Een Google Server API Key is nodig om de directions API te gebruiken.</string>
+    <string name="settings_directions_key_explanation">Maak of selecteer een project en activeer de Google Maps Directions API. Voeg een SERVER API key toe en kopieer deze naar onderstaand input veld.</string>
+    <string name="settings_directions_api_console">Google API Console</string>
+    <string name="settings_directions_input_hint">Server API key</string>
+    <string name="settings_directions_input_imeaction">Registreer</string>
+    <string name="settings_directions_button_register">Registreer</string>
+    <string name="settings_directions_button_note">Het kan tot 5 minuten duren voor de key actief is</string>
+    <string name="settings_directions_error_key_empty">API Key verplicht</string>
+    <string name="settings_directions_success_key_set">Server API Key geregistreerd</string>
+    <string name="directions_error_key_not_set">Directions Server API Key niet gezet</string>
+    <string name="directions_error_route_options_failed">Failed to get options for route</string>
+    <string name="directions_error_directions_failed">Failed to get directions</string>
+    <string name="directions_meters_short">%1$sm</string>
+    <string name="directions_minutes_short">%1$smin</string>
 </resources>

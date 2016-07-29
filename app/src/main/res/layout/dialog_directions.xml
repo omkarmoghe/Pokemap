@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_directions_walk"
+            android:src="@drawable/ic_directions_walk_white_24dp"
             android:contentDescription="Walk" />
 
         <ImageButton
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_directions_bike"
+            android:src="@drawable/ic_directions_bike_white_24dp"
             android:contentDescription="Bike" />
 
         <ImageButton
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_directions_car"
+            android:src="@drawable/ic_directions_car_white_24dp"
             android:contentDescription="Car" />
 
     </LinearLayout>

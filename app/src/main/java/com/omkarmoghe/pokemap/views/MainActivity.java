@@ -160,6 +160,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // TODO: test all this shit on a 6.0+ phone lmfao
+        // Carsten: Works fine on 6.0+ but the entire request permission stuff is handled incorrectly (it blocks the app if denied)
         switch (requestCode) {
             case 703:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

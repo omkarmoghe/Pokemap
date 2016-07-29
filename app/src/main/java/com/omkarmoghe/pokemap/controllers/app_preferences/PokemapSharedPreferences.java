@@ -4,17 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.ArraySet;
 import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.pokegoapi.api.pokemon.Pokemon;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +37,8 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String INFO_REFRESH = "refresh=";
     private static final String INFO_USERNAME = "username=";
     private static final String INFO_PASSWORD = "password=";
+
+    private static final String DIRECTIONS_KEY = "DirectionsAPIKey";
 
     private final SharedPreferences sharedPreferences;
 
@@ -212,5 +208,15 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public int getServiceRefreshRate() {
         return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
+    }
+
+    @Override
+    public void setDirectionsAPIKey(String key) {
+        sharedPreferences.edit().putString(DIRECTIONS_KEY, key).apply();
+    }
+
+    @Override
+    public String getDirectionsAPIKey() {
+        return sharedPreferences.getString(DIRECTIONS_KEY, "");
     }
 }

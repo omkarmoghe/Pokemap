@@ -12,10 +12,10 @@ import com.omkarmoghe.pokemap.R;
  * Created by carsten on 28-07-16.
  */
 
-public class InformationWindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class DirectionsInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private Activity activity;
 
-    public InformationWindowAdapter(Activity activity) {
+    public DirectionsInfoWindowAdapter(Activity activity) {
         this.activity = activity;
     }
 

@@ -12,7 +12,7 @@
     tools:context="com.omkarmoghe.pokemap.views.settings.ThemeActivity">
 
     <TextView
-        android:text="A Google Server API Key is required in order to use the directions API."
+        android:text="@string/settings_directions_key_required"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
     <TextView
-        android:text="Create or select a project and enable the Google Maps Directions API Key. Add a SERVER API Key and paste the key in the input field below."
+        android:text="@string/settings_directions_key_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -29,7 +29,6 @@
 
     <TextView
         android:id="@+id/txt_api_console"
-        android:text="Google API Console"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -44,8 +43,8 @@
             android:id="@+id/inp_directions_api_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Server API key"
-            android:imeActionLabel="Register"
+            android:hint="@string/settings_directions_input_hint"
+            android:imeActionLabel="@string/settings_directions_input_imeaction"
             android:imeOptions="actionGo"
             android:inputType="text" />
 
@@ -57,11 +56,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Register"
+        android:text="@string/settings_directions_button_register"
         android:textStyle="bold" />
 
     <TextView
-        android:text="The key might take up to 5 minutes to activate"
+        android:text="@string/settings_directions_button_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

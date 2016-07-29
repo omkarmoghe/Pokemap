@@ -3,13 +3,11 @@ package com.omkarmoghe.pokemap.views.map;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,15 +16,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,15 +36,13 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.MarkerRefreshController;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
-import com.omkarmoghe.pokemap.controllers.map.directions.DirectionsHandler;
-import com.omkarmoghe.pokemap.controllers.map.directions.InformationWindowAdapter;
+import com.omkarmoghe.pokemap.controllers.map.directions.DirectionsManager;
+import com.omkarmoghe.pokemap.controllers.map.directions.DirectionsInfoWindowAdapter;
 import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -63,7 +57,10 @@ import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.SearchParams;
+import com.omkarmoghe.pokemap.models.map.directions.RouteOption;
+import com.omkarmoghe.pokemap.models.map.directions.RouteOptions;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -100,9 +97,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private static final String TAG = "MapWrapperFragment";
 
     private LocationManager locationManager;
+    private DirectionsManager directionsManager;
 
     private PokemapAppPreferences mPref;
     private View mView;
+    private LinearLayout mToolbarDirectionsOptions;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
     private Location mLocation = null;
@@ -164,6 +163,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment if the view is not null
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
+        }
+
         locationManager = LocationManager.getInstance(getContext());
         locationManager.register(new LocationManager.Listener() {
             @Override
@@ -182,12 +186,66 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
-        // Inflate the layout for this fragment if the view is not null
-        if (mView == null) {
-            mView = inflater.inflate(R.layout.fragment_map_wrapper, container, false);
-        } else {
+        final TextView toolbarWalkDist = (TextView) getActivity().findViewById(R.id.walk_distance);
+        final TextView toolbarWalkDur = (TextView) getActivity().findViewById(R.id.walk_duration);
+        final TextView toolbarBikeDist = (TextView) getActivity().findViewById(R.id.bike_distance);
+        final TextView toolbarBikeDur = (TextView) getActivity().findViewById(R.id.bike_duration);
+        final TextView toolbarCarDist = (TextView) getActivity().findViewById(R.id.car_distance);
+        final TextView toolbarCarDur = (TextView) getActivity().findViewById(R.id.car_duration);
 
+        directionsManager = DirectionsManager.getInstance(getContext());
+        if (directionsManager.hasServerAPIKey()) {
+            directionsManager.register(new DirectionsManager.DirectionsListener() {
+                @Override
+                public void routeOptionsFound(RouteOptions options) {
+                    RouteOption walkOption = options.getWalkOption();
+                    toolbarWalkDist.setText(getString(R.string.directions_meters_short, walkOption.getDistance()));
+                    toolbarWalkDur.setText(getString(R.string.directions_minutes_short, walkOption.getDuration()));
+
+                    RouteOption bikeOption = options.getBikeOption();
+                    toolbarBikeDist.setText(getString(R.string.directions_meters_short, bikeOption.getDistance()));
+                    toolbarBikeDur.setText(getString(R.string.directions_minutes_short, bikeOption.getDuration()));
+
+                    RouteOption carOption = options.getCarOption();
+                    toolbarCarDist.setText(getString(R.string.directions_meters_short, carOption.getDistance()));
+                    toolbarCarDur.setText(getString(R.string.directions_minutes_short, carOption.getDuration()));
+
+                    mToolbarDirectionsOptions.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void routeOptionsFailed(String reason) {
+                    showGetDirectionsOptionsFailed(reason);
+                }
+            });
         }
+
+        mToolbarDirectionsOptions = (LinearLayout) getActivity().findViewById(R.id.toolbar_directions);
+
+        LinearLayout mToolbarDirectionsBtnWalk = (LinearLayout) getActivity().findViewById(R.id.btn_directions_walk);
+        mToolbarDirectionsBtnWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                directionsManager.startDirections(mGoogleMap, directionsManager.getCurrentRouteOptions().getWalkOption());
+                mToolbarDirectionsOptions.setVisibility(View.GONE); // todo: don't hide, update chosen option data
+            }
+        });
+        LinearLayout mToolbarDirectionsBtnBike = (LinearLayout) getActivity().findViewById(R.id.btn_directions_bike);
+        mToolbarDirectionsBtnBike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                directionsManager.startDirections(mGoogleMap, directionsManager.getCurrentRouteOptions().getBikeOption());
+                mToolbarDirectionsOptions.setVisibility(View.GONE); // todo: don't hide, update chosen option data
+            }
+        });
+        LinearLayout mToolbarDirectionsBtnCar = (LinearLayout) getActivity().findViewById(R.id.btn_directions_car);
+        mToolbarDirectionsBtnCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                directionsManager.startDirections(mGoogleMap, directionsManager.getCurrentRouteOptions().getCarOption());
+                mToolbarDirectionsOptions.setVisibility(View.GONE); // todo: don't hide, update chosen option data
+            }
+        });
 
         // build the map
         if (mSupportMapFragment == null) {
@@ -226,7 +284,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void initMap() {
         pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.enable_location_permission_title))
@@ -610,10 +668,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private void showGetDirectionsOptionsFailed(String reason) {
+        Snackbar.make(mView, getString(R.string.directions_error_route_options_failed) + " " + reason, Snackbar.LENGTH_SHORT).show();
+    }
     private void showGetDirectionsFailed(String reason) {
-        if(getView() != null){
-            Snackbar.make(getView(), getString(R.string.toast_directions_failed) + " " + reason, Snackbar.LENGTH_SHORT).show();
-        }
+        Snackbar.make(mView, getString(R.string.directions_error_directions_failed) + " " + reason, Snackbar.LENGTH_SHORT).show();
     }
 
     private String getExpirationBreakdown(long millis) {
@@ -725,8 +784,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
-
     private void clearCatchedPokemonCircle() {
 
         //Check and eventually remove old marker
@@ -776,7 +833,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.setOnMapClickListener(this);
         mGoogleMap.setOnMarkerClickListener(this);
         mGoogleMap.setOnInfoWindowClickListener(this);
-        mGoogleMap.setInfoWindowAdapter(new InformationWindowAdapter(getActivity()));
+        if (directionsManager.hasServerAPIKey()) {
+            mGoogleMap.setInfoWindowAdapter(new DirectionsInfoWindowAdapter(getActivity()));
+        }
         //Disable for now coz is under FAB
         settings.setMapToolbarEnabled(false);
     }
@@ -816,6 +875,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
+        mToolbarDirectionsOptions.setVisibility(View.GONE);
+
         for (Map.Entry<String, PokemonMarkerExtended> pm : markerList.entrySet()) {
             if(pm.getValue().getMarker().equals(marker)){
                 mSelectedMarker = pm.getValue();
@@ -830,77 +891,29 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onInfoWindowClick(final Marker marker) {
-        if (mLocation != null && mGoogleMap != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+        if (directionsManager.hasServerAPIKey()) {
+            if (mLocation != null && mGoogleMap != null) {
+                if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                    // Note: RequestCode is not being handled
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_FINE_LOCATION);
 
-                return;
+                    return;
+                }
+
+                directionsManager.getRouteOptions(marker, new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition());
+            } else {
+                showLocationFetchFailed();
             }
-
-            final Dialog dialogDirections = new Dialog(getActivity());
-            dialogDirections.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialogDirections.setContentView(R.layout.dialog_directions);
-
-            ImageButton btnWalk = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_walk);
-            btnWalk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.WALKING);
-                    dialogDirections.hide();
-                }
-            });
-
-            ImageButton btnBike = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_bike);
-            btnBike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.BICYCLING);
-                    dialogDirections.hide();
-                }
-            });
-
-            ImageButton btnCar = (ImageButton) dialogDirections.findViewById(R.id.btn_directions_car);
-            btnCar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getDirections(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), marker.getPosition(), TransportMode.DRIVING);
-                    dialogDirections.hide();
-                }
-            });
-
-            dialogDirections.show();
-        } else {
-            showLocationFetchFailed();
         }
-    }
-
-    private void getDirections(LatLng from, LatLng to, String transportMode) {
-        final DirectionsHandler directionsHandler = DirectionsHandler.getInstance(getContext());
-        directionsHandler.getDirections(from, to, transportMode, new DirectionsHandler.DirectionsHandlerCallback() {
-            @Override
-            public void directionsCreated(PolylineOptions polylineOptions) {
-                Polyline line = mGoogleMap.addPolyline(polylineOptions);
-                directionsHandler.setCurrentDirectionsPolyLine(line);
-            }
-
-            @Override
-            public void directionsUpdated() {
-
-            }
-
-            @Override
-            public void directionsFailed(String reason) {
-                showGetDirectionsFailed(reason);
-            }
-        });
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
         mSelectedMarker = null;
+        mToolbarDirectionsOptions.setVisibility(View.GONE);
         MarkerRefreshController.getInstance().stopTimer();
     }
 }

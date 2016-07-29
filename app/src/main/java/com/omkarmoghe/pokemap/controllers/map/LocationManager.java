@@ -64,7 +64,7 @@ public class LocationManager {
                             mLocationRequest.setFastestInterval(5000);
                             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 if (context instanceof Activity) {
 
                                     ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
