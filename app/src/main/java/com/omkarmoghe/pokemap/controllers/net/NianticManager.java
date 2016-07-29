@@ -329,9 +329,9 @@ public class NianticManager {
             public void run() {
                 try {
                     if (mPokemonGo != null) {
-                        Thread.sleep(33);
+                        Thread.sleep(100);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(33);
+                        Thread.sleep(100);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
                         EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }

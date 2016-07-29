@@ -149,12 +149,13 @@ public class PokemonNotificationService extends Service{
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
+                    long spawnPointId=cp.getEncounterId();
 
                     String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
 
-                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
+                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line,  pokeName, remTime,dist));
                 }
             }
 
