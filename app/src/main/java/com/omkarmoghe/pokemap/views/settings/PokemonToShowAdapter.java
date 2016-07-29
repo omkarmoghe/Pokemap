@@ -109,17 +109,9 @@ class PokemonToShowAdapter extends BaseAdapter {
                 }
             });
 
-            RemoteImageLoader.load(
-                    "http://serebii.net/pokemongo/pokemon/" + PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber()) + ".png",
-                    64, 64, null,
-                    row.getContext(),
-                    new RemoteImageLoader.Callback() {
-                        @Override
-                        public void onFetch(Bitmap bitmap) {
-                            mImageView.setImageBitmap(bitmap);
-                        }
-                    }
-            );
+            RemoteImageLoader.loadInto(mImageView,
+                    "http://serebii.net/pokemongo/pokemon/" + PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber()) + ".png");
+
         }
     }
 }

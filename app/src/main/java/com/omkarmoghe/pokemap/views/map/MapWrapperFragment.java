@@ -341,11 +341,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
 
-                    RemoteImageLoader.load(
-                        pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                        markerSize, markerSize, null,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
+                    RemoteImageLoader.loadMapIcon(
+                            getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                        markerSize, markerSize,
+                            new RemoteImageLoader.Callback() {
                             @Override
                             public void onFetch(Bitmap bitmap) {
 
@@ -374,11 +373,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.gym_marker);
 
-                    RemoteImageLoader.load(
-                        gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                        markerSize, markerSize, null,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
+                    RemoteImageLoader.loadMapIcon(
+                            getActivity(), gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                        markerSize, markerSize,
+                            new RemoteImageLoader.Callback() {
                             @Override
                             public void onFetch(Bitmap  bitmap) {
 
@@ -423,11 +421,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     if (!markerKeys.contains(pokestop.getId()) && distanceFromCenterInMeters <= MapHelper.convertStepsToRadius(mPref.getSteps())) {
 
-                            RemoteImageLoader.load(
-                            pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                            RemoteImageLoader.loadMapIcon(
+                                    getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                            markerSize, markerSize,
+                                    new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
@@ -472,11 +469,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     if (!markerKeys.contains(gym.getId()) && distanceFromCenterInMeters <= MapHelper.convertStepsToRadius(mPref.getSteps())) {
 
-                        RemoteImageLoader.load(
-                            gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                        RemoteImageLoader.loadMapIcon(
+                                getActivity(), gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                            markerSize, markerSize,
+                                new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
@@ -528,11 +524,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     PokemonIdOuterClass.PokemonId pokemonId = poke.getPokemonId();
                     if (showablePokemonIDs.contains(pokemonId)) {
 
-                        RemoteImageLoader.load(
-                            "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                        RemoteImageLoader.loadMapIcon(
+                                getActivity(), "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
+                            markerSize, markerSize,
+                                new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
