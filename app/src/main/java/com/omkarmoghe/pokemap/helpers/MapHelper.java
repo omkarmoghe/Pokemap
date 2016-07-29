@@ -1,7 +1,5 @@
 package com.omkarmoghe.pokemap.helpers;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -23,8 +21,8 @@ public class MapHelper {
     public static final float LAYER_GYMS = 150;
     public static final float LAYER_POKEMONS = 200;
 
-    private static final int DEFAULT_RADIUS = 100;
-    private static final double DISTANCE_BETWEEN_CIRCLES = 173.1;
+    public static final int SCAN_RADIUS = 70;
+    private static final double DISTANCE_BETWEEN_CIRCLES = 121;
 
     /**
      * Returns the distance from 'this' point to destination point (using haversine formula).
@@ -143,6 +141,6 @@ public class MapHelper {
 
 
     public static double convertStepsToRadius(int steps) {
-        return (steps - 1) * DISTANCE_BETWEEN_CIRCLES + DEFAULT_RADIUS;
+        return (steps - 1) * DISTANCE_BETWEEN_CIRCLES + SCAN_RADIUS;
     }
 }
