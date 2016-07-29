@@ -295,12 +295,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
-            if (userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
+            clearPokemonCircles();
         }
 
     }
@@ -647,6 +642,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ClearMapEvent event) {
+        nianticManager.cancelPendingSearches();
         clearMarkers();
         MarkerRefreshController.getInstance().clear();
     }
