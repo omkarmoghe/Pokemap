@@ -53,6 +53,7 @@ import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -109,7 +110,9 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
 
-    public static Snackbar pokeSnackbar;
+    public void snackMe(String message){
+        ((MainActivity)getActivity()).snackMe(message);
+    }
 
     public MapWrapperFragment() {
 
@@ -214,7 +217,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void initMap() {
-        pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
         if (mLocation != null && mGoogleMap != null) {
             if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -522,13 +524,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (nianticManager.getCurrentScan() != nianticManager.getPendingSearch()) {
-                    pokeSnackbar.setText(getString(R.string.toast_still_searching, nianticManager.getPokemonFound()));
-                    pokeSnackbar.show();
+                    snackMe(getString(R.string.toast_still_searching, nianticManager.getPokemonFound()));
 
                 } else {
                     String text = nianticManager.getPokemonFound() > 0 ? getString(R.string.pokemon_found_new, nianticManager.getPokemonFound()) : getString(R.string.pokemon_found_none);
-                    pokeSnackbar.setText(text);
-                    pokeSnackbar.show();
+                    snackMe(text);
                     nianticManager.resetSearchCount();
                 }
             }
