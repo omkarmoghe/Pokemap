@@ -32,7 +32,6 @@ import com.pokegoapi.exceptions.RemoteServerException;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
