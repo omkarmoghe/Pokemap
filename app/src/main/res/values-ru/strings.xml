@@ -70,5 +70,6 @@
     <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
     <string name="meters">метров</string>
     <string name="toast_google_login_error">Ошибка входа через аккаунт Google</string>
+    <string name="notification_service_launch_pokemon_go">Запустить Pokémon GO</string>
 
 </resources>

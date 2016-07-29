@@ -122,6 +122,12 @@ public class PokemonNotificationService extends Service{
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
         builder.addAction(R.drawable.ic_cancel_black_24px, getString(R.string.notification_service_stop), piStopService);
 
+        Intent pokemonGoIntent = getPackageManager().getLaunchIntentForPackage("com.nianticlabs.pokemongo");
+        if (pokemonGoIntent != null) { // make sure we will be able to launch Pokémon GO
+            PendingIntent pokemonGoPendingIntent = PendingIntent.getActivity(this, 0, pokemonGoIntent, 0);
+            builder.addAction(R.drawable.ic_pokeball, getString(R.string.notification_service_launch_pokemon_go), pokemonGoPendingIntent);
+        }
+
         nm.notify(notificationId,builder.build());
     }
 
