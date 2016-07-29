@@ -39,6 +39,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
     private static final String STEPS = "search_steps";
+    private static final String SHOW_MAP_SUGGESTION = "show_map_suggestion";
 
     private static final String INFO_TOKEN = "token=";
     private static final String INFO_REFRESH = "refresh=";
@@ -175,7 +176,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean getShowLuredPokemon() {
-        return sharedPreferences.getBoolean(SHOW_LURED, false);
+        return sharedPreferences.getBoolean(SHOW_LURED, true);
     }
 
     public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
@@ -202,6 +203,16 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
             showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
         }
         sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
+    }
+
+    @Override
+    public void setShowMapSuggestion(boolean showMapSuggestion) {
+        sharedPreferences.edit().putBoolean(SHOW_MAP_SUGGESTION, showMapSuggestion).apply();
+    }
+
+    @Override
+    public boolean getShowMapSuggestion() {
+        return sharedPreferences.getBoolean(SHOW_MAP_SUGGESTION, true);
     }
 
     @Override
