@@ -96,5 +96,7 @@
     <string name="pref_theme">Thème par défaut</string>
     <string name="pref_theme_button">Thème</string>
     <string name="preset_themes_title">Thèmes prédéfinis</string>
+    <string name="toast_still_searching">Searching&#8230; found %1$d Pokémon so far.</string>
+    <string name="theme_activity_text">Selectionner un thème:</string>
 
 </resources>
