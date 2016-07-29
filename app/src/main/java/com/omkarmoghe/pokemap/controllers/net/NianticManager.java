@@ -20,7 +20,6 @@ import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.omkarmoghe.pokemap.models.map.SearchParams;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -80,6 +79,10 @@ public class NianticManager {
     private final OkHttpClient mPoGoClient;
     private PokemonGo mPokemonGo;
 
+    private int pokemonFound = 0;
+    private int currentScan = 0;
+    private int pendingSearch = 0;
+
     public static NianticManager getInstance(){
         return instance;
     }
@@ -101,7 +104,7 @@ public class NianticManager {
 		so it being discarded is completely fine
 		*/
         CookieJar tempJar = new CookieJar() {
-            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<String, List<Cookie>>();
+            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
             @Override
             public void saveFromResponse(okhttp3.HttpUrl url, List<Cookie> cookies) {
@@ -181,7 +184,7 @@ public class NianticManager {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
                 String location = response.headers().get("location");
-                if (location != null) {
+                if (location != null && location.split("ticket=").length > 0) {
                     String ticket = location.split("ticket=")[1];
                     requestToken(ticket, loginListener);
                 } else {
@@ -243,6 +246,22 @@ public class NianticManager {
         call.enqueue(authCallback);
     }
 
+    public int getPokemonFound() {
+        return pokemonFound;
+    }
+
+    public void setPokemonFound(int pokemonFound) {
+        this.pokemonFound = pokemonFound;
+    }
+
+    public int getCurrentScan() {
+        return currentScan;
+    }
+
+    public int getPendingSearch() {
+        return pendingSearch;
+    }
+
     public interface LoginListener {
         void authSuccessful(String authToken);
         void authFailed(String message);
@@ -250,7 +269,7 @@ public class NianticManager {
 
     public interface AuthListener{
         void authSuccessful();
-        void authFailed(String message);
+        void authFailed(String message, String Provider);
     }
 
     /**
@@ -277,7 +296,6 @@ public class NianticManager {
      * Sets the pokemon trainer club auth token for the auth info also invokes the onLogin callback.
      */
     public void setLoginInfo(final Activity activity, @NonNull final LoginInfo info, @NonNull final AuthListener listener) {
-        Log.d(TAG, "setLoginInfo: LoginInfo = " +info);
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -292,11 +310,11 @@ public class NianticManager {
                     });
                 } catch (RemoteServerException | LoginFailedException | RuntimeException e){
                     e.printStackTrace();
-                    Log.e(TAG, "Failed to PTC login using PoGoAPI via login(). Raised: " + e.getMessage());
+                    Log.e(TAG, "Failed to login using PoGoAPI via login(). Raised: " + e.getMessage());
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            listener.authFailed(e.getMessage());
+                            listener.authFailed(e.getMessage(), info.getProvider());
                         }
                     });
 
@@ -310,13 +328,12 @@ public class NianticManager {
             @Override
             public void run() {
                 try {
-
                     if (mPokemonGo != null) {
-
                         Thread.sleep(33);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(33);
-                        EventBus.getDefault().post(new CatchablePokemonEvent(mPokemonGo.getMap().getCatchablePokemon(), lat, longitude));
+                        List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
+                        EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -332,8 +349,10 @@ public class NianticManager {
                     Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). PoGoAPI crashed. Raised: " + e.getMessage());
                     EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
+                NianticManager.this.currentScan++;
             }
         });
+        this.pendingSearch++;
     }
 
     public void getLuredPokemon(final double lat, final double longitude, final double alt){
@@ -437,5 +456,11 @@ public class NianticManager {
             }
             }
         });
+    }
+
+    public void resetSearchCount() {
+        this.pendingSearch = 0;
+        this.currentScan = 0;
+        this.pokemonFound = 0;
     }
 }

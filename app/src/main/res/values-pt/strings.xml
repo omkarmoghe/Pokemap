@@ -69,7 +69,7 @@
     <string name="enable_location_permission_title">Ativar Permissão de Localização</string>
     <string name="enable_location_permission_message">Por favor ativa as permissões de localização para usar esta aplicação</string>
     <string name="toast_no_location">Falha ao Encontrar Localização GPS</string>
-    <string name="expiring_in">"Expira em: "</string>
+    <string name="expiring_in">"Expira em: %1$d:%2$02d"</string>
     <string name="google_login_failed">Falha no Ínicio de Sessão da Google</string>
     <string name="permition_message">Por favor permita a localização para usar a aplicação</string>
     <string name="allow">Permitir</string>
@@ -89,6 +89,7 @@
     <string name="notification_service_pokemon_in_area">" Pokémons na area:"</string>
     <string name="meters">metros</string>
     <string name="gym">Ginásio</string>
+    <string name="toast_google_login_error">Falha no Ínicio de Sessão Google</string>
 
 
 </resources>

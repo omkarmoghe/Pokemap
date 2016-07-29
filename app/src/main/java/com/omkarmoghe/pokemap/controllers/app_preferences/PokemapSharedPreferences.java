@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -38,6 +39,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
     private static final String STEPS = "search_steps";
+    private static final String SHOW_MAP_SUGGESTION = "show_map_suggestion";
 
     private static final String INFO_TOKEN = "token=";
     private static final String INFO_REFRESH = "refresh=";
@@ -63,16 +65,18 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String password = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
-                        token = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_USERNAME)){
-                        username = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_PASSWORD)){
-                        password = getStoredString(s);
+                    if(!TextUtils.isEmpty(s)) {
+                        if (s.contains(INFO_TOKEN)) {
+                            token = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_USERNAME)) {
+                            username = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_PASSWORD)) {
+                            password = getStoredString(s);
+                        }
                     }
                 }
                 return new PtcLoginInfo(token, username, password);
@@ -88,12 +92,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String refresh = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
-                        token = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_PASSWORD)){
-                        refresh = getStoredString(s);
+                    if(!TextUtils.isEmpty(s)) {
+                        if (s.contains(INFO_TOKEN)) {
+                            token = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_PASSWORD)) {
+                            refresh = getStoredString(s);
+                        }
                     }
                 }
 
@@ -170,7 +176,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean getShowLuredPokemon() {
-        return sharedPreferences.getBoolean(SHOW_LURED, false);
+        return sharedPreferences.getBoolean(SHOW_LURED, true);
     }
 
     public Set<PokemonIdOuterClass.PokemonId> getShowablePokemonIDs() {
@@ -197,6 +203,16 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
             showablePokemonStringIDs.add(String.valueOf(pokemonId.getNumber()));
         }
         sharedPreferences.edit().putStringSet(POKEMONS_TO_SHOW, showablePokemonStringIDs).apply();
+    }
+
+    @Override
+    public void setShowMapSuggestion(boolean showMapSuggestion) {
+        sharedPreferences.edit().putBoolean(SHOW_MAP_SUGGESTION, showMapSuggestion).apply();
+    }
+
+    @Override
+    public boolean getShowMapSuggestion() {
+        return sharedPreferences.getBoolean(SHOW_MAP_SUGGESTION, true);
     }
 
     @Override
