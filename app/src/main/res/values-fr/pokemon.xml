@@ -28,10 +28,10 @@
     <string name="raichu">Raichu</string>
     <string name="sandshrew">Sabelette</string>
     <string name="sandslash">Sablaireau</string>
-    <string name="nidoran_female">Nidoran♀</string>
+    <string name="nidoran_female">Nidoran&#9792;</string>
     <string name="nidorina">Nidorina</string>
     <string name="nidoqueen">Nidoqueen</string>
-    <string name="nidoran_male">Nidoran♂</string>
+    <string name="nidoran_male">Nidoran&#9794;</string>
     <string name="nidorino">Nidorino</string>
     <string name="nidoking">Nidoking</string>
     <string name="clefairy">Mélofée</string>
@@ -82,7 +82,6 @@
     <string name="slowbro">Flagadoss</string>
     <string name="magnemite">Magnéti</string>
     <string name="magneton">Magneton</string>
-    <string name="farfetch_d">Canarticho</string>
     <string name="doduo">Doduo</string>
     <string name="dodrio">Dodrio</string>
     <string name="seel">Otaria</string>
