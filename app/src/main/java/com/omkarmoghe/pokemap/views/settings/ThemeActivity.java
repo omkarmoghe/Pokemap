@@ -72,6 +72,8 @@ public class ThemeActivity extends AppCompatActivity {
                     editor.putInt(PREF_ID, R.style.AppThemeSquirtle);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppThemeSquirtle_NoActionBar);
                     editor.apply();
+                    setTheme(R.style.AppThemeSquirtle);
+                    recreate();
                 }
                 break;
             case R.id.radioButton2:
@@ -79,6 +81,8 @@ public class ThemeActivity extends AppCompatActivity {
                     editor.putInt(PREF_ID, R.style.AppThemeCharmander);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppThemeCharmander_NoActionBar);
                     editor.apply();
+                    setTheme(R.style.AppThemeCharmander);
+                    recreate();
                 }
                 break;
             case R.id.radioButton3:
@@ -86,6 +90,8 @@ public class ThemeActivity extends AppCompatActivity {
                     editor.putInt(PREF_ID, R.style.AppThemeBulbasaur);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppThemeBulbasaur_NoActionBar);
                     editor.apply();
+                    setTheme(R.style.AppThemeBulbasaur);
+                    recreate();
                 }
                 break;
             case R.id.radioButton4:
@@ -93,6 +99,8 @@ public class ThemeActivity extends AppCompatActivity {
                     editor.putInt(PREF_ID, R.style.AppThemePikachu);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppThemePikachu_NoActionBar);
                     editor.apply();
+                    setTheme(R.style.AppThemePikachu);
+                    recreate();
                 }
                 break;
             case R.id.radioButton5:
@@ -100,6 +108,8 @@ public class ThemeActivity extends AppCompatActivity {
                     editor.putInt(PREF_ID, R.style.AppTheme);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppTheme_NoActionBar);
                     editor.apply();
+                    setTheme(R.style.AppTheme);
+                    recreate();
                 }
                 break;
         }

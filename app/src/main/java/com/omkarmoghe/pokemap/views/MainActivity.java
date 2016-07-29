@@ -63,8 +63,7 @@ public class MainActivity extends BaseActivity {
         if(mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
-                .commit();
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG).commit();
 
         if(pref.isServiceEnabled()){
             startNotificationService();
@@ -160,6 +159,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // TODO: test all this shit on a 6.0+ phone lmfao
+        // Carsten: Works fine on 6.0+ but the entire request permission stuff is handled incorrectly (it blocks the app if denied)
         switch (requestCode) {
             case 703:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * Called whenever a use whats to search pokemons on a different position
+     * Called whenever a user wants to search Pokémon in a different position
      *
      * @param event PoJo with LatLng obj
      */

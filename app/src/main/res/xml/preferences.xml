@@ -63,6 +63,10 @@
 			android:title="@string/pref_theme_button"
 			android:key="@string/pref_theme_button_key"/>
 
-	</PreferenceCategory>
+		<Preference
+			android:title="@string/pref_directions_button"
+			android:key="@string/pref_directions_button_key"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

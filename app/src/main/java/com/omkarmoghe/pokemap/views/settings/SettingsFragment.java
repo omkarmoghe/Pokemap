@@ -23,12 +23,24 @@ public class SettingsFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
         // Create Theme button to link to Theme Fragment
-        Preference button = (Preference) getPreferenceManager().findPreference(getString(R.string.pref_theme_button_key));
-        if (button != null) {
-            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference btnTheme = (Preference) getPreferenceManager().findPreference(getString(R.string.pref_theme_button_key));
+        if (btnTheme != null) {
+            btnTheme.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(getActivity(), ThemeActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+        }
+
+        Preference btnDirections = (Preference) getPreferenceManager().findPreference(getString(R.string.pref_directions_button_key));
+        if (btnDirections != null) {
+            btnDirections.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getActivity(), DirectionsActivity.class);
                     startActivity(intent);
                     return true;
                 }

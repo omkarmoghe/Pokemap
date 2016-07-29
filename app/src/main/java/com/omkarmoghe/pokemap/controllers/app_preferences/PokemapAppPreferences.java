@@ -48,6 +48,9 @@ public interface PokemapAppPreferences {
 
     void setShowablePokemonIDs(Set<PokemonIdOuterClass.PokemonId> pokemonIDs);
 
+    void setDirectionsAPIKey(String key);
+    String getDirectionsAPIKey();
+
     void setShowMapSuggestion(boolean showMapSuggestion);
 
     boolean getShowMapSuggestion();

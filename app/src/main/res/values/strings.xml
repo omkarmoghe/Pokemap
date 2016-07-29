@@ -40,6 +40,8 @@
     <string name="pref_cat_other">Other</string>
     <string name="pref_theme_button">Theme</string>
     <string name="pref_theme_button_key" translatable="false">ThemeKey</string>
+    <string name="pref_directions_button">Directions</string>
+    <string name="pref_directions_button_key" translatable="false">DirectionsKey</string>
     <string name="toast_credentials">Can\'t login. Please check your credentials</string>
     <string name="title_activity_poke_map">Pokémon Nearby</string>
     <string name="login_warning"><Data><![CDATA[
@@ -99,4 +101,19 @@
     <string name="toast_still_searching">Searching&#8230; found %1$d Pokémon so far.</string>
     <string name="preset_themes_title">Preset Themes</string>
     <string name="theme_activity_text">Will make this selection look pretty in the future. Select a theme:</string>
+    <string name="settings_directions_title">Directions</string>
+    <string name="settings_directions_key_required">A Google Server API Key is required in order to use the directions API.</string>
+    <string name="settings_directions_key_explanation">Create or select a project and enable the Google Maps Directions API. Add a SERVER API Key and paste the key in the input field below.</string>
+    <string name="settings_directions_api_console">Google API Console</string>
+    <string name="settings_directions_input_hint">Server API key</string>
+    <string name="settings_directions_input_imeaction">Register</string>
+    <string name="settings_directions_button_register">Register</string>
+    <string name="settings_directions_button_note">The key might take up to 5 minutes to activate</string>
+    <string name="settings_directions_error_key_empty">API Key required</string>
+    <string name="settings_directions_success_key_set">Server API Key registered</string>
+    <string name="directions_error_key_not_set">Directions Server API Key not set</string>
+    <string name="directions_error_route_options_failed">Failed to get options for route</string>
+    <string name="directions_error_directions_failed">Failed to get directions</string>
+    <string name="directions_meters_short">%1$sm</string>
+    <string name="directions_minutes_short">%1$smin</string>
 </resources>
