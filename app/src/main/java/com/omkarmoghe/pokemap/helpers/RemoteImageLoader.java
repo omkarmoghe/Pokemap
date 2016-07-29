@@ -19,8 +19,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
  */
 public class RemoteImageLoader {
     private static final String TAG = "RemoteImageLoader";
-    private static final int MAX_SIZE = (int) (Runtime.getRuntime().maxMemory() / 1024);
-    private static final LruCache<String, Bitmap> BITMAP_CACHE = new LruCache<String, Bitmap>((int) (MAX_SIZE /8)){
+    private static final int MAX_SIZE = (int) ((Runtime.getRuntime().maxMemory() / 1024)/ 8);
+    private static final LruCache<String, Bitmap> BITMAP_CACHE = new LruCache<String, Bitmap>(MAX_SIZE){
         @Override
         protected int sizeOf(String key, Bitmap value) {
             return value.getByteCount() / 1024;
