@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -25,11 +26,13 @@ import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import POGOProtos.Enums.PokemonIdOuterClass;
+
 
 
 public class PokemonNotificationService extends Service{
@@ -46,8 +49,11 @@ public class PokemonNotificationService extends Service{
     private NotificationCompat.Builder builder;
     private PokemapSharedPreferences preffs;
 
+    private List<CatchablePokemon> pokemonFound=null;
+
 
     public PokemonNotificationService() {
+        ;
     }
 
     @Override
@@ -57,7 +63,7 @@ public class PokemonNotificationService extends Service{
 
     @Override
     public void onCreate() {
-
+        pokemonFound=new ArrayList<>();
         EventBus.getDefault().register(this);
         createNotification();
 
@@ -145,25 +151,40 @@ public class PokemonNotificationService extends Service{
             for(CatchablePokemon cp : catchablePokemon){
                 //Only show the notification if the Pokemon is in the preference list
                 if(showablePokemonIDs.contains(cp.getPokemonId())) {
+
+                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
+                    //Vibrate if a new pokemon is found
+                    if(!pokemonFound.contains(cp)){
+                        System.out.println("New Pokemon found : "+pokeName);
+                        vibrate();
+                        pokemonFound.add(cp);
+                    }
                     Location pokeLocation = new Location("");
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
                     long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                    long spawnPointId=cp.getEncounterId();
-
-                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
+                    if(remainingTime<0) {
+                        remainingTime=-1;
+                    }
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
 
                     inboxStyle.addLine(getString(R.string.notification_service_inbox_line,  pokeName, remTime,dist));
                 }
             }
-
+            //Clean old pokemons
+            pokemonFound.retainAll(catchablePokemon);
             builder.setStyle(inboxStyle);
         }
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
+    }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) this.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(500);
     }
 
     private final class UpdateRunnable implements Runnable{

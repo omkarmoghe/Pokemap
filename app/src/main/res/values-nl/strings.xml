@@ -79,8 +79,6 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scannen</string>
     <string name="notification_service_stop">Stop Service</string>
-    <string name="notification_service_pokemon_near">" Pokémon dichtbij."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in omgeving:"</string>
     <string name="meters">meter</string>
     <string name="gym">Gym</string>
 

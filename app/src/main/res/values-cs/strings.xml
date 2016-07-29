@@ -99,8 +99,6 @@
     <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>
     <string name="notification_service_stop">Zastavit službu</string>
-    <string name="notification_service_pokemon_near">" Pokémoni poblíž."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémoni v oblasti:"</string>
     <string name="meters">metrů</string>
     <string name="gym">Tělocvična</string>
 

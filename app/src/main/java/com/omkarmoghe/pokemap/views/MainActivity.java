@@ -1,5 +1,7 @@
 package com.omkarmoghe.pokemap.views;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +10,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
 import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
@@ -60,29 +64,36 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
-        if(mapWrapperFragment == null) {
+        if (mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
-        if(pref.isServiceEnabled()){
+        if (pref.isServiceEnabled()) {
             startNotificationService();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+
+
+
         EventBus.getDefault().register(this);
 
-        if(pref.isServiceEnabled()) {
+        if (pref.isServiceEnabled()) {
             stopNotificationService();
         }
 
         // If the theme has changed, recreate the activity.
-        if(themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
+        if (themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
             recreate();
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.VIBRATE}, 0);
         }
     }
 
@@ -91,7 +102,7 @@ public class MainActivity extends BaseActivity {
         super.onPause();
         EventBus.getDefault().unregister(this);
 
-        if(!skipNotificationServer && pref.isServiceEnabled()){
+        if (!skipNotificationServer && pref.isServiceEnabled()) {
             startNotificationService();
         }
 
@@ -111,7 +122,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
-            startActivityForResult(new Intent(this, SettingsActivity.class),0);
+            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
         } else if (id == R.id.action_clear) {
             EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
@@ -169,7 +180,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startNotificationService(){
+    private void startNotificationService() {
         Intent intent = new Intent(this, PokemonNotificationService.class);
         startService(intent);
     }
