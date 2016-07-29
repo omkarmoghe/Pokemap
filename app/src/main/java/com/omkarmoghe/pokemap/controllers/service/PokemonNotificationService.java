@@ -114,7 +114,7 @@ public class PokemonNotificationService extends Service{
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        //builder.setContentIntent(pi);
+        builder.setContentIntent(pi);
 
         Intent stopService = new Intent();
         stopService.setAction(ACTION_STOP_SELF);
