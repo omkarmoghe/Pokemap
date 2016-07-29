@@ -47,13 +47,16 @@ public class MainActivity extends BaseActivity {
 
     private Snackbar _pokeSnackbar;
 
-    public void snackMe(String message){
-        if (null == _pokeSnackbar){
+    public void snackMe(String message,int duration){
+        if (null == _pokeSnackbar || _pokeSnackbar.getDuration() != duration){
             View rootView = findViewById(R.id.main_container);
-            _pokeSnackbar = Snackbar.make(rootView,"",Snackbar.LENGTH_LONG);
+            _pokeSnackbar = Snackbar.make(rootView,"",duration);
         }
         _pokeSnackbar.setText(message);
         _pokeSnackbar.show();
+    }
+    public void snackMe(String message){
+        snackMe(message, Snackbar.LENGTH_LONG);
     }
 
     //region Lifecycle Methods

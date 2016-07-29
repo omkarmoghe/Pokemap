@@ -110,8 +110,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
 
-    public void snackMe(String message){
-        ((MainActivity)getActivity()).snackMe(message);
+    private void snackMe(String message, int duration){
+        ((MainActivity)getActivity()).snackMe(message, duration);
+    }
+    private void snackMe(String message){
+        snackMe(message, Snackbar.LENGTH_LONG);
     }
 
     public MapWrapperFragment() {
@@ -568,13 +571,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void showMapNotInitializedError() {
         if(getView() != null){
-            Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
+            snackMe(getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT);
         }
     }
 
     private void showLocationFetchFailed() {
         if(getView() != null){
-            Snackbar.make(getView(),getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
+            snackMe(getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT);
         }
     }
 
