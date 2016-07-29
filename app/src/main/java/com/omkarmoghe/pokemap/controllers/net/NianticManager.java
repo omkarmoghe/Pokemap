@@ -329,9 +329,9 @@ public class NianticManager {
             public void run() {
                 try {
                     if (mPokemonGo != null) {
-                        Thread.sleep(33);
+                        Thread.sleep(133);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(33);
+                        Thread.sleep(133);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
                         EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }
@@ -363,9 +363,9 @@ public class NianticManager {
 
                     if (mPokemonGo != null) {
 
-                        Thread.sleep(33);
+                        Thread.sleep(133);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(33);
+                        Thread.sleep(133);
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
@@ -403,9 +403,9 @@ public class NianticManager {
 
                     if (mPokemonGo != null) {
 
-                        Thread.sleep(33);
+                        Thread.sleep(133);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(33);
+                        Thread.sleep(133);
                         EventBus.getDefault().post(new PokestopsEvent(mPokemonGo.getMap().getMapObjects().getPokestops(), lat, longitude));
                     }
 
@@ -435,9 +435,9 @@ public class NianticManager {
 
                 if (mPokemonGo != null) {
 
-                    Thread.sleep(33);
+                    Thread.sleep(133);
                     mPokemonGo.setLocation(latitude, longitude, alt);
-                    Thread.sleep(33);
+                    Thread.sleep(133);
                     EventBus.getDefault().post(new GymsEvent(mPokemonGo.getMap().getMapObjects().getGyms(), latitude, longitude));
                 }
 
