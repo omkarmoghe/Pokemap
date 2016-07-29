@@ -103,7 +103,7 @@ public class PokemonNotificationService extends Service{
 
     private void createNotification(){
         builder = new NotificationCompat.Builder(getApplication())
-                .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
+                .setSmallIcon(R.drawable.ic_gps_fixed_white_24dp)
                 .setContentTitle(getString(R.string.notification_service_title))
                 .setContentText(getString(R.string.notification_service_scanning)).setOngoing(true);
 
@@ -120,7 +120,7 @@ public class PokemonNotificationService extends Service{
         stopService.setAction(ACTION_STOP_SELF);
 
         PendingIntent piStopService = PendingIntent.getBroadcast(this,0,stopService,0);
-        builder.addAction(R.drawable.ic_cancel_black_24px, getString(R.string.notification_service_stop), piStopService);
+        builder.addAction(R.drawable.ic_cancel_white_24dp, getString(R.string.notification_service_stop), piStopService);
 
         Intent pokemonGoIntent = getPackageManager().getLaunchIntentForPackage("com.nianticlabs.pokemongo");
         if (pokemonGoIntent != null) { // make sure we will be able to launch Pokémon GO
