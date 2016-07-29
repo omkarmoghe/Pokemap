@@ -75,7 +75,7 @@
     <string name="enable_location_permission_title">Autoriser la géolocalisation</string>
     <string name="enable_location_permission_message">Merci d\'autoriser la géolocalisation</string>
     <string name="toast_no_location">Impossible de vous géolocaliser</string>
-    <string name="expiring_in">Disparait dans : %1$d:%2$d</string>
+    <string name="expiring_in">"Disparait dans : %1$d:%2$02d"</string>
     <string name="google_login_failed">Connexion au compte Google échouée</string>
     <string name="permition_message">Merci d\'autoriser la géolocalisation pour utiliser cette application</string>
     <string name="allow">Autoriser</string>
@@ -86,7 +86,7 @@
     <string name="toast_searching">Recherche&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémons trouvés"</string>
     <string name="pokemon_found_none">Aucun pokémon trouvé.</string>
-    <string name="pokemon_found_new">%1$d nouveaux pokémons trouvé.</string>
+    <string name="pokemon_found_new">"nouveaux pokémons trouvé."</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scan en cours</string>
@@ -96,5 +96,6 @@
     <string name="meters">metres</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Connexion échouée</string>
 
 </resources>

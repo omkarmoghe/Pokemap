@@ -64,7 +64,7 @@
     <string name="enable_location_permission_title">Locatie permissie toestaan</string>
     <string name="enable_location_permission_message">Locatie permissie moet worden toegestaan om deze applicatie te kunnen gebruiken.</string>
     <string name="toast_no_location">Kan GPS locatie niet vinden</string>
-    <string name="expiring_in">Verdwijnt over: %1$d:%2$d</string>
+    <string name="expiring_in">"Verdwijnt over: %1$d:%2$02d"</string>
     <string name="google_login_failed">Google login mislukt</string>
     <string name="permition_message">Sta locatie toe om de app te gebruiken</string>
     <string name="allow">Toestaan</string>
@@ -74,7 +74,7 @@
     <string name="toast_searching">Zoeken&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémon gevonden"</string>
     <string name="pokemon_found_none">Geen nieuwe Pokémon gevonden om te vangen.</string>
-    <string name="pokemon_found_new">%1$d nieuwe vangbare Pokémon gevonden.</string>
+    <string name="pokemon_found_new">"nieuwe vangbare Pokémon gevonden."</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scannen</string>
@@ -85,4 +85,5 @@
     <string name="gym">Gym</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google Login Mislukt</string>
 </resources>

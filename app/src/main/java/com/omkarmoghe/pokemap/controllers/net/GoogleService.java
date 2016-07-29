@@ -2,7 +2,10 @@ package com.omkarmoghe.pokemap.controllers.net;
 
 import com.google.gson.annotations.SerializedName;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
@@ -11,14 +14,17 @@ import retrofit2.http.Url;
  */
 
 public interface GoogleService {
-
+    @Deprecated
     @POST
     Call<AuthRequest> requestAuth(@Url String url);
 
     @POST
+    Call<TokenResponse> requestToken(@Url String url, @Body RequestBody body);
+
+    @POST
     Call<TokenResponse> requestToken(@Url String url);
 
-
+    @Deprecated
     class AuthRequest{
         @SerializedName("device_code")
         String deviceCode;

@@ -75,7 +75,7 @@
     <string name="enable_location_permission_title">Abilita location permission</string>
     <string name="enable_location_permission_message">Per favore abilita location permission per utilizzare questa app</string>
     <string name="toast_no_location">Impossibile trovare la posizione GPS</string>
-    <string name="expiring_in">Scade tra: %1$d:%2$d</string>
+    <string name="expiring_in">"Scade tra: %1$d:%2$02d"</string>
     <string name="google_login_failed">Accesso con Google fallito</string>
     <string name="permition_message">Per favore abilita locations per utilizzare questa app</string>
     <string name="allow">Permetti</string>
@@ -86,7 +86,7 @@
     <string name="toast_searching">Sto cercando&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémon trovato"</string>
     <string name="pokemon_found_none">Non sono stati trovati nuovi Pokèmon da catturare.</string>
-    <string name="pokemon_found_new">%1$d nuovo Pokèmon da catturare trovato.</string>
+    <string name="pokemon_found_new">"nuovo Pokèmon da catturare trovato."</string>
 
     <string name="notification_service_title">Servizio Pokémap</string>
     <string name="notification_service_scanning">Scansione in corso</string>
@@ -96,5 +96,6 @@
     <string name="meters">metri</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google Login fallito</string>
 
 </resources>

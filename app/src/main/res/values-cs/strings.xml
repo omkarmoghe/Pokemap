@@ -83,7 +83,7 @@
     <string name="enable_location_permission_title">Práva k použití polohy</string>
     <string name="enable_location_permission_message">Prosím povolte aplikaci používat Vaši polohu.</string>
     <string name="toast_no_location">Nemohu nalézt GPS polohu</string>
-    <string name="expiring_in">Vyprší za: %1$d:%2$d</string>
+    <string name="expiring_in">"Vyprší za: %1$d:%2$02d"</string>
     <string name="google_login_failed">Selhalo přihlášení ke Google účtu</string>
     <string name="permition_message">Prosím povolte aplikaci používat Vaši polohu</string>
     <string name="allow">Povolit</string>
@@ -94,7 +94,7 @@
     <string name="toast_searching">Hledám&#8230;</string>
     <string name="toast_pokemon_found_count">" Pokémon nalezeno"</string>
     <string name="pokemon_found_none">Nebyl nalezen žádný chytitelný Pokémon :\'( .</string>
-    <string name="pokemon_found_new">Objevilo se %1$d nových chytitelných Pokémonů.</string>
+    <string name="pokemon_found_new">" se objevil nový chytitelný Pokémon."</string>
 
     <string name="notification_service_title">Služba Pokémap</string>
     <string name="notification_service_scanning">Skenuji</string>
@@ -105,5 +105,6 @@
     <string name="gym">Tělocvična</string>
 
     <string name="button_ok">Ok</string>
+    <string name="toast_google_login_error">Google přihlášení selhalo.</string>
 
 </resources>
