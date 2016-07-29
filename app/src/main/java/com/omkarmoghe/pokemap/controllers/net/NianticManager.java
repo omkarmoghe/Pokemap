@@ -184,7 +184,7 @@ public class NianticManager {
             @Override
             public void onResponse(Call<NianticService.LoginResponse> call, Response<NianticService.LoginResponse> response) {
                 String location = response.headers().get("location");
-                if (location != null) {
+                if (location != null && location.split("ticket=").length > 0) {
                     String ticket = location.split("ticket=")[1];
                     requestToken(ticket, loginListener);
                 } else {

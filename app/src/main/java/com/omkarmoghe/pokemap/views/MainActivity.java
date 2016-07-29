@@ -186,6 +186,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startNotificationService(){
+
+        // check for if the service is already running
+        if (PokemonNotificationService.isRunning()) {
+            stopNotificationService();
+        }
+
         Intent intent = new Intent(this, PokemonNotificationService.class);
         startService(intent);
     }
