@@ -29,21 +29,21 @@ public class RemoteImageLoader {
 
     public static void load(final String url, final int pxWidth, final int pxHeight,
                             Drawable placeholderDrawable, Context context, final Callback onFetch) {
-        Bitmap bitmap = BITMAP_CACHE.get(url);
+        final String key = url+pxWidth +"x" + pxHeight;
+        Bitmap bitmap = BITMAP_CACHE.get(key);
         if(bitmap != null){
-            bitmap = scaleBitmap(bitmap, pxWidth, pxHeight);
             onFetch.onFetch(bitmap);
         } else {
+
             Glide.with(context).load(url)
                     .asBitmap()
                     .skipMemoryCache(false)
                     .placeholder(placeholderDrawable)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(new SimpleTarget<Bitmap>() {
+                    .into(new SimpleTarget<Bitmap>(pxWidth, pxHeight) {
                         @Override
                         public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                            addBitmapToMemoryCache(url, bitmap);
-                            bitmap = scaleBitmap(bitmap, pxWidth, pxHeight);
+                            addBitmapToMemoryCache(key, bitmap);
                             onFetch.onFetch(bitmap);
                         }
                     });
@@ -56,6 +56,8 @@ public class RemoteImageLoader {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static Bitmap scaleBitmap(Bitmap bitmap, int reqWidth, int reqHeight){
         Matrix m = new Matrix();
         m.setRectToRect(new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight()),
