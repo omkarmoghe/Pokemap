@@ -19,6 +19,13 @@ import com.bumptech.glide.request.target.SimpleTarget;
  */
 public class RemoteImageLoader {
     private static final String TAG = "RemoteImageLoader";
+    /*
+    The gets the max size of the app can be in memory. It then converts it into KB from Bytes and
+    divides it by 8. This means the max size of the cache is 1/8 of the total memory that this app
+    can use.
+
+    Do not change.
+     */
     private static final int MAX_SIZE = (int) ((Runtime.getRuntime().maxMemory() / 1024)/ 8);
     private static final LruCache<String, Bitmap> BITMAP_CACHE = new LruCache<String, Bitmap>(MAX_SIZE){
         @Override
