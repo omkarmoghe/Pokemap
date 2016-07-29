@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -63,16 +64,18 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String password = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
-                        token = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_USERNAME)){
-                        username = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_PASSWORD)){
-                        password = getStoredString(s);
+                    if(!TextUtils.isEmpty(s)) {
+                        if (s.contains(INFO_TOKEN)) {
+                            token = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_USERNAME)) {
+                            username = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_PASSWORD)) {
+                            password = getStoredString(s);
+                        }
                     }
                 }
                 return new PtcLoginInfo(token, username, password);
@@ -88,12 +91,14 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
                 String refresh = null;
 
                 for (String s :info) {
-                    if(s.contains(INFO_TOKEN)){
-                        token = getStoredString(s);
-                        continue;
-                    }
-                    if(s.contains(INFO_PASSWORD)){
-                        refresh = getStoredString(s);
+                    if(!TextUtils.isEmpty(s)) {
+                        if (s.contains(INFO_TOKEN)) {
+                            token = getStoredString(s);
+                            continue;
+                        }
+                        if (s.contains(INFO_PASSWORD)) {
+                            refresh = getStoredString(s);
+                        }
                     }
                 }
 
