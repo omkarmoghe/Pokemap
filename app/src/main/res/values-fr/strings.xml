@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Pokémap</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="action_clearmap">Effacer la carte</string>
@@ -13,20 +12,14 @@
     <string name="pref_warning">NOTE: NE PAS UTILISER votre compte principal pour cette application!
         Créez et utilisez un "faux" compte du Club de Dresseur de Pokemons</string>
     <string name="pref_username">Votre pseudo</string>
-    <string name="pref_username_key" translatable="false">UsernameKey</string>
     <string name="pref_default_username">Dupont</string>
     <string name="pref_password">Votre mot de passe</string>
-    <string name="pref_password_key" translatable="false">PasswordKey</string>
     <string name="pref_default_password" translatable="false">***</string>
 
     <string name="pref_cat_general">Général</string>
     <string name="pref_pokestops_title">Afficher les Pokéstops</string>
-    <string name="pref_pokestops_key" translatable="false">pokestops_checkbox</string>
     <string name="pref_gyms_title">Afficher les Arènes</string>
-    <string name="pref_gyms_key" translatable="false">gyms_checkbox</string>
     <string name="pref_scanned_title">Afficher les lieux scannés</string>
-    <string name="pref_scanned_key" translatable="false">scanned_checkbox</string>
-    <string name="pref_pokemons_to_show_key">pokemons_to_show</string>
 
     <string name="pokestop" translatable="false">Pokéstop</string>
 
@@ -36,7 +29,6 @@
     <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Fréquence de mise à jour</string>
     <string name="pref_service_refresh_summary">Tous les combien de secondes le scan doit avoir lieu.</string>
-    <string name="pref_service_refresh_key" translatable="false">service_refresh_rate</string>
 
     <string name="toast_credentials">Impossible de se connecter, vérifiez votre pseudo/mot de passe</string>
     <string name="title_activity_poke_map">Pokémon proches</string>
@@ -86,16 +78,25 @@
     <string name="toast_searching">Recherche&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémons trouvés"</string>
     <string name="pokemon_found_none">Aucun pokémon trouvé.</string>
-    <string name="pokemon_found_new">"nouveaux pokémons trouvé."</string>
+    <string name="pokemon_found_new">%1$d nouveaux pokémons trouvés.</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scan en cours</string>
     <string name="notification_service_stop">Arrêter la tâche de fond</string>
-    <string name="notification_service_pokemon_near">" Pokémon proche."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon dans la zone:"</string>
+    <string name="notification_service_pokemon_near">%1$d pokémon(s) proche(s)</string>
+    <string name="notification_service_pokemon_in_area">%1$d pokémon(s) dans la zone</string>
     <string name="meters">metres</string>
 
     <string name="button_ok">Ok</string>
     <string name="toast_google_login_error">Connexion échouée</string>
+    <string name="farfetchd">Canarticho</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d minutes, %3$d mètres)</string>
+    <string name="pref_cat_other">Autre</string>
+    <string name="pref_search_steps">Périmètre de recherche</string>
+    <string name="pref_theme">Thème par défaut</string>
+    <string name="pref_theme_button">Thème</string>
+    <string name="preset_themes_title">Thèmes prédéfinis</string>
+    <string name="toast_still_searching">Recherche&#8230; %1$d Pokémon(s) trouvé(s).</string>
+    <string name="theme_activity_text">Selectionner un thème:</string>
 
 </resources>
