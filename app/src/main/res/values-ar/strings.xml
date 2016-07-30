@@ -90,3 +90,4 @@
 <string name="toast_still_searching">"Searching... Found %1$d Pokémons so far"</string><!-- difficult to translate as arabic is rtl causing %1$d to become d$1%, if someone know how to ... i dont -->
 <string name="preset_themes_title">تصاميم</string>
 <string name="theme_activity_text">سيجعل هذا الاختيار تبدو جميلة في المستقبل. حدد التصميم</string>
+</resources>
