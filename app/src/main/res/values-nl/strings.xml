@@ -2,7 +2,7 @@
 <!-- Translation by Carsten and DoraKlikOpDora -->
 <resources>
     <string name="action_settings">Instellingen</string>
-    <string name="action_clearmap">Leeg de map</string>
+    <string name="action_clearmap">Leeg de kaart</string>
     <string name="action_logout">Uitloggen</string>
     <string name="pref_theme">PresetTheme</string>
     <string name="logout_prompt_message">Wil je echt uitloggen?</string>
@@ -80,7 +80,7 @@
     <string name="notification_service_pokemon_in_area">%1$d Pokémons in de buurt:</string>
     <string name="meters">meter</string>
     <string name="gym">Gym</string>
-    <string name="button_ok">Okay</string>
+    <string name="button_ok">Oké</string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
     <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
     <string name="preset_themes_title">Ingesteld thema</string>
