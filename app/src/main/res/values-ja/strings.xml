@@ -78,13 +78,13 @@
     <string name="toast_searching">検索中&#8230;</string>
     <string name="toast_pokemon_found_count">"ポケモン発見"</string>
     <string name="pokemon_found_none">ポケモンを発見できません。</string>
-    <string name="pokemon_found_new">"ポケモンを発見しました。"</string>
+    <string name="pokemon_found_new">新たに%1$d匹のポケモンを発見しました。</string>
 
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">検索中</string>
-    <string name="notification_service_stop">サービスを停止する</string>
-    <string name="notification_service_pokemon_near">" 近所のポケモン"</string>
-    <string name="notification_service_pokemon_in_area">" このエリアのポケモン:"</string>
+    <string name="notification_service_stop">サービスを停止</string>
+    <string name="notification_service_pokemon_near">%1$d匹のポケモンが近くにいます</string>
+    <string name="notification_service_pokemon_in_area">%1$d匹のポケモンがこのエリアにいます</string>
     <string name="meters">メートル</string>
     <string name="gym">ジム</string>
 
@@ -97,4 +97,5 @@
     <string name="default_string">デフォルト</string>
     <string name="notification_service_inbox_line">%1$s (%2$d 分, %3$d m)</string>
     <string name="preset_themes_title">プリセットテーマ</string>
+    <string name="notification_service_launch_pokemon_go">Pokémon GOを起動</string>
 </resources>

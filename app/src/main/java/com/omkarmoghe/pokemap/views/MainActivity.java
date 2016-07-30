@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.omkarmoghe.pokemap.R;
@@ -46,6 +47,20 @@ public class MainActivity extends BaseActivity {
     private PokemapAppPreferences pref;
     private SharedPreferences sharedPref;
     private int themeId;
+
+    private Snackbar _pokeSnackbar;
+
+    public void snackMe(String message,int duration){
+        if (null == _pokeSnackbar || _pokeSnackbar.getDuration() != duration){
+            View rootView = findViewById(R.id.main_container);
+            _pokeSnackbar = Snackbar.make(rootView,"",duration);
+        }
+        _pokeSnackbar.setText(message);
+        _pokeSnackbar.show();
+    }
+    public void snackMe(String message){
+        snackMe(message, Snackbar.LENGTH_LONG);
+    }
 
     //region Lifecycle Methods
     @Override
@@ -224,8 +239,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(SearchInPosition event) {
         List<LatLng> list = MapHelper.getSearchArea(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
-        MapWrapperFragment.pokeSnackbar.setText(getString(R.string.toast_searching));
-        MapWrapperFragment.pokeSnackbar.show();
+        snackMe(getString(R.string.toast_searching));
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);
         nianticManager.getPokeStops(event.getPosition().latitude, event.getPosition().longitude, 0D);

@@ -74,4 +74,6 @@
     <string name="preset_themes_title">Предустановленные темы</string>
     <string name="theme_activity_text">В будущем мы сделаем выбор темы более удобным. Выберите тему:</string>
     <string name="notification_service_inbox_line">%1$s (%2$d минут, %3$d метров)</string>
+    <string name="notification_service_launch_pokemon_go">Запустить Pokémon GO</string>
+
 </resources>

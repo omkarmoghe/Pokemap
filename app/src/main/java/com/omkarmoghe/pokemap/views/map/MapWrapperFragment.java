@@ -53,6 +53,7 @@ import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 
@@ -109,7 +110,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
 
-    public static Snackbar pokeSnackbar;
+    private void snackMe(String message, int duration){
+        ((MainActivity)getActivity()).snackMe(message, duration);
+    }
+    private void snackMe(String message){
+        snackMe(message, Snackbar.LENGTH_LONG);
+    }
 
     public MapWrapperFragment() {
 
@@ -230,7 +236,6 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void initMap(boolean animateZoomIn, boolean searchInPlace) {
 
         if (getView() != null) {
-            pokeSnackbar = Snackbar.make(getView(), "", Snackbar.LENGTH_LONG);
             if (mLocation != null && mGoogleMap != null) {
                 if (ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ContextCompat.checkSelfPermission(mView.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -341,11 +346,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
 
-                    RemoteImageLoader.load(
-                        pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                        markerSize, markerSize, null,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
+                    RemoteImageLoader.loadMapIcon(
+                            getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                        markerSize, markerSize,
+                            new RemoteImageLoader.Callback() {
                             @Override
                             public void onFetch(Bitmap bitmap) {
 
@@ -374,11 +378,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.gym_marker);
 
-                    RemoteImageLoader.load(
-                        gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                        markerSize, markerSize, null,
-                        getActivity(),
-                        new RemoteImageLoader.Callback() {
+                    RemoteImageLoader.loadMapIcon(
+                            getActivity(), gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                        markerSize, markerSize,
+                            new RemoteImageLoader.Callback() {
                             @Override
                             public void onFetch(Bitmap  bitmap) {
 
@@ -423,11 +426,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     if (!markerKeys.contains(pokestop.getId()) && distanceFromCenterInMeters <= MapHelper.convertStepsToRadius(mPref.getSteps())) {
 
-                            RemoteImageLoader.load(
-                            pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                            RemoteImageLoader.loadMapIcon(
+                                    getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                            markerSize, markerSize,
+                                    new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
@@ -472,11 +474,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                     if (!markerKeys.contains(gym.getId()) && distanceFromCenterInMeters <= MapHelper.convertStepsToRadius(mPref.getSteps())) {
 
-                        RemoteImageLoader.load(
-                            gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                        RemoteImageLoader.loadMapIcon(
+                                getActivity(), gymTeamImageUrls.get(gym.getOwnedByTeam().getNumber()),
+                            markerSize, markerSize,
+                                new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
@@ -528,11 +529,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     PokemonIdOuterClass.PokemonId pokemonId = poke.getPokemonId();
                     if (showablePokemonIDs.contains(pokemonId)) {
 
-                        RemoteImageLoader.load(
-                            "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
-                            markerSize, markerSize, null,
-                            getActivity(),
-                            new RemoteImageLoader.Callback() {
+                        RemoteImageLoader.loadMapIcon(
+                                getActivity(), "http://serebii.net/pokemongo/pokemon/"+PokemonIdUtils.getCorrectPokemonImageId(pokemonId.getNumber())+".png",
+                            markerSize, markerSize,
+                                new RemoteImageLoader.Callback() {
                                 @Override
                                 public void onFetch(Bitmap bitmap) {
 
@@ -569,13 +569,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             }
             if (getView() != null) {
                 if (nianticManager.getCurrentScan() != nianticManager.getPendingSearch()) {
-                    pokeSnackbar.setText(getString(R.string.toast_still_searching, nianticManager.getPokemonFound()));
-                    pokeSnackbar.show();
+                    snackMe(getString(R.string.toast_still_searching, nianticManager.getPokemonFound()));
 
                 } else {
                     String text = nianticManager.getPokemonFound() > 0 ? getString(R.string.pokemon_found_new, nianticManager.getPokemonFound()) : getString(R.string.pokemon_found_none);
-                    pokeSnackbar.setText(text);
-                    pokeSnackbar.show();
+                    snackMe(text);
                     nianticManager.resetSearchCount();
                 }
             }
@@ -615,13 +613,13 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
     private void showMapNotInitializedError() {
         if(getView() != null){
-            Snackbar.make(getView(), getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT).show();
+            snackMe(getString(R.string.toast_map_not_initialized), Snackbar.LENGTH_SHORT);
         }
     }
 
     private void showLocationFetchFailed() {
         if(getView() != null){
-            Snackbar.make(getView(),getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT).show();
+            snackMe(getString(R.string.toast_no_location), Snackbar.LENGTH_SHORT);
         }
     }
 
@@ -737,7 +735,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void drawCatchedPokemonCircle(double latitude, double longitude) {
 
         if (mGoogleMap != null && mPref.getShowScannedPlaces()) {
-            double radiusInMeters = 100.0;
+            double radiusInMeters = MapHelper.SCAN_RADIUS;
             int shadeColor = 0x44DCD90D; // fill
             CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng(latitude, longitude))
