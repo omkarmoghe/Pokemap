@@ -28,6 +28,8 @@
     <string name="pref_pokemons_to_show_key" translatable="false">pokemons_to_show</string>
     <string name="pref_search_steps">Search steps</string>
     <string name="pref_search_steps_key" translatable="false">search_steps</string>
+    <string name="pref_search_steps_service">Background service search steps</string>
+    <string name="pref_search_steps_service_key" translatable="false">service_search_steps</string>
     <string name="pre_lured_key" translatable="false">lured_checkbox</string>
     <string name="pref_lured_title">Show Lured Pokémon</string>
     <string name="pokestop" translatable="false">Pokéstop</string>
@@ -88,7 +90,8 @@
     <string name="pokemon_found_none">No new catchable Pokémon have been found.</string>
     <string name="pokemon_found_new">%1$d new catchable Pokémon found.</string>
     <string name="notification_service_title">Pokémap Service</string>
-    <string name="notification_service_scanning">Scanning</string>
+    <string name="notification_service_scanning">Wait %1$s s Before scan</string>
+    <string name="notification_service_scanning_progress">Scanning %1$s %%</string>
     <string name="notification_service_stop">Stop Service</string>
     <string name="notification_service_launch_pokemon_go">Launch Pokémon GO</string>
     <string name="notification_service_pokemon_near">%1$d Pokémon nearby.</string>

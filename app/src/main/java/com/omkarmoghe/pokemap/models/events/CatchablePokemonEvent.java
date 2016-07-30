@@ -12,11 +12,13 @@ public class CatchablePokemonEvent implements IEvent {
     private List<CatchablePokemon> catchablePokemon;
     private double lat;
     private double longitude;
+    private boolean mIsNotification =false;
 
-    public CatchablePokemonEvent(List<CatchablePokemon> catchablePokemon, double lat, double longitude) {
+    public CatchablePokemonEvent(List<CatchablePokemon> catchablePokemon, double lat, double longitude,boolean isNotification) {
         this.catchablePokemon = catchablePokemon;
         this.lat = lat;
         this.longitude = longitude;
+        mIsNotification = isNotification;
     }
 
     public List<CatchablePokemon> getCatchablePokemon() {
@@ -41,5 +43,9 @@ public class CatchablePokemonEvent implements IEvent {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public boolean isNotification() {
+        return mIsNotification;
     }
 }

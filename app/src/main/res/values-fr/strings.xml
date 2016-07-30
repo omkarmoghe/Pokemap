@@ -81,7 +81,9 @@
     <string name="pokemon_found_new">%1$d nouveaux pokémons trouvés.</string>
 
     <string name="notification_service_title">Pokémap Service</string>
-    <string name="notification_service_scanning">Scan en cours</string>
+
+    <string name="notification_service_scanning">Patientez %1$s s Avant le premier scan</string>
+    <string name="notification_service_scanning_progress">Scan en cours %1$s %%</string>
     <string name="notification_service_stop">Arrêter la tâche de fond</string>
     <string name="notification_service_pokemon_near">%1$d pokémon(s) proche(s)</string>
     <string name="notification_service_pokemon_in_area">%1$d pokémon(s) dans la zone</string>
@@ -90,9 +92,10 @@
     <string name="button_ok">Ok</string>
     <string name="toast_google_login_error">Connexion échouée</string>
     <string name="farfetchd">Canarticho</string>
-    <string name="notification_service_inbox_line">%1$s (%2$d minutes, %3$d mètres)</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
     <string name="pref_cat_other">Autre</string>
-    <string name="pref_search_steps">Périmètre de recherche</string>
+    <string name="pref_search_steps">Rayon de recherche</string>
+    <string name="pref_search_steps_service">Rayon de recherche en tâche de fond</string>
     <string name="pref_theme">Thème par défaut</string>
     <string name="pref_theme_button">Thème</string>
     <string name="preset_themes_title">Thèmes prédéfinis</string>

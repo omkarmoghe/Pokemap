@@ -93,14 +93,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-
-
         EventBus.getDefault().register(this);
-
-        if (pref.isServiceEnabled()) {
-            stopNotificationService();
-        }
 
         // If the theme has changed, recreate the activity.
         if (themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
@@ -116,11 +109,13 @@ public class MainActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
 
-        if (!skipNotificationServer && pref.isServiceEnabled()) {
-            startNotificationService();
+    public void onDestroy() {
+        super.onDestroy();
+        if (pref.isServiceEnabled()) {
+            stopNotificationService();
         }
-
     }
 
     //endregion
@@ -239,6 +234,8 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(SearchInPosition event) {
         List<LatLng> list = MapHelper.getSearchArea(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        snackMe(getString(R.string.toast_searching));
+        nianticManager.cancelPendingSearches();
         snackMe(getString(R.string.toast_searching));
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);

@@ -50,6 +50,9 @@ public class PokemonNotificationService extends Service{
     private NianticManager nianticManager;
     private NotificationCompat.Builder builder;
     private PokemapSharedPreferences preffs;
+    private static int WAIT_BEFORE_SCAN =15;
+
+    private static int ONE_SECOND =1000;
 
     private List<CatchablePokemon> pokemonFound=null;
 
@@ -66,10 +69,11 @@ public class PokemonNotificationService extends Service{
     @Override
     public void onCreate() {
         pokemonFound=new ArrayList<>();
-        EventBus.getDefault().register(this);
         createNotification();
 
         preffs = new PokemapSharedPreferences(this);
+
+        EventBus.getDefault().register(this);
 
         locationManager = LocationManager.getInstance(this);
         nianticManager = NianticManager.getInstance();
@@ -77,7 +81,7 @@ public class PokemonNotificationService extends Service{
         updateRunnable = new UpdateRunnable(preffs.getServiceRefreshRate() * 1000);
         workThread = new Thread(updateRunnable);
 
-        initBroadcastReciever();
+        initBroadcastReceiver();
         workThread.start();
         locationManager.onResume();
 
@@ -87,10 +91,10 @@ public class PokemonNotificationService extends Service{
     /**
      * This sets up the broadcast reciever.
      */
-    private void initBroadcastReciever() {
+    private void initBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_STOP_SELF);
-        registerReceiver(mBroadcastReciever,intentFilter);
+        registerReceiver(mBroadcastReceiver,intentFilter);
     }
 
     @Override
@@ -98,7 +102,7 @@ public class PokemonNotificationService extends Service{
         cancelNotification();
         updateRunnable.stop();
         EventBus.getDefault().unregister(this);
-        unregisterReceiver(mBroadcastReciever);
+        unregisterReceiver(mBroadcastReceiver);
         isRunning = false;
     }
 
@@ -111,7 +115,7 @@ public class PokemonNotificationService extends Service{
         builder = new NotificationCompat.Builder(getApplication())
                 .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
                 .setContentTitle(getString(R.string.notification_service_title))
-                .setContentText(getString(R.string.notification_service_scanning)).setOngoing(true);
+                .setContentText(getString(R.string.notification_service_scanning, WAIT_BEFORE_SCAN)).setOngoing(true);
 
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -144,51 +148,53 @@ public class PokemonNotificationService extends Service{
 
     @Subscribe
     public void onEvent(CatchablePokemonEvent event) {
-        List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
+        if(event.isNotification()) {
+            List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
-        LatLng location = locationManager.getLocation();
-        Location myLoc = new Location("");
-        myLoc.setLatitude(location.latitude);
-        myLoc.setLongitude(location.longitude);
-        builder.setContentText(getString(R.string.notification_service_pokemon_near,catchablePokemon.size()));
-        builder.setStyle(null);
+            LatLng location = locationManager.getLocation();
+            Location myLoc = new Location("");
+            myLoc.setLatitude(location.latitude);
+            myLoc.setLongitude(location.longitude);
+            builder.setContentText(getString(R.string.notification_service_pokemon_near, catchablePokemon.size()));
+            builder.setStyle(null);
 
-        if(!catchablePokemon.isEmpty()){
-            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, catchablePokemon.size()));
-            Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
-            
-            for(CatchablePokemon cp : catchablePokemon){
-                //Only show the notification if the Pokemon is in the preference list
-                if(showablePokemonIDs.contains(cp.getPokemonId())) {
+            if (!catchablePokemon.isEmpty()) {
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, catchablePokemon.size()));
+                Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
 
-                    String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
-                    //Vibrate if a new pokemon is found
-                    if(!pokemonFound.contains(cp)){
-                        System.out.println("New Pokemon found : "+pokeName);
-                        vibrate();
-                        pokemonFound.add(cp);
+                for (CatchablePokemon cp : catchablePokemon) {
+                    //Only show the notification if the Pokemon is in the preference list
+                    if (showablePokemonIDs.contains(cp.getPokemonId())) {
+
+                        String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(), cp.getPokemonId().name());
+                        //Vibrate if a new pokemon is found
+                        if (!pokemonFound.contains(cp)) {
+                            System.out.println("New Pokemon found : " + pokeName);
+                            vibrate();
+                            pokemonFound.add(cp);
+                        }
+                        Location pokeLocation = new Location("");
+                        pokeLocation.setLatitude(cp.getLatitude());
+                        pokeLocation.setLongitude(cp.getLongitude());
+                        long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
+                        if (remainingTime < 0) {
+                            remainingTime = -1;
+                        }
+                        long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
+                        int dist = (int) Math.ceil(pokeLocation.distanceTo(myLoc));
+
+                        inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime, dist));
                     }
-                    Location pokeLocation = new Location("");
-                    pokeLocation.setLatitude(cp.getLatitude());
-                    pokeLocation.setLongitude(cp.getLongitude());
-                    long remainingTime = cp.getExpirationTimestampMs() - System.currentTimeMillis();
-                    if(remainingTime<0) {
-                        remainingTime=-1;
-                    }
-                    long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
-                    int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
-
-                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line,  pokeName, remTime,dist));
                 }
+                //Clean old pokemons
+                pokemonFound.retainAll(catchablePokemon);
+                builder.setStyle(inboxStyle);
             }
-            //Clean old pokemons
-            pokemonFound.retainAll(catchablePokemon);
-            builder.setStyle(inboxStyle);
-        }
 
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(notificationId,builder.build());
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(notificationId, builder.build());
+        }
     }
 
     private void vibrate() {
@@ -198,7 +204,7 @@ public class PokemonNotificationService extends Service{
     }
 
     private final class UpdateRunnable implements Runnable{
-        private long refreshRate = preffs.getServiceRefreshRate() * 1000;
+        private long refreshRate = preffs.getServiceRefreshRate() * ONE_SECOND;
         private boolean isRunning = true;
 
         public UpdateRunnable(int refreshRate){
@@ -211,16 +217,19 @@ public class PokemonNotificationService extends Service{
                 try {
 
                     // initial wait (fFor a reason! Do NOT remove because of cyclic sleep!)
-                    Thread.sleep(refreshRate);
-
+                    Thread.sleep(WAIT_BEFORE_SCAN * ONE_SECOND);
+                    Log.d(this.getClass().getSimpleName(),"SERVICE WAIT is ended");
                     while (isRunning) {
+                        if(locationManager==null) {
+                            locationManager = LocationManager.getInstance(PokemonNotificationService.this);
+                        }
 
                         LatLng currentLocation = locationManager.getLocation();
 
+                        Log.d(this.getClass().getSimpleName(),"Get CurrentLocation: "+currentLocation);
                         if (currentLocation != null){
-                            nianticManager.getCatchablePokemon(currentLocation.latitude,currentLocation.longitude,0);
-                        } else {
-                            locationManager = LocationManager.getInstance(PokemonNotificationService.this);
+                            Log.d(this.getClass().getSimpleName(),"Fetch Pokemon Around: "+currentLocation);
+                            nianticManager.getCatchablePokemonInArea(currentLocation.latitude, currentLocation.longitude, 0,preffs.getServiceSteps(),true);
                         }
 
                         // cyclic sleep
@@ -238,7 +247,7 @@ public class PokemonNotificationService extends Service{
         }
     }
 
-    private BroadcastReceiver mBroadcastReciever = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             stopSelf();

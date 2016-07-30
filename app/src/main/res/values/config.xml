@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <integer name="pref_default_steps">3</integer>
+    <integer name="pref_default_steps_service">1</integer>
 
     <string-array name="pref_possible_steps">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="pref_possible_steps_service">
         <item>1</item>
         <item>2</item>
         <item>3</item>

@@ -6,6 +6,7 @@ import android.os.HandlerThread;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 
 import android.os.Handler;
@@ -85,11 +86,11 @@ public class NianticManager {
 
     private int currentBatchCall = 0;
 
-    public static NianticManager getInstance(){
+    public static NianticManager getInstance() {
         return instance;
     }
 
-    private NianticManager(){
+    private NianticManager() {
         mPoGoClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
@@ -101,7 +102,7 @@ public class NianticManager {
         mHandler = new Handler(thread.getLooper());
 
                   /*
-		This is a temporary, in-memory cookie jar.
+        This is a temporary, in-memory cookie jar.
 		We don't require any persistence outside of the scope of the login,
 		so it being discarded is completely fine
 		*/
@@ -137,11 +138,11 @@ public class NianticManager {
                 .create(NianticService.class);
     }
 
-    public void login(final String username, final String password, final LoginListener loginListener){
+    public void login(final String username, final String password, final LoginListener loginListener) {
         Callback<NianticService.LoginValues> valuesCallback = new Callback<NianticService.LoginValues>() {
             @Override
             public void onResponse(Call<NianticService.LoginValues> call, Response<NianticService.LoginValues> response) {
-                if(response.body() != null) {
+                if (response.body() != null) {
                     loginPTC(username, password, response.body(), loginListener);
                 } else {
                     Log.e(TAG, "PTC login failed via login(). There was no response.body().");
@@ -161,7 +162,7 @@ public class NianticManager {
         call.enqueue(valuesCallback);
     }
 
-    private void loginPTC(final String username, final String password, NianticService.LoginValues values, final LoginListener loginListener){
+    private void loginPTC(final String username, final String password, NianticService.LoginValues values, final LoginListener loginListener) {
         HttpUrl url = HttpUrl.parse(LOGIN_URL).newBuilder()
                 .addQueryParameter("lt", values.getLt())
                 .addQueryParameter("execution", values.getExecution())
@@ -206,7 +207,7 @@ public class NianticManager {
         call.enqueue(loginCallback);
     }
 
-    private void requestToken(String code, final LoginListener loginListener){
+    private void requestToken(String code, final LoginListener loginListener) {
         Log.d(TAG, "requestToken() called with: code = [" + code + "]");
         HttpUrl url = HttpUrl.parse(LOGIN_OAUTH).newBuilder()
                 .addQueryParameter("client_id", CLIENT_ID)
@@ -266,11 +267,13 @@ public class NianticManager {
 
     public interface LoginListener {
         void authSuccessful(String authToken);
+
         void authFailed(String message);
     }
 
-    public interface AuthListener{
+    public interface AuthListener {
         void authSuccessful();
+
         void authFailed(String message, String Provider);
     }
 
@@ -281,15 +284,15 @@ public class NianticManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-            try {
-                mAuthInfo = info.createAuthInfo();
-                mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
-                EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
-            } catch (RemoteServerException | LoginFailedException | RuntimeException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Setting google auth token failed. setGoogleAuthToken() raised: " + e.getMessage());
-                EventBus.getDefault().post(new LoginEventResult(false, null, null));
-            }
+                try {
+                    mAuthInfo = info.createAuthInfo();
+                    mPokemonGo = new PokemonGo(mAuthInfo, mPoGoClient);
+                    EventBus.getDefault().post(new LoginEventResult(true, mAuthInfo, mPokemonGo));
+                } catch (RemoteServerException | LoginFailedException | RuntimeException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Setting google auth token failed. setGoogleAuthToken() raised: " + e.getMessage());
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                }
             }
         });
     }
@@ -310,7 +313,7 @@ public class NianticManager {
                             listener.authSuccessful();
                         }
                     });
-                } catch (RemoteServerException | LoginFailedException | RuntimeException e){
+                } catch (RemoteServerException | LoginFailedException | RuntimeException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Failed to login using PoGoAPI via login(). Raised: " + e.getMessage());
                     activity.runOnUiThread(new Runnable() {
@@ -325,7 +328,52 @@ public class NianticManager {
         });
     }
 
-    public void getCatchablePokemon(final double lat, final double longitude, final double alt){
+    public void getCatchablePokemonInArea(final double lat, final double longitude, final double alt, final int serviceSteps, final boolean triggerVibration) {
+        final int myCurrentBatch = this.currentBatchCall;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    List<LatLng> list = MapHelper.getSearchArea(serviceSteps, new LatLng(lat, longitude));
+                    List<CatchablePokemon> catchablePokemons = new ArrayList<CatchablePokemon>();
+                    for (LatLng pos : list) {
+                        if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
+                            Thread.sleep(100);
+                            mPokemonGo.setLocation(pos.latitude, pos.longitude, alt);
+                            Thread.sleep(100);
+                            List<CatchablePokemon> areaCatchablePokemon = mPokemonGo.getMap().getCatchablePokemon();
+                            for (CatchablePokemon pokemonFound : areaCatchablePokemon) {
+                                if (!catchablePokemons.contains(pokemonFound)) {
+                                    catchablePokemons.add(pokemonFound);
+                                }
+                            }
+                        }
+                    }
+                    if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                        EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude, triggerVibration));
+
+
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). Login credentials wrong or user banned. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). Remote server unreachable. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (InterruptedException | RuntimeException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getCatchablePokemon(). PoGoAPI crashed. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
+                }
+                NianticManager.this.currentScan++;
+            }
+        });
+        this.pendingSearch++;
+    }
+
+    public void getCatchablePokemon(final double lat, final double longitude, final double alt) {
         final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
@@ -336,7 +384,8 @@ public class NianticManager {
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(100);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
-                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                            EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude, false));
                     }
 
                 } catch (LoginFailedException e) {
@@ -358,7 +407,7 @@ public class NianticManager {
         this.pendingSearch++;
     }
 
-    public void getLuredPokemon(final double lat, final double longitude, final double alt){
+    public void getLuredPokemon(final double lat, final double longitude, final double alt) {
         final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
@@ -372,13 +421,14 @@ public class NianticManager {
                         Thread.sleep(133);
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
-                        for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
-                            if(!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())){
+                        for (Pokestop pokestop : mPokemonGo.getMap().getMapObjects().getPokestops()) {
+                            if (!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())) {
                                 Log.d(TAG, "run: hasFortInfo = " + pokestop.getFortData().getLureInfo());
                                 pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
                             }
                         }
-                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                            EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -399,7 +449,7 @@ public class NianticManager {
     }
 
 
-    public void getPokeStops(final double lat, final double longitude, final double alt){
+    public void getPokeStops(final double lat, final double longitude, final double alt) {
         final int myCurrentBatch = this.currentBatchCall;
         mHandler.post(new Runnable() {
             @Override
@@ -412,7 +462,8 @@ public class NianticManager {
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(133);
                         Collection<Pokestop> pokestops = mPokemonGo.getMap().getMapObjects().getPokestops();
-                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new PokestopsEvent(pokestops, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                            EventBus.getDefault().post(new PokestopsEvent(pokestops, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
@@ -438,30 +489,31 @@ public class NianticManager {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-            try {
+                try {
 
-                if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
+                    if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
-                    Thread.sleep(133);
-                    mPokemonGo.setLocation(latitude, longitude, alt);
-                    Thread.sleep(133);
-                    Collection<FortDataOuterClass.FortData> gyms = mPokemonGo.getMap().getMapObjects().getGyms();
-                    if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new GymsEvent(gyms, latitude, longitude));
+                        Thread.sleep(133);
+                        mPokemonGo.setLocation(latitude, longitude, alt);
+                        Thread.sleep(133);
+                        Collection<FortDataOuterClass.FortData> gyms = mPokemonGo.getMap().getMapObjects().getGyms();
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                            EventBus.getDefault().post(new GymsEvent(gyms, latitude, longitude));
+                    }
+
+                } catch (LoginFailedException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getGyms(). Login credentials wrong or user banned. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new LoginEventResult(false, null, null));
+                } catch (RemoteServerException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getGyms(). Remote server unreachable. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new ServerUnreachableEvent(e));
+                } catch (InterruptedException | RuntimeException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "Failed to fetch map information via getGyms(). PoGoAPI crashed. Raised: " + e.getMessage());
+                    EventBus.getDefault().post(new InternalExceptionEvent(e));
                 }
-
-            } catch (LoginFailedException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Failed to fetch map information via getGyms(). Login credentials wrong or user banned. Raised: " + e.getMessage());
-                EventBus.getDefault().post(new LoginEventResult(false, null, null));
-            } catch (RemoteServerException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Failed to fetch map information via getGyms(). Remote server unreachable. Raised: " + e.getMessage());
-                EventBus.getDefault().post(new ServerUnreachableEvent(e));
-            } catch (InterruptedException | RuntimeException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Failed to fetch map information via getGyms(). PoGoAPI crashed. Raised: " + e.getMessage());
-                EventBus.getDefault().post(new InternalExceptionEvent(e));
-            }
             }
         });
     }
@@ -473,7 +525,7 @@ public class NianticManager {
         this.currentBatchCall++;
     }
 
-    public void cancelPendingSearches(){
+    public void cancelPendingSearches() {
         this.currentBatchCall++;
     }
 }
