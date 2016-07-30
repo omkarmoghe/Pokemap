@@ -58,7 +58,7 @@
 <string name="enable_location_permission_title">Habilitar permisos de localización</string> 
 <string name="enable_location_permission_message">Por favor habilite los permisos de localización para usar esta aplicación</string> 
 <string name="toast_no_location">Error para encontrar la ubicación GPS</string> 
-<string name="expiring_in">Expira en: %1$d:%2$02d</string> 
+<string name="expiring_in">Expira en: %1$d:%2$2d</string> 
 <string name="google_login_failed">Inicio de sesión de Google fallido</string> 
 <string name="permition_message">Por favor permita los servicios de localización para usar esta aplicación</string> 
 <string name="allow">Permitir</string> 
