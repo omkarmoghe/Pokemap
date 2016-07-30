@@ -59,6 +59,7 @@
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
     <string name="minutes">"minutes"</string>
+    <string name="pokemon_will_spawn">will spawn here, scan again in a while</string>
     <string name="pokemon_disappearing_in">"Disappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
     <string name="position_picked">Position Picked</string>
@@ -89,6 +90,7 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scanning</string>
     <string name="notification_service_stop">Stop Service</string>
+    <string name="notification_service_launch_pokemon_go">Launch Pokémon GO</string>
     <string name="notification_service_pokemon_near">%1$d Pokémon nearby.</string>
     <string name="notification_service_pokemon_in_area">%1$d Pokémon in area:</string>
     <string name="meters">meters</string>
