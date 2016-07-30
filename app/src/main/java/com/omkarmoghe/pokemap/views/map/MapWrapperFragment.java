@@ -596,12 +596,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                pokemonMarker.getMarker().remove();
+                markerList.remove(pokemonMarker);
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-                pokemonMarker.getMarker().remove();
-                markerList.remove(pokemonMarker);
             }
 
             @Override
