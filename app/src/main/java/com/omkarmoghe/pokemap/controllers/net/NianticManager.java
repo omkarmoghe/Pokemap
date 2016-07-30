@@ -6,6 +6,7 @@ import android.os.HandlerThread;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.omkarmoghe.pokemap.models.LurePokemon;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 
 import android.os.Handler;
@@ -26,6 +27,7 @@ import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
 import com.pokegoapi.auth.GoogleLogin;
 import com.pokegoapi.auth.PtcLogin;
+import com.pokegoapi.examples.ExampleLoginDetails;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -332,7 +334,7 @@ public class NianticManager {
             public void run() {
                 try {
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
-                        Thread.sleep(133);
+                        Thread.sleep(400);
                         mPokemonGo.setLocation(lat, longitude, alt);
                         Thread.sleep(133);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
@@ -374,11 +376,12 @@ public class NianticManager {
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
                             if(!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())){
-                                Log.d(TAG, "run: hasFortInfo = " + pokestop.getFortData().getLureInfo());
-                                pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
+                                CatchablePokemon poke = new LurePokemon(mPokemonGo, pokestop.getFortData());
+                                pokemon.add(poke);
                             }
                         }
-                        if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                            EventBus.getDefault().post(new LurePokemonEvent(pokemon, lat, longitude));
                     }
 
                 } catch (LoginFailedException e) {
