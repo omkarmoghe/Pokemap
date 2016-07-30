@@ -59,6 +59,7 @@
     <string name="action_relogin">Relogin</string>
     <string name="ban">banned</string>
     <string name="minutes">"minutes"</string>
+    <string name="pokemon_will_spawn">will spawn here, scan again in a while</string>
     <string name="pokemon_disappearing_in">"Disappearing in: "</string>
     <string name="pokemon_expired">Expired</string>
     <string name="position_picked">Position Picked</string>

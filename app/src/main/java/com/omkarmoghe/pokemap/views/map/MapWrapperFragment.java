@@ -104,6 +104,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private List<Circle> userSelectedPositionCircles = new ArrayList<>();
     private List<Marker> userSelectedPositionMarkers = new ArrayList<>();
     private Map<String, PokemonMarkerExtended> markerList = new HashMap<>();
+    private Map<String, PokemonMarkerExtended> futureMarkerList = new HashMap<>();
     private Map<String, PokestopMarkerExtended> pokestopsList = new HashMap<>();
 
     private Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = new HashSet<>();
@@ -295,12 +296,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
 
-            if (userSelectedPositionCircles != null && !userSelectedPositionCircles.isEmpty()) {
-                for (Circle circle : userSelectedPositionCircles) {
-                    circle.remove();
-                }
-                userSelectedPositionCircles.clear();
-            }
+            clearPokemonCircles();
         }
 
     }
@@ -317,6 +313,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                         marker.remove();
                         pokemonIterator.remove();
                     } else {
+                        if(catchablePokemon.getExpirationTimestampMs()==-1) {
+                            futureMarkerList.put(catchablePokemon.getSpawnPointId(),pokemonEntry.getValue());
+                            marker.setAlpha(0.6f);
+                            marker.setSnippet(getString(R.string.pokemon_will_spawn));
+                            continue;
+                        }
                         long millisLeft = catchablePokemon.getExpirationTimestampMs() - System.currentTimeMillis();
                         if (millisLeft < 0) {
                             marker.remove();
@@ -507,7 +509,18 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         if (mGoogleMap != null) {
 
             Set<String> markerKeys = markerList.keySet();
+            Set<String> futureKeys = futureMarkerList.keySet();
             for (final CatchablePokemon poke : pokeList) {
+
+                if(futureKeys.contains(poke.getSpawnPointId())){
+                    if(poke.getExpirationTimestampMs()>1) {
+                        futureMarkerList.get(poke.getSpawnPointId()).getMarker().remove();
+                        futureKeys.remove(poke.getSpawnPointId());
+                        futureMarkerList.remove(poke.getSpawnPointId());
+                        markerKeys.remove(poke.getSpawnPointId());
+                        markerList.remove(poke.getSpawnPointId());
+                    }
+                }
 
                 if(!markerKeys.contains(poke.getSpawnPointId())) {
 
@@ -545,6 +558,12 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                         //Increase founded pokemon counter
                         nianticManager.setPokemonFound(nianticManager.getPokemonFound() + 1);
+                    }
+                }else if(futureMarkerList.containsKey(poke.getSpawnPointId())){
+                    if(showablePokemonIDs.contains(poke.getPokemonId())){
+                        PokemonMarkerExtended futureMarker = futureMarkerList.get(poke.getSpawnPointId());
+
+                        futureMarkerList.remove(futureMarker);
                     }
                 }
             }
@@ -647,6 +666,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ClearMapEvent event) {
+        nianticManager.cancelPendingSearches();
         clearMarkers();
         MarkerRefreshController.getInstance().clear();
     }
@@ -797,6 +817,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                 mSelectedMarker = pm.getValue();
                 long duration = mSelectedMarker.getCatchablePokemon().getExpirationTimestampMs()
                         - System.currentTimeMillis();
+                if(duration<1)continue;
                 MarkerRefreshController.getInstance().startTimer(duration);
                 break;
             }
