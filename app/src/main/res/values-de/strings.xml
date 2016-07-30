@@ -86,4 +86,6 @@
     <string name="pref_search_steps">Suchschritte</string>
     <string name="preset_themes_title">Voreingestellte Designs</string>
     <string name="theme_activity_text">Wähle ein Design:</string>
+    <string name="notification_service_launch_pokemon_go">Pokémon GO starten</string>
+    <string name="pokemon_will_spawn">Erscheint hier in Kürze.</string>
 </resources>
