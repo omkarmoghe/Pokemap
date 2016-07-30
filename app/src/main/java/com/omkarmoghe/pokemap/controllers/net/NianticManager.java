@@ -3,7 +3,6 @@ package com.omkarmoghe.pokemap.controllers.net;
 import android.app.Activity;
 import android.os.HandlerThread;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -19,13 +18,10 @@ import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
-import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+import com.omkarmoghe.pokemap.util.PokestopUtil;
 import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-import com.pokegoapi.auth.GoogleLogin;
-import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -37,12 +33,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import POGOProtos.Map.Fort.FortDataOuterClass;
-import POGOProtos.Map.Fort.FortLureInfoOuterClass;
-import POGOProtos.Map.Pokemon.MapPokemonOuterClass;
-import POGOProtos.Map.Pokemon.WildPokemonOuterClass;
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
 
 import okhttp3.Cookie;
@@ -373,7 +365,8 @@ public class NianticManager {
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
-                            if(!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())){
+                            Log.d(TAG, "run: hasLuredPokemon = " + PokestopUtil.hasLuredPokemon(pokestop));
+                                if(PokestopUtil.hasLuredPokemon(pokestop)){
                                 Log.d(TAG, "run: hasFortInfo = " + pokestop.getFortData().getLureInfo());
                                 pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
                             }
