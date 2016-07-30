@@ -24,7 +24,7 @@
     <string name="pref_cat_service">Laat de app op de achtergrond lopen</string>
     <string name="pref_service_enable_title">Ingeschakeld</string>
     <string name="pref_service_refresh_title">Ververstijd</string>
-    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart hernieuwd in seconden.</string>
+    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart herniewt in seconden.</string>
     <string name="pref_cat_other">Overig</string>
     <string name="pref_theme_button">Thema</string>
     <string name="toast_credentials">Ongeldige gegevens ingevuld! Kan niet inloggen!</string>
