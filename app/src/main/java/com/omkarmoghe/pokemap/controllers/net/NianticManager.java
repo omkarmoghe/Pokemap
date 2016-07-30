@@ -1,18 +1,17 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
 import android.app.Activity;
+import android.location.Location;
+import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
@@ -20,13 +19,9 @@ import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
-import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
 import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-import com.pokegoapi.auth.GoogleLogin;
-import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -35,17 +30,15 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import POGOProtos.Map.Fort.FortDataOuterClass;
 import POGOProtos.Map.Fort.FortLureInfoOuterClass;
-import POGOProtos.Map.Pokemon.MapPokemonOuterClass;
-import POGOProtos.Map.Pokemon.WildPokemonOuterClass;
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
-
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -350,6 +343,20 @@ public class NianticManager {
                             }
                         }
                     }
+                    Collections.sort(catchablePokemons,new Comparator<CatchablePokemon>() {
+                        @Override
+                        public int compare(CatchablePokemon cp1, CatchablePokemon cp2) {
+                            Location myLoc=new Location("");
+                            Location cp1Location = new Location("");
+                            cp1Location.setLatitude(cp1.getLatitude());
+                            cp1Location.setLongitude(cp1.getLongitude());
+                            Location cp2Location = new Location("");
+                            cp2Location.setLatitude(cp2.getLatitude());
+                            cp2Location.setLongitude(cp2.getLongitude());
+                            Double diff= (Math.ceil(cp1Location.distanceTo(myLoc))-Math.ceil(cp2Location.distanceTo(myLoc)));
+                            return diff.intValue();
+                        }
+                    });
                     if (NianticManager.this.currentBatchCall == myCurrentBatch)
                         EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude, triggerVibration));
 
