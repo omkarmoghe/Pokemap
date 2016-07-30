@@ -735,7 +735,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     private void drawCatchedPokemonCircle(double latitude, double longitude) {
 
         if (mGoogleMap != null && mPref.getShowScannedPlaces()) {
-            double radiusInMeters = 100.0;
+            double radiusInMeters = MapHelper.SCAN_RADIUS;
             int shadeColor = 0x44DCD90D; // fill
             CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng(latitude, longitude))
