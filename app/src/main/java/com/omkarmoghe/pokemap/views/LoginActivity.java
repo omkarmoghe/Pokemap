@@ -287,10 +287,20 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void triggerAutoLogin() {
-        if(mPref.isLoggedIn()){
+
+        LoginInfo loginInfo = mPref.getLoginInfo();
+        if(loginInfo != null && loginInfo instanceof PtcLoginInfo){
+
             showProgress(true);
-            mNianticManager.setLoginInfo(this, mPref.getLoginInfo(), mNianticAuthListener);
+            PtcLoginInfo ptcLoginInfo = (PtcLoginInfo) mPref.getLoginInfo();
+            mNianticManager.login(ptcLoginInfo.getUsername(), ptcLoginInfo.getPassword(), mNianticLoginListener);
+
+        } else if (mPref.isLoggedIn() && loginInfo != null) {
+
+            showProgress(true);
+            mNianticManager.setLoginInfo(this, loginInfo, mNianticAuthListener);
         }
+
     }
 }
 
