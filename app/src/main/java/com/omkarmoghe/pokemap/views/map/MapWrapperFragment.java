@@ -71,10 +71,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import POGOProtos.Enums.PokemonIdOuterClass;
 import POGOProtos.Enums.TeamColorOuterClass;
 import POGOProtos.Map.Fort.FortDataOuterClass;
-
-import POGOProtos.Enums.PokemonIdOuterClass;
 
 /**
  * A simple {@link Fragment} subclass.

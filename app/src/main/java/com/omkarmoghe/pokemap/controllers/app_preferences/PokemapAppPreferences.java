@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 
-import java.util.List;
 import java.util.Set;
 
 import POGOProtos.Enums.PokemonIdOuterClass;
