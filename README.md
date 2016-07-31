@@ -11,6 +11,10 @@ A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
 screenshots from @linkout @mike @z14942744 @kyr0 @rancor
 
+### Please Read
+* Due to the recent server side changes by Niantic they have implemented request throttling. Please do not open any tickets about no pokemon showing up. This is known and options are being discussed.
+[Refer Here](https://github.com/omkarmoghe/Pokemap/issues/383)
+
 ### **Slack invites are now restricted to contributors only. Please comment your email when you submit a PR and we will send you an invite.**
 
 # [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
