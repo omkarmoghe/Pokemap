@@ -172,7 +172,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public int getServiceSteps() {
-        return Integer.parseInt(sharedPreferences.getString(SERVICE_STEPS, "1"));
+        return Integer.parseInt(sharedPreferences.getString(SERVICE_STEPS, "3"));
     }
 
     @Override
@@ -233,6 +233,6 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public int getServiceRefreshRate() {
-        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "120"));
     }
 }

@@ -56,7 +56,7 @@
 			/>
 
 		<EditTextPreference
-			android:defaultValue="30"
+			android:defaultValue="120"
 			android:inputType="number"
 			android:key="@string/pref_service_refresh_key"
 			android:summary="@string/pref_service_refresh_summary"

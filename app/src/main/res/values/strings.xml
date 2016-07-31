@@ -90,12 +90,12 @@
     <string name="pokemon_found_none">No new catchable Pokémon have been found.</string>
     <string name="pokemon_found_new">%1$d new catchable Pokémon found.</string>
     <string name="notification_service_title">Pokémap Service</string>
-    <string name="notification_service_scanning">Wait %1$s s Before scan</string>
+    <string name="notification_service_scanning">Wait %1$d s Before scan</string>
     <string name="notification_service_scanning_progress">Scanning %1$s %%</string>
     <string name="notification_service_stop">Stop Service</string>
     <string name="notification_service_launch_pokemon_go">Launch Pokémon GO</string>
-    <string name="notification_service_pokemon_near">%1$d Pokémon nearby.</string>
-    <string name="notification_service_pokemon_in_area">%1$d Pokémon in area:</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémon nearby (%2$d s).</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémon in area (%2$d s):</string>
     <string name="meters">meters</string>
     <string name="gym">Gym</string>
     <string name="button_ok">Ok</string>

@@ -332,15 +332,14 @@ public class NianticManager {
                     List<CatchablePokemon> catchablePokemons = new ArrayList<CatchablePokemon>();
                     for (LatLng pos : list) {
                         if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
-                            Thread.sleep(100);
                             mPokemonGo.setLocation(pos.latitude, pos.longitude, alt);
-                            Thread.sleep(100);
                             List<CatchablePokemon> areaCatchablePokemon = mPokemonGo.getMap().getCatchablePokemon();
                             for (CatchablePokemon pokemonFound : areaCatchablePokemon) {
                                 if (!catchablePokemons.contains(pokemonFound)) {
                                     catchablePokemons.add(pokemonFound);
                                 }
                             }
+                            Thread.sleep(6000);
                         }
                     }
                     Collections.sort(catchablePokemons,new Comparator<CatchablePokemon>() {
@@ -387,12 +386,12 @@ public class NianticManager {
             public void run() {
                 try {
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
-                        Thread.sleep(100);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(100);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
-                        if (NianticManager.this.currentBatchCall == myCurrentBatch)
+                        if (NianticManager.this.currentBatchCall == myCurrentBatch) {
                             EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude, false));
+                            Thread.sleep(6000);
+                        }
                     }
 
                 } catch (LoginFailedException e) {
@@ -423,9 +422,9 @@ public class NianticManager {
 
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
-                        Thread.sleep(133);
+                        Thread.sleep(3000);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(133);
+                        Thread.sleep(3000);
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for (Pokestop pokestop : mPokemonGo.getMap().getMapObjects().getPokestops()) {
