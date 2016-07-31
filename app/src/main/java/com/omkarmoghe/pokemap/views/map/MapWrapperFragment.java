@@ -196,7 +196,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
             mSupportMapFragment.getMapAsync(this);
         }
 
-        FloatingActionButton locationFab = (FloatingActionButton) mView.findViewById(R.id.location_fab);
+        FloatingActionButton locationFab = (FloatingActionButton) this.getActivity().findViewById(R.id.location_fab);
         locationFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
