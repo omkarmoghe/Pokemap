@@ -36,6 +36,7 @@ public class ThemeActivity extends AppCompatActivity {
         RadioButton r3 = (RadioButton) findViewById(R.id.radioButton3);
         RadioButton r4 = (RadioButton) findViewById(R.id.radioButton4);
         RadioButton r5 = (RadioButton) findViewById(R.id.radioButton5);
+        RadioButton r6 = (RadioButton) findViewById(R.id.radioButton6);
 
         switch (themeId) {
             case R.style.AppThemeSquirtle:
@@ -53,6 +54,9 @@ public class ThemeActivity extends AppCompatActivity {
             case R.style.AppTheme:
                 r5.setChecked(true);
                 break;
+            case R.style.AppTheme:
+                r6.setChecked(true);
+                break;    
             default:
                 break;
         }
@@ -96,6 +100,13 @@ public class ThemeActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.radioButton5:
+                if(checked) {
+                    editor.putInt(PREF_ID, R.style.AppTheme);
+                    editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppTheme_NoActionBar);
+                    editor.apply();
+                }
+                break;
+            case R.id.radioButton6:
                 if(checked) {
                     editor.putInt(PREF_ID, R.style.AppTheme);
                     editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppTheme_NoActionBar);
