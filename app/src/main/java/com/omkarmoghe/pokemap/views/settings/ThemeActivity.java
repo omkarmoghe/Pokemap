@@ -102,7 +102,7 @@ public class ThemeActivity extends AppCompatActivity {
             case R.id.radioButton5:
                 if(checked) {
                     editor.putInt(PREF_ID, R.style.AppTheme);
-                    editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppTheme_NoActionBar);
+                    editor.putInt(PREF_ID_NO_ACTION_BAR, R.style.AppThemePokeball_NoActionBar);
                     editor.apply();
                 }
                 break;
