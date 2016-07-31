@@ -157,7 +157,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean getShowScannedPlaces() {
-        return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, false);
+        return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, true);
     }
 
     @Override
@@ -228,7 +228,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean isServiceEnabled() {
-        return sharedPreferences.getBoolean(SERVICE_KEY, false);
+        return sharedPreferences.getBoolean(SERVICE_KEY, true);
     }
 
     @Override

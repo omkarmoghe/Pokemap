@@ -18,7 +18,7 @@
 			android:title="@string/pref_gyms_title"/>
 
 		<CheckBoxPreference
-			android:defaultValue="false"
+			android:defaultValue="true"
 			android:key="@string/pref_scanned_key"
 			android:title="@string/pref_scanned_title"/>
 
@@ -43,7 +43,7 @@
 		android:title="@string/pref_cat_service">
 
 		<CheckBoxPreference
-			android:defaultValue="false"
+			android:defaultValue="true"
 			android:key="@string/pref_service_enable_key"
 			android:title="@string/pref_service_enable_title"/>
 
