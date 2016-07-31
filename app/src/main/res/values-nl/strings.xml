@@ -24,7 +24,7 @@
     <string name="pref_cat_service">Laat de app op de achtergrond lopen</string>
     <string name="pref_service_enable_title">Ingeschakeld</string>
     <string name="pref_service_refresh_title">Ververstijd</string>
-    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart herniewt in seconden.</string>
+    <string name="pref_service_refresh_summary">Hoe vaak de kaart ververst wordt in seconden.</string>
     <string name="pref_cat_other">Overig</string>
     <string name="pref_theme_button">Thema</string>
     <string name="toast_credentials">Ongeldige gegevens ingevuld! Kan niet inloggen!</string>
@@ -82,6 +82,6 @@
     <string name="gym">Gym</string>
     <string name="button_ok">Oké</string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
-    <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
+    <string name="toast_still_searching">Zoeken&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
     <string name="preset_themes_title">Ingesteld thema</string>
 </resources>
