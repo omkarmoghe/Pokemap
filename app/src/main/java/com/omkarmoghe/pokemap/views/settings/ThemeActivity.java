@@ -51,7 +51,7 @@ public class ThemeActivity extends AppCompatActivity {
             case R.style.AppThemePikachu:
                 r4.setChecked(true);
                 break;
-            case R.style.AppTheme:
+            case R.style.AppThemePokeball:
                 r5.setChecked(true);
                 break;
             case R.style.AppTheme:
