@@ -55,7 +55,8 @@ public class MainActivity extends BaseActivity {
         _pokeSnackbar.setText(message);
         _pokeSnackbar.show();
     }
-    public void snackMe(String message){
+
+    private void snackMe(String message){
         snackMe(message, Snackbar.LENGTH_LONG);
     }
 
@@ -110,7 +111,6 @@ public class MainActivity extends BaseActivity {
         if(!skipNotificationServer && pref.isServiceEnabled()){
             startNotificationService();
         }
-
     }
 
     //endregion
@@ -186,7 +186,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startNotificationService(){
-
         // check for if the service is already running
         if (PokemonNotificationService.isRunning()) {
             stopNotificationService();
@@ -261,5 +260,4 @@ public class MainActivity extends BaseActivity {
         event.getE().printStackTrace();
         Snackbar.make(findViewById(R.id.root), getString(R.string.toast_internal_error), Snackbar.LENGTH_LONG).show();
     }
-
 }

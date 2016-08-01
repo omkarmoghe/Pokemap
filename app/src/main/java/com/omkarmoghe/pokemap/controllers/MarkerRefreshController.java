@@ -2,9 +2,7 @@ package com.omkarmoghe.pokemap.controllers;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
-import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.MarkerExpired;
 import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
@@ -12,18 +10,14 @@ import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.sql.Time;
-
 /**
  * Created by Rohan on 26-07-2016.
  */
-
-
 public class MarkerRefreshController {
 
     final private String TAG = MarkerRefreshController.class.getName();
 
-    private static final int DEFAULT_UPDATE_INTERVAL = 1000;//1 seconds : heartbeat
+    private static final int DEFAULT_UPDATE_INTERVAL = 1000; //1 seconds : heartbeat
     private static final int MARKER_EXPIRED = 1;
 
     private Handler mHandler;
@@ -60,25 +54,23 @@ public class MarkerRefreshController {
         return mInstance;
     }
 
-
     /**
      * Cleanup Messages and cancels the timer if it is running.
      */
     public void clear() {
-        if(mTimer != null){
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
         mHandler.removeMessages(MARKER_EXPIRED);
-
     }
 
-    public void startTimer(long duration){
-        if(mTimer != null){
+    public void startTimer(long duration) {
+        if (mTimer != null) {
             mTimer.cancel();
         }
 
-        if(duration <= 0) {
+        if (duration <= 0) {
             return;
         }
 
@@ -98,20 +90,20 @@ public class MarkerRefreshController {
         mTimer.start();
     }
 
-    public void stopTimer(){
-        if(mTimer != null){
+    public void stopTimer() {
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
     }
 
-    public void clearMessages(){
+    public void clearMessages() {
         mHandler.removeMessages(MARKER_EXPIRED);
     }
 
-    public void postMarker(PokemonMarkerExtended markerData){
+    public void postMarker(PokemonMarkerExtended markerData) {
         long time = markerData.getCatchablePokemon().getExpirationTimestampMs() - System.currentTimeMillis();
-        if(time > 0) {
+        if (time > 0) {
             Message message = mHandler.obtainMessage(MARKER_EXPIRED, markerData);
             mHandler.sendMessageDelayed(message, time);
         }
