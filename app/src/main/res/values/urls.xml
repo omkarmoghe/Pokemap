@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="lure_pokestop_image_url">http://i.imgur.com/2BI3Cqv.png</string>
+	<string name="pokestop_image_url">http://i.imgur.com/pmLrx3R.png</string>
+
+	<string name="gym_team_neutral">http://i.imgur.com/If3mHMM.png</string>
+	<string name="gym_team_blue">http://i.imgur.com/ElM6sqb.png</string>
+	<string name="gym_team_red">http://i.imgur.com/wO13iJ0.png</string>
+	<string name="gym_team_yellow">http://i.imgur.com/F8Jq1dc.png</string>
+
+</resources>
