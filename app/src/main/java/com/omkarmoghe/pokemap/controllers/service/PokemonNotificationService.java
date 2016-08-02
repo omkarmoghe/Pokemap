@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -37,6 +38,7 @@ public class PokemonNotificationService extends Service{
     private static final String TAG = "NotificationService";
 
     private static final int notificationId = 2423235;
+    private static final int wearableNotificationId = 2423236;
     private static final String ACTION_STOP_SELF = "com.omkarmoghe.pokemap.STOP_SERVICE";
 
     public static boolean isRunning = false;
@@ -163,16 +165,28 @@ public class PokemonNotificationService extends Service{
                     String pokeName = PokemonIdUtils.getLocalePokemonName(getApplicationContext(),cp.getPokemonId().name());
                     long remTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime);
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
-
-                    inboxStyle.addLine(getString(R.string.notification_service_inbox_line, pokeName, remTime,dist));
+                    String notificationLine = getString(R.string.notification_service_inbox_line, pokeName, remTime, dist);
+                    inboxStyle.addLine(notificationLine);
+                    notifyWearable(notificationLine);
                 }
             }
 
             builder.setStyle(inboxStyle);
         }
-
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
+    }
+
+    private void notifyWearable(String notificationLine) {
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContentTitle(getString(R.string.toast_pokemon_found_count))
+                        .setContentText(notificationLine);
+
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(this);
+
+        notificationManager.notify(wearableNotificationId, notificationBuilder.build());
     }
 
     private final class UpdateRunnable implements Runnable{
