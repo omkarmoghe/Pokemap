@@ -138,7 +138,7 @@ public class PokemonNotificationService extends Service{
 
     @Subscribe
     public void onEvent(CatchablePokemonEvent event) {
-        int nearPokemon = 0;
+        int nearPokemon = 0; //start fix of issue #379
         List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
         LatLng location = locationManager.getLocation();
@@ -152,7 +152,7 @@ public class PokemonNotificationService extends Service{
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
             
             for(CatchablePokemon cp : catchablePokemon){
-                //Only show the notification if the Pokemon is in the preference list
+                //Only add aPokemon to the notification if the Pokemon is in the preference list
                 if(showablePokemonIDs.contains(cp.getPokemonId())) {
                     nearPokemon++; //adding 1 to the amount of available pokemons
                     Location pokeLocation = new Location("");
@@ -168,8 +168,11 @@ public class PokemonNotificationService extends Service{
                 }
             }
 
-            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, nearPokemon));
-            builder.setStyle(inboxStyle);
+            if (nearPokemon > 0) {
+                //Only use inboxStyle if amount of unfiltered near pokemons is 1 or more
+                inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, nearPokemon));
+                builder.setStyle(inboxStyle);
+            }
         }
 
         builder.setContentText(getString(R.string.notification_service_pokemon_near, nearPokemon));
