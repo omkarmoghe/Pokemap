@@ -1,5 +1,6 @@
 package com.omkarmoghe.pokemap.controllers.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -167,7 +168,7 @@ public class PokemonNotificationService extends Service{
                     int dist = (int)Math.ceil(pokeLocation.distanceTo(myLoc));
                     String notificationLine = getString(R.string.notification_service_inbox_line, pokeName, remTime, dist);
                     inboxStyle.addLine(notificationLine);
-                    notifyWearable(notificationLine);
+                    notifyWearable(pokeName, notificationLine);
                 }
             }
 
@@ -177,11 +178,14 @@ public class PokemonNotificationService extends Service{
         nm.notify(notificationId,builder.build());
     }
 
-    private void notifyWearable(String notificationLine) {
+    private void notifyWearable(String pokeName, String notificationLine) {
+        long[] pattern = {0, 150, 200, 150};
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                        .setContentTitle(getString(R.string.toast_pokemon_found_count))
-                        .setContentText(notificationLine);
+                        .setSmallIcon(R.drawable.ic_gps_fixed_white_24px)
+                        .setContentTitle(pokeName)
+                        .setContentText(notificationLine)
+                        .setVibrate(pattern);
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(this);
