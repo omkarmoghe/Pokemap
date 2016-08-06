@@ -6,13 +6,13 @@
 
     <string name="pref_cat_user_account">Аккаунт</string>
     <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения! Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
-    <string name="pref_username">Введите Имя аккаунта</string>
+    <string name="pref_username">Введите имя аккаунта:</string>
     <string name="pref_default_username">John Doe</string>
-    <string name="pref_password">Введите Пароль</string>
+    <string name="pref_password">Введите пароль:</string>
 
     <string name="pref_cat_general">Главные опции</string>
-    <string name="pref_pokestops_title">Показать Pokéstops</string>
-    <string name="pref_gyms_title">Показать Gyms</string>
+    <string name="pref_pokestops_title">Показать Покестопы</string>
+    <string name="pref_gyms_title">Показать Гимы</string>
     <string name="pref_scanned_title">Показать отсканированную область</string>
 
 
@@ -22,7 +22,7 @@
     <string name="pref_service_refresh_summary">Как часто сервис будет обновлять данные (в секундах).</string>
 
     <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
-    <string name="title_activity_poke_map">Покемон рядом</string>
+    <string name="title_activity_poke_map">Покемон рядом!</string>
 
     <string name="login_warning">"Рекомендуется создать и использовать отдельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
          использовать учетную запись Google, которая не используется в вашем игровом аккаунте Pokémon Go, так как использование данного приложения может привести к тому, что данный аккаунт будет заблокирован."</string>
@@ -48,14 +48,14 @@
     <string name="toast_map_not_initialized">Ошибка инициализации Google Map</string>
     <string name="toast_searching">Поиск&#8230;</string>
     <string name="toast_server_unreachable">Невозможно подключиться к серверам Pokémon GO. Серверы могут быть отключены.</string>
-    <string name="toast_token_expired">Token для входа устарел. Запрос нового token.</string>
+    <string name="toast_token_expired">Токен для входа устарел. Запрос нового токена...</string>
     <string name="toast_user_found">Найдена ваша позиция!</string>
     <string name="toast_login_error">Ошибка входа.</string>
-    <string name="toast_internal_error">Внутренняя ошибка приложения.Это может быть если вы offline или Серверы Pokémon GO могут быть отключены.</string>
+    <string name="toast_internal_error">Внутренняя ошибка приложения. Это может быть если вы не в сети или Серверы Pokémon GO могут быть отключены.</string>
     <string name="toast_ptc_login_error">Ошибка входа через аккаунт PTC</string>
-    <string name="enable_location_permission_title">Включить разрешение геолокации.</string>
+    <string name="enable_location_permission_title">Включить разрешение геолокации</string>
     <string name="enable_location_permission_message">Пожалуйста, включите разрешение на отслеживание геолокации.</string>
-    <string name="toast_pokemon_found_count">" Покемон найден"</string>
+    <string name="toast_pokemon_found_count">" Покемонов найдено."</string>
     <string name="pokemon_found_none">Не найдено новых Покемонов.</string>
     <string name="toast_no_location">Ошибка отслеживания GPS позиции.</string>
     <string name="expiring_in">Исчезнет через: %1$d:%2$02d</string>
