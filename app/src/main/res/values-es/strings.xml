@@ -49,12 +49,12 @@
 <string name="toast_login_successful">Inicio de sesión satisfactorio.</string> 
 <string name="toast_map_not_initialized">Problema al inicializar el mapa de Google.</string> 
 <string name="toast_server_unreachable">No se ha podido conectar con los servidores de Pokémon GO. Podrían estar caídos.</string> 
-<string name="toast_token_expired">El autentificador de inicio de sesión ha expirado. Se está obteniendo uno nuevo...</string> 
+<string name="toast_token_expired">El autentificador de inicio de sesión ha expirado. Se está obteniendo uno nuevo&#8230;</string> 
 <string name="toast_user_found">Encontrado!</string> 
 <string name="toast_login_error">Error al iniciar sesión.</string> 
 <string name="toast_internal_error">Un error interno ha ocurrido. Esto puede deberse a que estás fuera de línea o los servidores están inactivos.</string> 
 <string name="toast_ptc_login_error">No se ha podido iniciar sesión en el Club de Entrenadores Pokémon.</string> 
-<string name="toast_google_login_error"></string></string>No se ha podido iniciar sesión en Google.</string> 
+<string name="toast_google_login_error">No se ha podido iniciar sesión en Google.</string> 
 <string name="enable_location_permission_title">Habilitar permisos de localización</string> 
 <string name="enable_location_permission_message">Debes habilitar los permisos de localización para usar esta aplicación.</string>
 <string name="toast_no_location">No se ha podido encontrar la ubicación GPS.</string> 
