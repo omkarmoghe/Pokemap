@@ -1,5 +1,7 @@
 # Pokemap [![Build Status](https://travis-ci.org/omkarmoghe/Pokemap.svg?branch=dev)](https://travis-ci.org/omkarmoghe/Pokemap) [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
 
+Latest release:  [PokeMap V1.1.0 Download](https://github.com/omkarmoghe/Pokemap/releases/download/v1.1.0/Pokemap_release_1.1.0.apk)
+
 # IMPORTANT UPDATE (PLEASE READ) 8/7/16
 
 First off, we want to thank the entire community for the crazy support and excitement you have shown about our project. We have some important news and updates concerning the state of this project.
