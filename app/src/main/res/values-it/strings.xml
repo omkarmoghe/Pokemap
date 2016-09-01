@@ -91,8 +91,6 @@
     <string name="notification_service_title">Servizio Pokémap</string>
     <string name="notification_service_scanning">Scansione in corso</string>
     <string name="notification_service_stop">Ferma il servizio</string>
-    <string name="notification_service_pokemon_near">" Pokémon vicini."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
     <string name="meters">metri</string>
 
     <string name="button_ok">Ok</string>

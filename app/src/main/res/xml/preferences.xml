@@ -18,7 +18,7 @@
 			android:title="@string/pref_gyms_title"/>
 
 		<CheckBoxPreference
-			android:defaultValue="false"
+			android:defaultValue="true"
 			android:key="@string/pref_scanned_key"
 			android:title="@string/pref_scanned_title"/>
 
@@ -43,12 +43,20 @@
 		android:title="@string/pref_cat_service">
 
 		<CheckBoxPreference
-			android:defaultValue="false"
+			android:defaultValue="true"
 			android:key="@string/pref_service_enable_key"
 			android:title="@string/pref_service_enable_title"/>
 
+		<ListPreference
+			android:defaultValue="@integer/pref_default_steps_service"
+			android:entryValues="@array/pref_possible_steps_service"
+			android:entries="@array/pref_possible_steps_service"
+			android:key="@string/pref_search_steps_service_key"
+			android:title="@string/pref_search_steps_service"
+			/>
+
 		<EditTextPreference
-			android:defaultValue="60"
+			android:defaultValue="120"
 			android:inputType="number"
 			android:key="@string/pref_service_refresh_key"
 			android:summary="@string/pref_service_refresh_summary"

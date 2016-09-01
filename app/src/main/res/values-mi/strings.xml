@@ -91,8 +91,6 @@
     <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">matawai</string>
     <string name="notification_service_stop">Ratonga Stop</string>
-    <string name="notification_service_pokemon_near">" Pokémon nearby."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémon in area:"</string>
     <string name="meters">mita</string>
 
     <string name="button_ok">Ok</string>

@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapAppPreferences;
 import com.omkarmoghe.pokemap.controllers.app_preferences.PokemapSharedPreferences;
 import com.omkarmoghe.pokemap.controllers.map.LocationManager;
 import com.omkarmoghe.pokemap.controllers.net.NianticManager;
+import com.omkarmoghe.pokemap.controllers.service.PokemonNotificationService;
 import com.omkarmoghe.pokemap.helpers.MapHelper;
 import com.omkarmoghe.pokemap.helpers.RemoteImageLoader;
 import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
@@ -151,6 +153,11 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+
+        List<CatchablePokemon> catchablePokemon = PokemonNotificationService.getPokemonFound();
+        if (catchablePokemon!=null && !catchablePokemon.isEmpty()) {
+                EventBus.getDefault().post(catchablePokemon);
+        }
         nianticManager.setPokemonFound(markerList.size());
         updateMarkers();
     }
@@ -632,6 +639,16 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
         return getString(R.string.expiring_in, minutes, seconds);
+    }
+
+    /**
+     *  Posted when onResume of MapWrapperFragment to display CatchablePokemon that was detected by the service then posted to the bus.
+     *
+     * @param event The event information
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(List<CatchablePokemon> catchablePokemons) {
+        setPokemonMarkers(catchablePokemons);
     }
 
     /**

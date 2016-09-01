@@ -39,6 +39,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     private static final String SERVICE_REFRESH_KEY = "service_refresh_rate";
     private static final String POKEMONS_TO_SHOW = "pokemons_to_show";
     private static final String STEPS = "search_steps";
+    private static final String SERVICE_STEPS = "service_search_steps";
     private static final String SHOW_MAP_SUGGESTION = "show_map_suggestion";
 
     private static final String INFO_TOKEN = "token=";
@@ -156,7 +157,7 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean getShowScannedPlaces() {
-        return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, false);
+        return sharedPreferences.getBoolean(SHOW_SCANNED_PLACES, true);
     }
 
     @Override
@@ -167,6 +168,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
     @Override
     public int getSteps() {
         return Integer.parseInt(sharedPreferences.getString(STEPS, "3"));
+    }
+
+    @Override
+    public int getServiceSteps() {
+        return Integer.parseInt(sharedPreferences.getString(SERVICE_STEPS, "3"));
     }
 
     @Override
@@ -222,11 +228,11 @@ public final class PokemapSharedPreferences implements PokemapAppPreferences {
 
     @Override
     public boolean isServiceEnabled() {
-        return sharedPreferences.getBoolean(SERVICE_KEY, false);
+        return sharedPreferences.getBoolean(SERVICE_KEY, true);
     }
 
     @Override
     public int getServiceRefreshRate() {
-        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "60"));
+        return Integer.valueOf(sharedPreferences.getString(SERVICE_REFRESH_KEY, "120"));
     }
 }

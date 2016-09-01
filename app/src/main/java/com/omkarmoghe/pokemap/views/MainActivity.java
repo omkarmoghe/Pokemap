@@ -1,5 +1,7 @@
 package com.omkarmoghe.pokemap.views;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -76,29 +79,29 @@ public class MainActivity extends BaseActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         MapWrapperFragment mapWrapperFragment = (MapWrapperFragment) fragmentManager.findFragmentByTag(MAP_FRAGMENT_TAG);
-        if(mapWrapperFragment == null) {
+        if (mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
+        fragmentManager.beginTransaction().replace(R.id.main_container, mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
-        if(pref.isServiceEnabled()){
+        if (pref.isServiceEnabled()) {
             startNotificationService();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
 
-        if(pref.isServiceEnabled()) {
-            stopNotificationService();
+        // If the theme has changed, recreate the activity.
+        if (themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
+            recreate();
         }
 
-        // If the theme has changed, recreate the activity.
-        if(themeId != sharedPref.getInt(getString(R.string.pref_theme_no_action_bar), R.style.AppTheme_NoActionBar)) {
-            recreate();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.VIBRATE}, 0);
         }
     }
 
@@ -106,11 +109,13 @@ public class MainActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+    }
 
-        if(!skipNotificationServer && pref.isServiceEnabled()){
-            startNotificationService();
+    public void onDestroy() {
+        super.onDestroy();
+        if (pref.isServiceEnabled()) {
+            stopNotificationService();
         }
-
     }
 
     //endregion
@@ -127,7 +132,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             skipNotificationServer = true;
-            startActivityForResult(new Intent(this, SettingsActivity.class),0);
+            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
         } else if (id == R.id.action_clear) {
             EventBus.getDefault().post(new ClearMapEvent());
         } else if (id == R.id.action_logout) {
@@ -185,7 +190,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startNotificationService(){
+    private void startNotificationService() {
 
         // check for if the service is already running
         if (PokemonNotificationService.isRunning()) {
@@ -229,6 +234,8 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(SearchInPosition event) {
         List<LatLng> list = MapHelper.getSearchArea(event.getSteps(), new LatLng(event.getPosition().latitude, event.getPosition().longitude));
+        snackMe(getString(R.string.toast_searching));
+        nianticManager.cancelPendingSearches();
         snackMe(getString(R.string.toast_searching));
 
         nianticManager.getGyms(event.getPosition().latitude, event.getPosition().longitude, 0D);

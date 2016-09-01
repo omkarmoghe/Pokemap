@@ -85,8 +85,6 @@
     <string name="notification_service_title">Serviço Pokémap</string>
     <string name="notification_service_scanning">À procura</string>
     <string name="notification_service_stop">Stop Service</string>
-    <string name="notification_service_pokemon_near">" Pokémons perto."</string>
-    <string name="notification_service_pokemon_in_area">" Pokémons na area:"</string>
     <string name="meters">metros</string>
     <string name="gym">Ginásio</string>
     <string name="toast_google_login_error">Falha no Ínicio de Sessão Google</string>

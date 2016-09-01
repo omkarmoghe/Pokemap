@@ -25,6 +25,7 @@ public interface PokemapAppPreferences {
     boolean getShowGyms();
     boolean getShowLuredPokemon();
     int getSteps();
+    int getServiceSteps();
 
     void clearLoginCredentials();
     /**
