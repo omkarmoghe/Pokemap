@@ -1,4 +1,4 @@
-# Latest release:  [PokeMap V1.1.5 Download](http://pokemapgo.xyz/downloads/PokeMap_1.1.5.apk)
+# Latest release:  [PokeMap V1.1.6 Download](http://pokemapgo.xyz/downloads/PokeMap_1.1.6.apk)
 
 
 # Pokemap [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
