@@ -7,7 +7,7 @@
 
 First off, we want to thank the entire community for the crazy support and excitement you have shown about our project. We have some important news and updates concerning the state of this project.
 
-Unforunately, we have noticed an increasing number of apps using our codebase to create bots or charge users for the services we aim to provide for free. While we encourage the community to use our code and play with the app, such uses undermine the progress of our app by [motiviating Niantic to change their APIs](https://github.com/omkarmoghe/Pokemap/issues/383) and ultimately hinder further development of this project. For these reasons our dev team has made the following decisions regarding our source code:
+Unfortunately, we have noticed an increasing number of apps using our codebase to create bots or charge users for the services we aim to provide for free. While we encourage the community to use our code and play with the app, such uses undermine the progress of our app by [motiviating Niantic to change their APIs](https://github.com/omkarmoghe/Pokemap/issues/383) and ultimately hinder further development of this project. For these reasons our dev team has made the following decisions regarding our source code:
 
 1. Further development of Pokemap will continue in a private repo. The source code here will be left as legacy.
 2. Signed APKs will be periodically uploaded to [releases](https://github.com/omkarmoghe/Pokemap/releases).
