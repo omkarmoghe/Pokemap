@@ -1,3 +1,5 @@
+#[Our website is now live](http://pokemapgo.xyz/)
+
 # Latest release:  [PokeMap V1.1.6 Download](http://pokemapgo.xyz/downloads/PokeMap_1.1.6.apk)
 
 
