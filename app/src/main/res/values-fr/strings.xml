@@ -9,7 +9,7 @@
     <string name="no">NON</string>
 
     <string name="pref_cat_user_account">Mon compte</string>
-    <string name="pref_warning">NOTE: NE PAS UTILISER votre compte principal pour cette application!
+    <string name="pref_warning">NOTE : NE PAS UTILISER votre compte principal pour cette application !
         Créez et utilisez un "faux" compte du Club de Dresseur de Pokemons</string>
     <string name="pref_username">Votre pseudo</string>
     <string name="pref_default_username">Dupont</string>
@@ -20,18 +20,18 @@
     <string name="pref_pokestops_title">Afficher les Pokéstops</string>
     <string name="pref_gyms_title">Afficher les Arènes</string>
     <string name="pref_scanned_title">Afficher les lieux scannés</string>
+    <string name="pref_lured_title">Afficher les Pokémons des leurres</string>
 
     <string name="pokestop" translatable="false">Pokéstop</string>
-
 
     <string name="pref_cat_service" translatable="false">Travail en tâche de fond</string>
     <string name="pref_service_enable_title">Activer</string>
     <string name="pref_service_enable_key" translatable="false">background_poke_service</string>
     <string name="pref_service_refresh_title">Fréquence de mise à jour</string>
-    <string name="pref_service_refresh_summary">Tous les combien de secondes le scan doit avoir lieu.</string>
+    <string name="pref_service_refresh_summary">Toutes les combien de secondes le scan doit avoir lieu.</string>
 
     <string name="toast_credentials">Impossible de se connecter, vérifiez votre pseudo/mot de passe</string>
-    <string name="title_activity_poke_map">Pokémon proches</string>
+    <string name="title_activity_poke_map">Pokémons proches</string>
 
     <string name="login_warning">
 	NE PAS UTILISER votre compte principal pour cette application !
@@ -41,39 +41,38 @@
     <string name="action_sign_in">Se connecter</string>
     <string name="error_field_required">Champ obligatoire</string>
     <string name="title_activity_maps">Carte</string>
-    <string name="login_warning_title">Attention:</string>
+    <string name="login_warning_title">Attention :</string>
 
     <string name="request_credentials_title">Veuillez saisir les informations de connexon à Pokémon Go</string>
     <string name="search_pokemon_map_suggestion">(Restez appuyé pour chercher à partir d\'un nouveau lieu.)</string>
 
-    <string name="pokemon_to_show">Pokemon à afficher</string>
+    <string name="pokemon_to_show">Pokémons à afficher</string>
 
     <string name="action_relogin">Reconnecter</string>
     <string name="ban">banni</string>
     <string name="minutes">"minutes"</string>
-    <string name="pokemon_disappearing_in">"Disparait dans in: "</string>
-    <string name="pokemon_expired">Périmé</string>
-    <string name="position_picked">Position selectionnée</string>
+    <string name="pokemon_disappearing_in">"Disparaît dans : "</string>
+    <string name="pokemon_expired">Expiré</string>
+    <string name="position_picked">Position sélectionnée</string>
     <string name="seconds">"s"</string>
     <string name="toast_localization_waiting">En attente du GPS &#8230;</string>
     <string name="toast_login_successful">Connexion réussie.</string>
     <string name="toast_map_not_initialized">Problème d\'initialisation de Google Map</string>
-    <string name="toast_server_unreachable">Impossible de contacter les servers de Pokémon GO.</string>
-    <string name="toast_token_expired">Connexion terminée, veuillez vous reconnecter.</string>
+    <string name="toast_server_unreachable">Impossible de contacter les serveurs de Pokémon GO.</string>
+    <string name="toast_token_expired">Connexion expirée, veuillez vous reconnecter.</string>
     <string name="toast_user_found">Trouvé !</string>
     <string name="toast_login_error">Impossible de se connecter.</string>
-    <string name="toast_internal_error">Une error interne est survenue. Serveur non joignable ou vous êtes hors ligne.</string>
+    <string name="toast_internal_error">Une erreur interne est survenue. Les serveurs sont injoignables ou vous êtes hors ligne.</string>
     <string name="toast_ptc_login_error">Connexion échouée</string>
     <string name="enable_location_permission_title">Autoriser la géolocalisation</string>
     <string name="enable_location_permission_message">Merci d\'autoriser la géolocalisation</string>
     <string name="toast_no_location">Impossible de vous géolocaliser</string>
-    <string name="expiring_in">"Disparait dans : %1$d:%2$02d"</string>
+    <string name="expiring_in">"Disparaît dans : %1$d:%2$02d"</string>
     <string name="google_login_failed">Connexion au compte Google échouée</string>
     <string name="permition_message">Merci d\'autoriser la géolocalisation pour utiliser cette application</string>
     <string name="allow">Autoriser</string>
     <string name="app_settings">Paramètres</string>
     <string name="disclaimer">Disclaimer</string>
-
 
     <string name="toast_searching">Recherche&#8230;</string>
     <string name="toast_pokemon_found_count">"Pokémons trouvés"</string>
@@ -97,6 +96,6 @@
     <string name="pref_theme_button">Thème</string>
     <string name="preset_themes_title">Thèmes prédéfinis</string>
     <string name="toast_still_searching">Recherche&#8230; %1$d Pokémon(s) trouvé(s).</string>
-    <string name="theme_activity_text">Selectionner un thème:</string>
+    <string name="theme_activity_text">Sélectionnez un thème:</string>
 
 </resources>
