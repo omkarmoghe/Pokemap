@@ -5,17 +5,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.ArraySet;
 import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.login.GoogleLoginInfo;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
-import com.pokegoapi.api.pokemon.Pokemon;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import java.util.HashSet;
 import java.util.Set;

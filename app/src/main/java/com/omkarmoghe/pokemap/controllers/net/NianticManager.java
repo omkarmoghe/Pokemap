@@ -1,17 +1,14 @@
 package com.omkarmoghe.pokemap.controllers.net;
 
 import android.app.Activity;
-import android.os.HandlerThread;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
-
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.omkarmoghe.pokemap.models.events.CatchablePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.GymsEvent;
 import com.omkarmoghe.pokemap.models.events.InternalExceptionEvent;
 import com.omkarmoghe.pokemap.models.events.LoginEventResult;
@@ -19,13 +16,9 @@ import com.omkarmoghe.pokemap.models.events.LurePokemonEvent;
 import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
-import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
 import com.pokegoapi.api.PokemonGo;
-import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
-import com.pokegoapi.auth.GoogleLogin;
-import com.pokegoapi.auth.PtcLogin;
 import com.pokegoapi.exceptions.LoginFailedException;
 import com.pokegoapi.exceptions.RemoteServerException;
 
@@ -37,14 +30,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import POGOProtos.Map.Fort.FortDataOuterClass;
 import POGOProtos.Map.Fort.FortLureInfoOuterClass;
-import POGOProtos.Map.Pokemon.MapPokemonOuterClass;
-import POGOProtos.Map.Pokemon.WildPokemonOuterClass;
 import POGOProtos.Networking.Envelopes.RequestEnvelopeOuterClass.RequestEnvelope.AuthInfo;
-
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -67,7 +56,7 @@ import static com.pokegoapi.auth.PtcLogin.REDIRECT_URI;
  */
 public class NianticManager {
     private static final String TAG = "NianticManager";
-
+    private static int SLEEP_TIME = 133;
     private static final String BASE_URL = "https://sso.pokemon.com/sso/";
 
     private static final NianticManager instance = new NianticManager();
@@ -332,9 +321,9 @@ public class NianticManager {
             public void run() {
                 try {
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
                         List<CatchablePokemon> catchablePokemons = mPokemonGo.getMap().getCatchablePokemon();
                         if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new CatchablePokemonEvent(catchablePokemons, lat, longitude));
                     }
@@ -367,9 +356,9 @@ public class NianticManager {
 
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
@@ -408,9 +397,9 @@ public class NianticManager {
 
                     if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
                         mPokemonGo.setLocation(lat, longitude, alt);
-                        Thread.sleep(133);
+                        Thread.sleep(SLEEP_TIME);
                         Collection<Pokestop> pokestops = mPokemonGo.getMap().getMapObjects().getPokestops();
                         if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new PokestopsEvent(pokestops, lat, longitude));
                     }
@@ -442,9 +431,9 @@ public class NianticManager {
 
                 if (mPokemonGo != null && NianticManager.this.currentBatchCall == myCurrentBatch) {
 
-                    Thread.sleep(133);
+                    Thread.sleep(SLEEP_TIME);
                     mPokemonGo.setLocation(latitude, longitude, alt);
-                    Thread.sleep(133);
+                    Thread.sleep(SLEEP_TIME);
                     Collection<FortDataOuterClass.FortData> gyms = mPokemonGo.getMap().getMapObjects().getGyms();
                     if (NianticManager.this.currentBatchCall == myCurrentBatch) EventBus.getDefault().post(new GymsEvent(gyms, latitude, longitude));
                 }

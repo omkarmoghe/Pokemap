@@ -2,17 +2,13 @@ package com.omkarmoghe.pokemap.controllers;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
-import android.util.Log;
 
 import com.omkarmoghe.pokemap.models.events.MarkerExpired;
 import com.omkarmoghe.pokemap.models.events.MarkerUpdate;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.sql.Time;
 
 /**
  * Created by Rohan on 26-07-2016.
