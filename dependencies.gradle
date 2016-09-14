@@ -1,0 +1,51 @@
+ext {
+    gradleVersion = '2.2.0-alpha6'
+    dexVersion = '0.5.5'
+    neenbedanktVersion = '1.8'
+
+    gradlePlugins = [
+            android                : "com.android.tools.build:gradle:$gradleVersion",
+            dexCount               : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$dexVersion",
+            neenbedankt            : "com.neenbedankt.gradle.plugins:android-apt:$neenbedanktVersion"
+    ]
+
+
+    retrofitVersion = '2.0.2'
+    eventBusVersion = '3.0.0'
+    glideVersion = '3.7.0'
+    ersistentCookieJarVersion = 'v0.9.3'
+
+    coreLibs = [
+            retrofit           : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitGson       : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+            eventBus           : "org.greenrobot:eventbus:$eventBusVersion",
+            pokemonGoAPI       : "com.github.Grover-c13:PokeGOAPI-Java:2e14fab7f0",
+            glide              : "com.github.bumptech.glide:glide:$glideVersion",
+            ersistentCookieJar : "com.github.franmontiel:PersistentCookieJar:$ersistentCookieJarVersion"
+    ]
+
+    supportVersion = '24.0.0'
+    playServiceVersion = '9.2.1'
+
+    uiLibs = [
+            appCompat             : "com.android.support:appcompat-v7:$supportVersion",
+            design                : "com.android.support:design:$supportVersion",
+            support               : "com.android.support:support-v4:$supportVersion",
+            cardview              : "com.android.support:cardview-v7:$supportVersion",
+            playServicesMaps      : "com.google.android.gms:play-services-maps:$playServiceVersion",
+            playServicesLocation  : "com.google.android.gms:play-services-location:$playServiceVersion"
+    ]
+
+
+    junitVersion = '4.12'
+    powerMockVersion = '1.6.5'
+    coreMockVersion = '1.10.19'
+
+    unitTestLibs = [
+            junit         : "junit:junit:$junitVersion",
+            mockitoCore   : "org.mockito:mockito-core:$coreMockVersion",
+            mockitoJunit  : "org.powermock:powermock-module-junit4:$powerMockVersion",
+            powerMockApi  : "org.powermock:powermock-api-mockito:$powerMockVersion",
+            espresso      : "com.android.support.test.espresso:espresso-core:2.2.2"
+    ]
+}
