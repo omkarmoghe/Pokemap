@@ -45,15 +45,12 @@ public class MainActivity extends BaseActivity {
     private SharedPreferences sharedPref;
     private int themeId;
 
-    private Snackbar _pokeSnackbar;
-
     public void snackMe(String message,int duration){
-        if (null == _pokeSnackbar || _pokeSnackbar.getDuration() != duration){
-            View rootView = findViewById(R.id.main_container);
-            _pokeSnackbar = Snackbar.make(rootView,"",duration);
-        }
-        _pokeSnackbar.setText(message);
-        _pokeSnackbar.show();
+        View rootView = findViewById(R.id.main_container);
+        final Snackbar pokeSnackbar = Snackbar.make(rootView,"",duration);
+
+        pokeSnackbar.setText(message);
+        pokeSnackbar.show();
     }
     public void snackMe(String message){
         snackMe(message, Snackbar.LENGTH_LONG);
@@ -79,7 +76,9 @@ public class MainActivity extends BaseActivity {
         if(mapWrapperFragment == null) {
             mapWrapperFragment = MapWrapperFragment.newInstance();
         }
-        fragmentManager.beginTransaction().replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.main_container,mapWrapperFragment, MAP_FRAGMENT_TAG)
                 .commit();
 
         if(pref.isServiceEnabled()){
