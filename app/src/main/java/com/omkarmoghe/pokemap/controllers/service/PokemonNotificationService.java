@@ -138,23 +138,23 @@ public class PokemonNotificationService extends Service{
 
     @Subscribe
     public void onEvent(CatchablePokemonEvent event) {
+        int nearPokemon = 0;
         List<CatchablePokemon> catchablePokemon = event.getCatchablePokemon();
 
         LatLng location = locationManager.getLocation();
         Location myLoc = new Location("");
         myLoc.setLatitude(location.latitude);
         myLoc.setLongitude(location.longitude);
-        builder.setContentText(getString(R.string.notification_service_pokemon_near,catchablePokemon.size()));
         builder.setStyle(null);
 
         if(!catchablePokemon.isEmpty()){
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, catchablePokemon.size()));
             Set<PokemonIdOuterClass.PokemonId> showablePokemonIDs = preffs.getShowablePokemonIDs();
             
             for(CatchablePokemon cp : catchablePokemon){
                 //Only show the notification if the Pokemon is in the preference list
                 if(showablePokemonIDs.contains(cp.getPokemonId())) {
+                    nearPokemon++; //adding 1 to the amount of available pokemons
                     Location pokeLocation = new Location("");
                     pokeLocation.setLatitude(cp.getLatitude());
                     pokeLocation.setLongitude(cp.getLongitude());
@@ -168,9 +168,11 @@ public class PokemonNotificationService extends Service{
                 }
             }
 
+            inboxStyle.setBigContentTitle(getString(R.string.notification_service_pokemon_in_area, nearPokemon));
             builder.setStyle(inboxStyle);
         }
 
+        builder.setContentText(getString(R.string.notification_service_pokemon_near, nearPokemon));
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(notificationId,builder.build());
     }
