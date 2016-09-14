@@ -2,14 +2,14 @@
 <!-- Translation by Carsten and DoraKlikOpDora -->
 <resources>
     <string name="action_settings">Instellingen</string>
-    <string name="action_clearmap">Leeg de kaart</string>
+    <string name="action_clearmap">Kaart legen</string>
     <string name="action_logout">Uitloggen</string>
     <string name="pref_theme">PresetTheme</string>
     <string name="logout_prompt_message">Wil je echt uitloggen?</string>
-    <string name="yes">JA</string>
-    <string name="no">NEE</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
     <string name="pref_cat_user_account">Account</string>
-    <string name="pref_warning">"LET OP! Gebruik niet je eigen account voor deze applicatie! Maak een nep account aan en gebruik dit account om geen risico's te lopen."</string>
+    <string name="pref_warning">"Let op! Gebruik niet je eigen account voor deze applicatie! Maak een nep account aan en gebruik dit account om geen risico's op te lopen."</string>
     <string name="pref_username">Gebruikersnaam</string>
     <string name="pref_default_username">Besbos</string>
     <string name="pref_password">Wachtwoord</string>
@@ -24,14 +24,14 @@
     <string name="pref_cat_service">Laat de app op de achtergrond lopen</string>
     <string name="pref_service_enable_title">Ingeschakeld</string>
     <string name="pref_service_refresh_title">Ververstijd</string>
-    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart herniewt in seconden.</string>
+    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart vernieuwd in seconden.</string>
     <string name="pref_cat_other">Overig</string>
     <string name="pref_theme_button">Thema</string>
     <string name="toast_credentials">Ongeldige gegevens ingevuld! Kan niet inloggen!</string>
     <string name="title_activity_poke_map">Pokémon in de buurt</string>
     <string name="login_warning"><Data><![CDATA[
     Door het gebruiken van deze applicatie kun je <b>verbannen worden</b>!
-    Om dit te voorkomen is het handig om een tweede account aan te maken en te gebruiken! Een Pokémon Trainer Club (PTC) account is aangeraden!
+    Om dit te voorkomen is het handig om een tweede account aan te maken en die te gebruiken! Een Pokémon Trainer Club (PTC) account is aangeraden.
     ]]></Data></string>
     <string name="prompt_username">PTC Gebruikersnaam</string>
     <string name="prompt_password">PTC Wachtwoord</string>
@@ -51,7 +51,7 @@
     <string name="position_picked">Geselecteerde positie</string>
     <string name="seconds">"seconden"</string>
     <string name="toast_localization_waiting">Wachtend op positie&#8230;</string>
-    <string name="toast_login_successful">Login succesvol.</string>
+    <string name="toast_login_successful">Succesvol ingelogd.</string>
     <string name="toast_map_not_initialized">Probleem tijdens laden van Google Maps</string>
     <string name="toast_server_unreachable">Het is niet mogelijk met Pokémon Go te verbinden. De servers kunnen offline zijn.</string>
     <string name="toast_token_expired">De Logintoken is verstreken. Bezig een nieuwe op te halen..</string>
@@ -60,7 +60,7 @@
     <string name="toast_internal_error">Een error binnen de app! Dit kan komen doordat je geen verbinding hebt of de Pokémon servers offline zjin!</string>
     <string name="toast_ptc_login_error">PTC Login mislukt</string>
     <string name="enable_location_permission_title">Geef de app toegang tot je locatie</string>
-    <string name="enable_location_permission_message">Geef de applicatie toegang tot je locatie om de app te gebruiken!</string>
+    <string name="enable_location_permission_message">Geef de applicatie toegang tot je locatie om de app te kunnen gebruiken.</string>
     <string name="toast_no_location">Kan geen GPS signaal vinden!</string>
     <string name="expiring_in">Verdwijnt in: %1$d:%2$d</string>
     <string name="google_login_failed">Google login mislukt</string>
@@ -70,18 +70,18 @@
     <string name="disclaimer">Disclaimer</string>
     <string name="toast_google_login_error">Google Login Mislukt</string>
     <string name="toast_searching">Zoeken&#8230;</string>
-    <string name="toast_pokemon_found_count">"Pokémons gevonden"</string>
-    <string name="pokemon_found_none">Er zijn geen nieuwe Pokémons gevonden.</string>
-    <string name="pokemon_found_new">%1$d nieuwe Pokémons gevonden.</string>
+    <string name="toast_pokemon_found_count">"Pokémon gevonden"</string>
+    <string name="pokemon_found_none">Er zijn geen nieuwe Pokémon gevonden.</string>
+    <string name="pokemon_found_new">%1$d nieuwe Pokémon gevonden.</string>
     <string name="notification_service_title">Pokémap</string>
     <string name="notification_service_scanning">Scannen</string>
     <string name="notification_service_stop">Stop Pokémap</string>
-    <string name="notification_service_pokemon_near">%1$d Pokémons in de buurt.</string>
-    <string name="notification_service_pokemon_in_area">%1$d Pokémons in de buurt:</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémon in de buurt.</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémon in de buurt:</string>
     <string name="meters">meter</string>
     <string name="gym">Gym</string>
     <string name="button_ok">Oké</string>
     <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
-    <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
+    <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémon gevonden. Nog steeds zoekend..</string>
     <string name="preset_themes_title">Ingesteld thema</string>
 </resources>
