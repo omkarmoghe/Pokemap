@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_theme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.omkarmoghe.pokemap.views.settings.ThemeActivity">
+
+
+    <TextView
+        android:text="@string/theme_activity_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textColor="#000000"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RadioButton
+            android:text="@string/squirtle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton1"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="@string/charmander"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton2"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="@string/bulbasaur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton3"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="@string/pikachu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton4"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:text="@string/default_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton5"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+
+</LinearLayout>

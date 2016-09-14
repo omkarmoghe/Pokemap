@@ -14,15 +14,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".views.LoginActivity"></activity>
+        <activity
+            android:name=".views.settings.SettingsActivity"
+            android:parentActivityName=".views.MainActivity" />
+        <activity
+            android:name=".views.GoogleAuthActivity"
+            android:parentActivityName=".views.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".views.settings.ThemeActivity"
+            android:parentActivityName=".views.settings.SettingsActivity"/>
+
+        <!--
+             use an alias in case we want to change the launch activity later without breaking
+             homescreen shortcuts.  Note must be defined after the targetActivity
+        -->
+        <activity-alias
+            android:name=".Launcher"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:targetActivity=".views.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -30,7 +49,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhI6GH4cMfMtv8kA-nQE9jPVmMa0PLuMg" />
-        <activity android:name=".settings.SettingsActivity" />
+
+        <service
+            android:name=".controllers.service.PokemonNotificationService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.omkarmoghe.pokemap.STOP_SERVICE"/>
+            </intent-filter>
+
+
+        </service>
     </application>
 
 </manifest>

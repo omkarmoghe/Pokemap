@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Translation by chrosey -->
+<resources>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_sign_in">Einloggen</string>
+    <string name="action_relogin">Neu einloggen</string>
+    <string name="error_field_required">Feld erforderlich</string>
+    <string name="login_warning"><Data><![CDATA[
+        Es wird empfohlen <b>NICHT</b> den eigenen Account zu benutzen.
+        Erstelle einen neuen Pokémon-Trainer-Club (PTC) Account mit einem anderem Passwort und anderer E-Mail-Adresse an,
+        oder nutze einen anderen Google Account der nicht mit Deiner E-Mail-Adresse verknüpft ist.
+        ]]></Data>
+    </string>
+    <string name="login_warning_title">Warnung:</string>
+    <string name="pref_cat_general">Allgemein</string>
+    <string name="pref_cat_user_account">Benutzerkonto</string>
+    <string name="pref_gyms_title">Zeige Arenen</string>
+    <string name="pref_password">Passwort setzen</string>
+    <string name="pref_pokestops_title">Zeige Pokéstops</string>
+    <string name="pref_username">Nutzernamen setzen</string>
+    <string name="pref_warning">Anmerkung: Nutze nicht Deinen Normalen Pokémon GO Account für diese App.
+        Erstelle lieber einen zusätzlichen Pokémon-Trainer-Club (PTC) Account / Google Account mit anderem Passwort und Email.</string>
+    <string name="prompt_password">PTC Passwort</string>
+    <string name="prompt_username">PTC Benutzername</string>
+    <string name="request_credentials_title">Gib deine Pokémon Go Zugangsdaten ein</string>
+    <string name="search_pokemon_map_suggestion">(Lange gedrückt halten zum Ändern der Suchposition)</string>
+    <string name="title_activity_maps">Karte</string>
+    <string name="title_activity_poke_map">Pokémon in der Nähe</string>
+    <string name="toast_credentials">Login fehlerhaft. Bitte überprüfe deine Zugangsdaten.</string>
+    <string name="pref_default_username">Max Mustermann</string>
+    <string name="toast_login_successful">Login erfolgreich.</string>
+    <string name="toast_searching">Suche&#8230; </string>
+    <string name="toast_server_unreachable">Pokémon GO Server nicht erreichbar. Eventuell sind die Server offline.</string>
+    <string name="toast_token_expired">Der Logintoken ist abgelaufen. Hole einen neuen.</string>
+    <string name="ban">gebannt</string>
+    <string name="minutes">"minuten"</string>
+    <string name="pokemon_disappearing_in">"Verschwindet in: "</string>
+    <string name="pokemon_expired">Abgelaufen</string>
+    <string name="pokemon_found_new">%1$d neue fangbare Pokémon wurden gefunden.</string>
+    <string name="position_picked">Gewählte Position</string>
+    <string name="seconds">"s"</string>
+    <string name="toast_localization_waiting">Warte auf Koordinaten&#8230;</string>
+    <string name="toast_map_not_initialized">Die Karte konnte nicht initialisiert werden.</string>
+    <string name="toast_user_found">Position gefunden</string>
+    <string name="action_clearmap">Karte leeren</string>
+    <string name="action_logout">Ausloggen</string>
+    <string name="pref_scanned_title">Zeige gescannte Bereiche</string>
+    <string name="pref_service_enable_title">Aktivieren</string>
+    <string name="pref_service_refresh_summary">Anzahl der Sekunden bis zur nächsten, periodischen Aktualisierung.</string>
+    <string name="pref_service_refresh_title">Aktualisierungsrate</string>
+    <string name="enable_location_permission_message">Bitte genehmige GPS-Erlaubnis für die App.</string>
+    <string name="enable_location_permission_title">GPS-Erlaubnis erteilen</string>
+    <string name="expiring_in">Läuft ab in %1$d:%2$02d</string>
+    <string name="pokemon_found_none">Keine neuen Pokémon gefunden.</string>
+    <string name="toast_internal_error">Ein interner Fehler ist aufgetreten. Eventuell sind die Server offline.</string>
+    <string name="toast_login_error">Fehler beim einloggen.</string>
+    <string name="toast_no_location">Fehler bei der GPS-Ortung.</string>
+    <string name="toast_pokemon_found_count">" Pokémon gefunden"</string>
+    <string name="toast_ptc_login_error">PTC Login fehlgeschlagen</string>
+    <string name="google_login_failed">Google Login fehlgeschlagen</string>
+    <string name="permition_message">Bitte erlaube die GPS-Positionierung</string>
+    <string name="allow">Erlauben</string>
+    <string name="app_settings">Einstellungen</string>
+    <string name="disclaimer">Haftungsausschluss</string>
+    <string name="notification_service_title">Pokémap Service</string>
+    <string name="notification_service_scanning">Scanne</string>
+    <string name="notification_service_stop">Beenden</string>
+    <string name="notification_service_pokemon_near">%1$d Pokémon in der Nähe.</string>
+    <string name="notification_service_pokemon_in_area">%1$d Pokémon in der Gegend:</string>
+    <string name="meters">Meter</string>
+    <string name="gym">Arena</string>
+    <string name="pokemon_to_show">Anzuzeigende Pokémon (Filter)</string>
+    <string name="logout_prompt_message">Möchtest du dich wirklich ausloggen?</string>
+    <string name="yes">JA</string>
+    <string name="no">NEIN</string>
+    <string name="button_ok">OK</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d min, %3$d m)</string>
+    <string name="pref_cat_other">Anderes</string>
+    <string name="pref_cat_service">Hintergrunddienst</string>
+    <string name="toast_still_searching">Suche läuft&#8230; bisher %1$d Pokémon gefunden.</string>
+    <string name="pref_theme">Standarddesign</string>
+    <string name="pref_theme_button">Design</string>
+    <string name="default_string">Standard</string>
+    <string name="toast_google_login_error">Google Login fehlgeschlagen</string>
+    <string name="pref_lured_title">Zeige angelockte Pokémon</string>
+    <string name="pref_search_steps">Suchschritte</string>
+    <string name="preset_themes_title">Voreingestellte Designs</string>
+    <string name="theme_activity_text">Wähle ein Design:</string>
+</resources>

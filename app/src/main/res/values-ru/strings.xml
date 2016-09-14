@@ -1,0 +1,79 @@
+<resources>
+    <string name="action_settings">Настройки</string>
+    <string name="action_clearmap">Очистить Карту</string>
+    <string name="action_logout">Выйти</string>
+
+
+    <string name="pref_cat_user_account">Аккаунт</string>
+    <string name="pref_warning">Внимание: Не используйте ваш главный аккаунт приложения! Вместо этого создайте и используйте новый аккаунт Pokémon Trainer Club с другим адресом электронной почты и паролем.</string>
+    <string name="pref_username">Введите Имя аккаунта</string>
+    <string name="pref_default_username">John Doe</string>
+    <string name="pref_password">Введите Пароль</string>
+
+    <string name="pref_cat_general">Главные опции</string>
+    <string name="pref_pokestops_title">Показать Pokéstops</string>
+    <string name="pref_gyms_title">Показать Gyms</string>
+    <string name="pref_scanned_title">Показать отсканированную область</string>
+
+
+
+    <string name="pref_service_enable_title">Включить</string>
+    <string name="pref_service_refresh_title">Интервал обновления</string>
+    <string name="pref_service_refresh_summary">Как часто сервис будет обновлять данные (в секундах).</string>
+
+    <string name="toast_credentials">Невозможно войти. Проверьте выши данные для входа</string>
+    <string name="title_activity_poke_map">Покемон рядом</string>
+
+    <string name="login_warning">"Рекомендуется создать и использовать отдельный аккаунт Pokémon Trainer Club с другим паролем и адресом электронной почты или
+         использовать учетную запись Google, которая не используется в вашем игровом аккаунте Pokémon Go, так как использование данного приложения может привести к тому, что данный аккаунт будет заблокирован."</string>
+    <string name="prompt_username">PTC Имя пользователя</string>
+    <string name="prompt_password">PTC Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="error_field_required">Необходимые данные</string>
+    <string name="title_activity_maps">Карта</string>
+    <string name="login_warning_title">Предупреждение:</string>
+
+    <string name="request_credentials_title">Введите ваши данные для входа в Pokémon Go</string>
+    <string name="search_pokemon_map_suggestion">(Долгое нажатие на карту для смены позиции для Поиска)</string>
+    <string name="action_relogin">Перезайти</string>
+    <string name="ban">забанен</string>
+    <string name="minutes">"минут"</string>
+    <string name="pokemon_disappearing_in">"Исчезнет через: "</string>
+    <string name="pokemon_expired">Исчез</string>
+    <string name="pokemon_found_new">%1$d новый Покемон найден.</string>
+    <string name="position_picked">Выбранная позиция</string>
+    <string name="seconds">"сек"</string>
+    <string name="toast_localization_waiting">Ожидание позиции&#8230;</string>
+    <string name="toast_login_successful">Успешный вход.</string>
+    <string name="toast_map_not_initialized">Ошибка инициализации Google Map</string>
+    <string name="toast_searching">Поиск&#8230;</string>
+    <string name="toast_server_unreachable">Невозможно подключиться к серверам Pokémon GO. Серверы могут быть отключены.</string>
+    <string name="toast_token_expired">Token для входа устарел. Запрос нового token.</string>
+    <string name="toast_user_found">Найдена ваша позиция!</string>
+    <string name="toast_login_error">Ошибка входа.</string>
+    <string name="toast_internal_error">Внутренняя ошибка приложения.Это может быть если вы offline или Серверы Pokémon GO могут быть отключены.</string>
+    <string name="toast_ptc_login_error">Ошибка входа через аккаунт PTC</string>
+    <string name="enable_location_permission_title">Включить разрешение геолокации.</string>
+    <string name="enable_location_permission_message">Пожалуйста, включите разрешение на отслеживание геолокации.</string>
+    <string name="toast_pokemon_found_count">" Покемон найден"</string>
+    <string name="pokemon_found_none">Не найдено новых Покемонов.</string>
+    <string name="toast_no_location">Ошибка отслеживания GPS позиции.</string>
+    <string name="expiring_in">Исчезнет через: %1$d:%2$02d</string>
+    <string name="permition_message">Пожалуйста, включите разрешение на отслеживание геолокации для использования приложения</string>
+    <string name="allow">Разрешить</string>
+    <string name="app_settings">Настройки приложения</string>
+    <string name="disclaimer">Совет</string>
+    <string name="notification_service_title">Pokémap Сервис</string>
+    <string name="notification_service_scanning">Сканирование</string>
+    <string name="notification_service_stop">Остановить Сервис</string>
+    <string name="notification_service_pokemon_near">%1$d покемон рядом.</string>
+    <string name="notification_service_pokemon_in_area">%1$d покемон в досягаемости:</string>
+    <string name="meters">метров</string>
+    <string name="toast_google_login_error">Ошибка входа через аккаунт Google</string>
+    <string name="toast_still_searching">Поиск&#8230; Покемонов найдено поблизости: %1$d.</string>
+    <string name="preset_themes_title">Предустановленные темы</string>
+    <string name="theme_activity_text">В будущем мы сделаем выбор темы более удобным. Выберите тему:</string>
+    <string name="notification_service_inbox_line">%1$s (%2$d минут, %3$d метров)</string>
+    <string name="notification_service_launch_pokemon_go">Запустить Pokémon GO</string>
+
+</resources>
