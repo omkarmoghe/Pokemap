@@ -1,23 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!--General-->
-    <string name="app_name" translatable="false">Pokémap</string>
-
     <!--Menu-->
-    <string name="action_settings">Configurações</string>
-    <string name="action_clearmap">Limpar Mapa</string>
     <string name="action_donate">Doar</string>
+    <string name="action_clearmap">Limpar Mapa</string>
+    <string name="action_settings">Configurações</string>
 
     <!--Prompts-->
     <string name="ok">OK</string>
-    <string name="yes">SIM</string>
     <string name="no">NÃO</string>
+    <string name="yes">SIM</string>
     <string name="allow">AUTORIZAR</string>
 
     <!--Preference Cats-->
-    <string name="pref_cat_general">Geral</string>
     <string name="pref_cat_other">Outro</string>
+    <string name="pref_cat_general">Geral</string>
     <string name="pref_cat_service">Serviço em Background</string>
+    <string name="pref_cat_user_account">Conta de usuário</string>
+
+    <string name="ban">banido</string>
+    <string name="minutes">minutos</string>
+    <string name="allow">Permitir</string>
+    <string name="disclaimer">Aviso Legal</string>
+    <string name="pokemon_expired">Expirado</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="login_warning_title">Atenção:</string>
+    <string name="action_sign_in">Iniciar Sessão</string>
+    <string name="position_picked">Posição Escolhida</string>
+    <string name="expiring_in">"Expira em: %1$d:%2$02d"</string>
+    <string name="app_settings">Definições da Aplicação</string>
+    <string name="error_field_required">Campo obrigatório</string>
+    <string name="pokemon_disappearing_in">Desaparece em: </string>
+    <string name="google_login_failed">Falha no Ínicio de Sessão da Google</string>
+    <string name="enable_location_permission_title">Ativar Permissão de Localização</string>
+    <string name="permition_message">Por favor permita a localização para usar a aplicação</string>
+    <string name="enable_location_permission_message">Por favor ativa as permissões de localização para usar esta aplicação</string>
+
+    <string name="toast_user_found">Encontrei-o</string>
+    <string name="toast_login_error">Falha ao Iniciar Sessão.</string>
+    <string name="toast_login_successful">Sessão iniciada com sucesso.</string>
+    <string name="toast_no_location">Falha ao Encontrar Localização GPS</string>
+    <string name="toast_ptc_login_error">Falha no Ínicio de Sessão PTC </string>
+    <string name="toast_localization_waiting">À espera de posição&#8230;</string>
+    <string name="toast_token_expired">A sessão expirou. Espere uma nova.</string>
+    <string name="toast_map_not_initialized">Problema ao iniciar o Google Maps</string>
+    <string name="request_credentials_title">Insira as suas credenciais de acesso Pokémon Go</string>
+    <string name="toast_server_unreachable">Impossivel contactar os servidores Pokemon Go. Os servidores podem estar em offline.</string>
+    <string name="toast_internal_error">Ocurreu um erro interno. Isto pode acontecer por estar offline ou os servidores estarem em baixo.</string>
 
     <!--Preference Text-->
     <string name="pref_pokestops_title">Exibir Pokéstops</string>
@@ -34,16 +62,19 @@
     <string name="pokemon_to_show">Pokémon para exibir (filtro)</string>
     <string name="theme_activity_text">Está seleção podera ser feita no futuro. Escolha um tema:</string>
     <string name="preset_themes_title">Temas Predefinidos</string>
+    <string name="pref_username">Definir Username</string>
+    <string name="pref_password">Definir Password</string>
+    <string name="pref_default_username">Fulano</string>
 
     <!--Map Strings-->
     <string name="search_pokemon_map_suggestion">(Pressione e segure no mapa para mudar a posição da pesquisa)</string>
 
     <!--Bottom Sheets-->
     <!--Pokemon-->
-    <string name="pokemon_despawn_unknown">Expira em: Mais de 15 minutos.</string>
-    <string name="expiring_in">Expira em: %1$d:%2$02d</string>
-    <string name="pokemon_despawn_at" formatted="true">"Desaparece em %1$d:%2$02d"</string>
     <string name="pokemon_expired">Expirado</string>
+    <string name="expiring_in">Expira em: %1$d:%2$02d</string>
+    <string name="pokemon_despawn_unknown">Expira em: Mais de 15 minutos.</string>
+    <string name="pokemon_despawn_at" formatted="true">"Desaparece em %1$d:%2$02d"</string>
 
     <!--Pokestops-->
     <string name="pokestop">Pokéstop</string>
@@ -73,5 +104,14 @@
     <string name="notification_service_pokemon_near" formatted="true">%1$d Pokémon por perto.</string>
     <string name="notification_service_pokemon_in_area" formatted="true">%1$d Pokémon na área:</string>
     <string name="notification_service_inbox_line" formatted="true">%1$s (%2$d minutos, %3$d metros)</string>
+
+    <!--Warnings-->
+    <string name="pref_warning">NOTA: NÃO usar a conta de usuário principal! Ao invés, crie e use
+        uma conta Pokémon Trainer Club (PTC) falsa com email e password diferentes.
+    </string>
+    <string name="login_warning">Recomenda-se criar uma conta Pokémon Trainer Club falsa com email e
+        password diferentes ou usar uma conta Google que não esteja ligada à sua conta Pokemon Go.
+        Ao usar esta aplicação sua conta poderá ser banida.
+    </string>
 
 </resources>
