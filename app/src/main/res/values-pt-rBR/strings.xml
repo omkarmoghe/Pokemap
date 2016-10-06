@@ -1,0 +1,77 @@
+<resources>
+
+    <!--General-->
+    <string name="app_name" translatable="false">Pokémap</string>
+
+    <!--Menu-->
+    <string name="action_settings">Configurações</string>
+    <string name="action_clearmap">Limpar Mapa</string>
+    <string name="action_donate">Doar</string>
+
+    <!--Prompts-->
+    <string name="ok">OK</string>
+    <string name="yes">SIM</string>
+    <string name="no">NÃO</string>
+    <string name="allow">AUTORIZAR</string>
+
+    <!--Preference Cats-->
+    <string name="pref_cat_general">Geral</string>
+    <string name="pref_cat_other">Outro</string>
+    <string name="pref_cat_service">Serviço em Background</string>
+
+    <!--Preference Text-->
+    <string name="pref_pokestops_title">Exibir Pokéstops</string>
+    <string name="pref_gyms_title">Exibir Ginásios</string>
+    <string name="pref_scanned_title">Mostrar Localizações Pesquisadas</string>
+    <string name="pref_search_steps">Etapas da Pesquisa</string>
+    <string name="pref_lured_title">Exibir Pokémon Lurado</string>
+    <string name="pref_service_enable_title">Ativado</string>
+    <string name="pref_service_refresh_title">Taxa de Atualização</string>
+    <string name="pref_service_refresh_summary">Quantas vezes o serviço irá atualizar em segundos.</string>
+    <string name="pref_theme_button">Tema</string>
+    <string name="pref_default_string">Padrão</string>
+    <string name="pref_reset_accounts">Resetar Contas</string>
+    <string name="pokemon_to_show">Pokémon para exibir (filtro)</string>
+    <string name="theme_activity_text">Está seleção podera ser feita no futuro. Escolha um tema:</string>
+    <string name="preset_themes_title">Temas Predefinidos</string>
+
+    <!--Map Strings-->
+    <string name="search_pokemon_map_suggestion">(Pressione e segure no mapa para mudar a posição da pesquisa)</string>
+
+    <!--Bottom Sheets-->
+    <!--Pokemon-->
+    <string name="pokemon_despawn_unknown">Expira em: Mais de 15 minutos.</string>
+    <string name="expiring_in">Expira em: %1$d:%2$02d</string>
+    <string name="pokemon_despawn_at" formatted="true">"Desaparece em %1$d:%2$02d"</string>
+    <string name="pokemon_expired">Expirado</string>
+
+    <!--Pokestops-->
+    <string name="pokestop">Pokéstop</string>
+    <string name="pokestop_lured">Pokéstop Lurado</string>
+
+    <!--Map Snackbars-->
+    <string name="searching">Procurando&#8230;</string>
+    <string name="map_not_initialized">Problema ao inicializar o Google Maps</string>
+    <string name="pogo_server_unreachable">Não foi possível contactar os servidores de Pokémon GO, eles podem estar offline</string>
+    <string name="internal_error">Ocorreu um erro interno. Isso pode acontecer quando você ou os servidores offline</string>
+    <string name="pokemon_found_none">Nenhum novo Pokémon capturável foi encontrado</string>
+    <string name="pokemon_found_new" formatted="true">%1$d novo Pokémon capturável encontrado</string>
+    <string name="still_searching" formatted="true">Procurando&#8230; Encontrado %1$d Pokémon longe</string>
+    <string name="no_location">Falha ao buscar a localização pelo GPS</string>
+
+    <!--Permissions-->
+    <string name="enable_location_permission_title">Ativar Permissão de Localização</string>
+    <string name="enable_location_permission_message">Por favor ative a permissão de localização para usar este app</string>
+    <string name="permition_message">Por favor, permita locais, para usar este app</string>
+    <string name="permissions_required_toast">Este aplicativo não pode ser usado a menos que sejam concedidas as permissões</string>
+
+    <!--Notification Service-->
+    <string name="notification_service_title">Serviço Pokémap</string>
+    <string name="notification_service_scanning">Scanning</string>
+    <string name="notification_service_stop">Parar o Serviço</string>
+    <string name="notification_service_launch_pokemon_go">Abrir o Pokémon GO</string>
+    <string name="notification_service_pokemon_near" formatted="true">%1$d Pokémon por perto.</string>
+    <string name="notification_service_pokemon_in_area" formatted="true">%1$d Pokémon na área:</string>
+    <string name="notification_service_inbox_line" formatted="true">%1$s (%2$d minutos, %3$d metros)</string>
+
+</resources>
