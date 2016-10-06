@@ -1,87 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Translation by Carsten and DoraKlikOpDora -->
+<!--Copyright 2016 Pokémap
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License-->
+
 <resources>
+    <!--If Translating, please stick to the same format and do not translate things if they have
+ translatable="false"-->
+
+    <!--General-->
+
+    <!--Menu-->
     <string name="action_settings">Instellingen</string>
-    <string name="action_clearmap">Leeg de kaart</string>
-    <string name="action_logout">Uitloggen</string>
-    <string name="pref_theme">PresetTheme</string>
-    <string name="logout_prompt_message">Wil je echt uitloggen?</string>
+    <string name="action_clearmap">Wis kaart</string>
+    <string name="action_donate">Doneer</string>
+
+    <!--Prompts-->
+    <string name="ok">OK</string>
     <string name="yes">JA</string>
     <string name="no">NEE</string>
-    <string name="pref_cat_user_account">Account</string>
-    <string name="pref_warning">"LET OP! Gebruik niet je eigen account voor deze applicatie! Maak een nep account aan en gebruik dit account om geen risico's te lopen."</string>
-    <string name="pref_username">Gebruikersnaam</string>
-    <string name="pref_default_username">Besbos</string>
-    <string name="pref_password">Wachtwoord</string>
+    <string name="allow">Toelaten</string>
+
+    <!--Preference Cats-->
     <string name="pref_cat_general">Algemeen</string>
+    <string name="pref_cat_other">andere</string>
+    <string name="pref_cat_service">achtergrond Service</string>
+
+    <!--Preference Text-->
     <string name="pref_pokestops_title">Toon Pokéstops</string>
     <string name="pref_gyms_title">Toon Gyms</string>
-    <string name="pref_scanned_title">Toon gescande locaties</string>
-    <string name="pref_search_steps">Zoekgebied</string>
-    <string name="pref_search_steps_key">search_steps</string>
-    <string name="pre_lured_key">lured_checkbox</string>
-    <string name="pref_lured_title">Toon Pokémons gevonden met Lure</string>
-    <string name="pref_cat_service">Laat de app op de achtergrond lopen</string>
-    <string name="pref_service_enable_title">Ingeschakeld</string>
-    <string name="pref_service_refresh_title">Ververstijd</string>
-    <string name="pref_service_refresh_summary">Hoe vaak de applicatie de kaart herniewt in seconden.</string>
-    <string name="pref_cat_other">Overig</string>
+    <string name="pref_scanned_title">Toon gescannde locaties</string>
+    <string name="pref_search_steps">Zoek stappen</string>
+    <string name="pref_lured_title">Toon Lured Pokémon</string>
+    <string name="pref_service_enable_title">Aanzetten</string>
+    <string name="pref_service_refresh_title">Ververs ratio</string>
+    <string name="pref_service_refresh_summary">Hoe dikwijls de service moet updaten in seconden.</string>
     <string name="pref_theme_button">Thema</string>
-    <string name="toast_credentials">Ongeldige gegevens ingevuld! Kan niet inloggen!</string>
-    <string name="title_activity_poke_map">Pokémon in de buurt</string>
-    <string name="login_warning"><Data><![CDATA[
-    Door het gebruiken van deze applicatie kun je <b>verbannen worden</b>!
-    Om dit te voorkomen is het handig om een tweede account aan te maken en te gebruiken! Een Pokémon Trainer Club (PTC) account is aangeraden!
-    ]]></Data></string>
-    <string name="prompt_username">PTC Gebruikersnaam</string>
-    <string name="prompt_password">PTC Wachtwoord</string>
-    <string name="action_sign_in">Log in</string>
-    <string name="error_field_required">Dit veld is verplicht</string>
-    <string name="title_activity_maps">Kaart</string>
-    <string name="login_warning_title">Waarschuwing:</string>
-    <string name="request_credentials_title">Vul je Pokémon Go login gegevens in</string>
-    <string name="search_pokemon_map_suggestion">Houd een plaats op de kaart ingedrukt om dit als zoeklocatie te gebruiken.</string>
-    <string name="default_string">Standaard</string>
-    <string name="pokemon_to_show">Pokémon filter</string>
-    <string name="action_relogin">Log opnieuw in</string>
-    <string name="ban">verbannen</string>
-    <string name="minutes">"minuten"</string>
-    <string name="pokemon_disappearing_in">"Verdwijnt over: "</string>
-    <string name="pokemon_expired">Verdwenen</string>
-    <string name="position_picked">Geselecteerde positie</string>
-    <string name="seconds">"seconden"</string>
-    <string name="toast_localization_waiting">Wachtend op positie&#8230;</string>
-    <string name="toast_login_successful">Login succesvol.</string>
-    <string name="toast_map_not_initialized">Probleem tijdens laden van Google Maps</string>
-    <string name="toast_server_unreachable">Het is niet mogelijk met Pokémon Go te verbinden. De servers kunnen offline zijn.</string>
-    <string name="toast_token_expired">De Logintoken is verstreken. Bezig een nieuwe op te halen..</string>
-    <string name="toast_user_found">Jou gevonden!</string>
-    <string name="toast_login_error">Kan niet inloggen!</string>
-    <string name="toast_internal_error">Een error binnen de app! Dit kan komen doordat je geen verbinding hebt of de Pokémon servers offline zjin!</string>
-    <string name="toast_ptc_login_error">PTC Login mislukt</string>
-    <string name="enable_location_permission_title">Geef de app toegang tot je locatie</string>
-    <string name="enable_location_permission_message">Geef de applicatie toegang tot je locatie om de app te gebruiken!</string>
-    <string name="toast_no_location">Kan geen GPS signaal vinden!</string>
-    <string name="expiring_in">Verdwijnt in: %1$d:%2$d</string>
-    <string name="google_login_failed">Google login mislukt</string>
-    <string name="permition_message">Sta locaties toe om de app te gebruiken</string>
-    <string name="allow">Toestaan</string>
-    <string name="app_settings">App instellingen</string>
-    <string name="disclaimer">Disclaimer</string>
-    <string name="toast_google_login_error">Google Login Mislukt</string>
-    <string name="toast_searching">Zoeken&#8230;</string>
-    <string name="toast_pokemon_found_count">"Pokémons gevonden"</string>
-    <string name="pokemon_found_none">Er zijn geen nieuwe Pokémons gevonden.</string>
-    <string name="pokemon_found_new">%1$d nieuwe Pokémons gevonden.</string>
-    <string name="notification_service_title">Pokémap</string>
+    <string name="pref_default_string">Standaard</string>
+    <string name="pref_reset_accounts">Herinitialiseer Accounts</string>
+    <string name="pokemon_to_show">Te tonen Pokémon (filter)</string>
+    <string name="theme_activity_text">Zal deze selectie in de toekomst mooier maken. Selecteer een thema:</string>
+    <string name="preset_themes_title">Vooringestelde Themas</string>
+
+    <!--Map Strings-->
+    <string name="search_pokemon_map_suggestion">(Lang drukken op de kaart voor nieuwe scan locatie)</string>
+
+    <!--Bottom Sheets-->
+    <!--Pokemon-->
+    <string name="pokemon_despawn_unknown">Verloopt in: Meer dan 15 minuten</string>
+    <string name="expiring_in">Verloopt in: %1$d:%2$02d</string>
+    <string name="pokemon_despawn_at" formatted="true">"Verdwijnt in %1$d:%2$02d"</string>
+    <string name="pokemon_expired">Verlopen</string>
+
+    <!--Pokestops-->
+    <string name="pokestop">Pokéstop</string>
+    <string name="pokestop_lured">Lured Pokéstop</string>
+
+    <!--Map Snackbars-->
+    <string name="searching">Zoeken&#8230;</string>
+    <string name="map_not_initialized">Initialisatie probleem met Google Maps</string>
+    <string name="pogo_server_unreachable">Kan Pokémon GO servers niet contacteren. De servers kunnen plat liggen</string>
+    <string name="internal_error">Een interne fout trad op. Dit kan gebeuren als je offline bent of de servers plat liggen</string>
+    <string name="pokemon_found_none">Geen nieuwe vangbare Pokémon gevonden!</string>
+    <string name="pokemon_found_new" formatted="true">%1$d nieuwe vangbare Pokémon gevonden</string>
+    <string name="still_searching" formatted="true">Zoeken&#8230; Gevonden %1$d Pokémon tot nu</string>
+    <string name="no_location">GPS locatie niet gevonden</string>
+
+    <!--Permissions-->
+    <string name="enable_location_permission_title">Locatie toestaan aanzetten</string>
+    <string name="enable_location_permission_message">AUB locatie toestaan aanzetten voor deze app</string>
+    <string name="permition_message">AUB locatie toestaan aanzetten voor deze app</string>
+    <string name="permissions_required_toast">Deze applicatie kan niet werken tot toestemming is gegeven</string>
+
+    <!--Notification Service-->
+    <string name="notification_service_title">Pokémap Service</string>
     <string name="notification_service_scanning">Scannen</string>
-    <string name="notification_service_stop">Stop Pokémap</string>
-    <string name="notification_service_pokemon_near">%1$d Pokémons in de buurt.</string>
-    <string name="notification_service_pokemon_in_area">%1$d Pokémons in de buurt:</string>
-    <string name="meters">meter</string>
-    <string name="gym">Gym</string>
-    <string name="button_ok">Oké</string>
-    <string name="notification_service_inbox_line">%1$s (%2$d minuten, %3$d meter)</string>
-    <string name="toast_still_searching">Searching&#8230; Al %1$d Pokémons gevonden. Nog steeds zoekend..</string>
-    <string name="preset_themes_title">Ingesteld thema</string>
+    <string name="notification_service_stop">Stop Service</string>
+    <string name="notification_service_launch_pokemon_go">start Pokémon GO</string>
+    <string name="notification_service_pokemon_near" formatted="true">%1$d Pokémon nabij.</string>
+    <string name="notification_service_pokemon_in_area" formatted="true">%1$d Pokémon in het gebied:</string>
+    <string name="notification_service_inbox_line" formatted="true">%1$s (%2$d minuten, %3$d meter)</string>
+
 </resources>
