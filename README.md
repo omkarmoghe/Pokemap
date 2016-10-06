@@ -1,4 +1,9 @@
-# Pokemap [![Build Status](https://travis-ci.org/omkarmoghe/Pokemap.svg?branch=dev)](https://travis-ci.org/omkarmoghe/Pokemap) [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
+#[Our website is now live](http://pokemapgo.xyz/)
+
+# Latest release:  [PokeMap V1.3.0 Download](https://github.com/omkarmoghe/Pokemap/releases/download/v1.3.0/PokeMap_1.3.0.apk)
+
+
+# Pokemap [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
 
 # IMPORTANT UPDATE (PLEASE READ) 8/7/16
 
@@ -9,7 +14,7 @@ Unforunately, we have noticed an increasing number of apps using our codebase to
 1. Further development of Pokemap will continue in a private repo. The source code here will be left as legacy.
 2. Signed APKs will be periodically uploaded to [releases](https://github.com/omkarmoghe/Pokemap/releases).
 3. The translations will be kept open source and we will accept pull requests for languages.
-4. No other pull requests will me merged to this repo.
+4. No other pull requests will be merged to this repo.
 5. Issues will be tracked and used to add features and fix bugs with the APK releases.
 
 If you are interested in contributing to the project, reach out to one of the contributors!
