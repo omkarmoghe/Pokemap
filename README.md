@@ -1,6 +1,6 @@
 #[Our website is now live](http://pokemapgo.xyz/)
 
-# Latest release:  [PokeMap V1.3.2 Download](https://github.com/omkarmoghe/Pokemap/releases/download/v1.3.2/PokeMap_1.3.2.apk)
+# Latest release:  [PokeMap V1.4.0 Download](https://github.com/omkarmoghe/Pokemap/releases/download/v1.4.0/PokeMap_1.4.0.apk)
 
 
 # Pokemap [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
