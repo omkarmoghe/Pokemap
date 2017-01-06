@@ -7,7 +7,9 @@
 
 
 
-# Join our Discord server ![Pokemap Discord](https://discordapp.com/api/guilds/258391846143787009/widget.png)
+ Join our Discord server ![Pokemap Discord](https://discordapp.com/api/guilds/258391846143787009/widget.png)
+
+
 
 
 # IMPORTANT UPDATE (PLEASE READ) 8/7/16
