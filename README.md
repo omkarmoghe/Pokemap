@@ -64,7 +64,7 @@ If you are contributing a PR related to language translations, please have other
 ## Reporting Bugs
 Please include a screenshot and instructions on how to recreate the bug you are reporting. If you have any LogCat stack traces, etc. please include those as well. **Use the search bar to make sure you are not creating duplicate issues. If your bug has already been reported, feel free to comment with additional info.**
 
-# [Official Website] (https://jz6.github.io/PoGoMap/#)
+# [Official Website] (http://pokemapgo.xyz/)
 From the main repo:
 > Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
 > 
