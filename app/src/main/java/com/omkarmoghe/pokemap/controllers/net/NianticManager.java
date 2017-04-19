@@ -20,6 +20,7 @@ import com.omkarmoghe.pokemap.models.events.PokestopsEvent;
 import com.omkarmoghe.pokemap.models.events.ServerUnreachableEvent;
 import com.omkarmoghe.pokemap.models.login.LoginInfo;
 import com.omkarmoghe.pokemap.models.login.PtcLoginInfo;
+import com.omkarmoghe.pokemap.util.PokestopUtil;
 import com.pokegoapi.api.PokemonGo;
 import com.pokegoapi.api.map.MapObjects;
 import com.pokegoapi.api.map.fort.Pokestop;
@@ -373,7 +374,7 @@ public class NianticManager {
 
                         List<CatchablePokemon> pokemon = new ArrayList<>();
                         for(Pokestop pokestop: mPokemonGo.getMap().getMapObjects().getPokestops()){
-                            if(!pokestop.getFortData().getLureInfo().equals(FortLureInfoOuterClass.FortLureInfo.getDefaultInstance())){
+                            if(PokestopUtil.hasLuredPokemon(pokestop)){
                                 Log.d(TAG, "run: hasFortInfo = " + pokestop.getFortData().getLureInfo());
                                 pokemon.add(new CatchablePokemon(mPokemonGo, pokestop.getFortData()));
                             }
