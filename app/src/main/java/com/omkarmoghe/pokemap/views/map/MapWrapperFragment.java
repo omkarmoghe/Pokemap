@@ -53,6 +53,7 @@ import com.omkarmoghe.pokemap.models.map.GymMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokemonMarkerExtended;
 import com.omkarmoghe.pokemap.models.map.PokestopMarkerExtended;
 import com.omkarmoghe.pokemap.util.PokemonIdUtils;
+import com.omkarmoghe.pokemap.util.PokestopUtil;
 import com.omkarmoghe.pokemap.views.MainActivity;
 import com.pokegoapi.api.map.fort.Pokestop;
 import com.pokegoapi.api.map.pokemon.CatchablePokemon;
@@ -347,7 +348,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     int markerSize = getResources().getDimensionPixelSize(R.dimen.pokestop_marker);
 
                     RemoteImageLoader.loadMapIcon(
-                            getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                            getActivity(), PokestopUtil.hasLuredPokemon(pokestop) ? lurePokeStopImageUrl : pokeStopImageUrl,
                         markerSize, markerSize,
                             new RemoteImageLoader.Callback() {
                             @Override
@@ -355,7 +356,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
 
                                 BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
                                 marker.setIcon(bitmapDescriptor);
-                                marker.setZIndex(pokestop.hasLurePokemon() ? 1.0f : 0.5f);
+                                marker.setZIndex(PokestopUtil.hasLuredPokemon(pokestop) ? 1.0f : 0.5f);
                             }
                         }
                     );
@@ -427,7 +428,7 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                     if (!markerKeys.contains(pokestop.getId()) && distanceFromCenterInMeters <= MapHelper.convertStepsToRadius(mPref.getSteps())) {
 
                             RemoteImageLoader.loadMapIcon(
-                                    getActivity(), pokestop.hasLurePokemon() ? lurePokeStopImageUrl : pokeStopImageUrl,
+                                    getActivity(), PokestopUtil.hasLuredPokemon(pokestop) ? lurePokeStopImageUrl : pokeStopImageUrl,
                             markerSize, markerSize,
                                     new RemoteImageLoader.Callback() {
                                 @Override
@@ -440,8 +441,8 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
                                         .title(getString(R.string.pokestop))
                                         .icon(bitmapDescriptor)
                                         .zIndex(MapHelper.LAYER_POKESTOPS)
-                                        .alpha(pokestop.hasLurePokemon() ? 1.0f : 0.5f)
-                                        .anchor(0.5f, 0.5f));
+                                        .alpha(PokestopUtil.hasLuredPokemon(pokestop) ? 1.0f : 0.5f)
+                                        .anchor(0.5f, 0.9f));
 
                                     //adding pokemons to list to be removed on next search
                                     pokestopsList.put(pokestop.getId(), new PokestopMarkerExtended(pokestop, marker));
