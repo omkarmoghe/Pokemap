@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Translation by jkodad -->
+<resources>
+<string name="action_settings">إعدادات</string>
+<string name="action_clearmap">محو الخريطة</string>
+<string name="action_logout">الخروج</string>
+<string name="pref_theme">تصاميم</string>
+<string name="logout_prompt_message">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
+<string name="yes">نعم</string>
+<string name="no">لا</string>
+<string name="pref_cat_user_account">حساب المستخدم</string>
+<string name="pref_warning">ملاحظة: لا تستخدم حسابك الرئيسي لهذا التطبيق! بدلا من ذلك، إنشاء واستخدام حساب بوكيمون مدرب نادي وهمية مع البريد الإلكتروني وكلمة المرور مختلفة.</string>
+<string name="pref_default_username">فلان الفلاني</string>
+<string name="pref_password">كلمة السر</string>
+
+<string name="pref_cat_general">عام</string>
+<string name="pref_pokestops_title">Pokéstops عرض</string>
+
+<string name="pref_gyms_title">Gyms عرض</string>
+
+<string name="pref_scanned_title">عرض اخذت المواقع</string>
+<string name="pref_search_steps">بحث الخطوات</string>
+
+
+<string name="pref_lured_title">Lured Pokémon عرض</string>
+
+<string name="pref_cat_service">الخدمة الخلفية</string>
+<string name="pref_service_enable_title">تفعيل</string>
+
+<string name="pref_service_refresh_title">سرعة التحديث</string>
+<string name="pref_service_refresh_summary">كم مرة سيتم تحديث الخدمة بالثانية</string>
+
+<string name="pref_cat_other">آخر</string>
+<string name="pref_theme_button">ثيمات</string>
+
+<string name="toast_credentials">لا أستطيع الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك</string>
+<string name="title_activity_poke_map">بوكيمون قريبة</string>
+<string name="login_warning"><Data><![CDATA[
+كما تستخدم هذا التطبيق يمكن أن يؤدي إلى حسابك حظرها فمن المستحسن استخدام حساب Google لا تعلق على حسابك بوكيمون العودة. بدلا من ذلك إنشاء واستخدام حساب وهمية بوكيمون مدرب نادي (PTC) مع البريد الإلكتروني وكلمة المرور مختلفة.
+]]></Data></string>
+<string name="prompt_username">PTC اسم المستخدم</string>
+<string name="prompt_password">PTC كلمة السر</string>
+<string name="action_sign_in">تسجيل الدخول</string>
+<string name="error_field_required">حقل مطلوب</string>
+<string name="title_activity_maps">خريطة</string>
+<string name="login_warning_title">تحذير:</string>
+<string name="request_credentials_title">Pokémon Go أدخل اسم المستخدم وكلمة المرور الخاصة بك</string>
+<string name="search_pokemon_map_suggestion">الضغط لفترة طويلة على الخريطة لتغيير موقفها البحث</string>
+<string name="default_string">الافتراضي</string>
+<string name="pokemon_to_show">بوكيمون لعرض (فلتر)</string>
+<string name="action_relogin">إعادة الدخول</string>
+<string name="ban">منعت</string>
+<string name="minutes">"دقائق"</string>
+<string name="pokemon_disappearing_in">"تختفي في:"</string>
+<string name="pokemon_expired">منتهية الصلاحية</string>
+<string name="position_picked">الموضع المحدد</string>
+<string name="seconds">"s"</string>
+<string name="toast_localization_waiting">انتظار الموقع</string>
+<string name="toast_login_successful">تسجيل الدخول ناجح</string>
+<string name="toast_map_not_initialized">مشكلة تهيئة خريطة جوجل</string>
+<string name="toast_server_unreachable">غير قادر على الاتصال بخدمة بوكيمون</string>
+<string name="toast_token_expired">انتهت صلاحية الرمز المميز لتسجيل الدخول. الحصول على واحدة جديدة</string>
+<string name="toast_user_found">وجدت لك!</string>
+<string name="toast_login_error">فشل في تسجيل الدخول</string>
+<string name="toast_internal_error">حدث خطأ داخلي. قد يحدث هذا عندما تكون غير متصل</string>
+<string name="toast_ptc_login_error">PTC فشل تسجيل الدخول</string>
+<string name="toast_google_login_error">Google فشل تسجيل الدخول</string>
+<string name="enable_location_permission_title">تفعيل إذن الموقع</string>
+<string name="enable_location_permission_message">يرجى تمكين إذن الموقع لاستخدام هذا التطبيق</string>
+<string name="toast_no_location">فشل في البحث عن الاحداثيات</string>
+<string name="expiring_in">  %1$d:%2$02d : ينتهي في</string>
+<string name="google_login_failed">Google login فشل تسجيل الدخول</string>
+<string name="permition_message">يرجى تمكين إذن الموقع لاستخدام هذا التطبيق</string>
+<string name="allow">سماح</string>
+<string name="app_settings">إعدادات التطبيق</string>
+<string name="disclaimer">إخلاء المسؤولية</string>
+<string name="toast_searching">بحث</string>
+<string name="toast_pokemon_found_count">بوكيمون وجد</string>
+<string name="pokemon_found_none">لم يعثر على أي بوكيمون جديد للقبض </string>
+<string name="pokemon_found_new">%1$d بوكيمون جديد للقبض </string>
+<string name="notification_service_title">Pokémap خدمة</string>
+<string name="notification_service_scanning">فحص</string>
+<string name="notification_service_stop">Stop خدمة</string>
+<string name="notification_service_pokemon_near">%1$d بوكيمون قريب</string>
+<string name="notification_service_pokemon_in_area">%1$d بوكيمون في المنطقة</string>
+<string name="meters">متر</string>
+<string name="gym">Gym</string>
+<string name="button_ok">Ok</string>
+<string name="notification_service_inbox_line">%1$s (%2$d دقائق, %3$d متر)</string>
+<string name="toast_still_searching">"Searching... Found %1$d Pokémons so far"</string><!-- difficult to translate as arabic is rtl causing %1$d to become d$1%, if someone know how to ... i dont -->
+<string name="preset_themes_title">تصاميم</string>
+<string name="theme_activity_text">سيجعل هذا الاختيار تبدو جميلة في المستقبل. حدد التصميم</string>
+</resources>
