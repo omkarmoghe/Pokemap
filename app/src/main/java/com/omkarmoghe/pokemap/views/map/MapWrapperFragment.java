@@ -587,19 +587,23 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         ObjectAnimator animator = ObjectAnimator.ofFloat(pokemonMarker.getMarker(), "alpha", 1f, 0f);
         animator.setDuration(400);
         animator.addListener(new Animator.AnimatorListener() {
+            private boolean isCanceled;
             @Override
             public void onAnimationStart(Animator animator) {
-
+                isCanceled = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                if (!isCanceled) {
+                    removeExpiredPokeMarker(pokemonMarker);
+                }
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-                pokemonMarker.getMarker().remove();
-                markerList.remove(pokemonMarker);
+                isCanceled = true;
+                removeExpiredPokeMarker(pokemonMarker);
             }
 
             @Override
@@ -610,6 +614,10 @@ public class MapWrapperFragment extends Fragment implements OnMapReadyCallback,
         animator.start();
     }
 
+    private void removeExpiredPokeMarker(PokemonMarkerExtended pokemonMarker){
+        pokemonMarker.getMarker().remove();
+        markerList.remove(pokemonMarker);
+    }
 
     private void showMapNotInitializedError() {
         if(getView() != null){
